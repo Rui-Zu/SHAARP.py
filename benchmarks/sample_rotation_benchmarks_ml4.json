@@ -1,0 +1,406 @@
+{
+  "benchmark_version": 1,
+  "tag": "ml4",
+  "status": "python_sample_rotation_multilayer_benchmark_for_mathematica_reference",
+  "case_count": 4,
+  "rotation_grid_deg": [
+    0.0,
+    22.5,
+    45.0
+  ],
+  "fixed_theta_deg": 12.0,
+  "layer_structure": "air / active-film / isotropic-interlayer / substrate (4 layers, 2 internal)",
+  "notes": [
+    "Multilayer SampleRotate grid: a 4-layer stack with an isotropic passive interlayer, swept over sample azimuth at fixed modest incidence.",
+    "All prior multilayer validation (ml1/ml2/ml3) was incidence-swept Maker fringes; ml4 is the azimuth-rotation (SampleRotate) analogue.",
+    "All cases are nonsingular (no phase-matching-like epsilon match).",
+    "Isotropic interlayer keeps azimuth rotation orientation-unambiguous for the passive layer.",
+    "Python SampleRotate-shaped outputs: rotation angle, reflected parallel/perpendicular, transmitted parallel/perpendicular."
+  ],
+  "cases": [
+    {
+      "id": "sample_rotation_ml4_b1_o0",
+      "source_case_id": "sample_rotation_ml4_b1_o0",
+      "theta_deg": 12.0,
+      "phi_deg": 35.0,
+      "psi_deg": 40.0,
+      "ellipticity_deg": 5.0,
+      "sample_rotation_deg": [
+        0.0,
+        22.5,
+        45.0
+      ],
+      "phase_matching_like": false,
+      "layer_count": 4,
+      "outputs": {
+        "sample_rotate_list": [
+          [
+            0.0,
+            0.00048213546095378243,
+            1.8591609223503573e-05,
+            0.059734434811060146,
+            8.178696664065193e-05
+          ],
+          [
+            22.5,
+            1.1107000697733674e-05,
+            0.00034663543323265107,
+            0.010337273707661625,
+            1.4153549164028674e-05
+          ],
+          [
+            45.0,
+            0.00100396054943218,
+            0.0008220567279271758,
+            0.08791744429520036,
+            0.00012037447255417184
+          ]
+        ],
+        "reflected_parallel_amplitude": [
+          {
+            "real": -0.021946561186866,
+            "imag": -0.000695638573498
+          },
+          {
+            "real": -0.003323615647938,
+            "imag": -0.00024612948323
+          },
+          {
+            "real": 0.031657253965026,
+            "imag": 0.001333724419065
+          }
+        ],
+        "reflected_perpendicular_amplitude": [
+          {
+            "real": -0.001562467940475,
+            "imag": 0.004018743977724
+          },
+          {
+            "real": 0.016293851140561,
+            "imag": 0.009008099035973
+          },
+          {
+            "real": 0.022335102995741,
+            "imag": 0.017977761320499
+          }
+        ],
+        "transmitted_parallel_amplitude": [
+          {
+            "real": 0.209215313455223,
+            "imag": 0.126346299616938
+          },
+          {
+            "real": 0.097892386836591,
+            "imag": -0.027465511229484
+          },
+          {
+            "real": -0.15288934703621,
+            "imag": -0.254051750354218
+          }
+        ],
+        "transmitted_perpendicular_amplitude": [
+          {
+            "real": 0.008428089968831,
+            "imag": 0.003279369774505
+          },
+          {
+            "real": 0.003394518630051,
+            "imag": -0.001621971773573
+          },
+          {
+            "real": -0.007184477783671,
+            "imag": -0.008292029397567
+          }
+        ]
+      }
+    },
+    {
+      "id": "sample_rotation_ml4_b4_o1",
+      "source_case_id": "sample_rotation_ml4_b4_o1",
+      "theta_deg": 12.0,
+      "phi_deg": 20.0,
+      "psi_deg": 60.0,
+      "ellipticity_deg": 18.0,
+      "sample_rotation_deg": [
+        0.0,
+        22.5,
+        45.0
+      ],
+      "phase_matching_like": false,
+      "layer_count": 4,
+      "outputs": {
+        "sample_rotate_list": [
+          [
+            0.0,
+            0.0025684627060254075,
+            0.016673223867090303,
+            0.11410381087662191,
+            0.038322202763813804
+          ],
+          [
+            22.5,
+            0.0064534606054119014,
+            0.006390002009939269,
+            0.10040730950877098,
+            0.0337221802181937
+          ],
+          [
+            45.0,
+            0.0004872220154499741,
+            0.0007220144863916494,
+            0.0013677240175487568,
+            0.00045935536002488056
+          ]
+        ],
+        "reflected_parallel_amplitude": [
+          {
+            "real": -0.018090904956463,
+            "imag": 0.047341122334411
+          },
+          {
+            "real": -0.058261403606828,
+            "imag": 0.055308855124421
+          },
+          {
+            "real": -0.017678564740173,
+            "imag": 0.013217048239962
+          }
+        ],
+        "reflected_perpendicular_amplitude": [
+          {
+            "real": -0.08538667145616,
+            "imag": 0.096862480892903
+          },
+          {
+            "real": -0.045681480757376,
+            "imag": 0.06559881344775
+          },
+          {
+            "real": 0.018336563436729,
+            "imag": 0.0196414084964
+          }
+        ],
+        "transmitted_parallel_amplitude": [
+          {
+            "real": 0.12020306386549,
+            "imag": -0.31568185616847
+          },
+          {
+            "real": 0.160233059328971,
+            "imag": -0.273372778832951
+          },
+          {
+            "real": 0.011133105336077,
+            "imag": -0.035267236681155
+          }
+        ],
+        "transmitted_perpendicular_amplitude": [
+          {
+            "real": -0.069093552921593,
+            "imag": 0.183161905724102
+          },
+          {
+            "real": -0.092368011977819,
+            "imag": 0.158714619936095
+          },
+          {
+            "real": -0.006388551958148,
+            "imag": 0.020458293279326
+          }
+        ]
+      }
+    },
+    {
+      "id": "sample_rotation_ml4_b8_o2",
+      "source_case_id": "sample_rotation_ml4_b8_o2",
+      "theta_deg": 12.0,
+      "phi_deg": 60.0,
+      "psi_deg": 50.0,
+      "ellipticity_deg": 12.0,
+      "sample_rotation_deg": [
+        0.0,
+        22.5,
+        45.0
+      ],
+      "phase_matching_like": false,
+      "layer_count": 4,
+      "outputs": {
+        "sample_rotate_list": [
+          [
+            0.0,
+            0.0003086157418988061,
+            0.0028186544474770154,
+            0.009106641600849192,
+            0.012956284659514448
+          ],
+          [
+            22.5,
+            5.477518324532813e-05,
+            0.003979330432879738,
+            0.01451396229435819,
+            0.020649437549582362
+          ],
+          [
+            45.0,
+            0.0006029760277453725,
+            0.003974850454248217,
+            0.01801634810645742,
+            0.025632384014146296
+          ]
+        ],
+        "reflected_parallel_amplitude": [
+          {
+            "real": 0.003566313929892,
+            "imag": 0.017201661165488
+          },
+          {
+            "real": -0.005665305299896,
+            "imag": 0.00476229977052
+          },
+          {
+            "real": -0.024314615305121,
+            "imag": 0.003431546343758
+          }
+        ],
+        "reflected_perpendicular_amplitude": [
+          {
+            "real": -0.039442013029,
+            "imag": -0.035538458825577
+          },
+          {
+            "real": -0.06061996079231,
+            "imag": -0.017451383510155
+          },
+          {
+            "real": -0.063017964116501,
+            "imag": -0.001893846049604
+          }
+        ],
+        "transmitted_parallel_amplitude": [
+          {
+            "real": 0.090075254286792,
+            "imag": -0.031513333146763
+          },
+          {
+            "real": 0.108801293368464,
+            "imag": -0.05173239657804
+          },
+          {
+            "real": 0.113279253292568,
+            "imag": -0.072001103324433
+          }
+        ],
+        "transmitted_perpendicular_amplitude": [
+          {
+            "real": -0.110349375668442,
+            "imag": 0.027915944352636
+          },
+          {
+            "real": -0.134735492669902,
+            "imag": 0.049957827860918
+          },
+          {
+            "real": -0.142198916959416,
+            "imag": 0.073565290930678
+          }
+        ]
+      }
+    },
+    {
+      "id": "sample_rotation_ml4_b15_o3",
+      "source_case_id": "sample_rotation_ml4_b15_o3",
+      "theta_deg": 12.0,
+      "phi_deg": 55.0,
+      "psi_deg": 20.0,
+      "ellipticity_deg": 28.0,
+      "sample_rotation_deg": [
+        0.0,
+        22.5,
+        45.0
+      ],
+      "phase_matching_like": false,
+      "layer_count": 4,
+      "outputs": {
+        "sample_rotate_list": [
+          [
+            0.0,
+            4.700319372860518e-05,
+            1.3559991345427704e-05,
+            0.0048081357412743985,
+            0.0007027971251650464
+          ],
+          [
+            22.5,
+            0.00014321712972836583,
+            4.976699358810403e-06,
+            0.017006360297446937,
+            0.0024857911194077057
+          ],
+          [
+            45.0,
+            0.0002877085741572095,
+            8.757785275210849e-05,
+            0.022058087399782263,
+            0.0032241935846631063
+          ]
+        ],
+        "reflected_parallel_amplitude": [
+          {
+            "real": 0.0009515736393,
+            "imag": -0.006789528800852
+          },
+          {
+            "real": -0.001106911318273,
+            "imag": -0.011916034452025
+          },
+          {
+            "real": -0.005000535942537,
+            "imag": -0.016208121866663
+          }
+        ],
+        "reflected_perpendicular_amplitude": [
+          {
+            "real": 0.001848969885063,
+            "imag": 0.003184541051636
+          },
+          {
+            "real": -0.001396414391273,
+            "imag": -0.00173974889184
+          },
+          {
+            "real": -0.005512948224434,
+            "imag": -0.007562093270174
+          }
+        ],
+        "transmitted_parallel_amplitude": [
+          {
+            "real": -0.049086024874764,
+            "imag": 0.048976503583539
+          },
+          {
+            "real": -0.066056462051059,
+            "imag": 0.112440669327179
+          },
+          {
+            "real": -0.031885570033724,
+            "imag": 0.145056533197946
+          }
+        ],
+        "transmitted_perpendicular_amplitude": [
+          {
+            "real": 0.019106908245987,
+            "imag": -0.018377246323769
+          },
+          {
+            "real": 0.026039076820924,
+            "imag": -0.042517732744371
+          },
+          {
+            "real": 0.013205834814664,
+            "imag": -0.055224989918613
+          }
+        ]
+      }
+    }
+  ]
+}

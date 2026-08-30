@@ -1,0 +1,48 @@
+{
+  "atol": 1e-10,
+  "diagnostic_case_ids": [
+    "sample_rotation_phase_matching_like"
+  ],
+  "diagnostic_fail_count": 1,
+  "full_sample_rotation_agreement_claimed": false,
+  "nonsingular_case_count": 2,
+  "nonsingular_fail_count": 0,
+  "results": [
+    {
+      "case_id": "sample_rotation_moderate_high_oblique",
+      "comparison_status": "passed",
+      "key": "sampleRotateList",
+      "max_abs_error": 4.208439152719734e-15,
+      "max_rel_error": 2.799469615685302e-13,
+      "shape": [
+        3,
+        5
+      ]
+    },
+    {
+      "case_id": "sample_rotation_negative_normal_positive",
+      "comparison_status": "passed",
+      "key": "sampleRotateList",
+      "max_abs_error": 2.588207426157396e-15,
+      "max_rel_error": 1.325440902999626e-12,
+      "shape": [
+        3,
+        5
+      ]
+    },
+    {
+      "case_id": "sample_rotation_phase_matching_like",
+      "comparison_status": "failed",
+      "key": "sampleRotateList",
+      "max_abs_error": 0.02219433108690414,
+      "max_rel_error": 100.19798155138896,
+      "shape": [
+        3,
+        5
+      ]
+    }
+  ],
+  "rtol": 1e-10,
+  "source": "Mathematica SHAARP.ml setup.nb SampleRotate reference values converted from InputForm debug export",
+  "status": "sample_rotation_nonsingular_match_with_phase_matching_diagnostic"
+}

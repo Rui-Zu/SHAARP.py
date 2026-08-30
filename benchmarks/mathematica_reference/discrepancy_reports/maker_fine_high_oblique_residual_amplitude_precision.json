@@ -1,0 +1,73 @@
+{
+  "report_version": 1,
+  "status": "resolved_python_bug",
+  "case_id": "fine_maker_high_oblique",
+  "source_notebook_or_package": "Mathematica SHAARP.ml setup.nb Maker MFList/listMFpara/listMFperp reference values",
+  "mathematica_version_or_runtime": "13.3.0 for Microsoft Windows (64-bit) (June 3, 2023)",
+  "shaarp_file_path_version_or_date": "Github/SHAARP.ml/setup.nb as loaded by benchmarks/mathematica_reference/export_maker_fine_reference.wl on 2026-05-23",
+  "python_git_or_worktree_state": "not_a_git_repository_from_workspace_root; local workspace files under Python Ver/shaarp_py",
+  "first_failing_stage": "resolved; previous final complex transmitted/analyzer amplitude mismatch traced to SHAARP.ml eigenStandard basis construction",
+  "expected_mathematica_value": {
+    "comparison_key": "transmitted_two_omega_jones_sp",
+    "theta_grid_index": 24,
+    "theta_deg": 12.0,
+    "value_source": "benchmarks/mathematica_reference/maker_fine_reference_v1.json"
+  },
+  "python_value": {
+    "comparison_key": "transmitted_2omega_jones_sp",
+    "theta_grid_index": 24,
+    "theta_deg": 12.0,
+    "value_source": "benchmarks/maker_fringes_fine_sampling_output_v1.json"
+  },
+  "absolute_error": 2.0205186901893972e-14,
+  "relative_error": 6.264713607880854e-13,
+  "tolerance": {
+    "atol": 1e-10,
+    "rtol": 1e-10
+  },
+  "intermediate_values_needed_to_reproduce": {
+    "comparison_summary": "benchmarks/mathematica_reference/maker_fine_comparison_summary_v1.json",
+    "theta_12_stage_diagnostics": "benchmarks/mathematica_reference/maker_high_oblique_12_stage_diagnostics_v1.json",
+    "theta_12_stage_comparison_summary": "benchmarks/mathematica_reference/maker_high_oblique_12_stage_comparison_summary_v1.json",
+    "theta_12_solvefresneln_system": "benchmarks/mathematica_reference/maker_high_oblique_12_solvefresneln_system_v1.json",
+    "theta_12_solvefresneln_system_summary": "benchmarks/mathematica_reference/maker_high_oblique_12_solvefresneln_system_summary_v1.json",
+    "theta_12_first_understood_residual_stage": "linear_reflected[0].best_electric_py[1]",
+    "theta_12_first_understood_residual_max_abs": 6.6759499162456697e-10,
+    "theta_12_max_understood_residual_stage": "inhomogeneous_layer_1[2].best_electric_py[2]",
+    "theta_12_max_understood_residual_abs": 1.8287163168681573e-09,
+    "theta_12_mathematica_boundary_condition_number": 4.114235794637225,
+    "theta_12_python_boundary_condition_number": 4.114235782252307,
+    "theta_12_max_abs_B_plus_python_rhs": 1.1102230246251565e-16,
+    "theta_12_max_aligned_matrix_relative_error_after_fix": 6.001445662079329e-14,
+    "theta_12_max_aligned_coefficient_abs_error_after_fix": 3.8694350984331427e-14,
+    "theta_12_max_basis_electric_relative_error_after_fix": 6.029830441850882e-14,
+    "theta_12_max_basis_k_abs_error_after_fix": 6.57935250289783e-14,
+    "resolved_root_cause": "Python used the generalized eigenproblem eigenvector route for absorbing low-symmetry media while SHAARP.ml has eigenStandard=True and uses the transformed standard eigenproblem plus Mathematica-style component Chop at 1e-6.",
+    "mathematica_reference": "benchmarks/mathematica_reference/maker_fine_reference_v1.json",
+    "python_reference": "benchmarks/maker_fringes_fine_sampling_output_v1.json",
+    "strict_intensity_outputs_pass": [
+      "MFList[[All,{1,2}]]",
+      "MFList[[All,{1,3}]]",
+      "listMFpara",
+      "listMFperp"
+    ],
+    "strict_complex_amplitude_outputs_fail": [],
+    "max_abs_errors": {
+      "parallel_analyzer_amplitude": 2.1117743569296775e-14,
+      "perpendicular_analyzer_amplitude": 1.859580586034479e-14,
+      "transmitted_two_omega_jones_sp": 2.0205186901893972e-14
+    },
+    "all_three_amplitude_maxima_occur_at_theta_grid_index": 24,
+    "all_three_amplitude_maxima_occur_at_theta_deg": 12.0,
+    "high_oblique_80_deg_endpoint_branch_bug": "resolved in maker_fine_high_oblique_80deg_fundamental_conditioning.json"
+  },
+    "classification": "python_bug",
+  "next_action": "Keep this report as resolved regression evidence. Continue broader Maker/Fresnel/analytical validation, but do not treat theta=12 EB11 as unresolved.",
+  "minimal_reproducible_case": "Run fine_maker_high_oblique after the complex reflected branch fix and compare Mathematica/Python fine Maker references at atol=1e-10, rtol=1e-10.",
+  "equation_or_residual_check": "After adding the SHAARP.ml eigenStandard-compatible basis path, the theta=12 solveFresnelN matrix/RHS/coefficients and exported unknown-wave bases match Mathematica below 1e-12. The regenerated fine Maker comparison now passes all compared high-oblique intensity and complex-amplitude outputs; largest transmitted_two_omega_jones_sp error is 2.0205186901893972e-14.",
+  "why_python_result_follows_documented_equations": "Python now uses a SHAARP-compatible transformed standard eigenproblem for material-based multilayer workflows: QP is built from the crystal tensor/orientation like QC2QP, epsilon_P is formed as Transpose[QP].epsilon_L.QP, Lambda = Transpose[C].L.C, electric vectors are transformed with Transpose[C], normalized without extra phase rotation, and complex components are chopped at 1e-6 to match Mathematica solveSnell.",
+  "notes": [
+    "This is not the old theta=80 catastrophic endpoint bug.",
+    "The old relative error was about 3.8e-9; the resolved regenerated comparison is below the strict 1e-10 comparator."
+  ]
+}

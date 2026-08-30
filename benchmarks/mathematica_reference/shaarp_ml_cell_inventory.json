@@ -1,0 +1,26 @@
+{
+	"source":"Mathematica SHAARP.ml SHAARP.ml.nb cell inventory",
+	"wolfram_version":"14.3.0 for Microsoft Windows (64-bit) (July 8, 2025)",
+	"notebook_path":"SHAARP.ml/SHAARP.ml.nb",
+	"inputCellCount":8,
+	"matchedCells":[
+		{
+			"index":2,
+			"byte_count":223359,
+			"patterns":[
+				"Analytical",
+				"Full",
+				"Partial",
+				"SHG",
+				"Reflected",
+				"Transmitted",
+				"Signal",
+				"Layer",
+				"multilayer",
+				"thickness",
+				"Thickness"
+			],
+			"preview":"BoxData[{RowBox[{RowBox[{\"Clear\", \"[\", \"run\", \"]\"}], \";\"}], \"\", RowBox[{RowBox[{\"If\", \"[\", RowBox[{RowBox[{RowBox[{\"setupvar\", \"≠\", \"1\"}], \"||\", RowBox[{\"!\", RowBox[{\"ValueQ\", \"[\", \"setupvar\", \"]\"}]}]}], \",\", RowBox[{RowBox[{\"Print\", \"[\", RowBox[{\"Style\", \"[\", RowBox[{\"\\\"Please Evaluate the setup.nb first!\\\"\", \",\", \"Bold\", \",\", \"Red\", \",\", \"32\"}], \"]\"}], \"]\"}], \";\", RowBox[{\"Abort\", \"[\", \"]\"}]}]}], \"]\"}], \";\"}], \"\", RowBox[{RowBox[{\"LogoExists\", \" \", \"=\", \" \", RowBox[{\"FileExistsQ\", \"[\", \"\\\"Logo.png\\\"\", \"]\"}]}], \";\"}], \"\", RowBox[{RowBox[{\"If\", \"[\", RowBox[{\"LogoExists\", \" \", \",\", RowBox[{R"
+		}
+	]
+}

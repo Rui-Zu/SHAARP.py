@@ -1,0 +1,489 @@
+{
+  "schema_version": 1,
+  "status": "si_compat_reflected_signal_matches_exported_shaarp_si_stage_reference",
+  "source": "Python SHAARP.si compatibility solver compared against SHAARP.si reflected signal stage ER2w values",
+  "mathematica_reference": "benchmarks/mathematica_reference/shaarp_si_signal_stage_reference_v1.json",
+  "pnl_reference": "benchmarks/mathematica_reference/shaarp_si_pnl_stage_reference_v1.json",
+  "full_notebook_end_to_end_agreement_claimed": false,
+  "full_notebook_end_to_end_caveat": "This validates the self-contained Python compatibility solver against exported SHAARP.si stage references. It is stronger than the legacy generic SI solver diagnostic, but still does not prove every GUI/notebook pathway or analytical branch.",
+  "normal_incidence_2omega_branch_policy": "shaarp_reference_like",
+  "case_count": 36,
+  "passing_er2w_case_count": 36,
+  "failing_er2w_case_count": 0,
+  "max_er2w_abs_error": 3.743244414124775e-12,
+  "max_er2w_rel_error": 9.970589654584972e-12,
+  "tolerance": {
+    "atol": 2e-06,
+    "rtol": 0.0
+  },
+  "cases": [
+    {
+      "case_id": "solver_stage_01",
+      "theta_deg": 0.0,
+      "incident_polarization": "s",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 6.213803285387811e-16,
+      "er2w_max_rel_error": 4.2682819989550683e-14,
+      "boundary_residual_norm": 2.0359180612652132e-16,
+      "two_omega_branch_indices": {
+        "ext": 2,
+        "ord": 1
+      }
+    },
+    {
+      "case_id": "solver_stage_02",
+      "theta_deg": 8.0,
+      "incident_polarization": "p",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 1.2902061101215293e-14,
+      "er2w_max_rel_error": 1.7798936530044227e-13,
+      "boundary_residual_norm": 7.651394097986541e-16,
+      "two_omega_branch_indices": {
+        "ext": 1,
+        "ord": 2
+      }
+    },
+    {
+      "case_id": "solver_stage_03",
+      "theta_deg": 17.5,
+      "incident_polarization": "s",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 5.662855929675654e-16,
+      "er2w_max_rel_error": 4.9371816398480054e-15,
+      "boundary_residual_norm": 3.9272885747619295e-16,
+      "two_omega_branch_indices": {
+        "ext": 1,
+        "ord": 2
+      }
+    },
+    {
+      "case_id": "solver_stage_04",
+      "theta_deg": 29.0,
+      "incident_polarization": "p",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 4.771235116366785e-15,
+      "er2w_max_rel_error": 2.883105536773123e-14,
+      "boundary_residual_norm": 1.6907574709932565e-15,
+      "two_omega_branch_indices": {
+        "ext": 1,
+        "ord": 2
+      }
+    },
+    {
+      "case_id": "solver_stage_05",
+      "theta_deg": 41.0,
+      "incident_polarization": "s",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 4.0201538192692905e-17,
+      "er2w_max_rel_error": 4.473633689083016e-15,
+      "boundary_residual_norm": 4.9197458146911646e-17,
+      "two_omega_branch_indices": {
+        "ext": 1,
+        "ord": 2
+      }
+    },
+    {
+      "case_id": "solver_stage_06",
+      "theta_deg": 55.0,
+      "incident_polarization": "p",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 4.79694171985382e-16,
+      "er2w_max_rel_error": 4.3714640593722e-14,
+      "boundary_residual_norm": 1.2600948222975654e-16,
+      "two_omega_branch_indices": {
+        "ext": 1,
+        "ord": 2
+      }
+    },
+    {
+      "case_id": "solver_stage_07",
+      "theta_deg": 0.0,
+      "incident_polarization": "p",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 3.143947018899394e-16,
+      "er2w_max_rel_error": 8.996239127287849e-15,
+      "boundary_residual_norm": 1.1017884180148108e-16,
+      "two_omega_branch_indices": {
+        "ext": 2,
+        "ord": 1
+      }
+    },
+    {
+      "case_id": "solver_stage_08",
+      "theta_deg": 8.0,
+      "incident_polarization": "s",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 3.849929460653035e-15,
+      "er2w_max_rel_error": 3.419878107558946e-14,
+      "boundary_residual_norm": 2.2653921180856004e-16,
+      "two_omega_branch_indices": {
+        "ext": 1,
+        "ord": 2
+      }
+    },
+    {
+      "case_id": "solver_stage_09",
+      "theta_deg": 17.5,
+      "incident_polarization": "p",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 3.1098516984515566e-16,
+      "er2w_max_rel_error": 2.0730356397567692e-14,
+      "boundary_residual_norm": 2.6128183633282146e-16,
+      "two_omega_branch_indices": {
+        "ext": 1,
+        "ord": 2
+      }
+    },
+    {
+      "case_id": "solver_stage_10",
+      "theta_deg": 29.0,
+      "incident_polarization": "s",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 8.477545883909683e-16,
+      "er2w_max_rel_error": 6.9519980322756e-14,
+      "boundary_residual_norm": 4.988596934876544e-16,
+      "two_omega_branch_indices": {
+        "ext": 1,
+        "ord": 2
+      }
+    },
+    {
+      "case_id": "solver_stage_11",
+      "theta_deg": 41.0,
+      "incident_polarization": "p",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 2.147260450988e-15,
+      "er2w_max_rel_error": 4.622525907514707e-14,
+      "boundary_residual_norm": 2.5066904290000116e-16,
+      "two_omega_branch_indices": {
+        "ext": 1,
+        "ord": 2
+      }
+    },
+    {
+      "case_id": "solver_stage_12",
+      "theta_deg": 55.0,
+      "incident_polarization": "s",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 4.241435437771145e-15,
+      "er2w_max_rel_error": 2.2782776649447477e-14,
+      "boundary_residual_norm": 4.261450260072707e-16,
+      "two_omega_branch_indices": {
+        "ext": 1,
+        "ord": 2
+      }
+    },
+    {
+      "case_id": "solver_stage_13",
+      "theta_deg": 0.0,
+      "incident_polarization": "s",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 5.2248534904547206e-15,
+      "er2w_max_rel_error": 1.5875809419651457e-13,
+      "boundary_residual_norm": 5.875567568596348e-16,
+      "two_omega_branch_indices": {
+        "ext": 1,
+        "ord": 2
+      }
+    },
+    {
+      "case_id": "solver_stage_14",
+      "theta_deg": 8.0,
+      "incident_polarization": "p",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 1.1654063659297895e-14,
+      "er2w_max_rel_error": 3.85836242459027e-13,
+      "boundary_residual_norm": 5.686383136321426e-16,
+      "two_omega_branch_indices": {
+        "ext": 1,
+        "ord": 2
+      }
+    },
+    {
+      "case_id": "solver_stage_15",
+      "theta_deg": 17.5,
+      "incident_polarization": "s",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 3.656129223666707e-15,
+      "er2w_max_rel_error": 9.68539966200214e-14,
+      "boundary_residual_norm": 1.0481233120871952e-15,
+      "two_omega_branch_indices": {
+        "ext": 1,
+        "ord": 2
+      }
+    },
+    {
+      "case_id": "solver_stage_16",
+      "theta_deg": 29.0,
+      "incident_polarization": "p",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 2.1262249192580175e-15,
+      "er2w_max_rel_error": 1.8339088265633368e-13,
+      "boundary_residual_norm": 3.758159404306944e-16,
+      "two_omega_branch_indices": {
+        "ext": 1,
+        "ord": 2
+      }
+    },
+    {
+      "case_id": "solver_stage_17",
+      "theta_deg": 41.0,
+      "incident_polarization": "s",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 2.3630022163879865e-15,
+      "er2w_max_rel_error": 4.229943446621576e-14,
+      "boundary_residual_norm": 9.48313208388415e-16,
+      "two_omega_branch_indices": {
+        "ext": 1,
+        "ord": 2
+      }
+    },
+    {
+      "case_id": "solver_stage_18",
+      "theta_deg": 55.0,
+      "incident_polarization": "p",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 5.793228716475862e-15,
+      "er2w_max_rel_error": 1.149567722943212e-13,
+      "boundary_residual_norm": 2.1185832015104208e-16,
+      "two_omega_branch_indices": {
+        "ext": 1,
+        "ord": 2
+      }
+    },
+    {
+      "case_id": "solver_stage_19",
+      "theta_deg": 0.0,
+      "incident_polarization": "p",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 4.99132617581354e-15,
+      "er2w_max_rel_error": 3.92611136331057e-13,
+      "boundary_residual_norm": 2.9258691793299054e-15,
+      "two_omega_branch_indices": {
+        "ext": 2,
+        "ord": 1
+      }
+    },
+    {
+      "case_id": "solver_stage_20",
+      "theta_deg": 8.0,
+      "incident_polarization": "s",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 5.042536738351043e-14,
+      "er2w_max_rel_error": 7.178201325377893e-14,
+      "boundary_residual_norm": 2.528120074965483e-15,
+      "two_omega_branch_indices": {
+        "ext": 1,
+        "ord": 2
+      }
+    },
+    {
+      "case_id": "solver_stage_21",
+      "theta_deg": 17.5,
+      "incident_polarization": "p",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 4.8214470764515326e-14,
+      "er2w_max_rel_error": 1.2381565369844148e-13,
+      "boundary_residual_norm": 1.7397676570734898e-15,
+      "two_omega_branch_indices": {
+        "ext": 1,
+        "ord": 2
+      }
+    },
+    {
+      "case_id": "solver_stage_22",
+      "theta_deg": 29.0,
+      "incident_polarization": "s",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 2.355342333297209e-13,
+      "er2w_max_rel_error": 3.52334842381238e-13,
+      "boundary_residual_norm": 5.22778311359917e-15,
+      "two_omega_branch_indices": {
+        "ext": 1,
+        "ord": 2
+      }
+    },
+    {
+      "case_id": "solver_stage_23",
+      "theta_deg": 41.0,
+      "incident_polarization": "p",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 2.380718363576838e-13,
+      "er2w_max_rel_error": 5.919150801829868e-13,
+      "boundary_residual_norm": 2.7708350961948777e-15,
+      "two_omega_branch_indices": {
+        "ext": 1,
+        "ord": 2
+      }
+    },
+    {
+      "case_id": "solver_stage_24",
+      "theta_deg": 55.0,
+      "incident_polarization": "s",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 3.743244414124775e-12,
+      "er2w_max_rel_error": 1.939489565464037e-12,
+      "boundary_residual_norm": 1.1547520356056974e-14,
+      "two_omega_branch_indices": {
+        "ext": 1,
+        "ord": 2
+      }
+    },
+    {
+      "case_id": "solver_stage_25",
+      "theta_deg": 0.0,
+      "incident_polarization": "s",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 5.7043500559402296e-15,
+      "er2w_max_rel_error": 1.527529255495405e-13,
+      "boundary_residual_norm": 2.8247690795161925e-15,
+      "two_omega_branch_indices": {
+        "ext": 2,
+        "ord": 1
+      }
+    },
+    {
+      "case_id": "solver_stage_26",
+      "theta_deg": 8.0,
+      "incident_polarization": "p",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 2.3564892345121155e-14,
+      "er2w_max_rel_error": 3.012518433653333e-13,
+      "boundary_residual_norm": 2.1055341519103112e-15,
+      "two_omega_branch_indices": {
+        "ext": 1,
+        "ord": 2
+      }
+    },
+    {
+      "case_id": "solver_stage_27",
+      "theta_deg": 17.5,
+      "incident_polarization": "s",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 4.557893419106609e-15,
+      "er2w_max_rel_error": 1.7503988401643312e-13,
+      "boundary_residual_norm": 6.682058581902191e-16,
+      "two_omega_branch_indices": {
+        "ext": 1,
+        "ord": 2
+      }
+    },
+    {
+      "case_id": "solver_stage_28",
+      "theta_deg": 29.0,
+      "incident_polarization": "p",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 2.2323109272085467e-15,
+      "er2w_max_rel_error": 2.904546766390752e-14,
+      "boundary_residual_norm": 5.534338849396636e-16,
+      "two_omega_branch_indices": {
+        "ext": 1,
+        "ord": 2
+      }
+    },
+    {
+      "case_id": "solver_stage_29",
+      "theta_deg": 41.0,
+      "incident_polarization": "s",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 8.188060191712318e-16,
+      "er2w_max_rel_error": 3.684807997500615e-14,
+      "boundary_residual_norm": 3.788375536338845e-16,
+      "two_omega_branch_indices": {
+        "ext": 1,
+        "ord": 2
+      }
+    },
+    {
+      "case_id": "solver_stage_30",
+      "theta_deg": 55.0,
+      "incident_polarization": "p",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 5.041341910668083e-16,
+      "er2w_max_rel_error": 4.043860842254892e-14,
+      "boundary_residual_norm": 2.1549532121986478e-16,
+      "two_omega_branch_indices": {
+        "ext": 1,
+        "ord": 2
+      }
+    },
+    {
+      "case_id": "solver_stage_31",
+      "theta_deg": 0.0,
+      "incident_polarization": "p",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 6.645426547289559e-15,
+      "er2w_max_rel_error": 2.278528811114851e-13,
+      "boundary_residual_norm": 5.946433702560691e-16,
+      "two_omega_branch_indices": {
+        "ext": 2,
+        "ord": 1
+      }
+    },
+    {
+      "case_id": "solver_stage_32",
+      "theta_deg": 8.0,
+      "incident_polarization": "s",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 1.0040857602480466e-12,
+      "er2w_max_rel_error": 9.970589654584972e-12,
+      "boundary_residual_norm": 1.2908137563214857e-15,
+      "two_omega_branch_indices": {
+        "ext": 1,
+        "ord": 2
+      }
+    },
+    {
+      "case_id": "solver_stage_33",
+      "theta_deg": 17.5,
+      "incident_polarization": "p",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 1.0824256369182172e-14,
+      "er2w_max_rel_error": 8.7860501981288e-14,
+      "boundary_residual_norm": 8.95045030540677e-16,
+      "two_omega_branch_indices": {
+        "ext": 1,
+        "ord": 2
+      }
+    },
+    {
+      "case_id": "solver_stage_34",
+      "theta_deg": 29.0,
+      "incident_polarization": "s",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 8.988517021833501e-16,
+      "er2w_max_rel_error": 1.6198642893329302e-14,
+      "boundary_residual_norm": 1.2701890026432285e-16,
+      "two_omega_branch_indices": {
+        "ext": 1,
+        "ord": 2
+      }
+    },
+    {
+      "case_id": "solver_stage_35",
+      "theta_deg": 41.0,
+      "incident_polarization": "p",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 1.5300506906973015e-15,
+      "er2w_max_rel_error": 8.652497124087623e-14,
+      "boundary_residual_norm": 5.32618022267736e-16,
+      "two_omega_branch_indices": {
+        "ext": 1,
+        "ord": 2
+      }
+    },
+    {
+      "case_id": "solver_stage_36",
+      "theta_deg": 55.0,
+      "incident_polarization": "s",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 4.08504876749402e-16,
+      "er2w_max_rel_error": 4.2749996684942815e-14,
+      "boundary_residual_norm": 2.964779140007281e-16,
+      "two_omega_branch_indices": {
+        "ext": 1,
+        "ord": 2
+      }
+    }
+  ]
+}

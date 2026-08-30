@@ -1,0 +1,68 @@
+{
+	"source":"Mathematica SHAARP.ml setup.nb orientation definition inspection",
+	"wolfram_version":"13.3.0 for Microsoft Windows (64-bit) (June 3, 2023)",
+	"inputCellCount":49,
+	"downValueCounts":{
+		"hklConvert":1,
+		"QC2QP":1,
+		"extMater":1
+	},
+	"selectedKeys":{
+		"orientation":[
+			111,
+			114,
+			105,
+			101,
+			110,
+			116,
+			97,
+			116,
+			105,
+			111,
+			110
+		],
+		"pg":[
+			112,
+			103
+		],
+		"latcon":[
+			108,
+			97,
+			116,
+			99,
+			111,
+			110
+		],
+		"QC":[
+			81,
+			67
+		],
+		"QPOmega":[
+			81,
+			80,
+			969
+		],
+		"QP2Omega":[
+			81,
+			80,
+			50,
+			969
+		],
+		"epsilonOmegaC":[
+			949,
+			969,
+			67
+		],
+		"epsilon2OmegaC":[
+			949,
+			50,
+			969,
+			67
+		]
+	},
+	"definitions":{
+		"hklConvert":"{HoldPattern[hklConvert[mat_]] :> Module[{clatticex, clatticey, clatticez, aZTohkl11, aZTohkl21, aZTohkl31, aZTohkl12, aZTohkl22, aZTohkl32, aZTohkl13, aZTohkl23, aZTohkl33, Valattice, Vblattice, Vclattice, latticeSolve, b1, b2, b3, Z1, Z2, Z3, VInput1, VInput2, VInput3, aZTohkl, CryOrienSolve, a, b1lab, b2lab, b3lab, Valatticelab, Vblatticelab, Vclatticelab, PlanehSolve, PlanekSolve, PlanelSolve, VerticalhSolve, VerticalkSolve, VerticallSolve, o1, o2, o3, Orientation, PointGroup, ori, alattice, blattice, clattice, alphalattice, betalattice, gamalattice, DebugFlag = False, Verticalh, Verticalk, Verticall, Planeh, Planek, Planel, rCry1, rCry2, rCry3}, Orientation = mat[orientation]; PointGroup = mat[pg]; {alattice, blattice, clattice, alphalattice, betalattice, gamalattice} = mat[latcon]; ori = Orientation[[1]]; {Planeh, Planek, Planel} = Orientation[[2,1]]; {Verticalh, Verticalk, Verticall} = Orientation[[2,2]]; {rCry1, rCry2, rCry3} = Orientation[[3]]; Valattice = alattice*{1, 0, 0}; Vblattice = blattice*{Cos[gamalattice*(Pi\/180)], Sin[gamalattice*(Pi\/180)], 0}; Vclattice = clattice*{clatticex, clatticey, clatticez}; latticeSolve = Quiet[NSolve[{clatticez > 0 && VectorAngle[Valattice, Vclattice] == betalattice*(Pi\/180) && VectorAngle[Vblattice, Vclattice] == alphalattice*(Pi\/180) && clatticex^2 + clatticey^2 + clatticez^2 == 1}, {clatticex, clatticey, clatticez}, Reals]]; clatticex = clatticex \/. latticeSolve[[1,1]]; clatticey = clatticey \/. latticeSolve[[1,2]]; clatticez = clatticez \/. latticeSolve[[1,3]]; b1 = Cross[Vblattice, Vclattice]\/Valattice . Cross[Vblattice, Vclattice]; b2 = Cross[Vclattice, Valattice]\/Valattice . Cross[Vblattice, Vclattice]; b3 = Cross[Valattice, Vblattice]\/Valattice . Cross[Vblattice, Vclattice]; If[PointGroup[[1]] == \"1\" || PointGroup[[1]] == \"\\!\\(\\*OverscriptBox[\\(1\\), \\(_\\)]\\)\", {Z3 = Normalize[Vclattice]; Z2 = Normalize[Cross[Valattice, Vclattice]]; Z1 = Normalize[Cross[Z2, Z3]]}]; If[PointGroup[[1]] == \"2\" || PointGroup[[1]] == \"m\" || PointGroup[[1]] == \"2\/m\", {Z2 = Normalize[Vblattice]; Z3 = Normalize[Vclattice]; Z1 = Normalize[Cross[Z2, Z3]]}]; If[PointGroup[[1]] == \"mm2\" || PointGroup[[1]] == \"222\" || PointGroup[[1]] == \"mmm\", {Z1 = Normalize[Valattice]; Z2 = Normalize[Vblattice]; Z3 = Normalize[Cross[Z1, Z2]]}]; If[PointGroup[[1]] == \"3\" || PointGroup[[1]] == \"32\" || PointGroup[[1]] == \"3m\" || PointGroup[[1]] == \"\\!\\(\\*OverscriptBox[\\(3\\), \\(_\\)]\\)\" || PointGroup[[1]] == \"\\!\\(\\*OverscriptBox[\\(3\\), \\(_\\)]\\)m\" || PointGroup[[1]] == \"∞2\" || PointGroup[[1]] == \"∞m\" || PointGroup[[1]] == \"∞\", {Z3 = Normalize[Vclattice]; Z1 = Normalize[Valattice]; Z2 = Normalize[Cross[Z3, Z1]]}]; If[PointGroup[[1]] == \"4\" || PointGroup[[1]] == \"\\!\\(\\*OverscriptBox[\\(4\\), \\(_\\)]\\)\" || PointGroup[[1]] == \"4mm\" || PointGroup[[1]] == \"422\" || PointGroup[[1]] == \"\\!\\(\\*OverscriptBox[\\(4\\), \\(_\\)]\\)2m\" || PointGroup[[1]] == \"4\/m\" || PointGroup[[1]] == \"4\/mmm\", {Z1 = Normalize[Valattice]; Z2 = Normalize[Vblattice]; Z3 = Normalize[Cross[Z1, Z2]]}]; If[PointGroup[[1]] == \"6\" || PointGroup[[1]] == \"\\!\\(\\*OverscriptBox[\\(6\\), \\(_\\)]\\)\" || PointGroup[[1]] == \"6mm\" || PointGroup[[1]] == \"622\" || PointGroup[[1]] == \"\\!\\(\\*OverscriptBox[\\(6\\), \\(_\\)]\\)m2\" || PointGroup[[1]] == \"6\/m\" || PointGroup[[1]] == \"6\/mmm\" || PointGroup[[1]] == \"∞\/mm\" || PointGroup[[1]] == \"∞\/m\", {Z3 = Normalize[Vclattice]; Z1 = Normalize[Valattice]; Z2 = Normalize[Cross[Z3, Z1]]}]; If[PointGroup[[1]] == \"\\!\\(\\*OverscriptBox[\\(4\\), \\(_\\)]\\)3m\" || PointGroup[[1]] == \"23\" || PointGroup[[1]] == \"∞∞m\" || PointGroup[[1]] == \"∞∞\" || PointGroup[[1]] == \"m3\" || PointGroup[[1]] == \"432\" || PointGroup[[1]] == \"m3m\", {Z3 = Normalize[Vclattice]; Z1 = Normalize[Valattice]; Z2 = Normalize[Cross[Z3, Z1]]}]; If[DebugFlag, {Print[\"clatticex = \", clatticex, \" , clatticey = \", clatticey, \" , clatticez = \", clatticez]; Print[\"b1 = \", b1, \" , b2 = \", b2*\" , b3 = \", b3]; }]; If[ori == 1, VInput3 = Normalize[Planeh*b1 + Planek*b2 + Planel*b3]; VInput2 = Normalize[Verticalh*Valattice + Verticalk*Vblattice + Verticall*Vclattice]; VInput1 = Normalize[Cross[VInput2, VInput3]]; If[DebugFlag, {Print[\"Z1 = \", Z1, \" , Z2 = \", Z2, \" , Z3 = \", Z3]; Print[\"VInput1 = \", VInput1, \" , VInput2 = \", VInput2, \" , VInput3 = \", VInput3]; }]; aZTohkl = {{aZTohkl11, aZTohkl12, aZTohkl13}, {aZTohkl21, aZTohkl22, aZTohkl23}, {aZTohkl31, aZTohkl32, aZTohkl33}}; CryOrienSolve = Quiet[NSolve[{aZTohkl . {Z1, Z2, Z3} == {VInput1, VInput2, VInput3}}, {aZTohkl11, aZTohkl12, aZTohkl13, aZTohkl21, aZTohkl22, aZTohkl23, aZTohkl31, aZTohkl32, aZTohkl33}]]; If[DebugFlag, {Print[\"latticeSolve = \", latticeSolve]; Print[\"CryOrienSolve = \", CryOrienSolve]; }]; aZTohkl11 = aZTohkl11 \/. CryOrienSolve[[1,1]]; aZTohkl12 = aZTohkl12 \/. CryOrienSolve[[1,2]]; aZTohkl13 = aZTohkl13 \/. CryOrienSolve[[1,3]]; aZTohkl21 = aZTohkl21 \/. CryOrienSolve[[1,4]]; aZTohkl22 = aZTohkl22 \/. CryOrienSolve[[1,5]]; aZTohkl23 = aZTohkl23 \/. CryOrienSolve[[1,6]]; aZTohkl31 = aZTohkl31 \/. CryOrienSolve[[1,7]]; aZTohkl32 = aZTohkl32 \/. CryOrienSolve[[1,8]]; aZTohkl33 = aZTohkl33 \/. CryOrienSolve[[1,9]]; o1 = Normalize[Chop[aZTohkl . {1, 0, 0}]]; o2 = Normalize[Chop[aZTohkl . {0, 1, 0}]]; o3 = Normalize[Chop[aZTohkl . {0, 0, 1}]]; If[DebugFlag, Print[\"Cry1 = \", rCry1, \" , Cry2 = \", rCry2, \" , Cry3 = \", rCry3]]; mat[[Key[orientation]]] = {ori, {{Planeh, Planek, Planel}, {Verticalh, Verticalk, Verticall}}, {o1, o2, o3}}; mat[[Key[QC]]] = {{Lab1 . o1, Lab1 . o2, Lab1 . o3}, {Lab2 . o1, Lab2 . o2, Lab2 . o3}, {Lab3 . o1, Lab3 . o2, Lab3 . o3}}; , a = {{Lab1 . rCry1, Lab1 . rCry2, Lab1 . rCry3}, {Lab2 . rCry1, Lab2 . rCry2, Lab2 . rCry3}, {Lab3 . rCry1, Lab3 . rCry2, Lab3 . rCry3}}; mat[[Key[QC]]] = a; b1lab = a . b1; b2lab = a . b2; b3lab = a . b3; Valatticelab = a . Valattice; Vblatticelab = a . Vblattice; Vclatticelab = a . Vclattice; CryOrienSolve = Quiet[NSolve[{PlanehSolve*b1lab + PlanekSolve*b2lab + PlanelSolve*b3lab == {0, 0, 1}, VerticalhSolve*Valatticelab + VerticalkSolve*Vblatticelab + VerticallSolve*Vclatticelab == {0, 1, 0}}, {PlanehSolve, PlanekSolve, PlanelSolve, VerticalhSolve, VerticalkSolve, VerticallSolve}]]; PlanehSolve = Chop[PlanehSolve \/. CryOrienSolve[[1,1]]]; PlanekSolve = Chop[PlanekSolve \/. CryOrienSolve[[1,2]]]; PlanelSolve = Chop[PlanelSolve \/. CryOrienSolve[[1,3]]]; VerticalhSolve = Chop[VerticalhSolve \/. CryOrienSolve[[1,4]]]; VerticalkSolve = Chop[VerticalkSolve \/. CryOrienSolve[[1,5]]]; VerticallSolve = Chop[VerticallSolve \/. CryOrienSolve[[1,6]]]; o1 = Normalize[Rationalize[Normalize[{PlanehSolve, PlanekSolve, PlanelSolve}, Max @* Abs], 0.01], GCD @@ #1 & ]; o2 = Normalize[Rationalize[Normalize[{VerticalhSolve, VerticalkSolve, VerticallSolve}, Max @* Abs], 0.01], GCD @@ #1 & ]; mat[[Key[orientation]]] = {ori, {o1, o2}, {rCry1, rCry2, rCry3}}; ]]}",
+		"QC2QP":"{HoldPattern[QC2QP[PointGroup_, εωC_, QC_]] :> Module[{Inv, aCryToPrin}, If[PointGroup[[1]] == \"1\" || PointGroup[[1]] == \"2\" || PointGroup[[1]] == \"m\" || PointGroup[[1]] == \"mm2\" || PointGroup[[1]] == \"2\", Inv = {{0, 0, 1}, {0, 1, 0}, {1, 0, 0}}; aCryToPrin = Inv . Eigenvectors[Re[MatrixPower[εωC, 0.5]]]; If[SetPrecision[aCryToPrin . εωC . Transpose[aCryToPrin], 6] == SetPrecision[εωC, 6], aCryToPrin = IdentityMatrix[3]]; , aCryToPrin = IdentityMatrix[3]; ]; aCryToPrin . Inverse[QC]]}",
+		"extMater":"{HoldPattern[extMater[mat_]] :> AppendTo[mat, {nω :> Sort[Sqrt[Eigenvalues[mat[εωC]]]], n2ω :> Sort[Sqrt[Eigenvalues[mat[ε2ωC]]]], QPω :> QC2QP[mat[pg], mat[εωC], mat[orientation][[3]]], QP2ω :> QC2QP[mat[pg], mat[ε2ωC], mat[orientation][[3]]], εωL :> mat[QC] . mat[εωC] . Transpose[mat[QC]], ε2ωL :> mat[QC] . mat[ε2ωC] . Transpose[mat[QC]], εωP :> Transpose[mat[QPω]] . mat[εωL] . mat[QPω], ε2ωP :> Transpose[mat[QP2ω]] . mat[ε2ωL] . mat[QP2ω], dL :> t2m3[TensorContract[mat[QC]  mat[QC]  mat[QC]  m2t3[mat[dC]], {{2, 7}, {4, 8}, {6, 9}}]]}]}"
+	}
+}

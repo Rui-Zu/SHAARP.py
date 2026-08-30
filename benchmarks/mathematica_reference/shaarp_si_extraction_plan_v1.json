@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "source": "SHAARP.si front-end text extraction plan from Mathematica-generated probe artifacts",
+  "status": "candidate_extraction_plan_not_validation_evidence",
+  "notebook_path": "SHAARP_V1.03/SHAARP_V1.03.nb",
+  "cell_index": 4,
+  "inputCellCount": 8,
+  "rule": "Ranges are candidate byte spans in front-end converted text. They guide targeted exporter work and must not be treated as Mathematica-vs-Python agreement.",
+  "formats": {
+    "PlainText": {
+      "byte_count": 307138,
+      "pattern_counts": {
+        "SHG Simulations": 2,
+        "Partial Analytical Expressions": 5,
+        "Full Analytical Expressions": 6,
+        "Use Numerical Solution with Fresnel": 2,
+        "RSignalCrystal": 22,
+        "doldExp": 38,
+        "dnewExp": 179,
+        "P2e": 21,
+        "P2o": 21,
+        "Peo": 21,
+        "I2": 79,
+        "E2": 26,
+        "NSolve": 9,
+        "FindRoot": 6,
+        "Eigenvectors": 12,
+        "Export[\"Full Analytical Expressions.nb\"": 1
+      },
+      "candidate_regions": [
+        {
+          "region_id": "initialization_and_input_setup_candidate",
+          "start": 1,
+          "end": 98975,
+          "byte_count": 98975,
+          "status": "candidate_not_validated",
+          "rationale": "Before the first SHG Simulations marker; contains global setup, controls, and physical variable preparation."
+        },
+        {
+          "region_id": "si_numerical_shg_compute_candidate",
+          "start": 98975,
+          "end": 174486,
+          "byte_count": 75512,
+          "status": "candidate_not_validated",
+          "rationale": "Between first SHG Simulations and first Partial Analytical marker; likely numerical reflected SHG compute path."
+        },
+        {
+          "region_id": "si_partial_analytical_compute_candidate",
+          "start": 174486,
+          "end": 189962,
+          "byte_count": 15477,
+          "status": "candidate_not_validated",
+          "rationale": "Between first Partial Analytical marker and later Manipulate/output region; likely partial analytical calculation body."
+        },
+        {
+          "region_id": "si_full_analytical_export_candidate",
+          "start": 210662,
+          "end": null,
+          "byte_count": null,
+          "status": "candidate_not_validated",
+          "rationale": "Starts at the Full Analytical Expressions notebook export block; use with a bounded end once the export expression is bracket-matched."
+        },
+        {
+          "region_id": "full_analytical_flag_setup_candidate",
+          "start": 259,
+          "end": 98975,
+          "byte_count": 98717,
+          "status": "candidate_not_validated",
+          "rationale": "Early FullAnalyticalFlag/setup area, not the full analytical expression export body."
+        }
+      ]
+    },
+    "InputText": {
+      "byte_count": 468960,
+      "pattern_counts": {
+        "SHG Simulations": 2,
+        "Partial Analytical Expressions": 3,
+        "Full Analytical Expressions": 6,
+        "Use Numerical Solution with Fresnel": 2,
+        "RSignalCrystal": 22,
+        "doldExp": 38,
+        "dnewExp": 179,
+        "P2e": 21,
+        "P2o": 21,
+        "Peo": 21,
+        "I2": 79,
+        "E2": 26,
+        "NSolve": 9,
+        "FindRoot": 6,
+        "Eigenvectors": 12,
+        "Export[\"Full Analytical Expressions.nb\"": 1
+      },
+      "candidate_regions": [
+        {
+          "region_id": "initialization_and_input_setup_candidate",
+          "start": 1,
+          "end": 139535,
+          "byte_count": 139535,
+          "status": "candidate_not_validated",
+          "rationale": "Before the first SHG Simulations marker; contains global setup, controls, and physical variable preparation."
+        },
+        {
+          "region_id": "si_numerical_shg_compute_candidate",
+          "start": 139535,
+          "end": 261107,
+          "byte_count": 121573,
+          "status": "candidate_not_validated",
+          "rationale": "Between first SHG Simulations and first Partial Analytical marker; likely numerical reflected SHG compute path."
+        },
+        {
+          "region_id": "si_partial_analytical_compute_candidate",
+          "start": 261107,
+          "end": 286428,
+          "byte_count": 25322,
+          "status": "candidate_not_validated",
+          "rationale": "Between first Partial Analytical marker and later Manipulate/output region; likely partial analytical calculation body."
+        },
+        {
+          "region_id": "si_full_analytical_export_candidate",
+          "start": 314649,
+          "end": null,
+          "byte_count": null,
+          "status": "candidate_not_validated",
+          "rationale": "Starts at the Full Analytical Expressions notebook export block; use with a bounded end once the export expression is bracket-matched."
+        },
+        {
+          "region_id": "full_analytical_flag_setup_candidate",
+          "start": 321,
+          "end": 139535,
+          "byte_count": 139215,
+          "status": "candidate_not_validated",
+          "rationale": "Early FullAnalyticalFlag/setup area, not the full analytical expression export body."
+        }
+      ]
+    }
+  },
+  "next_actions": [
+    "Extract and batch-parse the PlainText numerical core candidate before GUI output code.",
+    "Identify minimal variable assignments needed to run the SI numerical core.",
+    "Export stage records for omega waves, nonlinear polarization, inhomogeneous fields, two-omega waves, Fresnel coefficients, analyzer amplitudes, and final intensities.",
+    "Extract full analytical export block separately from numerical GUI rendering.",
+    "Compare exported Mathematica values against Python stage-by-stage before claiming agreement."
+  ]
+}

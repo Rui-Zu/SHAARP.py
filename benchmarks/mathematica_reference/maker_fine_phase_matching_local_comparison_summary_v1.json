@@ -1,0 +1,100 @@
+{
+  "atol": 1e-10,
+  "diagnostic_case_ids": [
+    "fine_maker_phase_matching_like_local"
+  ],
+  "diagnostic_fail_count": 7,
+  "diagnostic_outputs": [
+    {
+      "case_id": "fine_maker_phase_matching_like_local",
+      "comparison_status": "failed",
+      "key": "MFList[[All,{1,2}]]",
+      "max_abs_error": 1.7505811173168329,
+      "max_rel_error": 46.65197738602533,
+      "shape": [
+        101,
+        2
+      ]
+    },
+    {
+      "case_id": "fine_maker_phase_matching_like_local",
+      "comparison_status": "failed",
+      "key": "MFList[[All,{1,3}]]",
+      "max_abs_error": 0.03516047814208196,
+      "max_rel_error": 46.65197738602039,
+      "shape": [
+        101,
+        2
+      ]
+    },
+    {
+      "case_id": "fine_maker_phase_matching_like_local",
+      "comparison_status": "failed",
+      "key": "listMFpara",
+      "max_abs_error": 1.7505811173168329,
+      "max_rel_error": 46.65197738602533,
+      "shape": [
+        101,
+        2
+      ]
+    },
+    {
+      "case_id": "fine_maker_phase_matching_like_local",
+      "comparison_status": "failed",
+      "key": "listMFperp",
+      "max_abs_error": 0.03516047814208196,
+      "max_rel_error": 46.65197738602039,
+      "shape": [
+        101,
+        2
+      ]
+    },
+    {
+      "case_id": "fine_maker_phase_matching_like_local",
+      "comparison_status": "failed",
+      "key": "transmitted_two_omega_jones_sp",
+      "max_abs_error": 1.2042628211493744,
+      "max_rel_error": 6.472578346921048,
+      "shape": [
+        101,
+        2
+      ]
+    },
+    {
+      "case_id": "fine_maker_phase_matching_like_local",
+      "comparison_status": "failed",
+      "key": "parallel_analyzer_amplitude",
+      "max_abs_error": 1.253814845301718,
+      "max_rel_error": 6.472578346921037,
+      "shape": [
+        101
+      ]
+    },
+    {
+      "case_id": "fine_maker_phase_matching_like_local",
+      "comparison_status": "failed",
+      "key": "perpendicular_analyzer_amplitude",
+      "max_abs_error": 0.1776927358292111,
+      "max_rel_error": 6.472578346920658,
+      "shape": [
+        101
+      ]
+    }
+  ],
+  "diagnostic_pass_count": 0,
+  "full_shaarp_ml_agreement_claimed": false,
+  "nonsingular_case_count": 0,
+  "nonsingular_case_ids": [],
+  "nonsingular_fail_count": 0,
+  "nonsingular_outputs": [],
+  "nonsingular_pass_count": 0,
+  "notes": [
+    "Nonsingular cases compare Mathematica SHAARP.ml MFList/listMFpara/listMFperp and analyzer amplitudes value-by-value.",
+    "The phase-matching-like case is retained as a diagnostic because solveInhom is singular or nearly singular.",
+    "This summary does not relax the strict comparator; it classifies the known diagnostic case separately."
+  ],
+  "rtol": 1e-10,
+  "selected_transmitted_wave_policy": "shaarp_ml_selected",
+  "source": "Mathematica SHAARP.ml setup.nb Maker MFList/listMFpara/listMFperp reference values",
+  "status": "nonsingular_maker_outputs_match_with_phase_matching_diagnostic"
+}

@@ -1,0 +1,37 @@
+{
+  "window_deg": [
+    20.0,
+    21.0,
+    22.0,
+    23.0,
+    24.0,
+    25.0,
+    26.0,
+    27.0,
+    28.0,
+    29.0,
+    30.0
+  ],
+  "results": {
+    "0": {
+      "policy": "forward_only",
+      "max_abs_err": 1.0576082232205408e-09,
+      "rel_err": 2.0139522300568303e-10
+    },
+    "1": {
+      "policy": "forward_backward",
+      "max_abs_err": 1.043607422701598e-09,
+      "rel_err": 2.0728105851186617e-10
+    },
+    "2": {
+      "policy": "all",
+      "max_abs_err": 1.0392158245053906e-09,
+      "rel_err": 2.0466683199727277e-10
+    }
+  },
+  "winh_to_policy": {
+    "0": "forward_only",
+    "1": "forward_backward",
+    "2": "all"
+  }
+}

@@ -1,0 +1,811 @@
+{
+  "benchmark_version": 1,
+  "tag": "pg2act",
+  "status": "python_pointgroup_two_active_maker_fringes_benchmark_for_mathematica_reference",
+  "extension_of": "benchmarks/maker_fringes_benchmarks_ml3.json",
+  "case_count": 4,
+  "theta_sweep_deg": [
+    0.0,
+    20.0,
+    40.0,
+    60.0
+  ],
+  "point_group_pairs": [
+    [
+      "3m",
+      "-42m"
+    ],
+    [
+      "4mm",
+      "mm2"
+    ],
+    [
+      "32",
+      "-6m2"
+    ],
+    [
+      "-4",
+      "422"
+    ]
+  ],
+  "layer_structure": "air / point-group-active-film-1 / point-group-active-film-2 / substrate (4 layers, 2 coupled active sources)",
+  "notes": [
+    "Point-group x coupled-source intersection: TWO adjacent active films, EACH carrying a symmetry-constrained point-group d-tensor.",
+    "Generalizes ml3 (two coupled active sources, generic d) and pgml (one point-group film at depth) to two coupled point-group sources.",
+    "The transmitted 2omega signal is the coherent superposition of two symmetry-constrained nonlinear sources vs live Wolfram f4NL."
+  ],
+  "cases": [
+    {
+      "id": "maker_fringes_pg2act_3m_m42m_b4_9",
+      "point_groups": [
+        "3m",
+        "-42m"
+      ],
+      "theta_deg": [
+        0.0,
+        20.0,
+        40.0,
+        60.0
+      ],
+      "angle_count": 4,
+      "orientation_indices": [
+        2,
+        1
+      ],
+      "phi_deg": 40.0,
+      "psi_deg": 33.0,
+      "ellipticity_deg": 10.0,
+      "sample_azimuth_deg": 0.0,
+      "phase_matching_like": false,
+      "layer_count": 4,
+      "active_layer_count": 2,
+      "nonzero_d_entries": [
+        8,
+        3
+      ],
+      "outputs": {
+        "list_mf_para": [
+          [
+            {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.036155106942583,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 20.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.027814307399209,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 40.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.00378025164086,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 60.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.002207349958199,
+              "imag": 0.0
+            }
+          ]
+        ],
+        "list_mf_perp": [
+          [
+            {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.023090678216242,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 20.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.031284783065633,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 40.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.037527373071267,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 60.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.007966802549208,
+              "imag": 0.0
+            }
+          ]
+        ],
+        "parallel_amplitude": [
+          {
+            "real": -0.13481592301375,
+            "imag": 0.134088679031953
+          },
+          {
+            "real": -0.101998850397415,
+            "imag": 0.131949012564758
+          },
+          {
+            "real": 0.033176647380146,
+            "imag": -0.051764483089018
+          },
+          {
+            "real": 0.016160949257354,
+            "imag": -0.044115458484531
+          }
+        ],
+        "perpendicular_amplitude": [
+          {
+            "real": 0.110521467964014,
+            "imag": -0.104286544363699
+          },
+          {
+            "real": 0.115533312465509,
+            "imag": -0.133928476346072
+          },
+          {
+            "real": 0.138474348590034,
+            "imag": -0.135470394750411
+          },
+          {
+            "real": 0.03592420954104,
+            "imag": -0.081708345461521
+          }
+        ],
+        "transmitted_2omega_jones_sp": [
+          [
+            {
+              "real": 0.019265088092673,
+              "imag": -0.014432126636166
+            },
+            {
+              "real": -0.173260452382393,
+              "imag": 0.169254751486076
+            }
+          ],
+          [
+            {
+              "real": 0.041341833328975,
+              "imag": -0.04045728844677
+            },
+            {
+              "real": -0.148467385605885,
+              "imag": 0.183604429425681
+            }
+          ],
+          [
+            {
+              "real": 0.134203657792033,
+              "imag": -0.141807991022773
+            },
+            {
+              "real": -0.047594257889579,
+              "imag": 0.0303691166383
+            }
+          ],
+          [
+            {
+              "real": 0.038930461027227,
+              "imag": -0.092553385232356
+            },
+            {
+              "real": -0.006012014325907,
+              "imag": 0.007503217802443
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "id": "maker_fringes_pg2act_4mm_mm2_b1_8",
+      "point_groups": [
+        "4mm",
+        "mm2"
+      ],
+      "theta_deg": [
+        0.0,
+        20.0,
+        40.0,
+        60.0
+      ],
+      "angle_count": 4,
+      "orientation_indices": [
+        0,
+        3
+      ],
+      "phi_deg": 55.0,
+      "psi_deg": 25.0,
+      "ellipticity_deg": -12.0,
+      "sample_azimuth_deg": 0.0,
+      "phase_matching_like": false,
+      "layer_count": 4,
+      "active_layer_count": 2,
+      "nonzero_d_entries": [
+        5,
+        5
+      ],
+      "outputs": {
+        "list_mf_para": [
+          [
+            {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.006958824170704,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 20.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.020718549978622,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 40.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.023951390107973,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 60.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.007090031103039,
+              "imag": 0.0
+            }
+          ]
+        ],
+        "list_mf_perp": [
+          [
+            {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.000619571764456,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 20.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.002231744080958,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 40.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.00540017099653,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 60.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.006175976455817,
+              "imag": 0.0
+            }
+          ]
+        ],
+        "parallel_amplitude": [
+          {
+            "real": -0.054869926385087,
+            "imag": -0.062834030184277
+          },
+          {
+            "real": -0.101575714719485,
+            "imag": -0.101984921227835
+          },
+          {
+            "real": -0.129961099974153,
+            "imag": -0.084032747197039
+          },
+          {
+            "real": -0.079781430110259,
+            "imag": -0.026924979342631
+          }
+        ],
+        "perpendicular_amplitude": [
+          {
+            "real": -0.016522466753849,
+            "imag": -0.018616655360822
+          },
+          {
+            "real": -0.034450088539857,
+            "imag": -0.032325461799545
+          },
+          {
+            "real": -0.064109188963167,
+            "imag": -0.035919115899683
+          },
+          {
+            "real": -0.07611905594457,
+            "imag": -0.019541386284606
+          }
+        ],
+        "transmitted_2omega_jones_sp": [
+          [
+            {
+              "real": -0.038163473190773,
+              "imag": -0.043427228336733
+            },
+            {
+              "real": -0.042746345377752,
+              "imag": -0.04907923231889
+            }
+          ],
+          [
+            {
+              "real": -0.074150135497593,
+              "imag": -0.072397507881553
+            },
+            {
+              "real": -0.077499624688555,
+              "imag": -0.078768397793417
+            }
+          ],
+          [
+            {
+              "real": -0.113026591342908,
+              "imag": -0.068067547993063
+            },
+            {
+              "real": -0.090691042917204,
+              "imag": -0.060979458825972
+            }
+          ],
+          [
+            {
+              "real": -0.102704382456827,
+              "imag": -0.029089498526416
+            },
+            {
+              "real": -0.040137228261211,
+              "imag": -0.016143771740424
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "id": "maker_fringes_pg2act_32_m6m2_b11_15",
+      "point_groups": [
+        "32",
+        "-6m2"
+      ],
+      "theta_deg": [
+        0.0,
+        20.0,
+        40.0,
+        60.0
+      ],
+      "angle_count": 4,
+      "orientation_indices": [
+        2,
+        1
+      ],
+      "phi_deg": 30.0,
+      "psi_deg": 60.0,
+      "ellipticity_deg": 18.0,
+      "sample_azimuth_deg": 0.0,
+      "phase_matching_like": false,
+      "layer_count": 4,
+      "active_layer_count": 2,
+      "nonzero_d_entries": [
+        5,
+        3
+      ],
+      "outputs": {
+        "list_mf_para": [
+          [
+            {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.003136031522362,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 20.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.000326982317071,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 40.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.006740400351397,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 60.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.007480924893394,
+              "imag": 0.0
+            }
+          ]
+        ],
+        "list_mf_perp": [
+          [
+            {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.012660348645602,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 20.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.001883946371176,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 40.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.010041072207966,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 60.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.003568099454164,
+              "imag": 0.0
+            }
+          ]
+        ],
+        "parallel_amplitude": [
+          {
+            "real": -0.00656062861417,
+            "imag": 0.055614653415701
+          },
+          {
+            "real": 0.002885902465173,
+            "imag": 0.017850879082899
+          },
+          {
+            "real": -0.01632271117579,
+            "imag": 0.080460980924103
+          },
+          {
+            "real": 0.01831211996087,
+            "imag": 0.084531598564875
+          }
+        ],
+        "perpendicular_amplitude": [
+          {
+            "real": 0.011623592015984,
+            "imag": -0.111916222033483
+          },
+          {
+            "real": -0.009244970589019,
+            "imag": -0.042408453048708
+          },
+          {
+            "real": -0.018498820394223,
+            "imag": 0.098482820085479
+          },
+          {
+            "real": 0.014501338800935,
+            "imag": 0.057946618772322
+          }
+        ],
+        "transmitted_2omega_jones_sp": [
+          [
+            {
+              "real": 0.000130124963325,
+              "imag": -0.007794408336077
+            },
+            {
+              "real": -0.013346640276153,
+              "imag": 0.124729618084427
+            }
+          ],
+          [
+            {
+              "real": -0.002123220446825,
+              "imag": -0.005744911758679
+            },
+            {
+              "real": 0.009449330619917,
+              "imag": 0.04565223721683
+            }
+          ],
+          [
+            {
+              "real": -0.023385292733982,
+              "imag": 0.118922663536427
+            },
+            {
+              "real": 0.007859092813547,
+              "imag": -0.045058133568306
+            }
+          ],
+          [
+            {
+              "real": 0.023109430483729,
+              "imag": 0.102179821165851
+            },
+            {
+              "real": -0.00340246781006,
+              "imag": -0.007917444637806
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "id": "maker_fringes_pg2act_m4_422_b18_5",
+      "point_groups": [
+        "-4",
+        "422"
+      ],
+      "theta_deg": [
+        0.0,
+        20.0,
+        40.0,
+        60.0
+      ],
+      "angle_count": 4,
+      "orientation_indices": [
+        3,
+        0
+      ],
+      "phi_deg": 48.0,
+      "psi_deg": 20.0,
+      "ellipticity_deg": 22.0,
+      "sample_azimuth_deg": 0.0,
+      "phase_matching_like": false,
+      "layer_count": 4,
+      "active_layer_count": 2,
+      "nonzero_d_entries": [
+        7,
+        2
+      ],
+      "outputs": {
+        "list_mf_para": [
+          [
+            {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.037818906043046,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 20.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.056231519092057,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 40.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.046313174951651,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 60.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.020047542240052,
+              "imag": 0.0
+            }
+          ]
+        ],
+        "list_mf_perp": [
+          [
+            {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.004618368823692,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 20.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.006746250473082,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 40.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.005314279590336,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 60.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.002059861877708,
+              "imag": 0.0
+            }
+          ]
+        ],
+        "parallel_amplitude": [
+          {
+            "real": 0.001803530890446,
+            "imag": -0.194462472779127
+          },
+          {
+            "real": 0.001496681423662,
+            "imag": -0.23712713686285
+          },
+          {
+            "real": -0.037410777843409,
+            "imag": -0.211928310173044
+          },
+          {
+            "real": -0.057811340185353,
+            "imag": -0.129249337274996
+          }
+        ],
+        "perpendicular_amplitude": [
+          {
+            "real": -0.000864157216311,
+            "imag": 0.067953087170469
+          },
+          {
+            "real": -0.001850218326364,
+            "imag": 0.082114719540572
+          },
+          {
+            "real": 0.009775418432758,
+            "imag": 0.072240714176984
+          },
+          {
+            "real": 0.014016121510836,
+            "imag": 0.043167235439636
+          }
+        ],
+        "transmitted_2omega_jones_sp": [
+          [
+            {
+              "real": -0.000195198265724,
+              "imag": -0.00265506823767
+            },
+            {
+              "real": 0.00199032384409,
+              "imag": -0.205976275303792
+            }
+          ],
+          [
+            {
+              "real": -0.001226741313094,
+              "imag": -0.003939661326057
+            },
+            {
+              "real": 0.00203923242665,
+              "imag": -0.250911508844524
+            }
+          ],
+          [
+            {
+              "real": -0.00360935103357,
+              "imag": -0.004599684987735
+            },
+            {
+              "real": -0.038498021890752,
+              "imag": -0.223855248621997
+            }
+          ],
+          [
+            {
+              "real": -0.006601796900272,
+              "imag": -0.003641944257188
+            },
+            {
+              "real": -0.059118685657927,
+              "imag": -0.13621871253082
+            }
+          ]
+        ]
+      }
+    }
+  ]
+}

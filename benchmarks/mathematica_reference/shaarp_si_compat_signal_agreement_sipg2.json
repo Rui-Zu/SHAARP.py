@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "status": "si_compat_reflected_signal_matches_extension_shaarp_si_stage_reference",
+  "tag": "sipg2",
+  "source": "Python SHAARP.si compatibility solver vs SHAARP.si extension ER2w stage reference",
+  "mathematica_reference": "benchmarks/mathematica_reference/shaarp_si_signal_stage_reference_sipg2.json",
+  "input_mapping": "benchmarks/mathematica_reference/shaarp_si_case_input_mapping_sipg2.json",
+  "d_tensor_source": "constructed lab-frame d (equals SHAARP.si dSHG to ~4e-15; pure rotation input)",
+  "normal_incidence_2omega_branch_policy": "shaarp_reference_like",
+  "case_count": 8,
+  "passing_er2w_case_count": 8,
+  "failing_er2w_case_count": 0,
+  "max_er2w_abs_error": 1.3604532423917477e-13,
+  "max_er2w_rel_error": 1.0888937626810215e-12,
+  "tolerance": {
+    "atol": 2e-06,
+    "rtol": 0.0
+  },
+  "cases": [
+    {
+      "case_id": "si_pg2_stage_01",
+      "theta_deg": 14.0,
+      "incident_polarization": "p",
+      "orientation_index": 0,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 7.040072600513427e-16,
+      "er2w_max_rel_error": 5.952689025547356e-14,
+      "boundary_residual_norm": 1.5633518626080589e-16
+    },
+    {
+      "case_id": "si_pg2_stage_02",
+      "theta_deg": 27.5,
+      "incident_polarization": "s",
+      "orientation_index": 1,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 1.0506869391606442e-15,
+      "er2w_max_rel_error": 2.014134736680113e-14,
+      "boundary_residual_norm": 2.4155206857881277e-16
+    },
+    {
+      "case_id": "si_pg2_stage_03",
+      "theta_deg": 9.0,
+      "incident_polarization": "p",
+      "orientation_index": 2,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 3.290224915568499e-15,
+      "er2w_max_rel_error": 1.5011714793265085e-13,
+      "boundary_residual_norm": 1.61263984758854e-16
+    },
+    {
+      "case_id": "si_pg2_stage_04",
+      "theta_deg": 41.0,
+      "incident_polarization": "s",
+      "orientation_index": 3,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 3.2065650883915805e-16,
+      "er2w_max_rel_error": 2.56774902594944e-13,
+      "boundary_residual_norm": 3.200508986562202e-17
+    },
+    {
+      "case_id": "si_pg2_stage_05",
+      "theta_deg": 33.0,
+      "incident_polarization": "p",
+      "orientation_index": 4,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 7.193795977830983e-15,
+      "er2w_max_rel_error": 3.9127373368456405e-14,
+      "boundary_residual_norm": 2.2189384964605436e-15
+    },
+    {
+      "case_id": "si_pg2_stage_06",
+      "theta_deg": 19.0,
+      "incident_polarization": "s",
+      "orientation_index": 5,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 5.009179771574572e-15,
+      "er2w_max_rel_error": 1.2663666589999176e-13,
+      "boundary_residual_norm": 2.306399508261374e-16
+    },
+    {
+      "case_id": "si_pg2_stage_07",
+      "theta_deg": 52.0,
+      "incident_polarization": "p",
+      "orientation_index": 6,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 1.3604532423917477e-13,
+      "er2w_max_rel_error": 3.6497167954652444e-13,
+      "boundary_residual_norm": 2.4839301861845773e-15
+    },
+    {
+      "case_id": "si_pg2_stage_08",
+      "theta_deg": 6.5,
+      "incident_polarization": "s",
+      "orientation_index": 7,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 5.918766558623629e-14,
+      "er2w_max_rel_error": 1.0888937626810215e-12,
+      "boundary_residual_norm": 3.106511492679386e-16
+    }
+  ]
+}

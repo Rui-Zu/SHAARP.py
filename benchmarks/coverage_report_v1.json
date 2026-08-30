@@ -1,0 +1,257 @@
+{
+  "coverage_report_version": 1,
+  "status": "generated_python_coverage_report_not_mathematica_validation",
+  "coverage_matrix_version": 1,
+  "benchmark_counts": {
+    "numeric_reduced_model_cases": 20,
+    "solver_stage_cases": 36,
+    "complex_inhomogeneous_cases": 24,
+    "reflected_snell_cases": 20,
+    "biaxial_branch_sequences": 6,
+    "biaxial_branch_angles_per_sequence": 6,
+    "multilayer_boundary_system_cases": 6,
+    "multilayer_system_cases": 20,
+    "multilayer_polarimetry_cases": 20,
+    "maker_fringes_cases": 3,
+    "maker_fringes_total_angles": 10
+  },
+  "incidence_angle": {
+    "solver_stage_deg": [
+      0.0,
+      8.0,
+      17.5,
+      29.0,
+      41.0,
+      55.0
+    ],
+    "complex_inhomogeneous_deg": [
+      0.0,
+      12.0,
+      24.0,
+      36.0,
+      48.0,
+      60.0
+    ],
+    "reflected_snell_deg": [
+      0.0,
+      10.0,
+      22.5,
+      37.0,
+      52.0
+    ],
+    "biaxial_branch_deg": [
+      5.0,
+      15.0,
+      25.0,
+      35.0,
+      45.0,
+      55.0
+    ],
+    "has_normal_incidence": true,
+    "max_solver_angle_deg": 55.0,
+    "max_any_angle_deg": 60.0
+  },
+  "polarization": {
+    "solver_stage_polarizations": [
+      "p",
+      "s"
+    ]
+  },
+  "orientation": {
+    "solver_stage_orientation_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "biaxial_branch_orientation_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "solver_stage_orientation_count": 6,
+    "biaxial_branch_orientation_count": 6,
+    "has_nonzero_cubic_miller_orientation": true,
+    "has_noncubic_reciprocal_miller_orientation": true,
+    "has_mathematica_point_group_axis_alias_test": true,
+    "last_solver_surface_normal": [
+      0.387703026949619,
+      0.716967895589432,
+      0.579347391111899
+    ],
+    "last_branch_surface_normal": [
+      0.387703026949619,
+      0.716967895589432,
+      0.579347391111899
+    ]
+  },
+  "tensor_complexity": {
+    "solver_stage_has_complex_epsilon_omega": true,
+    "solver_stage_has_complex_epsilon_2omega": true,
+    "solver_stage_has_nondiagonal_epsilon": true,
+    "complex_inhomogeneous_has_complex_epsilon": true,
+    "complex_inhomogeneous_has_nondiagonal_epsilon": true,
+    "numeric_reduced_cases_have_complex_d": true,
+    "numeric_reduced_cases_have_nondiagonal_epsilon": true
+  },
+  "mode_identity": {
+    "has_uniaxial_identity_test": true,
+    "has_shg_source_identity_test": true,
+    "has_biaxial_branch_tracking_test": true,
+    "has_ambiguous_branch_test": true
+  },
+  "phase_matching_and_extremes": {
+    "has_numeric_phase_matching_test": true,
+    "has_exact_singular_phase_matching_diagnostic_test": true,
+    "has_symbolic_phase_matching_test": true,
+    "has_normal_incidence_all_complex_test": true,
+    "has_reflected_complex_anisotropic_test": true
+  },
+  "multilayer_nonlinear": {
+    "has_tensor_basis_generation_test": true,
+    "has_boundary_system_matrix_benchmark_test": true,
+    "has_ten_source_terms_test": true,
+    "has_ten_source_inhomogeneous_residual_test": true,
+    "has_ten_source_boundary_bridge_test": true,
+    "has_automatic_fundamental_to_shg_workflow_test": true,
+    "has_tensor_driven_complex_nondiagonal_workflow_test": true,
+    "has_manual_anisotropic_top_workflow_test": true,
+    "has_system_config_to_tensor_workflow_test": true,
+    "has_system_angle_sweep_test": true,
+    "has_jones_incidence_test": true,
+    "has_polarimetry_incidence_test": true,
+    "has_reflected_analyzer_projection_test": true,
+    "has_phi_psi_polarimetry_sweep_test": true,
+    "has_sample_azimuth_sweep_test": true,
+    "has_maker_fringes_sweep_test": true,
+    "has_transmitted_analyzer_projection_test": true,
+    "saved_multilayer_boundary_system_case_count": 6,
+    "saved_multilayer_boundary_system_layer_counts": [
+      1,
+      2,
+      3
+    ],
+    "saved_multilayer_boundary_system_has_known_sources": true,
+    "saved_multilayer_system_case_count": 20,
+    "saved_multilayer_system_angles_deg": [
+      0.0,
+      8.0,
+      18.0,
+      33.0,
+      52.0
+    ],
+    "saved_multilayer_system_orientation_count": 4,
+    "saved_multilayer_polarimetry_case_count": 20,
+    "saved_multilayer_polarimetry_angles_deg": [
+      0.0,
+      8.0,
+      18.0,
+      33.0,
+      52.0
+    ],
+    "saved_multilayer_polarimetry_phi_deg": [
+      0.0,
+      30.0,
+      67.5,
+      90.0
+    ],
+    "saved_multilayer_polarimetry_psi_deg": [
+      0.0,
+      22.5,
+      45.0,
+      90.0
+    ],
+    "saved_multilayer_polarimetry_ellipticity_deg": [
+      -35.0,
+      0.0,
+      15.0
+    ],
+    "saved_multilayer_polarimetry_sample_azimuth_deg": [
+      0.0,
+      15.0,
+      37.5,
+      72.0
+    ],
+    "saved_multilayer_polarimetry_orientation_count": 4,
+    "saved_maker_fringes_case_count": 3,
+    "saved_maker_fringes_total_angle_count": 10,
+    "saved_maker_fringes_angles_deg": [
+      -15.0,
+      -8.0,
+      0.0,
+      8.0,
+      15.0,
+      20.0,
+      40.0,
+      60.0
+    ],
+    "saved_maker_fringes_has_negative_angle": true,
+    "saved_maker_fringes_has_normal_incidence": true,
+    "saved_maker_fringes_max_angle_deg": 60.0,
+    "saved_maker_fringes_has_phase_matching_like_case": true,
+    "saved_maker_fringes_slow_path_small_grid": true
+  },
+  "symbolic": {
+    "symbolic_test_count_markers": 24,
+    "has_dense_complex_symbolic_known_waves": true,
+    "has_nondiagonal_complex_symbolic_inhomogeneous": true,
+    "has_mathematica_point_group_label_aliases": true,
+    "has_point_group_source_reference_test": true
+  },
+  "mathematica_validation": {
+    "comparator_present": true,
+    "wolfram_batch_detector_present": true,
+    "wolfram_batch_detector_test_present": true,
+    "strict_comparator_rejects_missing_source": true,
+    "strict_comparator_rejects_python_reference": true,
+    "strict_comparator_rejects_unfilled_placeholders": true,
+    "strict_comparator_accepts_filled_mathematica_reference": true,
+    "suite_template_comparator_present": true,
+    "suite_template_requires_suite_id": true,
+    "suite_template_rejects_unfilled_outputs": true,
+    "compute_pnl_reference_present": true,
+    "compute_pnl_reference_case_count": 20,
+    "compute_pnl_reference_source_is_mathematica": true,
+    "compute_pnl_reference_test_present": true,
+    "solve_inhom_reference_present": true,
+    "solve_inhom_reference_case_count": 20,
+    "solve_inhom_reference_source_is_mathematica": true,
+    "solve_inhom_reference_test_present": true,
+    "solve_snell_reference_present": true,
+    "solve_snell_reference_case_count": 20,
+    "solve_snell_reference_source_is_mathematica": true,
+    "solve_snell_reference_test_present": true,
+    "solve_snell_2omega_reference_present": true,
+    "solve_snell_2omega_reference_case_count": 20,
+    "solve_snell_2omega_reference_source_is_mathematica": true,
+    "solve_snell_2omega_reference_test_present": true,
+    "solve_fresnel_reference_present": true,
+    "solve_fresnel_reference_case_count": 20,
+    "solve_fresnel_reference_source_is_mathematica": true,
+    "solve_fresnel_reference_test_present": true,
+    "fresnel_sweep_reference_present": true,
+    "fresnel_sweep_reference_case_count": 3,
+    "fresnel_sweep_reference_test_present": true,
+    "maker_fringes_reference_present": true,
+    "maker_fine_reference_present": true,
+    "maker_fine_fringe_resolution_reference_present": true,
+    "maker_fine_phase_matching_local_reference_present": true,
+    "sample_rotation_reference_present": true,
+    "sample_rotation_reference_case_count": 3,
+    "solve_fresnel_n_reference_present": true,
+    "live_symbolic_compute_pnl_reference_present": true,
+    "live_symbolic_ml_partial_pnl_reference_present": true,
+    "live_symbolic_ml_partial_pnl_expression_count": 10,
+    "point_group_tensor_source_reference_present": true,
+    "point_group_tensor_source_reference_pattern_count": 16,
+    "live_symbolic_point_group_d_probe_present": true,
+    "live_symbolic_point_group_d_probe_status": "diagnostic_only_ml_material_extension_does_not_apply_gui_point_group_patterns",
+    "validation_plan_present": true,
+    "status": "partial_reference_values_plus_live_gui_and_symbolic_validation_artifacts"
+  }
+}

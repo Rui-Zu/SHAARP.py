@@ -1,0 +1,168 @@
+{
+	"source":"Mathematica SHAARP.si candidate front-end region parse probe",
+	"wolfram_version":"13.3.0 for Microsoft Windows (64-bit) (June 3, 2023)",
+	"notebook_path":"SHAARP_V1.03/SHAARP_V1.03.nb",
+	"plan_path":"benchmarks/mathematica_reference/shaarp_si_extraction_plan_v1.json",
+	"status":"parse_probe_not_validation_evidence",
+	"records":[
+		{
+			"format":"PlainText",
+			"region_id":"initialization_and_input_setup_candidate",
+			"start":1,
+			"end":98975,
+			"byte_count":98975,
+			"parse_status":"failed",
+			"held_head":"$Failed",
+			"held_byte_count":0,
+			"message_count":10,
+			"messages_preview":[
+				"HoldForm[Message[General::newsym, FullAnalyticalFlag]]",
+				"HoldForm[Message[General::newsym, Notation`AutoLoadNotationPalette]]",
+				"HoldForm[Message[General::newsym, Symbolize]]",
+				"HoldForm[Message[General::newsym, n]]",
+				"HoldForm[Message[General::newsym, ω]]",
+				"HoldForm[Message[General::newsym, ε]]",
+				"HoldForm[Message[General::newsym, L]]",
+				"HoldForm[Message[General::newsym, k]]",
+				"HoldForm[Message[General::newsym, i]]",
+				"HoldForm[Message[ToExpression::sntx, HoldForm[\"Quiet[Symbolize[k^(i,\\\\[Omega])]];Quiet[Symbolize[k^(R,\\\\[Omega])]];Quiet[Symbolize[k^(R,2\\\\[Omega])]];\\n                     ^\"], HoldForm[\"\"], HoldForm[\"\"], HoldForm[\"\\n\"]]]"
+			]
+		},
+		{
+			"format":"PlainText",
+			"region_id":"si_numerical_shg_compute_candidate",
+			"start":98975,
+			"end":174486,
+			"byte_count":75512,
+			"parse_status":"failed",
+			"held_head":"$Failed",
+			"held_byte_count":0,
+			"message_count":4,
+			"messages_preview":[
+				"HoldForm[Message[General::newsym, SHG]]",
+				"HoldForm[Message[General::newsym, Simulations]]",
+				"HoldForm[Message[General::newsym, Expressions]]",
+				"HoldForm[Message[ToExpression::sntx, HoldForm[\"SHG Simulations && Expressions*)\\n                                ^\"], HoldForm[\"\"], HoldForm[\"\"], HoldForm[\"\\n\"]]]"
+			]
+		},
+		{
+			"format":"PlainText",
+			"region_id":"si_partial_analytical_compute_candidate",
+			"start":174486,
+			"end":189962,
+			"byte_count":15477,
+			"parse_status":"failed",
+			"held_head":"$Failed",
+			"held_byte_count":0,
+			"message_count":19,
+			"messages_preview":[
+				"HoldForm[Message[General::newsym, Partial]]",
+				"HoldForm[Message[General::newsym, Analytical]]",
+				"HoldForm[Message[General::newsym, m]]",
+				"HoldForm[Message[General::newsym, mm2]]",
+				"HoldForm[Message[General::newsym, mm]]",
+				"HoldForm[Message[General::newsym, ∞m]]",
+				"HoldForm[Message[General::newsym, ∞2]]",
+				"HoldForm[Message[General::newsym, m2]]",
+				"HoldForm[Message[General::newsym, doldExp]]",
+				"HoldForm[Message[General::newsym, dnewExp]]",
+				"HoldForm[Message[General::newsym, P2eo]]",
+				"HoldForm[Message[General::newsym, P2o]]",
+				"HoldForm[Message[General::newsym, Peoo]]",
+				"HoldForm[Message[General::newsym, Croots]]",
+				"HoldForm[Message[General::newsym, ER2w]]",
+				"HoldForm[Message[General::newsym, Vkr2w]]",
+				"HoldForm[Message[General::newsym, HR2w]]",
+				"HoldForm[Message[General::newsym, E2wroots]]",
+				"HoldForm[Message[ToExpression::sntxi, HoldForm[\"\"], HoldForm[\"\"], HoldForm[\"\"], HoldForm[\"\\n\"]]]"
+			]
+		},
+		{
+			"format":"PlainText",
+			"region_id":"si_full_analytical_export_candidate",
+			"status":"skipped_unbounded_region",
+			"parse_status":"skipped",
+			"message_count":0,
+			"messages_preview":[]
+		},
+		{
+			"format":"PlainText",
+			"region_id":"full_analytical_flag_setup_candidate",
+			"start":259,
+			"end":98975,
+			"byte_count":98717,
+			"parse_status":"failed",
+			"held_head":"$Failed",
+			"held_byte_count":0,
+			"message_count":1,
+			"messages_preview":[
+				"HoldForm[Message[ToExpression::sntx, HoldForm[\"Quiet[Symbolize[k^(i,\\\\[Omega])]];Quiet[Symbolize[k^(R,\\\\[Omega])]];Quiet[Symbolize[k^(R,2\\\\[Omega])]];\\n                     ^\"], HoldForm[\"\"], HoldForm[\"\"], HoldForm[\"\\n\"]]]"
+			]
+		},
+		{
+			"format":"InputText",
+			"region_id":"initialization_and_input_setup_candidate",
+			"start":1,
+			"end":139535,
+			"byte_count":139535,
+			"parse_status":"failed",
+			"held_head":"$Failed",
+			"held_byte_count":0,
+			"message_count":2,
+			"messages_preview":[
+				"HoldForm[Message[General::newsym, NotationTemplateTag]]",
+				"HoldForm[Message[ToExpression::sntx, HoldForm[\"Quiet[Symbolize[NotationTemplateTag[k^(i, \\\\[Omega])]]]; Quiet[\\n                                         ^\"], HoldForm[\"\"], HoldForm[\"\"], HoldForm[\"\\n\"]]]"
+			]
+		},
+		{
+			"format":"InputText",
+			"region_id":"si_numerical_shg_compute_candidate",
+			"start":139535,
+			"end":261107,
+			"byte_count":121573,
+			"parse_status":"failed",
+			"held_head":"$Failed",
+			"held_byte_count":0,
+			"message_count":1,
+			"messages_preview":[
+				"HoldForm[Message[ToExpression::sntx, HoldForm[\"SHG Simulations && Expressions*)\\n                                ^\"], HoldForm[\"\"], HoldForm[\"\"], HoldForm[\"\\n\"]]]"
+			]
+		},
+		{
+			"format":"InputText",
+			"region_id":"si_partial_analytical_compute_candidate",
+			"start":261107,
+			"end":286428,
+			"byte_count":25322,
+			"parse_status":"failed",
+			"held_head":"$Failed",
+			"held_byte_count":0,
+			"message_count":1,
+			"messages_preview":[
+				"HoldForm[Message[ToExpression::sntxi, HoldForm[\"\"], HoldForm[\"\"], HoldForm[\"\"], HoldForm[\"\\n\"]]]"
+			]
+		},
+		{
+			"format":"InputText",
+			"region_id":"si_full_analytical_export_candidate",
+			"status":"skipped_unbounded_region",
+			"parse_status":"skipped",
+			"message_count":0,
+			"messages_preview":[]
+		},
+		{
+			"format":"InputText",
+			"region_id":"full_analytical_flag_setup_candidate",
+			"start":321,
+			"end":139535,
+			"byte_count":139215,
+			"parse_status":"failed",
+			"held_head":"$Failed",
+			"held_byte_count":0,
+			"message_count":1,
+			"messages_preview":[
+				"HoldForm[Message[ToExpression::sntx, HoldForm[\"Quiet[Symbolize[NotationTemplateTag[k^(i, \\\\[Omega])]]]; Quiet[\\n                                         ^\"], HoldForm[\"\"], HoldForm[\"\"], HoldForm[\"\\n\"]]]"
+			]
+		}
+	]
+}

@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "status": "batch_payload_confirmed_by_file_export",
+  "batch_execution_confirmed": true,
+  "usable_kernel_found": true,
+  "date_checked": "2026-05-24",
+  "detection_report": "benchmarks/wolfram_batch_detection_current_v1.json",
+  "preferred_strategy": "script",
+  "preferred_executable": "C:\\Program Files\\Wolfram Research\\Wolfram\\14.3\\WolframKernel.exe",
+  "kernel_candidates": [
+    "C:\\Program Files\\Wolfram Research\\Mathematica\\13.3\\WolframKernel.exe",
+    "C:\\Program Files\\Wolfram Research\\Mathematica\\13.3\\MathKernel.exe",
+    "C:\\Program Files\\Wolfram Research\\Wolfram\\14.3\\WolframKernel.exe",
+    "C:\\Program Files\\Wolfram Research\\Wolfram\\14.3\\MathKernel.exe",
+    "C:\\Program Files\\Wolfram Research\\Wolfram\\14.3\\SystemFiles\\Kernel\\Binaries\\Windows-x86-64\\WolframKernel.exe",
+    "C:\\Program Files\\Wolfram Research\\Wolfram\\14.3\\SystemFiles\\Kernel\\Binaries\\Windows-x86-64\\MathKernel.exe",
+    "C:\\Program Files\\Wolfram Research\\WolframScript\\wolframscript.exe"
+  ],
+  "attempts": [
+    {
+      "command_summary": "detect_wolfram_batch.py --include-mathematica --timeout 8",
+      "exit_code": 0,
+      "usable_kernel_found": true,
+      "confirmed_payload_execution": true,
+      "proof": "temporary script exported JSON with result 4"
+    },
+    {
+      "command_summary": "Manual Wolfram 14.3 MathKernel/WolframKernel -run Print[2+2]",
+      "exit_code": 0,
+      "stdout_observed": "",
+      "confirmed_payload_execution": false,
+      "lesson": "stdout silence is not proof of failure or success; require exported payload"
+    },
+    {
+      "command_summary": "Manual WolframScript -code Print[2+2]",
+      "exit_code": 0,
+      "stdout_observed": "",
+      "confirmed_payload_execution": false,
+      "lesson": "wolframscript may report config warnings and still execute file-export scripts"
+    }
+  ],
+  "proof_payload": {
+    "source": "Wolfram batch probe",
+    "result": 4,
+    "version": "14.3.0 for Microsoft Windows (64-bit) (July 8, 2025)"
+  },
+  "known_warnings": [
+    "The Wolfram 14.3.0 Kernel license is expiring.",
+    "Some wolframscript probes print a configuration-file warning even when the exported payload is created."
+  ],
+  "smoke_script": "benchmarks/wolfram_kernel_smoke.wls",
+  "next_action": "Use the script strategy and verify a JSON output payload for every Mathematica reference export; do not rely on stdout-only commands."
+}

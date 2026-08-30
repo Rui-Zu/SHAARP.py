@@ -1,0 +1,2121 @@
+{
+  "schema_version": 1,
+  "source": "SHAARP.si refined-region assignment map generated from audited snippets",
+  "status": "symbol_source_map_not_validation_evidence",
+  "snippet_file": "benchmarks/mathematica_reference/shaarp_si_refined_region_texts_v1.json",
+  "parse_file": "benchmarks/mathematica_reference/shaarp_si_refined_region_parse.json",
+  "requested_symbols": [
+    "ThetaExt",
+    "ThetaOrd",
+    "nwNumExt",
+    "nwNumOrd",
+    "EwrootsNum",
+    "E2wroots",
+    "ERpNum",
+    "ERsNum",
+    "ER2w",
+    "HR2w",
+    "P2e",
+    "P2o",
+    "Peo",
+    "P2eo",
+    "Peoo",
+    "Croots",
+    "ETweo",
+    "ETwo",
+    "Vktweo",
+    "Vktwo",
+    "RSignalCrystal",
+    "I2",
+    "Fresnel"
+  ],
+  "missing_requested_symbols": [
+    "P2e",
+    "Peo",
+    "I2"
+  ],
+  "regions": [
+    {
+      "region_id": "principal_axis_and_index_setup",
+      "line_start": 277,
+      "line_end": 307,
+      "parse_status": "parsed",
+      "active_status": "active_or_setup_code",
+      "assignment_count": 13,
+      "assignments": [
+        {
+          "symbol": "Inv",
+          "line_index": 280,
+          "line_text": "Inv={{0,0,1},{0,1,0},{1,0,0}};"
+        },
+        {
+          "symbol": "aCryToPrinw",
+          "line_index": 281,
+          "line_text": "aCryToPrinw = Inv.Eigenvectors[Re[MatrixPower[\\[CurlyEpsilon]\\[Omega]Cry,0.5]]];"
+        },
+        {
+          "symbol": "aCryToPrin2w",
+          "line_index": 282,
+          "line_text": "aCryToPrin2w = Inv.Eigenvectors[Re[MatrixPower[\\[CurlyEpsilon]2\\[Omega]Cry,0.5]]];"
+        },
+        {
+          "symbol": "aCryToPrinw",
+          "line_index": 285,
+          "line_text": "aCryToPrinw = IdentityMatrix[3]];"
+        },
+        {
+          "symbol": "aCryToPrin2w",
+          "line_index": 288,
+          "line_text": "aCryToPrin2w = IdentityMatrix[3]];"
+        },
+        {
+          "symbol": "aCryToPrinw",
+          "line_index": 291,
+          "line_text": "aCryToPrinw = IdentityMatrix[3];"
+        },
+        {
+          "symbol": "aCryToPrin2w",
+          "line_index": 292,
+          "line_text": "aCryToPrin2w = IdentityMatrix[3];"
+        },
+        {
+          "symbol": "Qw",
+          "line_index": 296,
+          "line_text": "Qw=aCryToPrinw.Inverse[a];"
+        },
+        {
+          "symbol": "Q2w",
+          "line_index": 297,
+          "line_text": "Q2w=aCryToPrin2w.Inverse[a];"
+        },
+        {
+          "symbol": "nwPrinciple",
+          "line_index": 299,
+          "line_text": "nwPrinciple=Chop[aCryToPrinw.MatrixPower[\\[CurlyEpsilon]\\[Omega]Cry,0.5].Transpose[aCryToPrinw]];"
+        },
+        {
+          "symbol": "n2wPrinciple",
+          "line_index": 300,
+          "line_text": "n2wPrinciple = Chop[aCryToPrin2w.MatrixPower[\\[CurlyEpsilon]2\\[Omega]Cry,0.5].Transpose[aCryToPrin2w]];"
+        },
+        {
+          "symbol": "elabwNum",
+          "line_index": 302,
+          "line_text": "elabwNum =Chop[a.\\[CurlyEpsilon]\\[Omega]Cry.Transpose[a]];"
+        },
+        {
+          "symbol": "elab2wNum",
+          "line_index": 303,
+          "line_text": "elab2wNum =Chop[a.\\[CurlyEpsilon]2\\[Omega]Cry.Transpose[a]];"
+        }
+      ]
+    },
+    {
+      "region_id": "shg_tensor_input_matrix",
+      "line_start": 309,
+      "line_end": 311,
+      "parse_status": "parsed",
+      "active_status": "active_or_setup_code",
+      "assignment_count": 1,
+      "assignments": [
+        {
+          "symbol": "dold",
+          "line_index": 309,
+          "line_text": "dold = {{d11,d12,d13,d14,d15,d16},"
+        }
+      ]
+    },
+    {
+      "region_id": "fresnel_sweep_table_initialization",
+      "line_start": 318,
+      "line_end": 320,
+      "parse_status": "parsed",
+      "active_status": "active_or_setup_code",
+      "assignment_count": 3,
+      "assignments": [
+        {
+          "symbol": "step",
+          "line_index": 318,
+          "line_text": "step = 15; Start=1;count = 0;"
+        },
+        {
+          "symbol": "Index",
+          "line_index": 319,
+          "line_text": "Index = ConstantArray[0,{Round[90/step]+1,5}];"
+        },
+        {
+          "symbol": "Fresnel",
+          "line_index": 320,
+          "line_text": "Fresnel = ConstantArray[0,{Round[90/step]+1,5}];"
+        }
+      ]
+    },
+    {
+      "region_id": "fresnel_sweep_angle_root_assignments",
+      "line_start": 340,
+      "line_end": 348,
+      "parse_status": "parsed",
+      "active_status": "active_or_setup_code",
+      "assignment_count": 9,
+      "assignments": [
+        {
+          "symbol": "Vw",
+          "line_index": 340,
+          "line_text": "Vw = Simplify[(AwNum[[1,1]]+AwNum[[2,2]]+AwNum[[3,3]]) / 2];"
+        },
+        {
+          "symbol": "Ww",
+          "line_index": 341,
+          "line_text": "Ww = Simplify[(AwNum[[1,1]]*AwNum[[2,2]]+AwNum[[1,1]]*AwNum[[3,3]]+AwNum[[2,2]]*AwNum[[3,3]]-AwNum[[1,3]]*AwNum[[3,1]]-AwNum[[1,2]]*AwNum[[2,1]]-AwNum[[2,3]]*AwNum[[3,2]])];"
+        },
+        {
+          "symbol": "fo",
+          "line_index": 342,
+          "line_text": "fo = Simplify[Sin[ThetaForIn]- Sqrt[(Vw+Sqrt[Vw^2-Ww])/Ww]*Sin[ThetaTout]];"
+        },
+        {
+          "symbol": "RootOrd",
+          "line_index": 343,
+          "line_text": "RootOrd = Quiet[FindRoot[fo==0,{ThetaTout,Pi/4}]];"
+        },
+        {
+          "symbol": "ThetaOrd",
+          "line_index": 344,
+          "line_text": "ThetaOrd=ThetaTout/.RootOrd;"
+        },
+        {
+          "symbol": "fe",
+          "line_index": 345,
+          "line_text": "fe = Simplify[Sin[ThetaForIn]- Sqrt[(Vw-Sqrt[Vw^2-Ww])/Ww]*Sin[ThetaTout]];"
+        },
+        {
+          "symbol": "RootExt",
+          "line_index": 346,
+          "line_text": "RootExt =Quiet[FindRoot[fe==0,{ThetaTout,Pi/4}]];"
+        },
+        {
+          "symbol": "ThetaExt",
+          "line_index": 347,
+          "line_text": "ThetaExt=ThetaTout/.RootExt;"
+        },
+        {
+          "symbol": "ExtwFactor",
+          "line_index": 348,
+          "line_text": "ExtwFactor=1;"
+        }
+      ]
+    },
+    {
+      "region_id": "omega_angle_roots_initial_path",
+      "line_start": 368,
+      "line_end": 371,
+      "parse_status": "parsed",
+      "active_status": "active_or_setup_code",
+      "assignment_count": 3,
+      "assignments": [
+        {
+          "symbol": "nwNumOrd",
+          "line_index": 368,
+          "line_text": "nwNumOrd = SetPrecision[Sqrt[(VwNumOrd-ExtwFactor*Sqrt[VwNumOrd^2-WwNumOrd])/WwNumOrd],6];"
+        },
+        {
+          "symbol": "If",
+          "line_index": 370,
+          "line_text": "If [Abs[nwNumExt]>Abs[ nwNumOrd] && Abs[ThetaExt]>Abs[ThetaOrd], ExtwFactor=ExtwFactor*(-1)];"
+        },
+        {
+          "symbol": "If",
+          "line_index": 371,
+          "line_text": "If [Abs[nwNumExt]< Abs[nwNumOrd] && Abs[ThetaExt]<Abs[ThetaOrd], ExtwFactor=ExtwFactor*(-1)];"
+        }
+      ]
+    },
+    {
+      "region_id": "fresnel_sweep_table_rows",
+      "line_start": 449,
+      "line_end": 465,
+      "parse_status": "parsed",
+      "active_status": "active_or_setup_code",
+      "assignment_count": 16,
+      "assignments": [
+        {
+          "symbol": "ERp",
+          "line_index": 450,
+          "line_text": "ERp = ERpNum/.EwrootsNum[[1,1]];"
+        },
+        {
+          "symbol": "ERs",
+          "line_index": 451,
+          "line_text": "ERs = ERsNum/.EwrootsNum[[1,2]];"
+        },
+        {
+          "symbol": "twe",
+          "line_index": 452,
+          "line_text": "twe = twe/.EwrootsNum[[1,3]];"
+        },
+        {
+          "symbol": "two",
+          "line_index": 453,
+          "line_text": "two = two/.EwrootsNum[[1,4]];"
+        },
+        {
+          "symbol": "ETweo",
+          "line_index": 454,
+          "line_text": "ETweo=Expand[ETwNumExt];"
+        },
+        {
+          "symbol": "ETwo",
+          "line_index": 455,
+          "line_text": "ETwo  =Expand[ETwNumOrd];"
+        },
+        {
+          "symbol": "Index",
+          "line_index": 456,
+          "line_text": "Index[[count+1,1]]=(count)*step;"
+        },
+        {
+          "symbol": "Index",
+          "line_index": 457,
+          "line_text": "Index[[count+1,2]]=ThetaOrd*180/Pi;"
+        },
+        {
+          "symbol": "Index",
+          "line_index": 458,
+          "line_text": "Index[[count+1,3]]=nwNumOrd;"
+        },
+        {
+          "symbol": "Index",
+          "line_index": 459,
+          "line_text": "Index[[count+1,4]]=ThetaExt*180/Pi;"
+        },
+        {
+          "symbol": "Index",
+          "line_index": 460,
+          "line_text": "Index[[count+1,5]]=nwNumExt;"
+        },
+        {
+          "symbol": "Fresnel",
+          "line_index": 461,
+          "line_text": "Fresnel[[count+1,1]]=(count)*step;"
+        },
+        {
+          "symbol": "Fresnel",
+          "line_index": 462,
+          "line_text": "Fresnel[[count+1,2]]=-ERwNum[[1]]/EIwNum[[1]];(*rp*)"
+        },
+        {
+          "symbol": "Fresnel",
+          "line_index": 463,
+          "line_text": "Fresnel[[count+1,3]]=ERs/EIwNum[[2]];(*rs*)"
+        },
+        {
+          "symbol": "Fresnel",
+          "line_index": 464,
+          "line_text": "Fresnel[[count+1,4]]=Sqrt[((ETwo[[1]]+ETweo[[1]])^2+(ETwo[[3]]+ETweo[[3]])^2)]/Sqrt[EIw[[1]]^2+EIw[[3]]^2];(*rp*)"
+        },
+        {
+          "symbol": "Fresnel",
+          "line_index": 465,
+          "line_text": "Fresnel[[count+1,5]]=(ETwo[[2]]+ETweo[[2]])/EIw[[2]]; (*rs*)"
+        }
+      ]
+    },
+    {
+      "region_id": "active_wave_equation_setup",
+      "line_start": 481,
+      "line_end": 491,
+      "parse_status": "parsed",
+      "active_status": "active_or_setup_code",
+      "assignment_count": 11,
+      "assignments": [
+        {
+          "symbol": "progress",
+          "line_index": 481,
+          "line_text": "progress=30;"
+        },
+        {
+          "symbol": "uy",
+          "line_index": 482,
+          "line_text": "uy = 0;"
+        },
+        {
+          "symbol": "ux",
+          "line_index": 483,
+          "line_text": "ux = Sin[ThetaTout];"
+        },
+        {
+          "symbol": "uz",
+          "line_index": 484,
+          "line_text": "uz = -Cos[ThetaTout];"
+        },
+        {
+          "symbol": "L",
+          "line_index": 485,
+          "line_text": "L = {{uy^2+uz^2,-ux*uy,-ux*uz},{-ux*uy, ux^2+uz^2,-uy*uz},{-uz*ux,-uz*uy,ux^2+uy^2}}; (*Curl * Curl of WaveEquation*)"
+        },
+        {
+          "symbol": "RstandardwNum",
+          "line_index": 486,
+          "line_text": "RstandardwNum = nwPrinciple.Qw;"
+        },
+        {
+          "symbol": "Rstandard2wNum",
+          "line_index": 487,
+          "line_text": "Rstandard2wNum = n2wPrinciple.Q2w;"
+        },
+        {
+          "symbol": "CstandardwNum",
+          "line_index": 488,
+          "line_text": "CstandardwNum = Inverse[RstandardwNum];"
+        },
+        {
+          "symbol": "Cstandard2wNum",
+          "line_index": 489,
+          "line_text": "Cstandard2wNum = Inverse[Rstandard2wNum];"
+        },
+        {
+          "symbol": "AwNum",
+          "line_index": 490,
+          "line_text": "AwNum = Transpose[CstandardwNum].L.CstandardwNum;"
+        },
+        {
+          "symbol": "A2wNum",
+          "line_index": 491,
+          "line_text": "A2wNum = Transpose[Cstandard2wNum].L.Cstandard2wNum;"
+        }
+      ]
+    },
+    {
+      "region_id": "active_backward_wave_equation_setup",
+      "line_start": 493,
+      "line_end": 504,
+      "parse_status": "parsed",
+      "active_status": "active_or_setup_code",
+      "assignment_count": 10,
+      "assignments": [
+        {
+          "symbol": "uMBy",
+          "line_index": 494,
+          "line_text": "uMBy = 0;"
+        },
+        {
+          "symbol": "uMBx",
+          "line_index": 495,
+          "line_text": "uMBx = Sin[ThetaTout];"
+        },
+        {
+          "symbol": "uMBz",
+          "line_index": 496,
+          "line_text": "uMBz = Cos[ThetaTout]; (*Change Sign due to Backward Wave*)"
+        },
+        {
+          "symbol": "LMB",
+          "line_index": 497,
+          "line_text": "LMB = {{uy^2+uz^2,-ux*uy,-ux*uz},{-ux*uy, ux^2+uz^2,-uy*uz},{-uz*ux,-uz*uy,ux^2+uy^2}};"
+        },
+        {
+          "symbol": "RstandardMBwNum",
+          "line_index": 499,
+          "line_text": "RstandardMBwNum= nwPrinciple.Qw;"
+        },
+        {
+          "symbol": "RstandardMB2wNum",
+          "line_index": 500,
+          "line_text": "RstandardMB2wNum = n2wPrinciple.Q2w;"
+        },
+        {
+          "symbol": "CstandardMBwNum",
+          "line_index": 501,
+          "line_text": "CstandardMBwNum = Inverse[RstandardMBwNum];"
+        },
+        {
+          "symbol": "CstandardMB2wNum",
+          "line_index": 502,
+          "line_text": "CstandardMB2wNum = Inverse[RstandardMB2wNum];"
+        },
+        {
+          "symbol": "AMBwNum",
+          "line_index": 503,
+          "line_text": "AMBwNum = Transpose[CstandardMBwNum].LMB.CstandardMBwNum;"
+        },
+        {
+          "symbol": "AMB2wNum",
+          "line_index": 504,
+          "line_text": "AMB2wNum = Transpose[CstandardMB2wNum].LMB.CstandardMB2wNum;"
+        }
+      ]
+    },
+    {
+      "region_id": "omega_angle_root_assignments_active_path",
+      "line_start": 508,
+      "line_end": 519,
+      "parse_status": "parsed",
+      "active_status": "active_or_setup_code",
+      "assignment_count": 9,
+      "assignments": [
+        {
+          "symbol": "Vw",
+          "line_index": 508,
+          "line_text": "Vw = Simplify[(AwNum[[1,1]]+AwNum[[2,2]]+AwNum[[3,3]]) / 2];"
+        },
+        {
+          "symbol": "Ww",
+          "line_index": 509,
+          "line_text": "Ww = Simplify[(AwNum[[1,1]]*AwNum[[2,2]]+AwNum[[1,1]]*AwNum[[3,3]]+AwNum[[2,2]]*AwNum[[3,3]]-AwNum[[1,3]]*AwNum[[3,1]]-AwNum[[1,2]]*AwNum[[2,1]]-AwNum[[2,3]]*AwNum[[3,2]])];"
+        },
+        {
+          "symbol": "fo",
+          "line_index": 510,
+          "line_text": "fo = Simplify[Sin[ThetaIn*Pi /180]- Sqrt[(Vw+Sqrt[Vw^2-Ww])/Ww]*Sin[ThetaTout]];"
+        },
+        {
+          "symbol": "RootOrd",
+          "line_index": 511,
+          "line_text": "RootOrd = Quiet[FindRoot[fo==0,{ThetaTout,Pi/4}]];"
+        },
+        {
+          "symbol": "ThetaOrd",
+          "line_index": 515,
+          "line_text": "ThetaOrd=ThetaTout/.RootOrd;"
+        },
+        {
+          "symbol": "fe",
+          "line_index": 516,
+          "line_text": "fe = Simplify[Sin[ThetaIn*Pi /180]- Sqrt[(Vw-Sqrt[Vw^2-Ww])/Ww]*Sin[ThetaTout]];"
+        },
+        {
+          "symbol": "RootExt",
+          "line_index": 517,
+          "line_text": "RootExt = Quiet[FindRoot[fe==0,{ThetaTout,Pi/4}]];"
+        },
+        {
+          "symbol": "ThetaExt",
+          "line_index": 518,
+          "line_text": "ThetaExt=ThetaTout/.RootExt;"
+        },
+        {
+          "symbol": "ExtwFactor",
+          "line_index": 519,
+          "line_text": "ExtwFactor=1;"
+        }
+      ]
+    },
+    {
+      "region_id": "two_omega_angle_root_assignments_active_path",
+      "line_start": 524,
+      "line_end": 533,
+      "parse_status": "parsed",
+      "active_status": "active_or_setup_code",
+      "assignment_count": 10,
+      "assignments": [
+        {
+          "symbol": "progress",
+          "line_index": 524,
+          "line_text": "progress=35;"
+        },
+        {
+          "symbol": "V2w",
+          "line_index": 525,
+          "line_text": "V2w = Simplify[(A2wNum[[1,1]]+A2wNum[[2,2]]+A2wNum[[3,3]]) / 2];"
+        },
+        {
+          "symbol": "W2w",
+          "line_index": 526,
+          "line_text": "W2w = Simplify[(A2wNum[[1,1]]*A2wNum[[2,2]]+A2wNum[[1,1]]*A2wNum[[3,3]]+A2wNum[[2,2]]*A2wNum[[3,3]]-A2wNum[[1,3]]*A2wNum[[3,1]]-A2wNum[[1,2]]*A2wNum[[2,1]]-A2wNum[[2,3]]*A2wNum[[3,2]])];"
+        },
+        {
+          "symbol": "fe2w",
+          "line_index": 527,
+          "line_text": "fe2w = Simplify[Sin[ThetaIn*Pi /180]- Sqrt[(V2w-Sqrt[V2w^2-W2w])/W2w]*Sin[ThetaTout]];"
+        },
+        {
+          "symbol": "RootExt2w",
+          "line_index": 528,
+          "line_text": "RootExt2w = Quiet[FindRoot[fe2w==0,{ThetaTout,Pi/4}]];"
+        },
+        {
+          "symbol": "ThetaExt2w",
+          "line_index": 529,
+          "line_text": "ThetaExt2w=ThetaTout/.RootExt2w;"
+        },
+        {
+          "symbol": "fo2w",
+          "line_index": 530,
+          "line_text": "fo2w = Simplify[Sin[ThetaIn*Pi /180]- Sqrt[(V2w+Sqrt[V2w^2-W2w])/W2w]*Sin[ThetaTout]];"
+        },
+        {
+          "symbol": "RootOrd2w",
+          "line_index": 531,
+          "line_text": "RootOrd2w = Quiet[FindRoot[fo2w==0,{ThetaTout,Pi/4}]];"
+        },
+        {
+          "symbol": "ThetaOrd2w",
+          "line_index": 532,
+          "line_text": "ThetaOrd2w=ThetaTout/.RootOrd2w;"
+        },
+        {
+          "symbol": "Ext2wFactor",
+          "line_index": 533,
+          "line_text": "Ext2wFactor=1;"
+        }
+      ]
+    },
+    {
+      "region_id": "omega_angle_roots_active_numerical_path",
+      "line_start": 536,
+      "line_end": 574,
+      "parse_status": "parsed",
+      "active_status": "active_or_setup_code",
+      "assignment_count": 36,
+      "assignments": [
+        {
+          "symbol": "uyNumExt",
+          "line_index": 537,
+          "line_text": "uyNumExt = 0;"
+        },
+        {
+          "symbol": "uxNumExt",
+          "line_index": 538,
+          "line_text": "uxNumExt = Sin[ThetaExt];"
+        },
+        {
+          "symbol": "uzNumExt",
+          "line_index": 539,
+          "line_text": "uzNumExt = -Cos[ThetaExt];"
+        },
+        {
+          "symbol": "LNumExt",
+          "line_index": 540,
+          "line_text": "LNumExt = {{uyNumExt^2+uzNumExt^2,-uxNumExt*uyNumExt,-uxNumExt*uzNumExt},{-uxNumExt*uyNumExt, uxNumExt^2+uzNumExt^2,-uyNumExt*uzNumExt},{-uzNumExt*uxNumExt,-uzNumExt*uyNumExt,uxNumExt^2+uyNumExt^2}};"
+        },
+        {
+          "symbol": "AwNumExt",
+          "line_index": 541,
+          "line_text": "AwNumExt = Transpose[CstandardwNum].LNumExt.CstandardwNum;"
+        },
+        {
+          "symbol": "VwNumExt",
+          "line_index": 542,
+          "line_text": "VwNumExt = Simplify[(AwNumExt[[1,1]]+AwNumExt[[2,2]]+AwNumExt[[3,3]]) / 2];"
+        },
+        {
+          "symbol": "WwNumExt",
+          "line_index": 543,
+          "line_text": "WwNumExt = Simplify[(AwNumExt[[1,1]]*AwNumExt[[2,2]]+AwNumExt[[1,1]]*AwNumExt[[3,3]]+AwNumExt[[2,2]]*AwNumExt[[3,3]]-AwNumExt[[1,3]]*AwNumExt[[3,1]]-AwNumExt[[1,2]]*AwNumExt[[2,1]]-AwNumExt[[2,3]]*AwNumExt[[3,2]])];"
+        },
+        {
+          "symbol": "nwNumExt",
+          "line_index": 544,
+          "line_text": "nwNumExt =SetPrecision[Sqrt[(VwNumExt +ExtwFactor*Sqrt[VwNumExt^2-WwNumExt])/WwNumExt],6];"
+        },
+        {
+          "symbol": "uyNumOrd",
+          "line_index": 545,
+          "line_text": "uyNumOrd = 0;"
+        },
+        {
+          "symbol": "uxNumOrd",
+          "line_index": 546,
+          "line_text": "uxNumOrd = Sin[ThetaOrd];"
+        },
+        {
+          "symbol": "uzNumOrd",
+          "line_index": 547,
+          "line_text": "uzNumOrd = -Cos[ThetaOrd];"
+        },
+        {
+          "symbol": "LNumOrd",
+          "line_index": 548,
+          "line_text": "LNumOrd = {{uyNumOrd^2+uzNumOrd^2,-uxNumOrd*uyNumOrd,-uxNumOrd*uzNumOrd},{-uxNumOrd*uyNumOrd, uxNumOrd^2+uzNumOrd^2,-uyNumOrd*uzNumOrd},{-uzNumOrd*uxNumOrd,-uzNumOrd*uyNumOrd,uxNumOrd^2+uyNumOrd^2}};"
+        },
+        {
+          "symbol": "AwNumOrd",
+          "line_index": 549,
+          "line_text": "AwNumOrd = Transpose[CstandardwNum].LNumOrd.CstandardwNum;"
+        },
+        {
+          "symbol": "VwNumOrd",
+          "line_index": 550,
+          "line_text": "VwNumOrd = Simplify[(AwNumOrd[[1,1]]+AwNumOrd[[2,2]]+AwNumOrd[[3,3]]) / 2];"
+        },
+        {
+          "symbol": "WwNumOrd",
+          "line_index": 551,
+          "line_text": "WwNumOrd = Simplify[(AwNumOrd[[1,1]]*AwNumOrd[[2,2]]+AwNumOrd[[1,1]]*AwNumOrd[[3,3]]+AwNumOrd[[2,2]]*AwNumOrd[[3,3]]-AwNumOrd[[1,3]]*AwNumOrd[[3,1]]-AwNumOrd[[1,2]]*AwNumOrd[[2,1]]-AwNumOrd[[2,3]]*AwNumOrd[[3,2]])];"
+        },
+        {
+          "symbol": "nwNumOrd",
+          "line_index": 552,
+          "line_text": "nwNumOrd = SetPrecision[Sqrt[(VwNumOrd-ExtwFactor*Sqrt[VwNumOrd^2-WwNumOrd])/WwNumOrd],6];"
+        },
+        {
+          "symbol": "If",
+          "line_index": 553,
+          "line_text": "If [Abs[nwNumExt]>Abs[ nwNumOrd] && Abs[ThetaExt]>Abs[ThetaOrd], ExtwFactor=ExtwFactor*(-1)];"
+        },
+        {
+          "symbol": "If",
+          "line_index": 554,
+          "line_text": "If [Abs[nwNumExt]< Abs[nwNumOrd] && Abs[ThetaExt]<Abs[ThetaOrd], ExtwFactor=ExtwFactor*(-1)];"
+        },
+        {
+          "symbol": "uyNumExt",
+          "line_index": 556,
+          "line_text": "uyNumExt = 0;"
+        },
+        {
+          "symbol": "uxNumExt",
+          "line_index": 557,
+          "line_text": "uxNumExt = Sin[ThetaExt2w];"
+        },
+        {
+          "symbol": "uzNumExt",
+          "line_index": 558,
+          "line_text": "uzNumExt = -Cos[ThetaExt2w];"
+        },
+        {
+          "symbol": "LNumExt",
+          "line_index": 559,
+          "line_text": "LNumExt = {{uyNumExt^2+uzNumExt^2,-uxNumExt*uyNumExt,-uxNumExt*uzNumExt},{-uxNumExt*uyNumExt, uxNumExt^2+uzNumExt^2,-uyNumExt*uzNumExt},{-uzNumExt*uxNumExt,-uzNumExt*uyNumExt,uxNumExt^2+uyNumExt^2}};"
+        },
+        {
+          "symbol": "A2wNumExt",
+          "line_index": 560,
+          "line_text": "A2wNumExt = Transpose[Cstandard2wNum].LNumExt.Cstandard2wNum;"
+        },
+        {
+          "symbol": "V2wNumExt",
+          "line_index": 561,
+          "line_text": "V2wNumExt = Simplify[(A2wNumExt[[1,1]]+A2wNumExt[[2,2]]+A2wNumExt[[3,3]]) / 2];"
+        },
+        {
+          "symbol": "W2wNumExt",
+          "line_index": 562,
+          "line_text": "W2wNumExt = Simplify[(A2wNumExt[[1,1]]*A2wNumExt[[2,2]]+A2wNumExt[[1,1]]*A2wNumExt[[3,3]]+A2wNumExt[[2,2]]*A2wNumExt[[3,3]]-A2wNumExt[[1,3]]*A2wNumExt[[3,1]]-A2wNumExt[[1,2]]*A2wNumExt[[2,1]]-A2wNumExt[[2,3]]*A2wNumExt[[3,2]])];"
+        },
+        {
+          "symbol": "n2wNumExt",
+          "line_index": 563,
+          "line_text": "n2wNumExt = SetPrecision[Sqrt[(V2wNumExt +Ext2wFactor*Sqrt[V2wNumExt^2-W2wNumExt])/W2wNumExt],6];"
+        },
+        {
+          "symbol": "uyNumOrd",
+          "line_index": 565,
+          "line_text": "uyNumOrd = 0;"
+        },
+        {
+          "symbol": "uxNumOrd",
+          "line_index": 566,
+          "line_text": "uxNumOrd = Sin[ThetaOrd2w];"
+        },
+        {
+          "symbol": "uzNumOrd",
+          "line_index": 567,
+          "line_text": "uzNumOrd = -Cos[ThetaOrd2w];"
+        },
+        {
+          "symbol": "LNumOrd",
+          "line_index": 568,
+          "line_text": "LNumOrd = {{uyNumOrd^2+uzNumOrd^2,-uxNumOrd*uyNumOrd,-uxNumOrd*uzNumOrd},{-uxNumOrd*uyNumOrd, uxNumOrd^2+uzNumOrd^2,-uyNumOrd*uzNumOrd},{-uzNumOrd*uxNumOrd,-uzNumOrd*uyNumOrd,uxNumOrd^2+uyNumOrd^2}};"
+        },
+        {
+          "symbol": "A2wNumOrd",
+          "line_index": 569,
+          "line_text": "A2wNumOrd = Transpose[Cstandard2wNum].LNumOrd.Cstandard2wNum;"
+        },
+        {
+          "symbol": "V2wNumOrd",
+          "line_index": 570,
+          "line_text": "V2wNumOrd = Simplify[(A2wNumOrd[[1,1]]+A2wNumOrd[[2,2]]+A2wNumOrd[[3,3]]) / 2];"
+        },
+        {
+          "symbol": "W2wNumOrd",
+          "line_index": 571,
+          "line_text": "W2wNumOrd = Simplify[(A2wNumOrd[[1,1]]*A2wNumOrd[[2,2]]+A2wNumOrd[[1,1]]*A2wNumOrd[[3,3]]+A2wNumOrd[[2,2]]*A2wNumOrd[[3,3]]-A2wNumOrd[[1,3]]*A2wNumOrd[[3,1]]-A2wNumOrd[[1,2]]*A2wNumOrd[[2,1]]-A2wNumOrd[[2,3]]*A2wNumOrd[[3,2]])];"
+        },
+        {
+          "symbol": "n2wNumOrd",
+          "line_index": 572,
+          "line_text": "n2wNumOrd = SetPrecision[Sqrt[(V2wNumOrd-Ext2wFactor*Sqrt[V2wNumOrd^2-W2wNumOrd])/W2wNumOrd],6];"
+        },
+        {
+          "symbol": "If",
+          "line_index": 573,
+          "line_text": "If [Abs[n2wNumExt]>Abs[n2wNumOrd] && Abs[ThetaExt2w]>Abs[ThetaOrd2w], Ext2wFactor=Ext2wFactor*(-1)];"
+        },
+        {
+          "symbol": "If",
+          "line_index": 574,
+          "line_text": "If [Abs[n2wNumExt]< Abs[n2wNumOrd] && Abs[ThetaExt2w]<Abs[ThetaOrd2w], Ext2wFactor=Ext2wFactor*(-1)];"
+        }
+      ]
+    },
+    {
+      "region_id": "omega_transmitted_field_directions_active_path",
+      "line_start": 576,
+      "line_end": 695,
+      "parse_status": "parsed",
+      "active_status": "active_or_setup_code",
+      "assignment_count": 84,
+      "assignments": [
+        {
+          "symbol": "progress",
+          "line_index": 578,
+          "line_text": "progress=40;"
+        },
+        {
+          "symbol": "uyNumExt",
+          "line_index": 579,
+          "line_text": "uyNumExt = 0;"
+        },
+        {
+          "symbol": "uxNumExt",
+          "line_index": 580,
+          "line_text": "uxNumExt = Sin[ThetaExt];"
+        },
+        {
+          "symbol": "uzNumExt",
+          "line_index": 581,
+          "line_text": "uzNumExt = -Cos[ThetaExt];"
+        },
+        {
+          "symbol": "LNumExt",
+          "line_index": 583,
+          "line_text": "LNumExt = {{uyNumExt^2+uzNumExt^2,-uxNumExt*uyNumExt,-uxNumExt*uzNumExt},{-uxNumExt*uyNumExt, uxNumExt^2+uzNumExt^2,-uyNumExt*uzNumExt},{-uzNumExt*uxNumExt,-uzNumExt*uyNumExt,uxNumExt^2+uyNumExt^2}};"
+        },
+        {
+          "symbol": "AwNumExt",
+          "line_index": 584,
+          "line_text": "AwNumExt = Transpose[CstandardwNum].LNumExt.CstandardwNum;"
+        },
+        {
+          "symbol": "VwNumExt",
+          "line_index": 585,
+          "line_text": "VwNumExt = Simplify[(AwNumExt[[1,1]]+AwNumExt[[2,2]]+AwNumExt[[3,3]]) / 2];"
+        },
+        {
+          "symbol": "WwNumExt",
+          "line_index": 586,
+          "line_text": "WwNumExt = Simplify[(AwNumExt[[1,1]]*AwNumExt[[2,2]]+AwNumExt[[1,1]]*AwNumExt[[3,3]]+AwNumExt[[2,2]]*AwNumExt[[3,3]]-AwNumExt[[1,3]]*AwNumExt[[3,1]]-AwNumExt[[1,2]]*AwNumExt[[2,1]]-AwNumExt[[2,3]]*AwNumExt[[3,2]])];"
+        },
+        {
+          "symbol": "nwNumExt",
+          "line_index": 587,
+          "line_text": "nwNumExt =SetPrecision[Sqrt[(VwNumExt +ExtwFactor*Sqrt[VwNumExt^2-WwNumExt])/WwNumExt],6];"
+        },
+        {
+          "symbol": "EigenwNumExt",
+          "line_index": 588,
+          "line_text": "EigenwNumExt = Eigensystem[{LNumExt,elabwNum}];"
+        },
+        {
+          "symbol": "If",
+          "line_index": 590,
+          "line_text": "If [nwNumExt == SetPrecision[Sqrt[1/EigenwNumExt[[1,1]]],6],k1Num=1,"
+        },
+        {
+          "symbol": "If",
+          "line_index": 591,
+          "line_text": "If[nwNumExt == SetPrecision[Sqrt[1/EigenwNumExt[[1,2]]],6],k1Num=2,k1Num=3]"
+        },
+        {
+          "symbol": "nwNumExt",
+          "line_index": 593,
+          "line_text": "nwNumExt =Quiet[Sqrt[1/EigenwNumExt[[1,k1Num]]]];"
+        },
+        {
+          "symbol": "ETwNumExt",
+          "line_index": 594,
+          "line_text": "ETwNumExt = twe*Chop[Normalize[EigenwNumExt[[2,k1Num]]]];"
+        },
+        {
+          "symbol": "If",
+          "line_index": 596,
+          "line_text": "If [nwNumExt \\[Equal] SetPrecision[Sqrt[1/EigenwNumExt[[1,1]]],6],k1Num=1,"
+        },
+        {
+          "symbol": "If",
+          "line_index": 597,
+          "line_text": "If[nwNumExt \\[Equal] SetPrecision[Sqrt[1/EigenwNumExt[[1,2]]],6],k1Num=2,k1Num=3]"
+        },
+        {
+          "symbol": "nwNumExt",
+          "line_index": 599,
+          "line_text": "nwNumExt =Sqrt[1/EigenwNumExt[[1,k1Num]]];"
+        },
+        {
+          "symbol": "FwNumExt",
+          "line_index": 600,
+          "line_text": "FwNumExt = EigenwNumExt[[2,All,k1Num]];"
+        },
+        {
+          "symbol": "ETwNumExt",
+          "line_index": 602,
+          "line_text": "ETwNumExt = twe*Chop[Transpose[Normalize[Inverse[RstandardwNum].FwNumExt],{1}]];"
+        },
+        {
+          "symbol": "DTwNumExt",
+          "line_index": 604,
+          "line_text": "DTwNumExt = e0*elabwNum.ETwNumExt;"
+        },
+        {
+          "symbol": "VktwNumExt",
+          "line_index": 605,
+          "line_text": "VktwNumExt = ktweo*{Sin[ThetaExt],0,-Cos[ThetaExt]};"
+        },
+        {
+          "symbol": "HTwNumExt",
+          "line_index": 606,
+          "line_text": "HTwNumExt=Simplify[Inverse[\\[Mu]].Cross[VktwNumExt,ETwNumExt]/(w*\\[Mu]0)];"
+        },
+        {
+          "symbol": "uyNumOrd",
+          "line_index": 610,
+          "line_text": "uyNumOrd = 0;"
+        },
+        {
+          "symbol": "uxNumOrd",
+          "line_index": 611,
+          "line_text": "uxNumOrd = Sin[ThetaOrd];"
+        },
+        {
+          "symbol": "uzNumOrd",
+          "line_index": 612,
+          "line_text": "uzNumOrd = -Cos[ThetaOrd];"
+        },
+        {
+          "symbol": "LNumOrd",
+          "line_index": 613,
+          "line_text": "LNumOrd = {{uyNumOrd^2+uzNumOrd^2,-uxNumOrd*uyNumOrd,-uxNumOrd*uzNumOrd},{-uxNumOrd*uyNumOrd, uxNumOrd^2+uzNumOrd^2,-uyNumOrd*uzNumOrd},{-uzNumOrd*uxNumOrd,-uzNumOrd*uyNumOrd,uxNumOrd^2+uyNumOrd^2}};"
+        },
+        {
+          "symbol": "AwNumOrd",
+          "line_index": 614,
+          "line_text": "AwNumOrd = Transpose[CstandardwNum].LNumOrd.CstandardwNum;"
+        },
+        {
+          "symbol": "VwNumOrd",
+          "line_index": 615,
+          "line_text": "VwNumOrd = Simplify[(AwNumOrd[[1,1]]+AwNumOrd[[2,2]]+AwNumOrd[[3,3]]) / 2];"
+        },
+        {
+          "symbol": "WwNumOrd",
+          "line_index": 616,
+          "line_text": "WwNumOrd = Simplify[(AwNumOrd[[1,1]]*AwNumOrd[[2,2]]+AwNumOrd[[1,1]]*AwNumOrd[[3,3]]+AwNumOrd[[2,2]]*AwNumOrd[[3,3]]-AwNumOrd[[1,3]]*AwNumOrd[[3,1]]-AwNumOrd[[1,2]]*AwNumOrd[[2,1]]-AwNumOrd[[2,3]]*AwNumOrd[[3,2]])];"
+        },
+        {
+          "symbol": "nwNumOrd",
+          "line_index": 617,
+          "line_text": "nwNumOrd = SetPrecision[Sqrt[(VwNumOrd-ExtwFactor*Sqrt[VwNumOrd^2-WwNumOrd])/WwNumOrd],6];"
+        },
+        {
+          "symbol": "EigenwNumOrd",
+          "line_index": 618,
+          "line_text": "EigenwNumOrd = Eigensystem[{LNumOrd,elabwNum}];"
+        },
+        {
+          "symbol": "If",
+          "line_index": 619,
+          "line_text": "If [nwNumOrd == SetPrecision[Sqrt[1/EigenwNumOrd[[1,1]]],6] && MatrixRank[{SetPrecision[elabwNum.Chop[EigenwNumOrd[[2,1]]],6],SetPrecision[DTwNumExt,6]}]==2,k2Num=1,"
+        },
+        {
+          "symbol": "k2Num",
+          "line_index": 620,
+          "line_text": "k2Num=2];"
+        },
+        {
+          "symbol": "nwNumOrd",
+          "line_index": 621,
+          "line_text": "nwNumOrd =Quiet[Sqrt[1/EigenwNumOrd[[1,k2Num]]]];"
+        },
+        {
+          "symbol": "ETwNumOrd",
+          "line_index": 622,
+          "line_text": "ETwNumOrd =two*Chop[Normalize[EigenwNumOrd[[2,k2Num]]]];"
+        },
+        {
+          "symbol": "If",
+          "line_index": 624,
+          "line_text": "If [nwNumOrd \\[Equal] SetPrecision[Sqrt[1/EigenwNumOrd[[1,1]]],6] && MatrixRank[{SetPrecision[elabwNum.Chop[Transpose[Normalize[Inverse[RstandardwNum].EigenwNumOrd[[2,All,1]]],{1}]],6],SetPrecision[DTwNumExt,6]}]\\[Equal]2,k2Num=1,"
+        },
+        {
+          "symbol": "k2Num",
+          "line_index": 625,
+          "line_text": "k2Num=2];"
+        },
+        {
+          "symbol": "nwNumOrd",
+          "line_index": 626,
+          "line_text": "nwNumOrd =Sqrt[1/EigenwNumOrd[[1,k2Num]]];"
+        },
+        {
+          "symbol": "FwNumOrd",
+          "line_index": 627,
+          "line_text": "FwNumOrd = EigenwNumOrd[[2,All,k2Num]];"
+        },
+        {
+          "symbol": "ETwNumOrd",
+          "line_index": 628,
+          "line_text": "ETwNumOrd =two*Chop[Transpose[Normalize[Inverse[RstandardwNum].FwNumOrd],{1}]];*)"
+        },
+        {
+          "symbol": "DTwNumOrd",
+          "line_index": 629,
+          "line_text": "DTwNumOrd= e0*elabwNum.ETwNumOrd;"
+        },
+        {
+          "symbol": "VktwNumOrd",
+          "line_index": 630,
+          "line_text": "VktwNumOrd = ktwo*{Sin[ThetaOrd],0,-Cos[ThetaOrd]};"
+        },
+        {
+          "symbol": "HTwNumOrd",
+          "line_index": 631,
+          "line_text": "HTwNumOrd = Simplify[Inverse[\\[Mu]].Cross[VktwNumOrd,ETwNumOrd]/(w*\\[Mu]0)];"
+        },
+        {
+          "symbol": "uyNumExt",
+          "line_index": 635,
+          "line_text": "uyNumExt = 0;"
+        },
+        {
+          "symbol": "uxNumExt",
+          "line_index": 636,
+          "line_text": "uxNumExt = Sin[ThetaExt2w];"
+        },
+        {
+          "symbol": "uzNumExt",
+          "line_index": 637,
+          "line_text": "uzNumExt = -Cos[ThetaExt2w];"
+        },
+        {
+          "symbol": "LNumExt",
+          "line_index": 638,
+          "line_text": "LNumExt = {{uyNumExt^2+uzNumExt^2,-uxNumExt*uyNumExt,-uxNumExt*uzNumExt},{-uxNumExt*uyNumExt, uxNumExt^2+uzNumExt^2,-uyNumExt*uzNumExt},{-uzNumExt*uxNumExt,-uzNumExt*uyNumExt,uxNumExt^2+uyNumExt^2}};"
+        },
+        {
+          "symbol": "A2wNumExt",
+          "line_index": 639,
+          "line_text": "A2wNumExt = Transpose[Cstandard2wNum].LNumExt.Cstandard2wNum;"
+        },
+        {
+          "symbol": "V2wNumExt",
+          "line_index": 640,
+          "line_text": "V2wNumExt = Simplify[(A2wNumExt[[1,1]]+A2wNumExt[[2,2]]+A2wNumExt[[3,3]]) / 2];"
+        },
+        {
+          "symbol": "W2wNumExt",
+          "line_index": 641,
+          "line_text": "W2wNumExt = Simplify[(A2wNumExt[[1,1]]*A2wNumExt[[2,2]]+A2wNumExt[[1,1]]*A2wNumExt[[3,3]]+A2wNumExt[[2,2]]*A2wNumExt[[3,3]]-A2wNumExt[[1,3]]*A2wNumExt[[3,1]]-A2wNumExt[[1,2]]*A2wNumExt[[2,1]]-A2wNumExt[[2,3]]*A2wNumExt[[3,2]])];"
+        },
+        {
+          "symbol": "n2wNumExt",
+          "line_index": 642,
+          "line_text": "n2wNumExt = SetPrecision[Sqrt[(V2wNumExt +Ext2wFactor*Sqrt[V2wNumExt^2-W2wNumExt])/W2wNumExt],6];"
+        },
+        {
+          "symbol": "Eigen2wNumExt",
+          "line_index": 645,
+          "line_text": "Eigen2wNumExt = Eigensystem[{LNumExt,elab2wNum}];"
+        },
+        {
+          "symbol": "If",
+          "line_index": 647,
+          "line_text": "If [n2wNumExt == SetPrecision[Sqrt[1/Eigen2wNumExt[[1,1]]],6],If[((Isotropic || Uniaxial) && SetPrecision[Chop[Eigen2wNumExt[[2,1]]],6].SetPrecision[Chop[e0*elabwNum.EigenwNumOrd[[2,k2Num]]],6]==0) || (Biaxial),k1Num=1,k1Num=2],k1Num=2];"
+        },
+        {
+          "symbol": "n2wNumExt",
+          "line_index": 648,
+          "line_text": "n2wNumExt =Quiet[Sqrt[1/Eigen2wNumExt[[1,k1Num]]]];"
+        },
+        {
+          "symbol": "ET2wNumExt",
+          "line_index": 649,
+          "line_text": "ET2wNumExt =Chop[Normalize[Eigen2wNumExt[[2,k1Num]]]];"
+        },
+        {
+          "symbol": "If",
+          "line_index": 652,
+          "line_text": "If [n2wNumExt \\[Equal] SetPrecision[Sqrt[1/Eigen2wNumExt[[1,1]]],6],If[((Isotropic || Uniaxial) && SetPrecision[Chop[elab2wNum.Chop[Transpose[Normalize[Inverse[Rstandard2wNum].Eigen2wNumExt[[2,All,1]]],{1}]]],6].SetPrecision[Chop[e0*elabwNum.Chop[Transpose[Normalize[Inverse[RstandardwNum].FwNumOrd],{1}]]],6]\\[Equal]0) || (Biaxial),k1Num=1,k1Num=2],k1Num=2];"
+        },
+        {
+          "symbol": "n2wNumExt",
+          "line_index": 653,
+          "line_text": "n2wNumExt =Sqrt[1/Eigen2wNumExt[[1,k1Num]]];"
+        },
+        {
+          "symbol": "F2wNumExt",
+          "line_index": 654,
+          "line_text": "F2wNumExt = Eigen2wNumExt[[2,All,k1Num]];"
+        },
+        {
+          "symbol": "ET2wNumExt",
+          "line_index": 655,
+          "line_text": "ET2wNumExt =Chop[Transpose[Normalize[Inverse[Rstandard2wNum].F2wNumExt],{1}]];*)"
+        },
+        {
+          "symbol": "DT2wNumExt",
+          "line_index": 656,
+          "line_text": "DT2wNumExt = e0*elab2wNum.ET2wNumExt;"
+        },
+        {
+          "symbol": "Vkt2wNumExt",
+          "line_index": 657,
+          "line_text": "Vkt2wNumExt = kt2weo*{Sin[ThetaExt2w],0,-Cos[ThetaExt2w]};"
+        },
+        {
+          "symbol": "HT2wNumExt",
+          "line_index": 659,
+          "line_text": "HT2wNumExt = Simplify[Inverse[\\[Mu]].Cross[Vkt2wNumExt,ET2wNumExt]/(2*w*\\[Mu]0)];"
+        },
+        {
+          "symbol": "uyNumOrd",
+          "line_index": 664,
+          "line_text": "uyNumOrd = 0;"
+        },
+        {
+          "symbol": "uxNumOrd",
+          "line_index": 665,
+          "line_text": "uxNumOrd = Sin[ThetaOrd2w];"
+        },
+        {
+          "symbol": "uzNumOrd",
+          "line_index": 666,
+          "line_text": "uzNumOrd = -Cos[ThetaOrd2w];"
+        },
+        {
+          "symbol": "LNumOrd",
+          "line_index": 667,
+          "line_text": "LNumOrd = {{uyNumOrd^2+uzNumOrd^2,-uxNumOrd*uyNumOrd,-uxNumOrd*uzNumOrd},{-uxNumOrd*uyNumOrd, uxNumOrd^2+uzNumOrd^2,-uyNumOrd*uzNumOrd},{-uzNumOrd*uxNumOrd,-uzNumOrd*uyNumOrd,uxNumOrd^2+uyNumOrd^2}};"
+        },
+        {
+          "symbol": "A2wNumOrd",
+          "line_index": 668,
+          "line_text": "A2wNumOrd = Transpose[Cstandard2wNum].LNumOrd.Cstandard2wNum;"
+        },
+        {
+          "symbol": "V2wNumOrd",
+          "line_index": 669,
+          "line_text": "V2wNumOrd = Simplify[(A2wNumOrd[[1,1]]+A2wNumOrd[[2,2]]+A2wNumOrd[[3,3]]) / 2];"
+        },
+        {
+          "symbol": "W2wNumOrd",
+          "line_index": 670,
+          "line_text": "W2wNumOrd = Simplify[(A2wNumOrd[[1,1]]*A2wNumOrd[[2,2]]+A2wNumOrd[[1,1]]*A2wNumOrd[[3,3]]+A2wNumOrd[[2,2]]*A2wNumOrd[[3,3]]-A2wNumOrd[[1,3]]*A2wNumOrd[[3,1]]-A2wNumOrd[[1,2]]*A2wNumOrd[[2,1]]-A2wNumOrd[[2,3]]*A2wNumOrd[[3,2]])];"
+        },
+        {
+          "symbol": "n2wNumOrd",
+          "line_index": 671,
+          "line_text": "n2wNumOrd = SetPrecision[Sqrt[(V2wNumOrd-Ext2wFactor*Sqrt[V2wNumOrd^2-W2wNumOrd])/W2wNumOrd],6];"
+        },
+        {
+          "symbol": "Eigen2wNumOrd",
+          "line_index": 672,
+          "line_text": "Eigen2wNumOrd = Eigensystem[{LNumOrd,elab2wNum}];"
+        },
+        {
+          "symbol": "k2Num",
+          "line_index": 674,
+          "line_text": "k2Num=2];*)"
+        },
+        {
+          "symbol": "If",
+          "line_index": 676,
+          "line_text": "If [SetPrecision[elab2wNum.Chop[Eigen2wNumOrd[[2,1]]],6].SetPrecision[DT2wNumExt,6]==0,k2Num=1,"
+        },
+        {
+          "symbol": "k2Num",
+          "line_index": 677,
+          "line_text": "k2Num=2];"
+        },
+        {
+          "symbol": "n2wNumOrd",
+          "line_index": 679,
+          "line_text": "n2wNumOrd =Quiet[Sqrt[1/Eigen2wNumOrd[[1,k2Num]]]];"
+        },
+        {
+          "symbol": "ET2wNumOrd",
+          "line_index": 680,
+          "line_text": "ET2wNumOrd =Chop[Normalize[Eigen2wNumOrd[[2,k2Num]]]];"
+        },
+        {
+          "symbol": "If",
+          "line_index": 682,
+          "line_text": "If [n2wNumOrd \\[Equal] SetPrecision[Sqrt[1/Eigen2wNumOrd[[1,1]]],6] && MatrixRank[{SetPrecision[elab2wNum.Chop[Transpose[Normalize[Inverse[Rstandard2wNum].Eigen2wNumOrd[[2,All,1]]],{1}]],6],SetPrecision[DT2wNumExt,6]}]\\[Equal]2,k2Num=1,"
+        },
+        {
+          "symbol": "k2Num",
+          "line_index": 683,
+          "line_text": "k2Num=2];"
+        },
+        {
+          "symbol": "n2wNumOrd",
+          "line_index": 684,
+          "line_text": "n2wNumOrd =Sqrt[1/Eigen2wNumOrd[[1,k2Num]]];"
+        },
+        {
+          "symbol": "F2wNumOrd",
+          "line_index": 685,
+          "line_text": "F2wNumOrd = Eigen2wNumOrd[[2,All,k2Num]];"
+        },
+        {
+          "symbol": "ET2wNumOrd",
+          "line_index": 686,
+          "line_text": "ET2wNumOrd =Chop[Transpose[Normalize[Inverse[Rstandard2wNum].F2wNumOrd],{1}]];*)"
+        },
+        {
+          "symbol": "DT2wNumOrd",
+          "line_index": 687,
+          "line_text": "DT2wNumOrd= e0*elab2wNum.ET2wNumOrd;"
+        },
+        {
+          "symbol": "Vkt2wNumOrd",
+          "line_index": 688,
+          "line_text": "Vkt2wNumOrd = kt2wo*{Sin[ThetaOrd2w],0,-Cos[ThetaOrd2w]};"
+        },
+        {
+          "symbol": "HT2wNumOrd",
+          "line_index": 689,
+          "line_text": "HT2wNumOrd = Simplify[Inverse[\\[Mu]].Cross[Vkt2wNumOrd,ET2wNumOrd]/(2*w*\\[Mu]0)];"
+        }
+      ]
+    },
+    {
+      "region_id": "omega_incident_controls_active_path",
+      "line_start": 697,
+      "line_end": 716,
+      "parse_status": "parsed",
+      "active_status": "active_or_setup_code",
+      "assignment_count": 5,
+      "assignments": [
+        {
+          "symbol": "progress",
+          "line_index": 698,
+          "line_text": "progress=45;"
+        },
+        {
+          "symbol": "w",
+          "line_index": 700,
+          "line_text": "w=1;e0=1;"
+        },
+        {
+          "symbol": "EIw",
+          "line_index": 705,
+          "line_text": "EIw = Eiw*{Cos[\\[CurlyPhi]],Sin[\\[CurlyPhi]]*Exp[I (Ellipticity Degree)],0};"
+        },
+        {
+          "symbol": "EIw",
+          "line_index": 708,
+          "line_text": "EIw = Eiw*{Cos[PolarizerAngle Degree],Sin[PolarizerAngle Degree]*Exp[I (Ellipticity Degree)],0};"
+        },
+        {
+          "symbol": "RHTilt",
+          "line_index": 716,
+          "line_text": "RHTilt = {{Cos[\\[Alpha]],0,-Sin[\\[Alpha]]},{0,1,0},{Sin[\\[Alpha]],0,Cos[\\[Alpha]]}}; (*Sample Rightwards*)"
+        }
+      ]
+    },
+    {
+      "region_id": "omega_fresnel_field_setup_active_path",
+      "line_start": 720,
+      "line_end": 728,
+      "parse_status": "parsed",
+      "active_status": "active_or_setup_code",
+      "assignment_count": 9,
+      "assignments": [
+        {
+          "symbol": "RNum",
+          "line_index": 720,
+          "line_text": "RNum =RHTilt;"
+        },
+        {
+          "symbol": "EIwNum",
+          "line_index": 721,
+          "line_text": "EIwNum = RNum.EIw;"
+        },
+        {
+          "symbol": "DIwNum",
+          "line_index": 722,
+          "line_text": "DIwNum = e0*EIwNum;"
+        },
+        {
+          "symbol": "VkiwNum",
+          "line_index": 723,
+          "line_text": "VkiwNum = kiw*RNum.{0,0,-1};"
+        },
+        {
+          "symbol": "ERwNum",
+          "line_index": 724,
+          "line_text": "ERwNum =Simplify[Inverse[RNum]].{-ERpNum,ERsNum,0};"
+        },
+        {
+          "symbol": "DRwNum",
+          "line_index": 725,
+          "line_text": "DRwNum =e0*ERwNum;"
+        },
+        {
+          "symbol": "VkrwNum",
+          "line_index": 726,
+          "line_text": "VkrwNum = krw*Simplify[Inverse[RNum].{0,0,1}];"
+        },
+        {
+          "symbol": "HIwNum",
+          "line_index": 727,
+          "line_text": "HIwNum = Simplify[Inverse[\\[Mu]].Cross[VkiwNum,EIwNum]/(w*\\[Mu]0)];"
+        },
+        {
+          "symbol": "HRwNum",
+          "line_index": 728,
+          "line_text": "HRwNum = Simplify[Inverse[\\[Mu]].Cross[VkrwNum,ERwNum]/(w*\\[Mu]0)];"
+        }
+      ]
+    },
+    {
+      "region_id": "omega_fresnel_equations_active_path",
+      "line_start": 732,
+      "line_end": 737,
+      "parse_status": "parsed",
+      "active_status": "active_or_setup_code",
+      "assignment_count": 2,
+      "assignments": [
+        {
+          "symbol": "x",
+          "line_index": 732,
+          "line_text": "x=y=z=0;"
+        },
+        {
+          "symbol": "EwrootsNum",
+          "line_index": 736,
+          "line_text": "EwrootsNum = Simplify[NSolve[{EIwNum[[1]]+ERwNum[[1]]== ETwNumOrd[[1]]+ETwNumExt[[1]], EIwNum[[2]]+ERwNum[[2]]== ETwNumOrd[[2]]+ETwNumExt[[2]],HIwNum[[1]]+HRwNum[[1]]== HTwNumOrd[[1]]+HTwNumExt[[1]],HIwNum[[2]]+HRwNum[[2]]== HTwNumOrd[[2]]+HTwNumExt[[2]]},{ERpNum,ERsNum,twe,two}]];"
+        }
+      ]
+    },
+    {
+      "region_id": "omega_fresnel_substitution_active_path",
+      "line_start": 740,
+      "line_end": 753,
+      "parse_status": "parsed",
+      "active_status": "active_or_setup_code",
+      "assignment_count": 9,
+      "assignments": [
+        {
+          "symbol": "ERpNum",
+          "line_index": 742,
+          "line_text": "ERpNum = ERpNum/.EwrootsNum[[1,1]];"
+        },
+        {
+          "symbol": "ERsNum",
+          "line_index": 743,
+          "line_text": "ERsNum = ERsNum/.EwrootsNum[[1,2]];"
+        },
+        {
+          "symbol": "twe",
+          "line_index": 744,
+          "line_text": "twe = twe/.EwrootsNum[[1,3]];"
+        },
+        {
+          "symbol": "two",
+          "line_index": 745,
+          "line_text": "two = two/.EwrootsNum[[1,4]];"
+        },
+        {
+          "symbol": "ETweo",
+          "line_index": 746,
+          "line_text": "ETweo=Expand[ETwNumExt];"
+        },
+        {
+          "symbol": "ETwo",
+          "line_index": 747,
+          "line_text": "ETwo  =Expand[ETwNumOrd];"
+        },
+        {
+          "symbol": "Vktwo",
+          "line_index": 748,
+          "line_text": "Vktwo=Chop[VktwNumOrd];"
+        },
+        {
+          "symbol": "Vktweo",
+          "line_index": 749,
+          "line_text": "Vktweo=Chop[VktwNumExt];"
+        },
+        {
+          "symbol": "elab2w",
+          "line_index": 751,
+          "line_text": "elab2w=elab2wNum;"
+        }
+      ]
+    },
+    {
+      "region_id": "shg_tensor_transformation_active_path",
+      "line_start": 759,
+      "line_end": 773,
+      "parse_status": "parsed",
+      "active_status": "active_or_setup_code",
+      "assignment_count": 10,
+      "assignments": [
+        {
+          "symbol": "progress",
+          "line_index": 760,
+          "line_text": "progress=50;"
+        },
+        {
+          "symbol": "T",
+          "line_index": 761,
+          "line_text": "T = {{1,6,5},"
+        },
+        {
+          "symbol": "dSHG",
+          "line_index": 764,
+          "line_text": "dSHG = ConstantArray[0,{3,6}];"
+        },
+        {
+          "symbol": "For",
+          "line_index": 765,
+          "line_text": "For [i=1,i<4,i++,"
+        },
+        {
+          "symbol": "For",
+          "line_index": 766,
+          "line_text": "For [j=1,j<4,j++,"
+        },
+        {
+          "symbol": "For",
+          "line_index": 767,
+          "line_text": "For [k=j,k<4,k++,"
+        },
+        {
+          "symbol": "For",
+          "line_index": 768,
+          "line_text": "For [l=1,l<4,l++,"
+        },
+        {
+          "symbol": "For",
+          "line_index": 769,
+          "line_text": "For [m=1,m<4,m++,"
+        },
+        {
+          "symbol": "For",
+          "line_index": 770,
+          "line_text": "For [n=1,n<4,n++,"
+        },
+        {
+          "symbol": "dSHG",
+          "line_index": 771,
+          "line_text": "dSHG[[i,T[[j,k]]]] =dSHG[[i,T[[j,k]]]] + a[[i,l]]*a[[j,m]]*a[[k,n]]*dold[[l,T[[m,n]]]];"
+        }
+      ]
+    },
+    {
+      "region_id": "commented_real_field_pnl_block",
+      "line_start": 775,
+      "line_end": 789,
+      "parse_status": "parsed",
+      "active_status": "commented_reference_only",
+      "assignment_count": 4,
+      "assignments": [
+        {
+          "symbol": "RETwo",
+          "line_index": 777,
+          "line_text": "RETwo=  ComplexExpand[Re[ETwo],Element[\\[CurlyPhi],Reals]];"
+        },
+        {
+          "symbol": "P2eo",
+          "line_index": 778,
+          "line_text": "P2eo=e0*Simplify["
+        },
+        {
+          "symbol": "P2o",
+          "line_index": 782,
+          "line_text": "P2o=e0*Simplify["
+        },
+        {
+          "symbol": "Peoo",
+          "line_index": 786,
+          "line_text": "Peoo=e0*Simplify["
+        }
+      ]
+    },
+    {
+      "region_id": "active_complex_field_pnl_block",
+      "line_start": 790,
+      "line_end": 810,
+      "parse_status": "parsed",
+      "active_status": "active_or_setup_code",
+      "assignment_count": 4,
+      "assignments": [
+        {
+          "symbol": "progress",
+          "line_index": 792,
+          "line_text": "progress=55;"
+        },
+        {
+          "symbol": "P2eo",
+          "line_index": 793,
+          "line_text": "P2eo=e0*Simplify["
+        },
+        {
+          "symbol": "P2o",
+          "line_index": 798,
+          "line_text": "P2o=e0*Simplify["
+        },
+        {
+          "symbol": "Peoo",
+          "line_index": 803,
+          "line_text": "Peoo=e0*Simplify["
+        }
+      ]
+    },
+    {
+      "region_id": "inhomogeneous_particular_solution_coefficients",
+      "line_start": 815,
+      "line_end": 838,
+      "parse_status": "parsed",
+      "active_status": "active_or_setup_code",
+      "assignment_count": 12,
+      "assignments": [
+        {
+          "symbol": "r",
+          "line_index": 815,
+          "line_text": "r={x,y,z};"
+        },
+        {
+          "symbol": "g2o",
+          "line_index": 817,
+          "line_text": "g2o = {C11*Exp[I*(2*Vktwo.r-2*w*t)],C21*Exp[I*(2*Vktwo.r-2*w*t)],C31*Exp[I*(2*Vktwo.r-2*w*t)]};"
+        },
+        {
+          "symbol": "g2eo",
+          "line_index": 818,
+          "line_text": "g2eo = {C12*Exp[I*(2*Vktweo.r-2*w*t)],C22*Exp[I*(2*Vktweo.r-2*w*t)],C32*Exp[I*(2*Vktweo.r-2*w*t)]};"
+        },
+        {
+          "symbol": "geoo",
+          "line_index": 819,
+          "line_text": "geoo = {C13*Exp[I*((Vktwo+Vktweo).r-2*w*t)],C23*Exp[I*((Vktwo+Vktweo).r-2*w*t)],C33*Exp[I*((Vktwo+Vktweo).r-2*w*t)]};"
+        },
+        {
+          "symbol": "MatrixForm",
+          "line_index": 820,
+          "line_text": "MatrixForm[Lg2o   =Curl[Curl[g2o ,{x,y,z}],{x,y,z}]];"
+        },
+        {
+          "symbol": "MatrixForm",
+          "line_index": 821,
+          "line_text": "MatrixForm[Lg2eo =Simplify[Curl[Curl[g2eo ,{x,y,z}],{x,y,z}]]];"
+        },
+        {
+          "symbol": "MatrixForm",
+          "line_index": 822,
+          "line_text": "MatrixForm[Lgeoo =Curl[Curl[geoo,{x,y,z}],{x,y,z}]];"
+        },
+        {
+          "symbol": "MatrixForm",
+          "line_index": 825,
+          "line_text": "MatrixForm[R2o    =4*w^2*\\[Mu]0*e0*elab2wNum.g2o+4*\\[Mu]0*w^2*P2o];"
+        },
+        {
+          "symbol": "MatrixForm",
+          "line_index": 826,
+          "line_text": "MatrixForm[R2eo = 4*w^2*\\[Mu]0*e0*elab2wNum.g2eo+4*\\[Mu]0*w^2*P2eo];"
+        },
+        {
+          "symbol": "MatrixForm",
+          "line_index": 827,
+          "line_text": "MatrixForm[Reoo = 4*w^2*\\[Mu]0*e0*elab2wNum.geoo+4*\\[Mu]0*w^2*Peoo];"
+        },
+        {
+          "symbol": "x",
+          "line_index": 828,
+          "line_text": "x=y=z=0; t=0;"
+        },
+        {
+          "symbol": "Croots",
+          "line_index": 836,
+          "line_text": "Croots = NSolve[{"
+        }
+      ]
+    },
+    {
+      "region_id": "numerical_coefficients_and_two_omega_field_setup",
+      "line_start": 840,
+      "line_end": 890,
+      "parse_status": "parsed",
+      "active_status": "active_or_setup_code",
+      "assignment_count": 37,
+      "assignments": [
+        {
+          "symbol": "neMB2w",
+          "line_index": 846,
+          "line_text": "neMB2w=nMB2wNumExt;"
+        },
+        {
+          "symbol": "noMB2w",
+          "line_index": 847,
+          "line_text": "noMB2w=nMB2wNumOrd;"
+        },
+        {
+          "symbol": "ktwo",
+          "line_index": 850,
+          "line_text": "ktwo=w*Sqrt[\\[CurlyEpsilon]woEff*e0];"
+        },
+        {
+          "symbol": "ktweo",
+          "line_index": 851,
+          "line_text": "ktweo = w*Sqrt[\\[CurlyEpsilon]weoEff*e0];"
+        },
+        {
+          "symbol": "kt2weo",
+          "line_index": 852,
+          "line_text": "kt2weo = 2*w*Sqrt[\\[CurlyEpsilon]2weoEff*e0];"
+        },
+        {
+          "symbol": "kt2wo",
+          "line_index": 853,
+          "line_text": "kt2wo = 2*w*Sqrt[\\[CurlyEpsilon]2woEff*e0];"
+        },
+        {
+          "symbol": "kr2w",
+          "line_index": 854,
+          "line_text": "kr2w = 2*w*Sqrt[e0];"
+        },
+        {
+          "symbol": "kiw",
+          "line_index": 855,
+          "line_text": "kiw = w*Sqrt[e0];"
+        },
+        {
+          "symbol": "krw",
+          "line_index": 856,
+          "line_text": "krw = w*Sqrt[e0];"
+        },
+        {
+          "symbol": "ktMB2wo",
+          "line_index": 857,
+          "line_text": "ktMB2wo=2*w*Sqrt[noMB2w^2*e0];"
+        },
+        {
+          "symbol": "ktMB2weo",
+          "line_index": 858,
+          "line_text": "ktMB2weo=2*w*Sqrt[neMB2w^2*e0];"
+        },
+        {
+          "symbol": "RC11",
+          "line_index": 859,
+          "line_text": "RC11 = C11/.Croots;"
+        },
+        {
+          "symbol": "RC12",
+          "line_index": 860,
+          "line_text": "RC12 = C12/.Croots;"
+        },
+        {
+          "symbol": "RC13",
+          "line_index": 861,
+          "line_text": "RC13 = Simplify[C13/.Croots,Element[\\[CurlyPhi],Reals]];"
+        },
+        {
+          "symbol": "RC21",
+          "line_index": 862,
+          "line_text": "RC21 = C21/.Croots;"
+        },
+        {
+          "symbol": "RC22",
+          "line_index": 863,
+          "line_text": "RC22 = C22/.Croots;"
+        },
+        {
+          "symbol": "RC23",
+          "line_index": 864,
+          "line_text": "RC23 = C23/.Croots;"
+        },
+        {
+          "symbol": "RC31",
+          "line_index": 865,
+          "line_text": "RC31 = C31/.Croots;"
+        },
+        {
+          "symbol": "RC32",
+          "line_index": 866,
+          "line_text": "RC32 = C32/.Croots;"
+        },
+        {
+          "symbol": "RC33",
+          "line_index": 867,
+          "line_text": "RC33 = C33/.Croots;"
+        },
+        {
+          "symbol": "progress",
+          "line_index": 871,
+          "line_text": "progress=70;"
+        },
+        {
+          "symbol": "ER2w",
+          "line_index": 872,
+          "line_text": "ER2w = Simplify[Inverse[RNum]].{-ER2wp,ER2ws,0};"
+        },
+        {
+          "symbol": "DR2w",
+          "line_index": 873,
+          "line_text": "DR2w =ER2w*e0;"
+        },
+        {
+          "symbol": "Vkr2w",
+          "line_index": 874,
+          "line_text": "Vkr2w = kr2w*Simplify[Inverse[RNum]].{0,0,1};"
+        },
+        {
+          "symbol": "DT2w2eo",
+          "line_index": 876,
+          "line_text": "DT2w2eo = e0*elab2wNum.{RC12,RC22,RC32}+P2eo;"
+        },
+        {
+          "symbol": "DT2w2eo",
+          "line_index": 877,
+          "line_text": "DT2w2eo = DT2w2eo[[All,1]];"
+        },
+        {
+          "symbol": "Vkt2w2eo",
+          "line_index": 878,
+          "line_text": "Vkt2w2eo = 2*VktwNumExt;"
+        },
+        {
+          "symbol": "DT2w2o",
+          "line_index": 879,
+          "line_text": "DT2w2o = e0*elab2wNum.{RC11,RC21,RC31}+P2o;"
+        },
+        {
+          "symbol": "DT2w2o",
+          "line_index": 880,
+          "line_text": "DT2w2o = DT2w2o[[All,1]];"
+        },
+        {
+          "symbol": "Vkt2w2o",
+          "line_index": 881,
+          "line_text": "Vkt2w2o = 2*VktwNumOrd;"
+        },
+        {
+          "symbol": "DT2weoo",
+          "line_index": 882,
+          "line_text": "DT2weoo = e0*elab2wNum.{RC13,RC23,RC33}+Peoo;"
+        },
+        {
+          "symbol": "DT2weoo",
+          "line_index": 883,
+          "line_text": "DT2weoo = DT2weoo[[All,1]];"
+        },
+        {
+          "symbol": "Vkt2weoo",
+          "line_index": 884,
+          "line_text": "Vkt2weoo = Vktwo+VktwNumExt;"
+        },
+        {
+          "symbol": "HR2w",
+          "line_index": 886,
+          "line_text": "HR2w = Simplify[Inverse[\\[Mu]].Cross[Vkr2w,ER2w]/(2*w*\\[Mu]0)];"
+        },
+        {
+          "symbol": "HT2w2o",
+          "line_index": 887,
+          "line_text": "HT2w2o =   Simplify[Inverse[\\[Mu]].Cross[Vkt2w2o,Flatten[{RC11,RC21,RC31}]]/(2*w*\\[Mu]0)];"
+        },
+        {
+          "symbol": "HT2w2eo",
+          "line_index": 888,
+          "line_text": "HT2w2eo = Simplify[Inverse[\\[Mu]].Cross[Vkt2w2eo,Flatten[{RC12,RC22,RC32}]]/(2*w*\\[Mu]0)];"
+        },
+        {
+          "symbol": "HT2weoo",
+          "line_index": 889,
+          "line_text": "HT2weoo = Simplify[Inverse[\\[Mu]].Cross[Vkt2weoo,Flatten[{RC13,RC23,RC33}]]/(2*w*\\[Mu]0)];"
+        }
+      ]
+    },
+    {
+      "region_id": "two_omega_boundary_solution",
+      "line_start": 899,
+      "line_end": 908,
+      "parse_status": "parsed",
+      "active_status": "active_or_setup_code",
+      "assignment_count": 6,
+      "assignments": [
+        {
+          "symbol": "E2wroots",
+          "line_index": 899,
+          "line_text": "E2wroots=NSolve[{"
+        },
+        {
+          "symbol": "ER2wp",
+          "line_index": 904,
+          "line_text": "ER2wp = Simplify[TrigReduce[ER2wp/.E2wroots]][[1]];"
+        },
+        {
+          "symbol": "ER2ws",
+          "line_index": 905,
+          "line_text": "ER2ws = TrigReduce[FullSimplify[ER2ws/.E2wroots]][[1]];"
+        },
+        {
+          "symbol": "ET2weoA",
+          "line_index": 906,
+          "line_text": "ET2weoA = Chop[TrigReduce[FullSimplify[ET2weoA/.E2wroots]]][[1]];"
+        },
+        {
+          "symbol": "ET2woA",
+          "line_index": 907,
+          "line_text": "ET2woA = Chop[TrigReduce[FullSimplify[ET2woA/.E2wroots]]][[1]];"
+        },
+        {
+          "symbol": "RSignal",
+          "line_index": 908,
+          "line_text": "RSignal = {ER2wp,ER2ws};"
+        }
+      ]
+    },
+    {
+      "region_id": "reflected_signal_and_basic_intensity",
+      "line_start": 920,
+      "line_end": 938,
+      "parse_status": "parsed",
+      "active_status": "active_or_setup_code",
+      "assignment_count": 10,
+      "assignments": [
+        {
+          "symbol": "progress",
+          "line_index": 920,
+          "line_text": "progress=80;"
+        },
+        {
+          "symbol": "I2wx",
+          "line_index": 921,
+          "line_text": "I2wx[\\[CurlyPhi]:_] = Abs[Chop[Simplify[ComplexExpand[RSignal[[1]]*Conjugate[RSignal[[1]]]]]]];"
+        },
+        {
+          "symbol": "I2wy",
+          "line_index": 923,
+          "line_text": "I2wy[\\[CurlyPhi]:_] =Abs[Chop[Simplify[ComplexExpand[RSignal[[2]]*Conjugate[RSignal[[2]]]]]]];"
+        },
+        {
+          "symbol": "RSignalCrystal",
+          "line_index": 928,
+          "line_text": "{RSignalCrystal  ={{Cos[\\[CurlyPhi]],Sin[\\[CurlyPhi]]},{-Sin[\\[CurlyPhi]],Cos[\\[CurlyPhi]]}}. {-ER2wp,ER2ws};},"
+        },
+        {
+          "symbol": "RSignalCrystal",
+          "line_index": 929,
+          "line_text": "{RSignalCrystal  ={{Cos[AnalyzerAngle Degree],-Sin[AnalyzerAngle Degree]},{Sin[AnalyzerAngle Degree],Cos[AnalyzerAngle Degree]}}. {ER2wp,ER2ws};}"
+        },
+        {
+          "symbol": "I2wParallel",
+          "line_index": 932,
+          "line_text": "I2wParallel[\\[CurlyPhi]:_] = Abs[Chop[Simplify[ComplexExpand[RSignalCrystal[[1]]*Conjugate[RSignalCrystal[[1]]]],  Element[\\[CurlyPhi],Reals]]]];"
+        },
+        {
+          "symbol": "I2wPerpdicular",
+          "line_index": 934,
+          "line_text": "I2wPerpdicular[\\[CurlyPhi]:_] = Abs[Chop[Simplify[ComplexExpand[RSignalCrystal[[2]]*Conjugate[RSignalCrystal[[2]]]], Element[\\[CurlyPhi],Reals]]]];"
+        },
+        {
+          "symbol": "MaxI2wx",
+          "line_index": 936,
+          "line_text": "MaxI2wx = If[ValueQ[Unevaluated[I2wx[\\[CurlyPhi]]]],MaxValue[I2wx[\\[CurlyPhi]],\\[CurlyPhi]],1];"
+        },
+        {
+          "symbol": "MaxI2wy",
+          "line_index": 937,
+          "line_text": "MaxI2wy = If[ValueQ[Unevaluated[I2wy[\\[CurlyPhi]]]],MaxValue[I2wy[\\[CurlyPhi]],\\[CurlyPhi]],1];"
+        },
+        {
+          "symbol": "MaxI2w",
+          "line_index": 938,
+          "line_text": "MaxI2w=Max[MaxI2wx,MaxI2wy]*1.1;"
+        }
+      ]
+    }
+  ],
+  "symbol_sources": {
+    "Croots": [
+      {
+        "region_id": "inhomogeneous_particular_solution_coefficients",
+        "line_index": 836,
+        "line_text": "Croots = NSolve[{",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "E2wroots": [
+      {
+        "region_id": "two_omega_boundary_solution",
+        "line_index": 899,
+        "line_text": "E2wroots=NSolve[{",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "ER2w": [
+      {
+        "region_id": "numerical_coefficients_and_two_omega_field_setup",
+        "line_index": 872,
+        "line_text": "ER2w = Simplify[Inverse[RNum]].{-ER2wp,ER2ws,0};",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "ERpNum": [
+      {
+        "region_id": "omega_fresnel_substitution_active_path",
+        "line_index": 742,
+        "line_text": "ERpNum = ERpNum/.EwrootsNum[[1,1]];",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "ERsNum": [
+      {
+        "region_id": "omega_fresnel_substitution_active_path",
+        "line_index": 743,
+        "line_text": "ERsNum = ERsNum/.EwrootsNum[[1,2]];",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "ETweo": [
+      {
+        "region_id": "fresnel_sweep_table_rows",
+        "line_index": 454,
+        "line_text": "ETweo=Expand[ETwNumExt];",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "omega_fresnel_substitution_active_path",
+        "line_index": 746,
+        "line_text": "ETweo=Expand[ETwNumExt];",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "ETwo": [
+      {
+        "region_id": "fresnel_sweep_table_rows",
+        "line_index": 455,
+        "line_text": "ETwo  =Expand[ETwNumOrd];",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "omega_fresnel_substitution_active_path",
+        "line_index": 747,
+        "line_text": "ETwo  =Expand[ETwNumOrd];",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "EwrootsNum": [
+      {
+        "region_id": "omega_fresnel_equations_active_path",
+        "line_index": 736,
+        "line_text": "EwrootsNum = Simplify[NSolve[{EIwNum[[1]]+ERwNum[[1]]== ETwNumOrd[[1]]+ETwNumExt[[1]], EIwNum[[2]]+ERwNum[[2]]== ETwNumOrd[[2]]+ETwNumExt[[2]],HIwNum[[1]]+HRwNum[[1]]== HTwNumOrd[[1]]+HTwNumExt[[1]],HIwNum[[2]]+HRwNum[[2]]== HTwNumOrd[[2]]+HTwNumExt[[2]]},{ERpNum,ERsNum,twe,two}]];",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "Fresnel": [
+      {
+        "region_id": "fresnel_sweep_table_initialization",
+        "line_index": 320,
+        "line_text": "Fresnel = ConstantArray[0,{Round[90/step]+1,5}];",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "fresnel_sweep_table_rows",
+        "line_index": 461,
+        "line_text": "Fresnel[[count+1,1]]=(count)*step;",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "fresnel_sweep_table_rows",
+        "line_index": 462,
+        "line_text": "Fresnel[[count+1,2]]=-ERwNum[[1]]/EIwNum[[1]];(*rp*)",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "fresnel_sweep_table_rows",
+        "line_index": 463,
+        "line_text": "Fresnel[[count+1,3]]=ERs/EIwNum[[2]];(*rs*)",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "fresnel_sweep_table_rows",
+        "line_index": 464,
+        "line_text": "Fresnel[[count+1,4]]=Sqrt[((ETwo[[1]]+ETweo[[1]])^2+(ETwo[[3]]+ETweo[[3]])^2)]/Sqrt[EIw[[1]]^2+EIw[[3]]^2];(*rp*)",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "fresnel_sweep_table_rows",
+        "line_index": 465,
+        "line_text": "Fresnel[[count+1,5]]=(ETwo[[2]]+ETweo[[2]])/EIw[[2]]; (*rs*)",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "HR2w": [
+      {
+        "region_id": "numerical_coefficients_and_two_omega_field_setup",
+        "line_index": 886,
+        "line_text": "HR2w = Simplify[Inverse[\\[Mu]].Cross[Vkr2w,ER2w]/(2*w*\\[Mu]0)];",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "P2eo": [
+      {
+        "region_id": "commented_real_field_pnl_block",
+        "line_index": 778,
+        "line_text": "P2eo=e0*Simplify[",
+        "region_active_status": "commented_reference_only"
+      },
+      {
+        "region_id": "active_complex_field_pnl_block",
+        "line_index": 793,
+        "line_text": "P2eo=e0*Simplify[",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "P2o": [
+      {
+        "region_id": "commented_real_field_pnl_block",
+        "line_index": 782,
+        "line_text": "P2o=e0*Simplify[",
+        "region_active_status": "commented_reference_only"
+      },
+      {
+        "region_id": "active_complex_field_pnl_block",
+        "line_index": 798,
+        "line_text": "P2o=e0*Simplify[",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "Peoo": [
+      {
+        "region_id": "commented_real_field_pnl_block",
+        "line_index": 786,
+        "line_text": "Peoo=e0*Simplify[",
+        "region_active_status": "commented_reference_only"
+      },
+      {
+        "region_id": "active_complex_field_pnl_block",
+        "line_index": 803,
+        "line_text": "Peoo=e0*Simplify[",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "RSignalCrystal": [
+      {
+        "region_id": "reflected_signal_and_basic_intensity",
+        "line_index": 928,
+        "line_text": "{RSignalCrystal  ={{Cos[\\[CurlyPhi]],Sin[\\[CurlyPhi]]},{-Sin[\\[CurlyPhi]],Cos[\\[CurlyPhi]]}}. {-ER2wp,ER2ws};},",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "reflected_signal_and_basic_intensity",
+        "line_index": 929,
+        "line_text": "{RSignalCrystal  ={{Cos[AnalyzerAngle Degree],-Sin[AnalyzerAngle Degree]},{Sin[AnalyzerAngle Degree],Cos[AnalyzerAngle Degree]}}. {ER2wp,ER2ws};}",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "ThetaExt": [
+      {
+        "region_id": "fresnel_sweep_angle_root_assignments",
+        "line_index": 347,
+        "line_text": "ThetaExt=ThetaTout/.RootExt;",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "omega_angle_root_assignments_active_path",
+        "line_index": 518,
+        "line_text": "ThetaExt=ThetaTout/.RootExt;",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "ThetaOrd": [
+      {
+        "region_id": "fresnel_sweep_angle_root_assignments",
+        "line_index": 344,
+        "line_text": "ThetaOrd=ThetaTout/.RootOrd;",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "omega_angle_root_assignments_active_path",
+        "line_index": 515,
+        "line_text": "ThetaOrd=ThetaTout/.RootOrd;",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "Vktweo": [
+      {
+        "region_id": "omega_fresnel_substitution_active_path",
+        "line_index": 749,
+        "line_text": "Vktweo=Chop[VktwNumExt];",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "Vktwo": [
+      {
+        "region_id": "omega_fresnel_substitution_active_path",
+        "line_index": 748,
+        "line_text": "Vktwo=Chop[VktwNumOrd];",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "nwNumExt": [
+      {
+        "region_id": "omega_angle_roots_active_numerical_path",
+        "line_index": 544,
+        "line_text": "nwNumExt =SetPrecision[Sqrt[(VwNumExt +ExtwFactor*Sqrt[VwNumExt^2-WwNumExt])/WwNumExt],6];",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "omega_transmitted_field_directions_active_path",
+        "line_index": 587,
+        "line_text": "nwNumExt =SetPrecision[Sqrt[(VwNumExt +ExtwFactor*Sqrt[VwNumExt^2-WwNumExt])/WwNumExt],6];",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "omega_transmitted_field_directions_active_path",
+        "line_index": 593,
+        "line_text": "nwNumExt =Quiet[Sqrt[1/EigenwNumExt[[1,k1Num]]]];",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "omega_transmitted_field_directions_active_path",
+        "line_index": 599,
+        "line_text": "nwNumExt =Sqrt[1/EigenwNumExt[[1,k1Num]]];",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "nwNumOrd": [
+      {
+        "region_id": "omega_angle_roots_initial_path",
+        "line_index": 368,
+        "line_text": "nwNumOrd = SetPrecision[Sqrt[(VwNumOrd-ExtwFactor*Sqrt[VwNumOrd^2-WwNumOrd])/WwNumOrd],6];",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "omega_angle_roots_active_numerical_path",
+        "line_index": 552,
+        "line_text": "nwNumOrd = SetPrecision[Sqrt[(VwNumOrd-ExtwFactor*Sqrt[VwNumOrd^2-WwNumOrd])/WwNumOrd],6];",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "omega_transmitted_field_directions_active_path",
+        "line_index": 617,
+        "line_text": "nwNumOrd = SetPrecision[Sqrt[(VwNumOrd-ExtwFactor*Sqrt[VwNumOrd^2-WwNumOrd])/WwNumOrd],6];",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "omega_transmitted_field_directions_active_path",
+        "line_index": 621,
+        "line_text": "nwNumOrd =Quiet[Sqrt[1/EigenwNumOrd[[1,k2Num]]]];",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "omega_transmitted_field_directions_active_path",
+        "line_index": 626,
+        "line_text": "nwNumOrd =Sqrt[1/EigenwNumOrd[[1,k2Num]]];",
+        "region_active_status": "active_or_setup_code"
+      }
+    ]
+  },
+  "notes": [
+    "Assignments are detected mechanically from snippet lines using simple Mathematica Set syntax.",
+    "This map identifies exporter source regions; it does not validate numerical values.",
+    "Commented regions are preserved but marked inactive so their assignments are not mistaken for active SHAARP.si behavior."
+  ]
+}

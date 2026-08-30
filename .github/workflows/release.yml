@@ -1,0 +1,127 @@
+# Release bundles — builds the installation-free SHAARP.py desktop app natively on each platform
+# and attaches all three archives to this repo's GitHub Release:
+# SHAARP_py_v{ver}_win64.zip (windows-latest)
+# SHAARP_py_v{ver}_macos_arm64.zip (macos-latest — Apple Silicon)
+# SHAARP_py_v{ver}_macos_x86_64.zip (macos-15-intel — GitHub retires Intel macOS Aug 2027)
+#
+# TWO WAYS TO RELEASE (a simpler way instead of clicking to ensure proper tag"):
+# 1. ONE BUTTON (recommended, no local git tagging): repo -> Actions -> "Release bundles" ->
+# "Run workflow" -> type the version (e.g. 1.0.1) -> Run. The workflow reads pyproject.toml,
+# refuses to run if the version does not match, creates the tag itself, makes the Release, and
+# uploads the bundles. Leave the input blank to release exactly what pyproject.toml says.
+# 2. Push a tag `vX.Y.Z` as before — same pipeline.
+# Either way the tag <-> pyproject version can never drift: the check below is the single guard.
+#
+# ONE repo, ONE build definition: scripts/build_gui_bundle.py stages the git-shippable benchmark
+# data, generates the per-OS icon, runs PyInstaller, bundle-hygiene-checks the app, and smoke-tests
+# the FROZEN app (--self-check + --gui-smoke) before packaging. The same script backs the local
+# Windows release gate, so CI and the maintainer's box build identically.
+name: Release bundles
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release, e.g. 1.0.1 (blank = whatever pyproject.toml says)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  prepare:
+    # Resolves the tag ONCE (and creates it for a button-click run) so the build matrix and the
+    # upload step can never disagree about which version they are producing.
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.resolve.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve + verify the version, and create the tag if this was a button click
+        id: resolve
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REQUESTED: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          PYPROJECT_VERSION=$(grep -m1 '^version *= *"' pyproject.toml | sed 's/.*"\(.*\)".*/\1/')
+          echo "pyproject.toml version: $PYPROJECT_VERSION"
+
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            WANT="${REQUESTED#v}" # tolerate "v1.0.1" or "1.0.1"
+            [ -n "$WANT" ] || WANT="$PYPROJECT_VERSION" # blank input = release pyproject's version
+            if [ "$WANT" != "$PYPROJECT_VERSION" ]; then
+              echo "::error::You asked for $WANT but pyproject.toml says $PYPROJECT_VERSION."
+              echo "::error::Bump the version in pyproject.toml, push, then run this again."
+              exit 1
+            fi
+            TAG="v$PYPROJECT_VERSION"
+            if git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null 2>&1; then
+              echo "::notice::Tag $TAG already exists — reusing it (assets will be re-uploaded)."
+            else
+              git tag "$TAG"
+              git push origin "$TAG"
+              echo "::notice::Created tag $TAG from ${GITHUB_SHA::7}."
+            fi
+          else
+            TAG="$GITHUB_REF_NAME"
+            if [ "$TAG" != "v$PYPROJECT_VERSION" ]; then
+              echo "::error::Tag $TAG does not match pyproject.toml version $PYPROJECT_VERSION."
+              exit 1
+            fi
+          fi
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Create the GitHub Release (idempotent)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ steps.resolve.outputs.tag }}" --verify-tag --generate-notes \
+            --title "SHAARP.py ${{ steps.resolve.outputs.tag }}" || true
+
+  build:
+    needs: prepare
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest, macos-15-intel]
+    runs-on: ${{ matrix.os }}
+    env:
+      PYTHONIOENCODING: utf-8
+      MPLBACKEND: Agg
+      QT_QPA_PLATFORM: offscreen
+      # the builder's tag<->version guard reads this; set it explicitly so a button-click run
+      # (where GITHUB_REF_NAME is the branch, not the tag) is checked exactly like a tag push
+      GITHUB_REF_NAME: ${{ needs.prepare.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.prepare.outputs.tag }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      - name: Install the library + pinned build tools
+        run: |
+          pip install -e ".[desktop,symbolic]"
+          pip install "pyinstaller==6.20.0" "pyside6==6.11.1"
+
+      - name: Point offscreen Qt at the system fonts (Windows only)
+        if: runner.os == 'Windows'
+        run: echo "QT_QPA_FONTDIR=C:/Windows/Fonts" >> $env:GITHUB_ENV
+
+      - name: Build, hygiene-check, smoke-test, and package the bundle
+        run: python scripts/build_gui_bundle.py
+
+      - name: Upload the archive to this repo's Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: gh release upload "${{ needs.prepare.outputs.tag }}" dist/release/* --clobber

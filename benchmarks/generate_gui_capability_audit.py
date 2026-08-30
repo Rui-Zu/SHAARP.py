@@ -1,0 +1,364 @@
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+BENCHMARK_DIR = ROOT / "benchmarks"
+AUDIT_VERSION = 1
+
+
+def build_audit() -> dict:
+    capabilities = [
+        _capability(
+            "gui_user_guide",
+            "User Guide welcome page and quick-start help panel.",
+            "not_ported_not_required_for_physics_core",
+            "documentation_ui",
+            ["Github/SHAARP.ml/docs/input.md", "Github/SHAARP.ml/SHAARP.ml.nb"],
+            "Decide whether Python needs a notebook/help page equivalent or only API/examples.",
+            current_python_evidence=["README.md", "notebooks/SHAARP_py_step_by_step.ipynb"],
+        ),
+        _capability(
+            "gui_set_material_properties",
+            "GUI workflow for defining multilayer materials, thicknesses, structures, orientations, dielectric tensors, and SHG tensors.",
+            "config_core_registry_validated_merged_gui_material_entry_widgets_implemented",
+            "headless_material_property_validation_implemented_and_tested",
+            ["Github/SHAARP.ml/docs/input.md", "shaarp/config.py", "shaarp/presets.py"],
+            "Config objects + material/stack registries + a headless property validator "
+            "(shaarp/material_validation.py: physical dielectric-tensor checks and convention-robust "
+            "d-tensor / point-group consistency) are in place; the remaining gap is the interactive "
+            "form widget itself (display-bound).",
+            current_python_evidence=[
+                "shaarp/config.py",
+                "shaarp/presets.py",
+                "shaarp/layer_presets.py",
+                "shaarp/material_validation.py",
+                "tests/test_material_validation.py",
+                "tests/test_orientation.py",
+            ],
+        ),
+        _capability(
+            "gui_material_selection_blank_linear_nonlinear",
+            "GUI material selection including blank linear and blank nonlinear material setup.",
+            "implemented_headless",
+            "headless_material_registry_implemented_and_tested",
+            ["Github/SHAARP.ml/docs/input.md", "shaarp/config.py"],
+            "Headless material-picker registry done (presets.list_materials/build_material over air, LiNbO3 "
+            "z-cut/x-cut, GaAs, blank linear, blank nonlinear; fresh per call, unknown raises, feeds a Layer); "
+            "only the live ipywidgets material-dropdown binding remains, which needs a notebook display.",
+            current_python_evidence=["shaarp/presets.py", "shaarp/config.py", "tests/test_layer_presets.py"],
+        ),
+        _capability(
+            "gui_layer_thickness_symbolic_h",
+            "Layer thickness input with analytical h option for partial analytical expressions.",
+            "per_layer_symbolic_h_implemented_and_validated_through_full_2omega_shg_stage",
+            "symbolic_h_amplitudes_and_shg_coefficient_reduce_to_numeric_to_1e-11",
+            ["Github/SHAARP.ml/docs/input.md", "Github/SHAARP.ml/docs/examples.md"],
+            "Symbolic layer-thickness h is implemented for the linear (omega) multilayer boundary stage: "
+            "solve_multilayer_boundary_symbolic_thickness keeps each thickness a sympy symbol (eigenmodes are "
+            "numeric -- h enters only via exp(i k_z h)) and returns reflected/transmitted amplitudes as "
+            "closed-form functions of h; substituting the real thickness reproduces the numeric (live-Mathematica-"
+            "validated) solve_multilayer_boundary to ~1e-11 for single-film AND two-layer stacks (isotropic and "
+            "anisotropic alike, since the tangential vectors are numeric). The symbolic h is now ALSO carried "
+            "through the full 2omega SHG stage: solve_single_film_shg_symbolic_thickness gives the reflected/"
+            "transmitted SHG amplitude as a closed form in h (the Maker fringe), via the linearity decomposition "
+            "SHG(h)=sum_ij c_i(h)c_j(h)*[symbolic-h 2omega boundary of unit source ij]; substituting a numeric h "
+            "reproduces solve_multilayer_shg_from_fundamental to ~1e-18. This extends to N "
+            "LAYERS with PER-LAYER flags, matching the original: SHAARP.ml.nb:5135-5146 gives every interior "
+            "layer its own 'analytical h' button storing a distinct symbol h1,h2,..., and setup.nb:11011-11017 "
+            "consumes the thicknesses as a LIST, so any SUBSET may be symbolic while the rest stay numeric. "
+            "solve_multilayer_shg_symbolic_thickness reproduces the numeric N-layer solver over 2- and 3-layer "
+            "stacks (mixed symbolic/numeric, a passive interior spacer, and absorbing layers) to ~1e-15..1e-11. "
+            "The GUI carries the flag per layer and no longer truncates a multilayer stack to its first film.",
+            current_python_evidence=[
+                "shaarp/multilayer_boundary_symbolic.py",
+                "shaarp/multilayer_shg_symbolic.py",
+                "tests/test_multilayer_boundary_symbolic.py",
+                "tests/test_multilayer_shg_symbolic_thickness.py",
+                "tests/test_multilayer_shg_symbolic_nlayer.py",
+                "benchmarks/compare_symbolic_reference.py",
+            ],
+        ),
+        _capability(
+            "gui_crystal_structure_orientation",
+            "Point group, lattice constants, Miller-plane orientation, and lab/crystal orientation controls.",
+            "orientation_math_mathematica_value_validated_merged_gui_miller_hkl_uvw_widgets_implemented",
+            "python_orientation_matches_live_mathematica_hklconvert_qc_qp_to_1e-11",
+            ["Github/SHAARP.ml/docs/input.md", "tests/test_orientation.py"],
+            "Orientation construction is value-validated against live Mathematica (hklConvert / QC2QP / "
+            "extMater): the rotation axes, QC, QPω/QP2ω, and the rotated eps-lab / d-lab match to 1e-11 across "
+            "10 cases incl. hexagonal/non-cubic (test_mathematica_orientation_reference). The remaining gap is "
+            "the interactive lattice/Miller input widget itself (display-bound).",
+            current_python_evidence=[
+                "shaarp/config.py",
+                "tests/test_orientation.py",
+                "tests/test_mathematica_orientation_reference.py",
+                "benchmarks/mathematica_reference/orientation_reference_v1.json",
+            ],
+        ),
+        _capability(
+            "gui_dielectric_tensor_inputs",
+            "Linear optical tensor entry at omega and 2omega, including complex/non-diagonal tensors.",
+            "core_inputs_mathematica_validated_merged_gui_index_widgets_implemented",
+            "eps_omega_and_2omega_crystal_to_lab_rotation_mathematica_validated_to_1e-11",
+            ["Github/SHAARP.ml/docs/input.md", "benchmarks/solver_stage_benchmarks_v1.json"],
+            "The omega/2omega dielectric tensors (incl. complex / non-diagonal) feed every validated solve, and "
+            "the crystal->lab rotation of both is value-validated vs live Mathematica to 1e-11 (orientation "
+            "reference). Remaining gap is the interactive tensor-entry widget (display-bound).",
+            current_python_evidence=[
+                "tests/test_shg.py",
+                "tests/test_multilayer_shg_boundary.py",
+                "tests/test_mathematica_orientation_reference.py",
+                "benchmarks/mathematica_reference/orientation_reference_v1.json",
+                "benchmarks/mathematica_reference/solve_inhom_reference_v1.json",
+            ],
+        ),
+        _capability(
+            "gui_shg_tensor_inputs_and_analytical_dij",
+            "SHG tensor entry with point-group constraints and analytical dij variables for partial analytical expressions.",
+            "tensor_inputs_merged_gui_constrained_d_entry_partial_analytical_polarimetry_validated",
+            "d_tensor_structure_and_d_voigt_symbolic_crystallographically_verified",
+            ["Github/SHAARP.ml/docs/input.md", "Github/SHAARP.ml/docs/examples.md"],
+            "Tensor-structure summary (point-group-constrained analytical dij with independent constants + Voigt relations) "
+            "now headless via shaarp/symbolic.py d_tensor_structure; the remaining gap is the multilayer partial-analytical "
+            "(InputForm dij) expression assembly tracked under gui_partial_analytical_expressions.",
+            current_python_evidence=[
+                "shaarp/symbolic.py",
+                "tests/test_symbolic.py",
+                "tests/test_symbolic.py::DTensorStructureTests",
+                "benchmarks/mathematica_reference/compute_pnl_reference_v1.json",
+            ],
+        ),
+        _capability(
+            "gui_layer_property_presets",
+            "GUI preset save/apply/clear workflow for user-defined layer properties.",
+            "implemented_headless_plus_persistent_user_material_store",
+            "headless_data_model_implemented_and_tested",
+            ["Github/SHAARP.ml/docs/input.md"],
+            "Headless layer/stack preset registry done (build/list/apply, fresh per call, validated stacks, "
+            "round-trips through the layer editor model and runs through the solver incl JK/HH). "
+            "the session-scoped preset slots are hidden; the user's materials persist in a local JSON store "
+            "(~/.shaarp/user_materials.json: save / update / rename / delete, built-in cases read-only) and appear "
+            "as selectable materials on both tabs.",
+            current_python_evidence=[
+                "shaarp/layer_presets.py",
+                "shaarp/presets.py",
+                "shaarp/user_materials.py",
+                "tests/test_layer_presets.py",
+                "tests/test_user_materials.py",
+            ],
+        ),
+        _capability(
+            "gui_shg_simulation_polarimetry",
+            "SHG simulation polarimetry controls for incident angle, phi, psi/analyzer, ellipticity, fixed/rotating polarizer/analyzer.",
+            "polarimetry_solve_sweep_and_closed_form_with_interactive_widget_modes_headless_testable",
+            "solve_and_sweep_match_live_mathematica_sampleRotate_to_2e-14_across_20_polarimetry_cases_under_forward_only",
+            ["Github/SHAARP.ml/docs/input.md", "tests/test_multilayer_shg_boundary.py"],
+            "Both the polarimetry solve (solve_multilayer_shg_from_system_polarimetry) AND the public sweep "
+            "wrapper (solve_multilayer_shg_polarimetry_sweep) are value-validated vs a dedicated live-Wolfram "
+            "SampleRotate export across 20 polarimetry settings (varied incidence / phi / psi / ellipticity with "
+            "non-trivial baked orientations): reflected & transmitted analyzer-projected intensities match to "
+            "~2e-14. CONVENTION (a finding from building this): the sweep wrapper now ACCEPTS "
+            "inhomogeneous_source_policy and matches SHAARP.ml under 'forward_only'; its default stays 'all' (a "
+            "different, non-SHAARP.ml convention) for backward compatibility -- pass 'forward_only' to reproduce "
+            "the original package. The interactive control widget is now PROVIDED: the ipywidgets panel "
+            "(shaarp/interactive.py via make_interactive_session) exposes 'SI polarimetry' and 'ML polarimetry' "
+            "modes that route the VALIDATED closed-form polarimetry (run_si_full_analytical / "
+            "run_ml_partial_analytical workflow='polarimetry'), plus a 'd-extraction (demo)' mode that recovers a "
+            "known d-tensor from a simulated scan (extract_si_d_voigt). The per-mode compute is factored into PURE, "
+            "no-widget helpers (compute_polarimetry_result, compute_dextraction_demo) so it is unit-tested headlessly.",
+            current_python_evidence=[
+                "shaarp/multilayer_shg_boundary.py",
+                "shaarp/interactive.py",
+                "tests/test_interactive_polarimetry_modes.py",
+                "tests/test_polarimetry_reference_comparison.py",
+                "benchmarks/mathematica_reference/polarimetry_reference_v1.json",
+                "benchmarks/generate_polarimetry_mathematica_inputs.py",
+                "tests/test_maker_fringes_reference_comparison.py",
+                "tests/test_sample_rotation_ext_reference_comparison.py",
+            ],
+        ),
+        _capability(
+            "gui_calculation_assumptions_full_jk_hh",
+            "Calculation assumptions: full multiple reflection, backward waves, standing waves, Jerphagnon-Kurtz, and Herman-Hayden.",
+            "implemented_validated_solver_not_gui_bound",
+            "live_wolfram_validated",
+            ["Github/SHAARP.ml/docs/input.md", "Github/SHAARP.ml/SHAARP.ml.nb"],
+            "The mrassumption flag (0=full, 1=JK, 2=HH) is now mapped to Python single-pass solver modes "
+            "(solve_multilayer_boundary_single_pass) and validated vs live SHAARP.ml to ~5e-15 across both the "
+            "Maker and SampleRotate sweeps (21/21, single/4/5/9-layer, point-group, two-active); winhAssumption "
+            "= inhomogeneous_source_policy is already implemented. Only the live GUI control binding remains.",
+            current_python_evidence=[
+                "shaarp/multilayer_shg_boundary.py",
+                "shaarp/multilayer_boundary.py",
+                "tests/test_jkhh_maker_agreement.py",
+                "tests/test_jkhh_samplerotate_agreement.py",
+            ],
+        ),
+        _capability(
+            "gui_fresnel_coefficient_plot",
+            "'Fresnel Coefficients' functionality (the opt-in checkbox was removed -- one control per concept) using FresnelList over incidence angle.",
+            "implemented_multilayer_listfresnel_mathematica_validated",
+            "multilayer_listfresnel_mathematica_validated_to_1e-10_with_transmitted_sum_caveat",
+            ["Github/SHAARP.ml/docs/input.md", "Github/SHAARP.ml/SHAARP.ml.nb"],
+            "Plot facade (fresnel_figure_data) routes a MultilayerSystem through the gui_multilayer / "
+            "shaarp_ml_selected listFresnel path; plotted Rp/Rs/Tp/Ts magnitudes match Mathematica listFresnel "
+            "to 1e-10 (transmitted-sum caveat documented). Remaining: a bare-Material single-interface plot "
+            "stays staged python.",
+            current_python_evidence=[
+                "shaarp/figuredata.py",
+                "shaarp/api.py::run_fresnel_sweep(workflow='gui_multilayer')",
+                "tests/test_figuredata.py::FresnelPlotMathematicaValidationTests",
+                "tests/test_fresnel_sweep_python_comparison.py",
+                "benchmarks/mathematica_reference/fresnel_sweep_reference_v1.json",
+            ],
+        ),
+        _capability(
+            "gui_maker_fringes_plot",
+            "'Maker Fringes' functionality (the opt-in checkbox was removed -- one control per concept) with parallel/perpendicular analyzer outputs over incidence-angle scan.",
+            "implemented_mflist_mathematica_validated",
+            "plot_series_match_mathematica_mflist_to_1e-15_nonsingular_with_phase_matching_diagnostic",
+            ["Github/SHAARP.ml/docs/input.md", "Github/SHAARP.ml/SHAARP.ml.nb", "Github/SHAARP.ml/docs/examples.md"],
+            "Plot facade (maker_figure_data via run_maker_fringes) now defaults to the SHAARP.ml unit "
+            "normalization (mu=1, eps0=1), so the plotted listMFpara/listMFperp match live Mathematica MFList "
+            "to ~1e-15 on non-singular cases; the phase-matching-like case remains a documented diagnostic. "
+            "Remaining GUI work is the interactive plot widget, not the physics.",
+            current_python_evidence=[
+                "shaarp/figuredata.py",
+                "shaarp/api.py::run_maker_fringes",
+                "tests/test_figuredata.py::MakerPlotMathematicaValidationTests",
+                "solve_multilayer_maker_fringes_sweep",
+                "shaarp/multilayer_shg_boundary.py",
+                "benchmarks/compare_maker_fringes_reference.py",
+                "tests/test_maker_fringes_reference_comparison.py",
+                "LIVE-WOLFRAM: maker_fringes_comparison_summary_ext1.json (12 incidence angles)",
+                "LIVE-WOLFRAM: maker_fringes_comparison_summary_ml1.json (4-layer 6/6)",
+                "LIVE-WOLFRAM: maker_fringes_comparison_summary_ml2.json (5-layer aniso 4/4)",
+                "LIVE-WOLFRAM: maker_fringes_comparison_summary_ml3.json (two-active-layer 4/4)",
+                "LIVE-WOLFRAM: maker_fringes_comparison_summary_ml5.json (6-layer 4/4)",
+                "tests/test_maker_fringes_multilayer_ml1/ml2/ml3/ml5_reference_comparison.py",
+            ],
+        ),
+        _capability(
+            "gui_sample_rotation_scan",
+            "Sample-rotation scan controlled by samplerotationcontrol.",
+            "mathematica_validated_ext1_and_ml4_nonsingular_scan_widget_display_bound",
+            "sample_rotation_outputs_match_live_mathematica_ext1_12_and_ml4_4_to_1e-15",
+            ["Github/SHAARP.ml/SHAARP.ml.nb", "tests/test_multilayer_shg_boundary.py"],
+            "Single-layer sample-azimuth sweep is live-Wolfram validated (ext1, 12/12 nonsingular, all 4 "
+            "orientations) AND the multilayer azimuth rotation (ml4, 4/4) is now validated to ~1e-15 -- the "
+            "earlier 'rotated steps zeroed' ml4 export artifact was RESOLVED by the rotate-active-only export "
+            "fix. Both assert sample_rotation_outputs_match with full agreement claimed; only the v1 phase-"
+            "matching case carries 1 documented diagnostic. Remaining GUI work is the scan widget/UI.",
+            current_python_evidence=[
+                "solve_multilayer_shg_sample_azimuth_sweep",
+                "benchmarks/compare_sample_rotation_reference.py",
+                "LIVE-WOLFRAM: sample_rotation_comparison_summary_ext1.json (12 nonsingular azimuth cases, all 4 orientations)",
+                "tests/test_sample_rotation_ext_reference_comparison.py",
+                "LIVE-WOLFRAM: sample_rotation_comparison_summary_ml4.json (4-layer azimuth, 4/4 match ~1e-15)",
+                "tests/test_sample_rotation_multilayer_ml4_reference_comparison.py",
+            ],
+        ),
+        _capability(
+            "gui_2d_3d_schematics",
+            "2D/3D schematics for multilayer geometry, crystal axes, wave propagation, and polarization relations.",
+            "implemented_2d_and_3d_figures_rendered_in_merged_gui",
+            "headless_schematic_data_implemented_and_tested",
+            ["Github/SHAARP.ml/docs/input.md", "Github/SHAARP.ml/SHAARP.ml.nb", "Github/SHAARP.ml/README.md"],
+            "Headless schematic DATA done: stack_schematic_data (2D per-layer depth diagram) + "
+            "stack_orientation_schematic_data (per-layer crystal-axes orientation matrix in the lab frame, "
+            "optical class isotropic/uniaxial/biaxial, and uniaxial optic-axis vector) -- physically checked "
+            "(orthonormal axes, z-cut LiNbO3 -> uniaxial c-axis along lab z). Only the live 2D/3D RENDER "
+            "(matplotlib/plotly in a notebook) is display-bound.",
+            current_python_evidence=["shaarp/figuredata.py", "tests/test_figuredata.py"],
+        ),
+        _capability(
+            "gui_partial_analytical_expressions",
+            "Partial Analytical Expressions for reflected/transmitted SHG intensities with symbolic h and dij variables.",
+            "symbolic_building_blocks_live_wolfram_validated_full_reflected_assembly_not_symbolic_in_source",
+            "doldexp_16pg_solveinhom_20_computepnl_36_ml_partial_pnl_10_live_wolfram_validated",
+            ["Github/SHAARP.ml/docs/input.md", "Github/SHAARP.ml/docs/examples.md"],
+            "Core symbolic building blocks now live-Wolfram validated (doldExp 16 point groups + 6 transitive, dnewExp rotation, P2o/P2eo/Peoo source trio, solveInhom vs 20 cases, computePNL vs 36 SI PNL-stage cases); remaining = the downstream full reflected-SHG analytical assembly (SHAARP.si uses numeric eigenmodes, no symbolic closed-form).",
+            current_python_evidence=[
+                "shaarp/symbolic.py",
+                "benchmarks/compare_symbolic_reference.py",
+                "LIVE-WOLFRAM: wolfram_live_symbolic_doldexp_reference_v1.json (16 point groups)",
+                "LIVE-WOLFRAM: symbolic_solve_inhom_live_comparison_summary_v1.json (20 cases)",
+                "LIVE-WOLFRAM: symbolic_pnl_stage_live_comparison_summary_v1.json (36 cases)",
+                "LIVE-WOLFRAM: wolfram_live_symbolic_ml_partial_pnl_reference_v1.json (10 ML partial-PNL expressions)",
+                "tests/test_wolfram_live_symbolic_ml_partial_pnl_reference.py",
+            ],
+        ),
+        _capability(
+            "gui_copy_export_outputs",
+            "Copy/Export buttons for polarimetry, Fresnel, Maker fringes, and analytical outputs.",
+            "copy_list_content_mathematica_validated_merged_gui_export_and_closed_form_copy_implemented",
+            "shaarp_ml_copy_lists_for_maker_and_fresnel_ARE_the_mathematica_validated_payloads",
+            ["Github/SHAARP.ml/SHAARP.ml.nb", "Github/SHAARP.ml/docs/examples.md"],
+            "The Copy/Export CONTENT is already validated: shaarp_ml_copy_lists() produces exactly the "
+            "listMFpara/listMFperp and listFresnel-ordered payloads that the Maker-fringe and Fresnel "
+            "validations compare against live Mathematica (~1e-13 / ~1e-15). File export (export_result json/csv, "
+            "save_csv, figure_data_to_csv) is round-trip tested. Remaining: full GUI-button format parity for "
+            "every GUI Copy/Export payload (e.g. a Mathematica InputForm-string round-trip) -- a low-value IO "
+            "formatting layer on top of already-validated values.",
+            current_python_evidence=[
+                "shaarp/multilayer_shg_boundary.py::shaarp_ml_copy_lists",
+                "shaarp/linear.py::shaarp_ml_copy_lists",
+                "shaarp/api.py::export_result",
+                "shaarp/notebook_exports.py::figure_data_to_csv",
+                "tests/test_notebook_exports.py",
+                "tests/test_maker_fringes_benchmarks.py",
+                "benchmarks/convert_wolfram_copied_output.py",
+                "SingleInterfaceResult.save_csv",
+            ],
+        ),
+    ]
+    return {
+        "gui_capability_audit_version": AUDIT_VERSION,
+        "source_notebook": "Github/SHAARP.ml/SHAARP.ml.nb",
+        "source_docs": [
+            "Github/SHAARP.ml/docs/input.md",
+            "Github/SHAARP.ml/docs/examples.md",
+            "Github/SHAARP.ml/README.md",
+        ],
+        "status": "gui_capability_audit_not_full_port_claim",
+        "full_gui_feature_parity_claimed": False,
+        "capability_count": len(capabilities),
+        "capabilities": capabilities,
+    }
+
+
+def _capability(
+    capability_id: str,
+    description: str,
+    python_status: str,
+    validation_status: str,
+    original_evidence: list[str],
+    next_action: str,
+    *,
+    current_python_evidence: list[str],
+) -> dict:
+    return {
+        "capability_id": capability_id,
+        "description": description,
+        "python_status": python_status,
+        "validation_status": validation_status,
+        "original_evidence": original_evidence,
+        "current_python_evidence": current_python_evidence,
+        "next_action": next_action,
+    }
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Generate SHAARP.ml GUI capability parity audit.")
+    parser.add_argument("--output", type=Path, default=BENCHMARK_DIR / "gui_capability_audit_v1.json")
+    args = parser.parse_args()
+    args.output.write_text(json.dumps(build_audit(), indent=2), encoding="utf-8")
+    print(f"Wrote GUI capability audit to {args.output}")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,300 @@
+{
+  "benchmark_version": 1,
+  "tag": "mlamb_airtwin",
+  "status": "python_air_ambient_twin_for_n0_liveness_check",
+  "case_count": 2,
+  "theta_sweep_deg": [
+    20.0,
+    40.0,
+    60.0
+  ],
+  "notes": [
+    "Same stacks as mlamb with layer 0 = air (eps = I). Used ONLY to prove the ambient index reaches the solve: identical curves would mean a dead knob."
+  ],
+  "cases": [
+    {
+      "id": "maker_fringes_mlamb_b1_o0",
+      "theta_deg": [
+        20.0,
+        40.0,
+        60.0
+      ],
+      "angle_count": 3,
+      "orientation_index": 0,
+      "phi_deg": 35.0,
+      "psi_deg": 40.0,
+      "ellipticity_deg": 5.0,
+      "sample_azimuth_deg": 0.0,
+      "phase_matching_like": false,
+      "layer_count": 9,
+      "outputs": {
+        "list_mf_para": [
+          [
+            {
+              "real": 20.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.045702547821567,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 40.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.031801105720701,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 60.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.008471285650046,
+              "imag": 0.0
+            }
+          ]
+        ],
+        "list_mf_perp": [
+          [
+            {
+              "real": 20.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.00014407889589,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 40.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.001084350831567,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 60.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.002409490297445,
+              "imag": 0.0
+            }
+          ]
+        ],
+        "parallel_amplitude": [
+          {
+            "real": 0.018549148339017,
+            "imag": -0.212975296495776
+          },
+          {
+            "real": -0.125772044028011,
+            "imag": -0.126421907364653
+          },
+          {
+            "real": -0.090657414347032,
+            "imag": 0.015890842455856
+          }
+        ],
+        "perpendicular_amplitude": [
+          {
+            "real": -0.001115564622899,
+            "imag": -0.011951335133022
+          },
+          {
+            "real": -0.026208165240119,
+            "imag": -0.019936973348878
+          },
+          {
+            "real": -0.047402759567743,
+            "imag": 0.012746320363438
+          }
+        ],
+        "transmitted_2omega_jones_sp": [
+          [
+            {
+              "real": 0.011068590642246,
+              "imag": -0.146053135623306
+            },
+            {
+              "real": 0.014926543127098,
+              "imag": -0.155466372259488
+            }
+          ],
+          [
+            {
+              "real": -0.100921330892693,
+              "imag": -0.096535043293457
+            },
+            {
+              "real": -0.079500691538407,
+              "imag": -0.084029560181885
+            }
+          ],
+          [
+            {
+              "real": -0.094586083223865,
+              "imag": 0.019978684522731
+            },
+            {
+              "real": -0.038977701972983,
+              "imag": 0.003979914761075
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "id": "maker_fringes_mlamb_b4_o2",
+      "theta_deg": [
+        20.0,
+        40.0,
+        60.0
+      ],
+      "angle_count": 3,
+      "orientation_index": 2,
+      "phi_deg": 20.0,
+      "psi_deg": 60.0,
+      "ellipticity_deg": 18.0,
+      "sample_azimuth_deg": 0.0,
+      "phase_matching_like": false,
+      "layer_count": 9,
+      "outputs": {
+        "list_mf_para": [
+          [
+            {
+              "real": 20.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.01694033640657,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 40.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.04455394201005,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 60.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.022887643302472,
+              "imag": 0.0
+            }
+          ]
+        ],
+        "list_mf_perp": [
+          [
+            {
+              "real": 20.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.196108492141185,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 40.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.04689185330189,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 60.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.011456372423536,
+              "imag": 0.0
+            }
+          ]
+        ],
+        "parallel_amplitude": [
+          {
+            "real": 0.128112900358164,
+            "imag": -0.022965651926054
+          },
+          {
+            "real": -0.122093151805439,
+            "imag": 0.172183635378812
+          },
+          {
+            "real": 0.10895245362555,
+            "imag": 0.104961927151916
+          }
+        ],
+        "perpendicular_amplitude": [
+          {
+            "real": -0.441489881543237,
+            "imag": 0.034571326791487
+          },
+          {
+            "real": -0.147074625923969,
+            "imag": 0.158936804143077
+          },
+          {
+            "real": 0.072874216005159,
+            "imag": 0.078394649467737
+          }
+        ],
+        "transmitted_2omega_jones_sp": [
+          [
+            {
+              "real": -0.109795914508944,
+              "imag": -0.002603174586691
+            },
+            {
+              "real": 0.446397903109308,
+              "imag": -0.041422473206988
+            }
+          ],
+          [
+            {
+              "real": -0.179273084053604,
+              "imag": 0.228583804425547
+            },
+            {
+              "real": 0.066323786399531,
+              "imag": -0.05155149229481
+            }
+          ],
+          [
+            {
+              "real": 0.130792700646952,
+              "imag": 0.1300970200776
+            },
+            {
+              "real": -0.008634695528568,
+              "imag": -0.015410794383878
+            }
+          ]
+        ]
+      }
+    }
+  ]
+}

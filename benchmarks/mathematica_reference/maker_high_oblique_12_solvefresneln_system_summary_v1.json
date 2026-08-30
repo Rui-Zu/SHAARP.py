@@ -1,0 +1,337 @@
+{
+  "agreement_claimed": true,
+  "basis_deltas": [
+    {
+      "electric_abs_error": 0.0,
+      "electric_relative_error": 0.0,
+      "k_abs_error": 2.220446049250313e-16,
+      "mathematica_basis_index": 0,
+      "mathematica_label": "top_unknown_1",
+      "mathematica_unknown_symbol": "ER1",
+      "python_basis_index": 0,
+      "scale": {
+        "imag": 0.0,
+        "real": -1.0
+      }
+    },
+    {
+      "electric_abs_error": 2.7755575615628914e-17,
+      "electric_relative_error": 2.7755575615628914e-17,
+      "k_abs_error": 2.220446049250313e-16,
+      "mathematica_basis_index": 1,
+      "mathematica_label": "top_unknown_2",
+      "mathematica_unknown_symbol": "ER2",
+      "python_basis_index": 1,
+      "scale": {
+        "imag": 0.0,
+        "real": 1.0
+      }
+    },
+    {
+      "electric_abs_error": 5.5195953614261746e-15,
+      "electric_relative_error": 5.519595361426175e-15,
+      "k_abs_error": 1.93178806649906e-14,
+      "mathematica_basis_index": 2,
+      "mathematica_label": "layer_1_unknown_1",
+      "mathematica_unknown_symbol": "EF11",
+      "python_basis_index": 2,
+      "scale": {
+        "imag": -6.591949208711868e-17,
+        "real": 1.0
+      }
+    },
+    {
+      "electric_abs_error": 4.7283923889816254e-15,
+      "electric_relative_error": 4.7283923889816254e-15,
+      "k_abs_error": 1.0061396160665481e-15,
+      "mathematica_basis_index": 3,
+      "mathematica_label": "layer_1_unknown_2",
+      "mathematica_unknown_symbol": "EF21",
+      "python_basis_index": 3,
+      "scale": {
+        "imag": -1.656660919557851e-16,
+        "real": 1.0000000000000002
+      }
+    },
+    {
+      "electric_abs_error": 3.6285952452369256e-15,
+      "electric_relative_error": 3.628595245237202e-15,
+      "k_abs_error": 1.931788363250813e-14,
+      "mathematica_basis_index": 4,
+      "mathematica_label": "layer_1_unknown_3",
+      "mathematica_unknown_symbol": "EB11",
+      "python_basis_index": 4,
+      "scale": {
+        "imag": -1.647987302178218e-17,
+        "real": 1.0
+      }
+    },
+    {
+      "electric_abs_error": 4.200432923632394e-15,
+      "electric_relative_error": 4.200432923632394e-15,
+      "k_abs_error": 2.0872348406033234e-14,
+      "mathematica_basis_index": 5,
+      "mathematica_label": "layer_1_unknown_4",
+      "mathematica_unknown_symbol": "EB21",
+      "python_basis_index": 5,
+      "scale": {
+        "imag": -1.3608905669038056e-15,
+        "real": 1.0
+      }
+    },
+    {
+      "electric_abs_error": 2.7803927328123934e-14,
+      "electric_relative_error": 2.7803927328123934e-14,
+      "k_abs_error": 1.9558254437941956e-14,
+      "mathematica_basis_index": 6,
+      "mathematica_label": "substrate_unknown_1",
+      "mathematica_unknown_symbol": "ET1",
+      "python_basis_index": 6,
+      "scale": {
+        "imag": -2.3245294578089203e-15,
+        "real": 0.9999999999999998
+      }
+    },
+    {
+      "electric_abs_error": 2.843956060241871e-14,
+      "electric_relative_error": 2.8439560602418704e-14,
+      "k_abs_error": 1.5998605169993243e-14,
+      "mathematica_basis_index": 7,
+      "mathematica_label": "substrate_unknown_2",
+      "mathematica_unknown_symbol": "ET2",
+      "python_basis_index": 7,
+      "scale": {
+        "imag": -3.039235529911366e-15,
+        "real": 1.0000000000000002
+      }
+    }
+  ],
+  "case_id": "maker_fringes_moderate_high_oblique",
+  "coefficient_deltas": [
+    {
+      "actual_python_coefficient": {
+        "imag": 0.10314020049717743,
+        "real": -0.2462832474419132
+      },
+      "coefficient_abs_error": 2.025634159101047e-15,
+      "expected_python_coefficient_from_mathematica_nsolve": {
+        "imag": 0.10314020049717669,
+        "real": -0.24628324744191132
+      },
+      "mathematica_column": 0,
+      "python_column": 0
+    },
+    {
+      "actual_python_coefficient": {
+        "imag": 0.03606763505150564,
+        "real": 0.15038893288390678
+      },
+      "coefficient_abs_error": 5.306779683744404e-16,
+      "expected_python_coefficient_from_mathematica_nsolve": {
+        "imag": 0.036067635051505884,
+        "real": 0.1503889328839063
+      },
+      "mathematica_column": 1,
+      "python_column": 1
+    },
+    {
+      "actual_python_coefficient": {
+        "imag": -0.2981551556000405,
+        "real": 0.6429863743988421
+      },
+      "coefficient_abs_error": 2.0411201962889075e-15,
+      "expected_python_coefficient_from_mathematica_nsolve": {
+        "imag": -0.2981551556000413,
+        "real": 0.6429863743988402
+      },
+      "mathematica_column": 2,
+      "python_column": 2
+    },
+    {
+      "actual_python_coefficient": {
+        "imag": -0.0002920652399749443,
+        "real": -0.2524672909962934
+      },
+      "coefficient_abs_error": 3.652331865331933e-15,
+      "expected_python_coefficient_from_mathematica_nsolve": {
+        "imag": -0.0002920652399733279,
+        "real": -0.25246729099629667
+      },
+      "mathematica_column": 3,
+      "python_column": 3
+    },
+    {
+      "actual_python_coefficient": {
+        "imag": 0.010237465919431666,
+        "real": -0.04468915689708874
+      },
+      "coefficient_abs_error": 1.242131056627463e-15,
+      "expected_python_coefficient_from_mathematica_nsolve": {
+        "imag": 0.01023746591943148,
+        "real": -0.04468915689708751
+      },
+      "mathematica_column": 4,
+      "python_column": 4
+    },
+    {
+      "actual_python_coefficient": {
+        "imag": 0.02519564901648324,
+        "real": 0.027064910395637506
+      },
+      "coefficient_abs_error": 3.993633352219104e-16,
+      "expected_python_coefficient_from_mathematica_nsolve": {
+        "imag": 0.025195649016483464,
+        "real": 0.027064910395637177
+      },
+      "mathematica_column": 5,
+      "python_column": 5
+    },
+    {
+      "actual_python_coefficient": {
+        "imag": 0.7302635793211063,
+        "real": 0.18445135508663318
+      },
+      "coefficient_abs_error": 6.679816236361857e-15,
+      "expected_python_coefficient_from_mathematica_nsolve": {
+        "imag": 0.7302635793211087,
+        "real": 0.1844513550866394
+      },
+      "mathematica_column": 6,
+      "python_column": 6
+    },
+    {
+      "actual_python_coefficient": {
+        "imag": 0.11499772885777478,
+        "real": 0.19394862912396543
+      },
+      "coefficient_abs_error": 2.048863971481249e-14,
+      "expected_python_coefficient_from_mathematica_nsolve": {
+        "imag": 0.11499772885775561,
+        "real": 0.1939486291239582
+      },
+      "mathematica_column": 7,
+      "python_column": 7
+    }
+  ],
+  "column_alignment": [
+    {
+      "absolute_matrix_error": 1.5700924586837752e-16,
+      "mathematica_column": 0,
+      "python_column": 0,
+      "relative_matrix_error": 1.122419063098703e-16,
+      "scale": {
+        "imag": 0.0,
+        "real": -0.9999999999999999
+      }
+    },
+    {
+      "absolute_matrix_error": 2.220446049250313e-16,
+      "mathematica_column": 1,
+      "python_column": 1,
+      "relative_matrix_error": 1.5873402617002886e-16,
+      "scale": {
+        "imag": 0.0,
+        "real": 0.9999999999999998
+      }
+    },
+    {
+      "absolute_matrix_error": 1.4763084883433317e-14,
+      "mathematica_column": 2,
+      "python_column": 2,
+      "relative_matrix_error": 5.670097285077106e-15,
+      "scale": {
+        "imag": -1.215999719988565e-15,
+        "real": 0.999999999999998
+      }
+    },
+    {
+      "absolute_matrix_error": 1.4051912749654216e-14,
+      "mathematica_column": 3,
+      "python_column": 3,
+      "relative_matrix_error": 4.788306283644534e-15,
+      "scale": {
+        "imag": -7.734895231653029e-17,
+        "real": 1.0
+      }
+    },
+    {
+      "absolute_matrix_error": 8.965917688393874e-15,
+      "mathematica_column": 4,
+      "python_column": 4,
+      "relative_matrix_error": 3.406400384323879e-15,
+      "scale": {
+        "imag": 1.045665157046287e-15,
+        "real": 0.9999999999999991
+      }
+    },
+    {
+      "absolute_matrix_error": 9.831806050371906e-15,
+      "mathematica_column": 5,
+      "python_column": 5,
+      "relative_matrix_error": 3.210354186218451e-15,
+      "scale": {
+        "imag": -1.4678146152285798e-15,
+        "real": 1.0000000000000009
+      }
+    },
+    {
+      "absolute_matrix_error": 4.7622361115942813e-14,
+      "mathematica_column": 6,
+      "python_column": 6,
+      "relative_matrix_error": 2.8091725644484212e-14,
+      "scale": {
+        "imag": -2.361370267437665e-15,
+        "real": 1.0000000000000013
+      }
+    },
+    {
+      "absolute_matrix_error": 4.94327690503654e-14,
+      "mathematica_column": 7,
+      "python_column": 7,
+      "relative_matrix_error": 2.8280532790798012e-14,
+      "scale": {
+        "imag": -3.027371325979905e-15,
+        "real": 0.9999999999999987
+      }
+    }
+  ],
+  "interpretation": "The exported Mathematica CoefficientArrays system is close to the Python boundary system after column phase/order alignment, with RHS agreement at machine precision and a maximum aligned matrix relative residual around 1e-8. Solving the exported Mathematica system directly reproduces Mathematica NSolve coefficients. The largest exported wave-basis difference is the EB11 electric basis, while k-vectors remain matched near machine precision.",
+  "mathematica_condition_number": 4.114235794637222,
+  "max_abs_B_plus_python_rhs": 1.1102230246251565e-16,
+  "max_aligned_coefficient_abs_error": 2.048863971481249e-14,
+  "max_aligned_coefficient_error_column": {
+    "actual_python_coefficient": {
+      "imag": 0.11499772885777478,
+      "real": 0.19394862912396543
+    },
+    "coefficient_abs_error": 2.048863971481249e-14,
+    "expected_python_coefficient_from_mathematica_nsolve": {
+      "imag": 0.11499772885775561,
+      "real": 0.1939486291239582
+    },
+    "mathematica_column": 7,
+    "python_column": 7
+  },
+  "max_aligned_matrix_relative_error": 2.8280532790798012e-14,
+  "max_basis_electric_relative_error": 2.8439560602418704e-14,
+  "max_basis_error_record": {
+    "electric_abs_error": 2.843956060241871e-14,
+    "electric_relative_error": 2.8439560602418704e-14,
+    "k_abs_error": 1.5998605169993243e-14,
+    "mathematica_basis_index": 7,
+    "mathematica_label": "substrate_unknown_2",
+    "mathematica_unknown_symbol": "ET2",
+    "python_basis_index": 7,
+    "scale": {
+      "imag": -3.039235529911366e-15,
+      "real": 1.0000000000000002
+    }
+  },
+  "max_basis_k_abs_error": 2.0872348406033234e-14,
+  "max_mathematica_direct_solve_vs_nsolve_coeff_error": 2.2215299868541707e-16,
+  "python_condition_number": 4.1142357946372154,
+  "source": "Mathematica SHAARP.ml setup.nb solveFresnelN system captured inside f4L for Maker high-oblique theta=12",
+  "status": "theta12_solvefresneln_matrix_and_coefficients_match",
+  "theta_deg": 12.0,
+  "tolerance": 1e-10
+}

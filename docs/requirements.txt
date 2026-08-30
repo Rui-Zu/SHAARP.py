@@ -1,0 +1,10 @@
+# Documentation build dependencies (in addition to the runtime deps in the package).
+# Versions pinned to a mutually-compatible set: myst-parser 4.x/5.x unconditionally removes a Sphinx
+# footnote transform that isn't present across current Sphinx releases (build crash); myst-parser 3.0.1
+# predates that code and builds cleanly on Sphinx 7.3.
+sphinx==7.3.7
+sphinx-rtd-theme==2.0.0
+myst-parser==3.0.1
+myst-nb==1.1.2
+docutils<0.21
+sphinx-design

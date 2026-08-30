@@ -1,0 +1,36 @@
+{
+	"source":"SHAARP.si stage reference export template",
+	"status":"mathematica_reference_export_template_not_values",
+	"validation_claim":false,
+	"wolfram_version":"13.3.0 for Microsoft Windows (64-bit) (June 3, 2023)",
+	"contract_path":"benchmarks/mathematica_reference/shaarp_si_stage_export_contract_v1.json",
+	"exportable_symbols":[
+		"Croots",
+		"E2wroots",
+		"ER2w",
+		"ERpNum",
+		"ERsNum",
+		"ETweo",
+		"ETwo",
+		"EwrootsNum",
+		"Fresnel",
+		"HR2w",
+		"P2eo",
+		"P2o",
+		"Peoo",
+		"RSignalCrystal",
+		"ThetaExt",
+		"ThetaOrd",
+		"Vktweo",
+		"Vktwo",
+		"nwNumExt",
+		"nwNumOrd"
+	],
+	"unresolved_symbols":[
+		"P2e",
+		"Peo",
+		"I2"
+	],
+	"case_count":36,
+	"cases":[]
+}

@@ -1,0 +1,359 @@
+{
+  "schema_version": 1,
+  "source": "SHAARP.si Mathematica stage export contract generated from refined snippet evidence",
+  "status": "export_contract_not_validation_evidence",
+  "validation_claim": false,
+  "request_file": "benchmarks/mathematica_reference/shaarp_si_stage_reference_request_v1.json",
+  "symbol_source_file": "benchmarks/mathematica_reference/shaarp_si_stage_symbol_sources_v1.json",
+  "gap_audit_file": "benchmarks/mathematica_reference/shaarp_si_symbol_gap_audit_v1.json",
+  "dependency_audit_file": "benchmarks/mathematica_reference/shaarp_si_active_route_dependency_audit_v1.json",
+  "case_input_mapping_file": "benchmarks/mathematica_reference/shaarp_si_case_input_mapping_v1.json",
+  "case_input_mapping_preflight_file": "benchmarks/mathematica_reference/shaarp_si_case_input_mapping_preflight_v1.json",
+  "case_count": 36,
+  "active_numeric_region_order": [
+    "principal_axis_and_index_setup",
+    "shg_tensor_input_matrix",
+    "active_wave_equation_setup",
+    "active_backward_wave_equation_setup",
+    "omega_angle_root_assignments_active_path",
+    "two_omega_angle_root_assignments_active_path",
+    "omega_angle_roots_active_numerical_path",
+    "omega_fresnel_field_setup_active_path",
+    "omega_fresnel_equations_active_path",
+    "omega_fresnel_substitution_active_path",
+    "shg_tensor_transformation_active_path",
+    "active_complex_field_pnl_block",
+    "inhomogeneous_particular_solution_coefficients",
+    "numerical_coefficients_and_two_omega_field_setup",
+    "two_omega_boundary_solution",
+    "reflected_signal_and_basic_intensity"
+  ],
+  "fresnel_sweep_region_order": [
+    "fresnel_sweep_table_initialization",
+    "fresnel_sweep_angle_root_assignments",
+    "omega_angle_roots_initial_path",
+    "fresnel_sweep_table_rows"
+  ],
+  "commented_reference_region_order": [
+    "commented_real_field_pnl_block"
+  ],
+  "exact_active_requested_symbols": {
+    "Croots": [
+      {
+        "region_id": "inhomogeneous_particular_solution_coefficients",
+        "line_index": 836,
+        "line_text": "Croots = NSolve[{",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "E2wroots": [
+      {
+        "region_id": "two_omega_boundary_solution",
+        "line_index": 899,
+        "line_text": "E2wroots=NSolve[{",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "ER2w": [
+      {
+        "region_id": "numerical_coefficients_and_two_omega_field_setup",
+        "line_index": 872,
+        "line_text": "ER2w = Simplify[Inverse[RNum]].{-ER2wp,ER2ws,0};",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "ERpNum": [
+      {
+        "region_id": "omega_fresnel_substitution_active_path",
+        "line_index": 742,
+        "line_text": "ERpNum = ERpNum/.EwrootsNum[[1,1]];",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "ERsNum": [
+      {
+        "region_id": "omega_fresnel_substitution_active_path",
+        "line_index": 743,
+        "line_text": "ERsNum = ERsNum/.EwrootsNum[[1,2]];",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "ETweo": [
+      {
+        "region_id": "fresnel_sweep_table_rows",
+        "line_index": 454,
+        "line_text": "ETweo=Expand[ETwNumExt];",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "omega_fresnel_substitution_active_path",
+        "line_index": 746,
+        "line_text": "ETweo=Expand[ETwNumExt];",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "ETwo": [
+      {
+        "region_id": "fresnel_sweep_table_rows",
+        "line_index": 455,
+        "line_text": "ETwo  =Expand[ETwNumOrd];",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "omega_fresnel_substitution_active_path",
+        "line_index": 747,
+        "line_text": "ETwo  =Expand[ETwNumOrd];",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "EwrootsNum": [
+      {
+        "region_id": "omega_fresnel_equations_active_path",
+        "line_index": 736,
+        "line_text": "EwrootsNum = Simplify[NSolve[{EIwNum[[1]]+ERwNum[[1]]== ETwNumOrd[[1]]+ETwNumExt[[1]], EIwNum[[2]]+ERwNum[[2]]== ETwNumOrd[[2]]+ETwNumExt[[2]],HIwNum[[1]]+HRwNum[[1]]== HTwNumOrd[[1]]+HTwNumExt[[1]],HIwNum[[2]]+HRwNum[[2]]== HTwNumOrd[[2]]+HTwNumExt[[2]]},{ERpNum,ERsNum,twe,two}]];",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "Fresnel": [
+      {
+        "region_id": "fresnel_sweep_table_initialization",
+        "line_index": 320,
+        "line_text": "Fresnel = ConstantArray[0,{Round[90/step]+1,5}];",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "fresnel_sweep_table_rows",
+        "line_index": 461,
+        "line_text": "Fresnel[[count+1,1]]=(count)*step;",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "fresnel_sweep_table_rows",
+        "line_index": 462,
+        "line_text": "Fresnel[[count+1,2]]=-ERwNum[[1]]/EIwNum[[1]];(*rp*)",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "fresnel_sweep_table_rows",
+        "line_index": 463,
+        "line_text": "Fresnel[[count+1,3]]=ERs/EIwNum[[2]];(*rs*)",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "fresnel_sweep_table_rows",
+        "line_index": 464,
+        "line_text": "Fresnel[[count+1,4]]=Sqrt[((ETwo[[1]]+ETweo[[1]])^2+(ETwo[[3]]+ETweo[[3]])^2)]/Sqrt[EIw[[1]]^2+EIw[[3]]^2];(*rp*)",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "fresnel_sweep_table_rows",
+        "line_index": 465,
+        "line_text": "Fresnel[[count+1,5]]=(ETwo[[2]]+ETweo[[2]])/EIw[[2]]; (*rs*)",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "HR2w": [
+      {
+        "region_id": "numerical_coefficients_and_two_omega_field_setup",
+        "line_index": 886,
+        "line_text": "HR2w = Simplify[Inverse[\\[Mu]].Cross[Vkr2w,ER2w]/(2*w*\\[Mu]0)];",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "P2eo": [
+      {
+        "region_id": "active_complex_field_pnl_block",
+        "line_index": 793,
+        "line_text": "P2eo=e0*Simplify[",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "P2o": [
+      {
+        "region_id": "active_complex_field_pnl_block",
+        "line_index": 798,
+        "line_text": "P2o=e0*Simplify[",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "Peoo": [
+      {
+        "region_id": "active_complex_field_pnl_block",
+        "line_index": 803,
+        "line_text": "Peoo=e0*Simplify[",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "RSignalCrystal": [
+      {
+        "region_id": "reflected_signal_and_basic_intensity",
+        "line_index": 928,
+        "line_text": "{RSignalCrystal  ={{Cos[\\[CurlyPhi]],Sin[\\[CurlyPhi]]},{-Sin[\\[CurlyPhi]],Cos[\\[CurlyPhi]]}}. {-ER2wp,ER2ws};},",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "reflected_signal_and_basic_intensity",
+        "line_index": 929,
+        "line_text": "{RSignalCrystal  ={{Cos[AnalyzerAngle Degree],-Sin[AnalyzerAngle Degree]},{Sin[AnalyzerAngle Degree],Cos[AnalyzerAngle Degree]}}. {ER2wp,ER2ws};}",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "ThetaExt": [
+      {
+        "region_id": "fresnel_sweep_angle_root_assignments",
+        "line_index": 347,
+        "line_text": "ThetaExt=ThetaTout/.RootExt;",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "omega_angle_root_assignments_active_path",
+        "line_index": 518,
+        "line_text": "ThetaExt=ThetaTout/.RootExt;",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "ThetaOrd": [
+      {
+        "region_id": "fresnel_sweep_angle_root_assignments",
+        "line_index": 344,
+        "line_text": "ThetaOrd=ThetaTout/.RootOrd;",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "omega_angle_root_assignments_active_path",
+        "line_index": 515,
+        "line_text": "ThetaOrd=ThetaTout/.RootOrd;",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "Vktweo": [
+      {
+        "region_id": "omega_fresnel_substitution_active_path",
+        "line_index": 749,
+        "line_text": "Vktweo=Chop[VktwNumExt];",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "Vktwo": [
+      {
+        "region_id": "omega_fresnel_substitution_active_path",
+        "line_index": 748,
+        "line_text": "Vktwo=Chop[VktwNumOrd];",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "nwNumExt": [
+      {
+        "region_id": "omega_angle_roots_active_numerical_path",
+        "line_index": 544,
+        "line_text": "nwNumExt =SetPrecision[Sqrt[(VwNumExt +ExtwFactor*Sqrt[VwNumExt^2-WwNumExt])/WwNumExt],6];",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "omega_transmitted_field_directions_active_path",
+        "line_index": 587,
+        "line_text": "nwNumExt =SetPrecision[Sqrt[(VwNumExt +ExtwFactor*Sqrt[VwNumExt^2-WwNumExt])/WwNumExt],6];",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "omega_transmitted_field_directions_active_path",
+        "line_index": 593,
+        "line_text": "nwNumExt =Quiet[Sqrt[1/EigenwNumExt[[1,k1Num]]]];",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "omega_transmitted_field_directions_active_path",
+        "line_index": 599,
+        "line_text": "nwNumExt =Sqrt[1/EigenwNumExt[[1,k1Num]]];",
+        "region_active_status": "active_or_setup_code"
+      }
+    ],
+    "nwNumOrd": [
+      {
+        "region_id": "omega_angle_roots_initial_path",
+        "line_index": 368,
+        "line_text": "nwNumOrd = SetPrecision[Sqrt[(VwNumOrd-ExtwFactor*Sqrt[VwNumOrd^2-WwNumOrd])/WwNumOrd],6];",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "omega_angle_roots_active_numerical_path",
+        "line_index": 552,
+        "line_text": "nwNumOrd = SetPrecision[Sqrt[(VwNumOrd-ExtwFactor*Sqrt[VwNumOrd^2-WwNumOrd])/WwNumOrd],6];",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "omega_transmitted_field_directions_active_path",
+        "line_index": 617,
+        "line_text": "nwNumOrd = SetPrecision[Sqrt[(VwNumOrd-ExtwFactor*Sqrt[VwNumOrd^2-WwNumOrd])/WwNumOrd],6];",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "omega_transmitted_field_directions_active_path",
+        "line_index": 621,
+        "line_text": "nwNumOrd =Quiet[Sqrt[1/EigenwNumOrd[[1,k2Num]]]];",
+        "region_active_status": "active_or_setup_code"
+      },
+      {
+        "region_id": "omega_transmitted_field_directions_active_path",
+        "line_index": 626,
+        "line_text": "nwNumOrd =Sqrt[1/EigenwNumOrd[[1,k2Num]]];",
+        "region_active_status": "active_or_setup_code"
+      }
+    ]
+  },
+  "commented_reference_only_symbols": {},
+  "resolved_intensity_outputs_for_I2_gap": [
+    "I2wx",
+    "I2wy",
+    "I2wParallel",
+    "I2wPerpdicular",
+    "MaxI2wx",
+    "MaxI2wy",
+    "MaxI2w"
+  ],
+  "unresolved_exact_requested_symbols": [
+    {
+      "symbol": "P2e",
+      "classification": "substring_only_of_active_pnl_symbols",
+      "assigned_symbols_containing_name": [
+        "P2eo"
+      ],
+      "policy": "do_not_alias_to_P2eo_or_Peoo_without_notebook_evidence"
+    },
+    {
+      "symbol": "Peo",
+      "classification": "substring_only_of_active_pnl_symbols",
+      "assigned_symbols_containing_name": [
+        "Peoo"
+      ],
+      "policy": "do_not_alias_to_P2eo_or_Peoo_without_notebook_evidence"
+    },
+    {
+      "symbol": "I2",
+      "classification": "represented_by_specific_intensity_functions_not_exact_symbol",
+      "assigned_symbols_containing_name": [
+        "I2wParallel",
+        "I2wPerpdicular",
+        "I2wx",
+        "I2wy",
+        "MaxI2w",
+        "MaxI2wParallel",
+        "MaxI2wPerpdicular",
+        "MaxI2wx",
+        "MaxI2wy"
+      ],
+      "policy": "export_specific_intensity_functions_until_exact_I2_assignment_is_found"
+    }
+  ],
+  "export_status": {
+    "mathematica_values_exported": false,
+    "comparison_against_python_completed": false,
+    "safe_to_claim_shaarp_agreement": false
+  },
+  "notes": [
+    "This contract defines what an eventual Mathematica export must emit; it does not contain Mathematica reference values.",
+    "Do not export substring matches as exact symbols. P2e and Peo remain unresolved exact-name gaps.",
+    "For the I2 gap, export the specific intensity functions/normalizers until an exact SHAARP.si I2 symbol is found.",
+    "The active numeric route excludes commented real-field PNL except as reference-only evidence."
+  ]
+}

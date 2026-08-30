@@ -1,0 +1,348 @@
+{
+	"source":"Mathematica SHAARP.ml setup.nb orientation cell inventory",
+	"wolfram_version":"13.3.0 for Microsoft Windows (64-bit) (June 3, 2023)",
+	"inputCellCount":49,
+	"matchedCells":[
+		{
+			"index":1,
+			"byte_count":5734,
+			"patterns":[
+				"orientation",
+				"latcon"
+			],
+			"preview":"BoxData[RowBox[{RowBox[{\"(*\", RowBox[{\"Protect\", \" \", \"the\", \" \", \"keys\", \" \", \"for\", \" \", \"all\", \" \", \"associations\"}], \"*)\"}], \"\", RowBox[{RowBox[{RowBox[{\"Unprotect\", \"[\", RowBox[{\"name\", \",\", \"orientation\", \",\", \"pg\", \",\", \"latcon\", \",\", \"ω\", \",\", \"k\", \",\", \"k0\", \",\", \"θ\", \",\", \"EE\", \",\", \"H\", \",\", \"neff\", \",\", \"nω\", \",\", \"n2ω\", \",\", \"εωC\", \",\", \"ε2ωC\", \",\", \"εωL\", \",\", \"εω2L\", \",\", \"εωP\", \","
+		},
+		{
+			"index":2,
+			"byte_count":3472,
+			"patterns":[
+				"Lab1",
+				"Lab2",
+				"Lab3"
+			],
+			"preview":"BoxData[RowBox[{RowBox[{\"(*\", RowBox[{\"Before\", \" \", \"normalization\"}], \"*)\"}], \"\", RowBox[{\"(*\", RowBox[{RowBox[{\"n0\", \"=\", \"1\"}], \";\", \"\", RowBox[{\"c0\", \"=\", RowBox[{\"2.998\", \"*\", SuperscriptBox[\"10\", \"8\"]}]}], \";\", \" \", RowBox[{\"(*\", RowBox[{\"m\", \"\/\", \"s\"}], \"*)\"}], \"\", RowBox[{\"ε0\", \"=\", RowBox[{\"8.854\", \"*\", SuperscriptBox[\"10\", RowBox[{\"-\", \"12\"}]]}]}], \";\", \" \", RowBox[{\"(*\", RowBox[{\"C\""
+		},
+		{
+			"index":4,
+			"byte_count":2994,
+			"patterns":[
+				"m2t3",
+				"t2m3"
+			],
+			"preview":"BoxData[{RowBox[{RowBox[{RowBox[{\"ClearAll\", \"[\", RowBox[{\"m2t3\", \",\", \"t2m3\"}], \"]\"}], \";\"}], \"\", RowBox[{\"(*\", RowBox[{RowBox[{\"matrix\", \" \", \"notation\", \" \", \"to\", \" \", \"tensor\", \" \", \"for\", \" \", \"tensor\", \" \", \"of\", \" \", \"rank\", \" \", \"3\"}], \",\", \" \", \"m2t3\"}], \"*)\"}], \"\", RowBox[{\"(*\", RowBox[{RowBox[{\"tensor\", \" \", \"to\", \" \", \"matrix\", \" \", \"notation\", \" \", \"for\", \" \", \"tensor\", \" \", \"of\", "
+		},
+		{
+			"index":5,
+			"byte_count":5484,
+			"patterns":[
+				"QC2QP",
+				"extMater",
+				"m2t3",
+				"t2m3",
+				"orientation",
+				"latcon"
+			],
+			"preview":"BoxData[{RowBox[{RowBox[{RowBox[{\"ClearAll\", \"[\", RowBox[{\"setWave\", \",\", \"extWave\", \",\", \"setMater\", \",\", \"extMater\"}], \"]\"}], \";\"}], \"\", RowBox[{\"(*\", \"\", RowBox[{RowBox[{\"setWave\", \":\", \" \", RowBox[{\"create\", \" \", \"a\", \" \", \"wave\", \" \", \"object\", \" \", RowBox[{\"(\", \"Association\", \")\"}]}]}], \";\", \"\", RowBox[{\"extWave\", \":\", \" \", RowBox[{\"extend\", \" \", \"a\", \" \", \"created\", \" \", \"wave\", \" \", \"ob"
+		},
+		{
+			"index":6,
+			"byte_count":1822,
+			"patterns":[
+				"QC2QP"
+			],
+			"preview":"BoxData[{RowBox[{RowBox[{\"ClearAll\", \"[\", \"QC2QP\", \"]\"}], \";\"}], \"\", RowBox[{RowBox[{\"QC2QP\", \"[\", RowBox[{\"PointGroup_\", \",\", \"εωC_\", \",\", \"QC_\"}], \"]\"}], \":=\", RowBox[{\"Module\", \"[\", RowBox[{RowBox[{\"{\", RowBox[{\"Inv\", \",\", \"aCryToPrin\"}], \"}\"}], \",\", \"\", RowBox[{RowBox[{\"If\", \" \", \"[\", RowBox[{RowBox[{RowBox[{RowBox[{\"PointGroup\", \"[\", RowBox[{\"[\", \"1\", \"]\"}], \"]\"}], \"\", \" \", \"\\\"1\\\"\"}], \"∨\","
+		},
+		{
+			"index":9,
+			"byte_count":4029,
+			"patterns":[
+				"Lab1",
+				"Lab2",
+				"Lab3",
+				"orientation"
+			],
+			"preview":"BoxData[{RowBox[{RowBox[{\"ClearAll\", \"[\", \"Air\", \"]\"}], \";\"}], \"\", RowBox[{RowBox[{\"Air\", \"[\", RowBox[{\"λ_\", \":\", \"1.064\"}], \"]\"}], \":=\", RowBox[{\"Module\", \"[\", RowBox[{RowBox[{\"{\", RowBox[{\"name\", \",\", \"orientation\", \",\", \"pg\", \",\", \"a\", \",\", \"b\", \",\", \"c\", \",\", \"α\", \",\", \"β\", \",\", \"γ\", \",\", \"n1ω\", \",\", \"n2ω\", \",\", \"n3ω\", \",\", \"n12ω\", \",\", \"n22ω\", \",\", \"n32ω\", \",\", \"\", \"d11\", \",\", \"d12\", \",\", \""
+		},
+		{
+			"index":10,
+			"byte_count":4071,
+			"patterns":[
+				"Lab1",
+				"Lab2",
+				"Lab3",
+				"orientation"
+			],
+			"preview":"BoxData[{RowBox[{RowBox[{\"ClearAll\", \"[\", \"blankMaterL\", \"]\"}], \";\"}], \"\", RowBox[{RowBox[{\"blankMaterL\", \"[\", RowBox[{\"λ_\", \":\", \"1.0\"}], \"]\"}], \":=\", RowBox[{\"Module\", \"[\", RowBox[{RowBox[{\"{\", RowBox[{\"name\", \",\", \"orientation\", \",\", \"pg\", \",\", \"a\", \",\", \"b\", \",\", \"c\", \",\", \"α\", \",\", \"β\", \",\", \"γ\", \",\", \"n1ω\", \",\", \"n2ω\", \",\", \"n3ω\", \",\", \"n12ω\", \",\", \"n22ω\", \",\", \"n32ω\", \",\", \"\", \"d11\", \",\","
+		},
+		{
+			"index":11,
+			"byte_count":4150,
+			"patterns":[
+				"Lab1",
+				"Lab2",
+				"Lab3",
+				"orientation"
+			],
+			"preview":"BoxData[{RowBox[{RowBox[{\"ClearAll\", \"[\", \"blankMaterNL\", \"]\"}], \";\"}], \"\", RowBox[{RowBox[{\"blankMaterNL\", \"[\", RowBox[{\"λ_\", \":\", \"1.0\"}], \"]\"}], \":=\", RowBox[{\"Module\", \"[\", RowBox[{RowBox[{\"{\", RowBox[{\"name\", \",\", \"orientation\", \",\", \"pg\", \",\", \"a\", \",\", \"b\", \",\", \"c\", \",\", \"α\", \",\", \"β\", \",\", \"γ\", \",\", \"n1ω\", \",\", \"n2ω\", \",\", \"n3ω\", \",\", \"n12ω\", \",\", \"n22ω\", \",\", \"n32ω\", \",\", \"\", \"d11\", \","
+		},
+		{
+			"index":12,
+			"byte_count":4363,
+			"patterns":[
+				"Lab1",
+				"Lab2",
+				"Lab3",
+				"orientation"
+			],
+			"preview":"BoxData[{RowBox[{RowBox[{\"ClearAll\", \"[\", \"LiNbO3\", \"]\"}], \";\"}], \"\", RowBox[{RowBox[{\"LiNbO3\", \"[\", RowBox[{\"λ_\", \":\", \"1.064\"}], \"]\"}], \":=\", RowBox[{\"Module\", \"[\", RowBox[{RowBox[{\"{\", RowBox[{\"name\", \",\", \"orientation\", \",\", \"pg\", \",\", \"a\", \",\", \"b\", \",\", \"c\", \",\", \"α\", \",\", \"β\", \",\", \"γ\", \",\", \"n1ω\", \",\", \"n2ω\", \",\", \"n3ω\", \",\", \"n12ω\", \",\", \"n22ω\", \",\", \"n32ω\", \",\", \"\", \"d11\", \",\", \"d12\", "
+		},
+		{
+			"index":13,
+			"byte_count":8754,
+			"patterns":[
+				"Lab1",
+				"Lab2",
+				"Lab3",
+				"orientation"
+			],
+			"preview":"BoxData[{RowBox[{RowBox[{\"ClearAll\", \"[\", \"LiNbO3xCutλ1550\", \"]\"}], \";\"}], \"\", RowBox[{RowBox[{\"LiNbO3xCutλ1550\", \"[\", RowBox[{\"λ_\", \":\", \"1.55\"}], \"]\"}], \":=\", RowBox[{\"Module\", \"[\", RowBox[{RowBox[{\"{\", RowBox[{\"name\", \",\", \"orientation\", \",\", \"pg\", \",\", \"a\", \",\", \"b\", \",\", \"c\", \",\", \"α\", \",\", \"β\", \",\", \"γ\", \",\", \"n1ω\", \",\", \"n2ω\", \",\", \"n3ω\", \",\", \"n12ω\", \",\", \"n22ω\", \",\", \"n32ω\", \",\", \"\", \"d"
+		},
+		{
+			"index":14,
+			"byte_count":8725,
+			"patterns":[
+				"Lab1",
+				"Lab2",
+				"Lab3",
+				"orientation"
+			],
+			"preview":"BoxData[{RowBox[{RowBox[{\"ClearAll\", \"[\", \"LiNbO3zCutλ1550\", \"]\"}], \";\"}], \"\", RowBox[{RowBox[{\"LiNbO3zCutλ1550\", \"[\", RowBox[{\"λ_\", \":\", \"1.55\"}], \"]\"}], \":=\", RowBox[{\"Module\", \"[\", RowBox[{RowBox[{\"{\", RowBox[{\"name\", \",\", \"orientation\", \",\", \"pg\", \",\", \"a\", \",\", \"b\", \",\", \"c\", \",\", \"α\", \",\", \"β\", \",\", \"γ\", \",\", \"n1ω\", \",\", \"n2ω\", \",\", \"n3ω\", \",\", \"n12ω\", \",\", \"n22ω\", \",\", \"n32ω\", \",\", \"\", \"d"
+		},
+		{
+			"index":15,
+			"byte_count":5941,
+			"patterns":[
+				"Lab1",
+				"Lab2",
+				"Lab3",
+				"orientation"
+			],
+			"preview":"BoxData[{RowBox[{RowBox[{\"ClearAll\", \"[\", \"KTPxCut\", \"]\"}], \";\"}], \"\", RowBox[{RowBox[{\"KTPxCut\", \"[\", RowBox[{\"λ_\", \":\", \"1.55\"}], \"]\"}], \":=\", RowBox[{\"Module\", \"[\", RowBox[{RowBox[{\"{\", RowBox[{\"name\", \",\", \"orientation\", \",\", \"pg\", \",\", \"a\", \",\", \"b\", \",\", \"c\", \",\", \"α\", \",\", \"β\", \",\", \"γ\", \",\", \"n1ω\", \",\", \"n2ω\", \",\", \"n3ω\", \",\", \"n12ω\", \",\", \"n22ω\", \",\", \"n32ω\", \",\", \"\", \"d11\", \",\", \"d12\","
+		},
+		{
+			"index":16,
+			"byte_count":5941,
+			"patterns":[
+				"Lab1",
+				"Lab2",
+				"Lab3",
+				"orientation"
+			],
+			"preview":"BoxData[{RowBox[{RowBox[{\"ClearAll\", \"[\", \"KTPyCut\", \"]\"}], \";\"}], \"\", RowBox[{RowBox[{\"KTPyCut\", \"[\", RowBox[{\"λ_\", \":\", \"1.55\"}], \"]\"}], \":=\", RowBox[{\"Module\", \"[\", RowBox[{RowBox[{\"{\", RowBox[{\"name\", \",\", \"orientation\", \",\", \"pg\", \",\", \"a\", \",\", \"b\", \",\", \"c\", \",\", \"α\", \",\", \"β\", \",\", \"γ\", \",\", \"n1ω\", \",\", \"n2ω\", \",\", \"n3ω\", \",\", \"n12ω\", \",\", \"n22ω\", \",\", \"n32ω\", \",\", \"\", \"d11\", \",\", \"d12\","
+		},
+		{
+			"index":17,
+			"byte_count":5997,
+			"patterns":[
+				"Lab1",
+				"Lab2",
+				"Lab3",
+				"orientation"
+			],
+			"preview":"BoxData[{RowBox[{RowBox[{\"ClearAll\", \"[\", \"ZnO001\", \"]\"}], \";\"}], \"\", RowBox[{RowBox[{\"ZnO001\", \"[\", RowBox[{\"λ_\", \":\", \"1.55\"}], \"]\"}], \":=\", RowBox[{\"Module\", \"[\", RowBox[{RowBox[{\"{\", RowBox[{\"name\", \",\", \"orientation\", \",\", \"pg\", \",\", \"a\", \",\", \"b\", \",\", \"c\", \",\", \"α\", \",\", \"β\", \",\", \"γ\", \",\", \"n1ω\", \",\", \"n2ω\", \",\", \"n3ω\", \",\", \"n12ω\", \",\", \"n22ω\", \",\", \"n32ω\", \",\", \"\", \"d11\", \",\", \"d12\", \""
+		},
+		{
+			"index":18,
+			"byte_count":4166,
+			"patterns":[
+				"Lab1",
+				"Lab2",
+				"Lab3",
+				"orientation"
+			],
+			"preview":"BoxData[{RowBox[{RowBox[{\"ClearAll\", \"[\", \"Pt111λ1550\", \"]\"}], \";\"}], \"\", RowBox[{RowBox[{\"Pt111λ1550\", \"[\", RowBox[{\"λ_\", \":\", \"1.55\"}], \"]\"}], \":=\", RowBox[{\"Module\", \"[\", RowBox[{RowBox[{\"{\", RowBox[{\"name\", \",\", \"orientation\", \",\", \"pg\", \",\", \"a\", \",\", \"b\", \",\", \"c\", \",\", \"α\", \",\", \"β\", \",\", \"γ\", \",\", \"n1ω\", \",\", \"n2ω\", \",\", \"n3ω\", \",\", \"n12ω\", \",\", \"n22ω\", \",\", \"n32ω\", \",\", \"\", \"d11\", \",\", "
+		},
+		{
+			"index":19,
+			"byte_count":4183,
+			"patterns":[
+				"Lab1",
+				"Lab2",
+				"Lab3",
+				"orientation"
+			],
+			"preview":"BoxData[{RowBox[{RowBox[{\"ClearAll\", \"[\", \"Al2O3$0001λ1550\", \"]\"}], \";\"}], \"\", RowBox[{RowBox[{\"Al2O3$0001λ1550\", \"[\", RowBox[{\"λ_\", \":\", \"1.55\"}], \"]\"}], \":=\", RowBox[{\"Module\", \"[\", RowBox[{RowBox[{\"{\", RowBox[{\"name\", \",\", \"orientation\", \",\", \"pg\", \",\", \"a\", \",\", \"b\", \",\", \"c\", \",\", \"α\", \",\", \"β\", \",\", \"γ\", \",\", \"n1ω\", \",\", \"n2ω\", \",\", \"n3ω\", \",\", \"n12ω\", \",\", \"n22ω\", \",\", \"n32ω\", \",\", \"\", \"d"
+		},
+		{
+			"index":20,
+			"byte_count":4338,
+			"patterns":[
+				"Lab1",
+				"Lab2",
+				"Lab3",
+				"orientation"
+			],
+			"preview":"BoxData[{RowBox[{RowBox[{\"ClearAll\", \"[\", \"Quartz$xCutλ1064\", \"]\"}], \";\"}], \"\", RowBox[{RowBox[{\"Quartz$xCutλ1064\", \"[\", RowBox[{\"λ_\", \":\", \"1.064\"}], \"]\"}], \":=\", RowBox[{\"Module\", \"[\", RowBox[{RowBox[{\"{\", RowBox[{\"name\", \",\", \"orientation\", \",\", \"pg\", \",\", \"a\", \",\", \"b\", \",\", \"c\", \",\", \"α\", \",\", \"β\", \",\", \"γ\", \",\", \"n1ω\", \",\", \"n2ω\", \",\", \"n3ω\", \",\", \"n12ω\", \",\", \"n22ω\", \",\", \"n32ω\", \",\", \"\","
+		},
+		{
+			"index":21,
+			"byte_count":11645,
+			"patterns":[
+				"Lab1",
+				"Lab2",
+				"Lab3",
+				"orientation"
+			],
+			"preview":"BoxData[{RowBox[{RowBox[{\"ClearAll\", \"[\", \"Quartz$zCutλ800\", \"]\"}], \";\"}], \"\", RowBox[{RowBox[{\"Quartz$zCutλ800\", \"[\", RowBox[{\"λ_\", \":\", \"0.8\"}], \"]\"}], \":=\", RowBox[{\"Module\", \"[\", RowBox[{RowBox[{\"{\", RowBox[{\"name\", \",\", \"orientation\", \",\", \"pg\", \",\", \"a\", \",\", \"b\", \",\", \"c\", \",\", \"α\", \",\", \"β\", \",\", \"γ\", \",\", \"n1ω\", \",\", \"n2ω\", \",\", \"n3ω\", \",\", \"n12ω\", \",\", \"n22ω\", \",\", \"n32ω\", \",\", \"\", \"d1"
+		},
+		{
+			"index":22,
+			"byte_count":4230,
+			"patterns":[
+				"Lab1",
+				"Lab2",
+				"Lab3",
+				"orientation"
+			],
+			"preview":"BoxData[{RowBox[{RowBox[{\"ClearAll\", \"[\", \"Auλ800\", \"]\"}], \";\"}], \"\", RowBox[{RowBox[{\"Auλ800\", \"[\", RowBox[{\"λ_\", \":\", \"0.8\"}], \"]\"}], \":=\", RowBox[{\"Module\", \"[\", RowBox[{RowBox[{\"{\", RowBox[{\"name\", \",\", \"orientation\", \",\", \"pg\", \",\", \"a\", \",\", \"b\", \",\", \"c\", \",\", \"α\", \",\", \"β\", \",\", \"γ\", \",\", \"n1ω\", \",\", \"n2ω\", \",\", \"n3ω\", \",\", \"n12ω\", \",\", \"n22ω\", \",\", \"n32ω\", \",\", \"\", \"d11\", \",\", \"d12\", \","
+		},
+		{
+			"index":23,
+			"byte_count":5103,
+			"patterns":[
+				"Lab1",
+				"Lab2",
+				"Lab3",
+				"orientation"
+			],
+			"preview":"BoxData[{RowBox[{RowBox[{\"ClearAll\", \"[\", \"GaAs111λ800\", \"]\"}], \";\"}], \"\", RowBox[{RowBox[{\"GaAs111λ800\", \"[\", RowBox[{\"λ_\", \":\", \"0.8\"}], \"]\"}], \":=\", RowBox[{\"Module\", \"[\", RowBox[{RowBox[{\"{\", RowBox[{\"name\", \",\", \"orientation\", \",\", \"pg\", \",\", \"a\", \",\", \"b\", \",\", \"c\", \",\", \"α\", \",\", \"β\", \",\", \"γ\", \",\", \"n1ω\", \",\", \"n2ω\", \",\", \"n3ω\", \",\", \"n12ω\", \",\", \"n22ω\", \",\", \"n32ω\", \",\", \"\", \"d11\", \",\","
+		},
+		{
+			"index":24,
+			"byte_count":4384,
+			"patterns":[
+				"Lab1",
+				"Lab2",
+				"Lab3",
+				"orientation"
+			],
+			"preview":"BoxData[{RowBox[{RowBox[{\"ClearAll\", \"[\", \"BTO\", \"]\"}], \";\"}], \"\", RowBox[{RowBox[{\"BTO\", \"[\", RowBox[{\"λ_\", \":\", \"0.8\"}], \"]\"}], \":=\", RowBox[{\"Module\", \"[\", RowBox[{RowBox[{\"{\", RowBox[{\"name\", \",\", \"orientation\", \",\", \"pg\", \",\", \"a\", \",\", \"b\", \",\", \"c\", \",\", \"α\", \",\", \"β\", \",\", \"γ\", \",\", \"n1ω\", \",\", \"n2ω\", \",\", \"n3ω\", \",\", \"n12ω\", \",\", \"n22ω\", \",\", \"n32ω\", \",\", \"\", \"d11\", \",\", \"d12\", \",\", \"d1"
+		},
+		{
+			"index":25,
+			"byte_count":4418,
+			"patterns":[
+				"Lab1",
+				"Lab2",
+				"Lab3",
+				"orientation"
+			],
+			"preview":"BoxData[{RowBox[{RowBox[{\"ClearAll\", \"[\", \"MoS2\", \"]\"}], \";\"}], \"\", RowBox[{RowBox[{\"MoS2\", \"[\", RowBox[{\"λ_\", \":\", \"0.8\"}], \"]\"}], \":=\", RowBox[{\"Module\", \"[\", RowBox[{RowBox[{\"{\", RowBox[{\"name\", \",\", \"orientation\", \",\", \"pg\", \",\", \"a\", \",\", \"b\", \",\", \"c\", \",\", \"α\", \",\", \"β\", \",\", \"γ\", \",\", \"n1ω\", \",\", \"n2ω\", \",\", \"n3ω\", \",\", \"n12ω\", \",\", \"n22ω\", \",\", \"n32ω\", \",\", \"\", \"d11\", \",\", \"d12\", \",\", \""
+		},
+		{
+			"index":38,
+			"byte_count":24694,
+			"patterns":[
+				"Lab1",
+				"Lab2",
+				"Lab3",
+				"orientation",
+				"latcon"
+			],
+			"preview":"BoxData[{RowBox[{RowBox[{RowBox[{\"ClearAll\", \"[\", \"ruihklfun\", \"]\"}], \";\"}], \"\", RowBox[{\"(*\", RowBox[{RowBox[{\"SetAttributes\", \"[\", RowBox[{\"ruihklfun\", \",\", \"HoldAll\"}], \"]\"}], \";\"}], \"*)\"}]}], \"\", RowBox[{RowBox[{RowBox[{RowBox[{\"ruihklfun\", \"[\", \"matindex_\", \"]\"}], \":=\", RowBox[{\"Module\", \"[\", \"\", RowBox[{RowBox[{\"{\", RowBox[{\"clatticex\", \",\", \"clatticey\", \",\", \"clatticez\", \",\", \"aZTohkl11\""
+		},
+		{
+			"index":39,
+			"byte_count":23609,
+			"patterns":[
+				"hklConvert",
+				"Lab1",
+				"Lab2",
+				"Lab3",
+				"orientation",
+				"latcon"
+			],
+			"preview":"BoxData[{RowBox[{RowBox[{\"Clear\", \"[\", \"hklConvert\", \"]\"}], \";\"}], \"\", RowBox[{\"SetAttributes\", \"[\", RowBox[{\"hklConvert\", \",\", \"HoldAll\"}], \"]\"}], \"\", RowBox[{RowBox[{RowBox[{\"hklConvert\", \"[\", \"mat_\", \"]\"}], \":=\", RowBox[{\"Module\", \"[\", \"\", RowBox[{RowBox[{\"{\", RowBox[{\"clatticex\", \",\", \"clatticey\", \",\", \"clatticez\", \",\", \"aZTohkl11\", \",\", \"aZTohkl21\", \",\", \"aZTohkl31\", \",\", \"aZTohkl12\", \",\","
+		},
+		{
+			"index":40,
+			"byte_count":23959,
+			"patterns":[
+				"hklConvert",
+				"extMater",
+				"orientation"
+			],
+			"preview":"BoxData[{RowBox[{RowBox[{\"ClearAll\", \"[\", RowBox[{\"Fresnel\", \",\", \"MF\", \",\", \"MFandFresnel\", \",\", \"SampleRotate\"}], \"]\"}], \";\"}], \"\", RowBox[{RowBox[{RowBox[{\"Fresnel\", \"[\", RowBox[{\"mats_\", \",\", \"thetatemp_\", \",\", RowBox[{\"assumption_\", \":\", \"0\"}]}], \"]\"}], \":=\", RowBox[{\"Module\", \"[\", RowBox[{RowBox[{\"{\", RowBox[{\"wIncLocal\", \",\", \"wavLLocal\", \",\", \"wavNLLocal\", \",\", \"tmpw1Local\", \",\", \"tmpw2Lo"
+		},
+		{
+			"index":41,
+			"byte_count":12311,
+			"patterns":[
+				"orientation"
+			],
+			"preview":"BoxData[RowBox[{RowBox[{\"(*\", RowBox[{\"options\", \" \", \"for\", \" \", \"wave\", \" \", \"vector\", \" \", \"plots\"}], \"*)\"}], \"\", RowBox[{RowBox[{RowBox[{\"options2d\", \"=\", RowBox[{\"{\", RowBox[{RowBox[{\"ViewProjection\", \"\", \"\\\"Orthographic\\\"\"}], \",\", RowBox[{\"ViewPoint\", \"\", RowBox[{\"{\", RowBox[{\"0\", \",\", \"Infinity\", \",\", \"0\"}], \"}\"}]}], \",\", RowBox[{\"ViewVertical\", \"\", RowBox[{\"{\", RowBox[{\"0\", \",\", \" \", \""
+		},
+		{
+			"index":42,
+			"byte_count":10478,
+			"patterns":[
+				"Lab1",
+				"Lab2",
+				"Lab3",
+				"orientation"
+			],
+			"preview":"BoxData[{RowBox[{RowBox[{\"ClearAll\", \"[\", \"fzvecplots2d\", \"]\"}], \";\"}], \"\", RowBox[{RowBox[{\"fzvecplots2d\", \"[\", \"mat_\", \"]\"}], \":=\", RowBox[{\"Show\", \"[\", \"\", RowBox[{RowBox[{\"Graphics\", \"[\", RowBox[{\"{\", RowBox[{\"Orange\", \",\", RowBox[{\"Thickness\", \"[\", \"0.01\", \"]\"}], \",\", RowBox[{\"Line\", \"[\", RowBox[{\"{\", RowBox[{RowBox[{\"{\", RowBox[{RowBox[{\"-\", \"1\"}], \",\", \"0\"}], \"}\"}], \",\", RowBox[{\"{\", RowB"
+		},
+		{
+			"index":43,
+			"byte_count":7131,
+			"patterns":[
+				"Lab1",
+				"Lab2",
+				"Lab3",
+				"orientation"
+			],
+			"preview":"BoxData[{RowBox[{RowBox[{\"ClearAll\", \"[\", \"fzvecplots3d\", \"]\"}], \";\"}], \"\", RowBox[{RowBox[{\"fzvecplots3d\", \"[\", \"mat_\", \"]\"}], \":=\", RowBox[{\"Show\", \"[\", \"\", RowBox[{RowBox[{\"Graphics3D\", \"[\", RowBox[{\"{\", RowBox[{\"Orange\", \",\", RowBox[{\"Opacity\", \"[\", \"0.4\", \"]\"}], \",\", RowBox[{\"EdgeForm\", \"[\", \" \", \"]\"}], \",\", RowBox[{\"HalfSpace\", \"[\", RowBox[{RowBox[{\"{\", RowBox[{\"0\", \",\", \"0\", \",\", \"1\"}], \""
+		},
+		{
+			"index":44,
+			"byte_count":14999,
+			"patterns":[
+				"Lab1",
+				"Lab2",
+				"Lab3"
+			],
+			"preview":"BoxData[{RowBox[{\"ClearAll\", \"[\", \"fplot2geometry2d\", \"]\"}], \"\", RowBox[{RowBox[{\"fplot2geometry2d\", \"[\", \"theta_\", \"]\"}], \":=\", RowBox[{\"Module\", \"[\", RowBox[{RowBox[{\"{\", RowBox[{RowBox[{\"rtheta\", \"=\", \"0.5\"}], \",\", \"CylinTopBase1\", \",\", \"t1\", \",\", \"η\"}], \"}\"}], \",\", \"\", RowBox[{RowBox[{\"CylinTopBase1\", \" \", \"=\", RowBox[{\"0.8\", \"*\", RowBox[{\"{\", RowBox[{RowBox[{\"-\", RowBox[{\"Sin\", \"[\", RowBox["
+		},
+		{
+			"index":45,
+			"byte_count":5167,
+			"patterns":[
+				"Lab1",
+				"Lab2",
+				"Lab3"
+			],
+			"preview":"BoxData[{RowBox[{RowBox[{\"ClearAll\", \"[\", \"fplot2geometry3d\", \"]\"}], \";\"}], \"\", RowBox[{RowBox[{\"fplot2geometry3d\", \"[\", \"theta_\", \"]\"}], \":=\", RowBox[{\"Module\", \"[\", RowBox[{RowBox[{\"{\", \"}\"}], \",\", \"\", RowBox[{\"Show\", \"[\", \"\", RowBox[{RowBox[{\"Graphics3D\", \"[\", RowBox[{\"{\", RowBox[{\"Orange\", \",\", RowBox[{\"Opacity\", \"[\", \"0.4\", \"]\"}], \",\", RowBox[{\"EdgeForm\", \"[\", \" \", \"]\"}], \",\", RowBox[{\"Hal"
+		},
+		{
+			"index":46,
+			"byte_count":36082,
+			"patterns":[
+				"Lab1",
+				"Lab2",
+				"Lab3"
+			],
+			"preview":"BoxData[{RowBox[{RowBox[{\"ClearAll\", \"[\", \"fpolarizationplot3d\", \"]\"}], \";\"}], \"\", RowBox[{RowBox[{\"fpolarizationplot3d\", \"[\", RowBox[{\"theta_\", \",\", \"phi_\", \",\", \"psi_\", \",\", \"RotatePolarizer_\", \",\", \"RotateAnalyzer_\"}], \"]\"}], \":=\", RowBox[{\"Module\", \"[\", RowBox[{RowBox[{\"{\", RowBox[{\"CylinTopBase1\", \",\", \"CylinTopBase2\", \",\", \"CylinBotBase1\", \",\", \"CylinBotBase2\", \",\", \"rCylin\", \",\", \"t1\", \",\""
+		},
+		{
+			"index":47,
+			"byte_count":27365,
+			"patterns":[
+				"Lab1",
+				"Lab2",
+				"Lab3"
+			],
+			"preview":"BoxData[{RowBox[{RowBox[{\"ClearAll\", \"[\", \"fpolarizationplot2d\", \"]\"}], \";\"}], \"\", RowBox[{RowBox[{\"fpolarizationplot2d\", \"[\", RowBox[{\"theta_\", \",\", \"phi_\", \",\", \"psi_\", \",\", \"RotatePolarizer_\", \",\", \"RotateAnalyzer_\"}], \"]\"}], \":=\", RowBox[{\"Module\", \"[\", RowBox[{RowBox[{\"{\", RowBox[{\"AnalyzerBase\", \",\", \"t1\", \",\", RowBox[{\"rtheta\", \"=\", \"0.5\"}], \",\", \"η\"}], \"}\"}], \",\", \"\", RowBox[{RowBox[{\"t1"
+		}
+	]
+}

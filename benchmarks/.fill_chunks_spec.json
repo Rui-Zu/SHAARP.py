@@ -1,0 +1,121 @@
+[
+  {
+    "slug": "fill_neg_0_4",
+    "case": "fine_maker_negative_normal_positive",
+    "start": 0,
+    "count": 4,
+    "ok": true
+  },
+  {
+    "slug": "fill_neg_9_15",
+    "case": "fine_maker_negative_normal_positive",
+    "start": 9,
+    "count": 15,
+    "ok": true
+  },
+  {
+    "slug": "fill_neg_29_19",
+    "case": "fine_maker_negative_normal_positive",
+    "start": 29,
+    "count": 19,
+    "ok": true
+  },
+  {
+    "slug": "fill_neg_53_17",
+    "case": "fine_maker_negative_normal_positive",
+    "start": 53,
+    "count": 17,
+    "ok": true
+  },
+  {
+    "slug": "fill_neg_75_17",
+    "case": "fine_maker_negative_normal_positive",
+    "start": 75,
+    "count": 17,
+    "ok": true
+  },
+  {
+    "slug": "fill_hob_5_35",
+    "case": "fine_maker_high_oblique",
+    "start": 5,
+    "count": 35,
+    "ok": true
+  },
+  {
+    "slug": "fill_hob_45_35",
+    "case": "fine_maker_high_oblique",
+    "start": 45,
+    "count": 35,
+    "ok": true
+  },
+  {
+    "slug": "fill_hob_85_35",
+    "case": "fine_maker_high_oblique",
+    "start": 85,
+    "count": 35,
+    "ok": true
+  },
+  {
+    "slug": "fill_hob_125_31",
+    "case": "fine_maker_high_oblique",
+    "start": 125,
+    "count": 31,
+    "ok": true
+  },
+  {
+    "slug": "fill_frng_5_60",
+    "case": "fine_maker_fringe_resolution",
+    "start": 5,
+    "count": 60,
+    "ok": true
+  },
+  {
+    "slug": "fill_frng_65_55",
+    "case": "fine_maker_fringe_resolution",
+    "start": 65,
+    "count": 55,
+    "ok": true
+  },
+  {
+    "slug": "fill_frng_125_60",
+    "case": "fine_maker_fringe_resolution",
+    "start": 125,
+    "count": 60,
+    "ok": true
+  },
+  {
+    "slug": "fill_frng_185_55",
+    "case": "fine_maker_fringe_resolution",
+    "start": 185,
+    "count": 55,
+    "ok": true
+  },
+  {
+    "slug": "fill_frng_245_60",
+    "case": "fine_maker_fringe_resolution",
+    "start": 245,
+    "count": 60,
+    "ok": true
+  },
+  {
+    "slug": "fill_frng_305_55",
+    "case": "fine_maker_fringe_resolution",
+    "start": 305,
+    "count": 55,
+    "ok": true
+  },
+  {
+    "slug": "fill_frng_365_60",
+    "case": "fine_maker_fringe_resolution",
+    "start": 365,
+    "count": 60,
+    "ok": true
+  },
+  {
+    "slug": "fill_frng_425_51",
+    "case": "fine_maker_fringe_resolution",
+    "start": 425,
+    "count": 51,
+    "ok": true
+  }
+]

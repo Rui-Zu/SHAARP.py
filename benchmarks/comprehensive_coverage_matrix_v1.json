@@ -1,0 +1,158 @@
+{
+  "coverage_matrix_version": 1,
+  "status": "coverage_contract_for_python_regression_and_residual_tests_not_mathematica_validation",
+  "notes": [
+    "This file records required coverage dimensions for the SHAARP Python port.",
+    "Passing this matrix does not mean Mathematica-vs-Python equivalence; exported Mathematica values are still required for final validation.",
+    "Each dimension should be backed by an automated test, benchmark fixture, or both."
+  ],
+  "dimensions": {
+    "incidence_angle": {
+      "required": ["normal_incidence", "multiple_oblique_angles", "high_angle"],
+      "evidence": [
+        "tests/test_shg.py::test_normal_incidence_all_complex_properties_solves_boundary_residual",
+        "benchmarks/solver_stage_benchmarks_v1.json",
+        "benchmarks/complex_inhomogeneous_benchmarks_v1.json",
+        "benchmarks/reflected_snell_benchmarks_v1.json"
+      ]
+    },
+    "polarization": {
+      "required": ["s", "p"],
+      "evidence": [
+        "benchmarks/solver_stage_benchmarks_v1.json",
+        "benchmarks/multilayer_polarimetry_benchmarks_v1.json",
+        "tests/test_boundary.py",
+        "tests/test_linear.py"
+      ]
+    },
+    "orientation": {
+      "required": [
+        "identity",
+        "random_real_3d_rotations",
+        "cubic_all_nonzero_miller_123",
+        "noncubic_reciprocal_lattice_miller_123",
+        "complex_orientation_rejected"
+      ],
+      "evidence": [
+        "tests/test_orientation.py",
+        "benchmarks/solver_stage_benchmarks_v1.json",
+        "benchmarks/biaxial_branch_benchmarks_v1.json"
+      ]
+    },
+    "dielectric_tensor": {
+      "required": [
+        "isotropic",
+        "uniaxial",
+        "biaxial",
+        "anisotropic_diagonal",
+        "anisotropic_nondiagonal",
+        "complex_permittivity",
+        "same_epsilon_omega_and_2omega_phase_matching"
+      ],
+      "evidence": [
+        "tests/test_anisotropic.py",
+        "tests/test_shg.py",
+        "benchmarks/solver_stage_benchmarks_v1.json",
+        "benchmarks/complex_inhomogeneous_benchmarks_v1.json",
+        "benchmarks/biaxial_branch_benchmarks_v1.json"
+      ]
+    },
+    "nonlinear_tensor": {
+      "required": ["zero_d", "dense_complex_d", "symbolic_point_group_patterns", "rotated_d_tensor"],
+      "evidence": [
+        "tests/test_shg.py",
+        "tests/test_symbolic.py",
+        "benchmarks/solver_stage_benchmarks_v1.json",
+        "benchmarks/numeric_benchmarks_v1.json"
+      ]
+    },
+    "mode_identity": {
+      "required": [
+        "uniaxial_ordinary_extraordinary_not_fast_slow_assumed",
+        "biaxial_branch_tracking",
+        "ambiguous_branch_assignment_flagged"
+      ],
+      "evidence": [
+        "tests/test_anisotropic.py",
+        "tests/test_shg.py",
+        "benchmarks/biaxial_branch_benchmarks_v1.json"
+      ]
+    },
+    "solver_stage": {
+      "required": [
+        "snell_transmitted",
+        "snell_reflected",
+        "fresnel_boundary",
+        "linear_interface",
+        "inhomogeneous_particular_field",
+        "single_interface_shg_boundary",
+        "multilayer_tensor_basis_generation",
+        "multilayer_boundary_kernel",
+        "multilayer_boundary_matrix_rhs_benchmark",
+        "multilayer_10_source_terms",
+        "multilayer_boundary_known_inhomogeneous_sources",
+        "multilayer_shg_boundary_assembly",
+        "multilayer_automatic_fundamental_to_shg_workflow",
+        "multilayer_system_config_to_tensor_workflow",
+        "multilayer_system_angle_sweep",
+        "multilayer_jones_and_polarimetry_incidence",
+        "multilayer_reflected_analyzer_projection",
+        "multilayer_phi_psi_polarimetry_sweep",
+        "multilayer_sample_azimuth_sweep_separate_from_phi"
+      ],
+      "evidence": [
+        "tests/test_anisotropic.py",
+        "tests/test_boundary.py",
+        "tests/test_linear.py",
+        "tests/test_nonlinear.py",
+        "tests/test_shg.py",
+        "tests/test_multilayer_boundary.py",
+        "tests/test_multilayer_boundary_system_benchmarks.py",
+        "tests/test_multilayer_shg_boundary.py",
+        "benchmarks/multilayer_boundary_system_benchmarks_v1.json",
+        "benchmarks/multilayer_system_benchmarks_v1.json",
+        "benchmarks/multilayer_polarimetry_benchmarks_v1.json"
+      ]
+    },
+    "symbolic": {
+      "required": [
+        "symbolic_pnl",
+        "symbolic_tensor_rotation",
+        "symbolic_boundary",
+        "symbolic_inhomogeneous_field",
+        "symbolic_known_waves_shg",
+        "dense_complex_symbolic_case_not_skipped",
+        "normal_incidence_symbolic",
+        "phase_matched_symbolic"
+      ],
+      "evidence": ["tests/test_symbolic.py"]
+    },
+    "benchmark_validation_level": {
+      "required": [
+        "python_regression_fingerprints",
+        "algebraic_residuals",
+        "mathematica_reference_comparator_present",
+        "mathematica_compute_pnl_values_available",
+        "mathematica_solve_inhom_values_available",
+        "mathematica_solve_snell_values_available",
+        "mathematica_solve_snell_2omega_values_available",
+        "mathematica_solve_fresnel_values_available",
+        "full_solver_mathematica_values_still_pending"
+      ],
+      "evidence": [
+        "benchmarks/compare_mathematica_reference.py",
+        "benchmarks/mathematica_reference/README.md",
+        "benchmarks/mathematica_reference/compute_pnl_reference_v1.json",
+        "benchmarks/mathematica_reference/solve_inhom_reference_v1.json",
+        "benchmarks/mathematica_reference/solve_snell_reference_v1.json",
+        "benchmarks/mathematica_reference/solve_snell_2omega_reference_v1.json",
+        "benchmarks/mathematica_reference/solve_fresnel_reference_v1.json",
+        "tests/test_mathematica_compute_pnl_reference.py",
+        "tests/test_mathematica_solve_inhom_reference.py",
+        "tests/test_mathematica_solve_snell_reference.py",
+        "tests/test_mathematica_solve_snell_2omega_reference.py",
+        "tests/test_mathematica_solve_fresnel_reference.py"
+      ]
+    }
+  }
+}

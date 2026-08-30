@@ -1,0 +1,861 @@
+{
+  "schema_version": 1,
+  "status": "si_compat_reflected_signal_matches_extension_shaarp_si_stage_reference",
+  "tag": "ext1",
+  "source": "Python SHAARP.si compatibility solver vs SHAARP.si extension ER2w stage reference",
+  "mathematica_reference": "benchmarks/mathematica_reference/shaarp_si_signal_stage_reference_ext1.json",
+  "input_mapping": "benchmarks/mathematica_reference/shaarp_si_case_input_mapping_ext1.json",
+  "d_tensor_source": "constructed lab-frame d (equals SHAARP.si dSHG to ~4e-15; pure rotation input)",
+  "normal_incidence_2omega_branch_policy": "shaarp_reference_like",
+  "case_count": 84,
+  "passing_er2w_case_count": 84,
+  "failing_er2w_case_count": 0,
+  "max_er2w_abs_error": 1.883337090003211e-12,
+  "max_er2w_rel_error": 8.870102705407342e-13,
+  "tolerance": {
+    "atol": 2e-06,
+    "rtol": 0.0
+  },
+  "cases": [
+    {
+      "case_id": "si_ext_stage_01",
+      "theta_deg": 4.0,
+      "incident_polarization": "s",
+      "orientation_index": 0,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 7.152868842559757e-16,
+      "er2w_max_rel_error": 3.44532609119876e-15,
+      "boundary_residual_norm": 1.1779368827714186e-15
+    },
+    {
+      "case_id": "si_ext_stage_02",
+      "theta_deg": 4.0,
+      "incident_polarization": "p",
+      "orientation_index": 0,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 1.4512908514252033e-15,
+      "er2w_max_rel_error": 1.2346688710191235e-14,
+      "boundary_residual_norm": 1.3320476651695805e-15
+    },
+    {
+      "case_id": "si_ext_stage_03",
+      "theta_deg": 12.0,
+      "incident_polarization": "s",
+      "orientation_index": 0,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 5.453105385130469e-16,
+      "er2w_max_rel_error": 5.7993307786655765e-15,
+      "boundary_residual_norm": 8.157960209980422e-16
+    },
+    {
+      "case_id": "si_ext_stage_04",
+      "theta_deg": 12.0,
+      "incident_polarization": "p",
+      "orientation_index": 0,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 3.420276461808681e-15,
+      "er2w_max_rel_error": 1.1246662635322469e-13,
+      "boundary_residual_norm": 1.3075560650074224e-15
+    },
+    {
+      "case_id": "si_ext_stage_05",
+      "theta_deg": 20.5,
+      "incident_polarization": "s",
+      "orientation_index": 0,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 1.4934750137995173e-16,
+      "er2w_max_rel_error": 2.99453312110399e-15,
+      "boundary_residual_norm": 2.7747111539481507e-16
+    },
+    {
+      "case_id": "si_ext_stage_06",
+      "theta_deg": 20.5,
+      "incident_polarization": "p",
+      "orientation_index": 0,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 1.3867125570905663e-14,
+      "er2w_max_rel_error": 2.2256889965955262e-14,
+      "boundary_residual_norm": 6.5628631157139055e-15
+    },
+    {
+      "case_id": "si_ext_stage_07",
+      "theta_deg": 35.0,
+      "incident_polarization": "s",
+      "orientation_index": 0,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 1.7402657376242655e-16,
+      "er2w_max_rel_error": 6.84508059679773e-15,
+      "boundary_residual_norm": 4.850809213121546e-16
+    },
+    {
+      "case_id": "si_ext_stage_08",
+      "theta_deg": 35.0,
+      "incident_polarization": "p",
+      "orientation_index": 0,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 1.1146041286326053e-16,
+      "er2w_max_rel_error": 9.65537035639643e-15,
+      "boundary_residual_norm": 2.868322982675545e-16
+    },
+    {
+      "case_id": "si_ext_stage_09",
+      "theta_deg": 48.0,
+      "incident_polarization": "s",
+      "orientation_index": 0,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 7.897870409192304e-16,
+      "er2w_max_rel_error": 2.5773080911532365e-14,
+      "boundary_residual_norm": 1.3544458289895889e-16
+    },
+    {
+      "case_id": "si_ext_stage_10",
+      "theta_deg": 48.0,
+      "incident_polarization": "p",
+      "orientation_index": 0,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 7.22728354945427e-16,
+      "er2w_max_rel_error": 4.6992979084578874e-14,
+      "boundary_residual_norm": 2.5308539463700016e-16
+    },
+    {
+      "case_id": "si_ext_stage_11",
+      "theta_deg": 62.0,
+      "incident_polarization": "s",
+      "orientation_index": 0,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 1.0881377092151727e-15,
+      "er2w_max_rel_error": 7.037655696756372e-14,
+      "boundary_residual_norm": 1.0384845878470237e-16
+    },
+    {
+      "case_id": "si_ext_stage_12",
+      "theta_deg": 62.0,
+      "incident_polarization": "p",
+      "orientation_index": 0,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 8.670116868900623e-16,
+      "er2w_max_rel_error": 4.1492863923713677e-14,
+      "boundary_residual_norm": 2.5639132649954897e-16
+    },
+    {
+      "case_id": "si_ext_stage_13",
+      "theta_deg": 70.0,
+      "incident_polarization": "s",
+      "orientation_index": 0,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 8.022813827230046e-15,
+      "er2w_max_rel_error": 8.633579063797357e-13,
+      "boundary_residual_norm": 4.5484445611842973e-17
+    },
+    {
+      "case_id": "si_ext_stage_14",
+      "theta_deg": 70.0,
+      "incident_polarization": "p",
+      "orientation_index": 0,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 1.7840158714956957e-14,
+      "er2w_max_rel_error": 4.1950081910204547e-13,
+      "boundary_residual_norm": 1.9394410172403838e-16
+    },
+    {
+      "case_id": "si_ext_stage_15",
+      "theta_deg": 4.0,
+      "incident_polarization": "s",
+      "orientation_index": 1,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 3.2278911070751665e-16,
+      "er2w_max_rel_error": 4.7833761407648156e-15,
+      "boundary_residual_norm": 1.3509976981842602e-16
+    },
+    {
+      "case_id": "si_ext_stage_16",
+      "theta_deg": 4.0,
+      "incident_polarization": "p",
+      "orientation_index": 1,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 2.775896354064802e-16,
+      "er2w_max_rel_error": 7.537317043306211e-15,
+      "boundary_residual_norm": 2.432048905433933e-16
+    },
+    {
+      "case_id": "si_ext_stage_17",
+      "theta_deg": 12.0,
+      "incident_polarization": "s",
+      "orientation_index": 1,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 2.6529180055220114e-15,
+      "er2w_max_rel_error": 2.970325489399728e-14,
+      "boundary_residual_norm": 3.565394846663857e-16
+    },
+    {
+      "case_id": "si_ext_stage_18",
+      "theta_deg": 12.0,
+      "incident_polarization": "p",
+      "orientation_index": 1,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 6.834128019298404e-16,
+      "er2w_max_rel_error": 2.1614817849435366e-14,
+      "boundary_residual_norm": 1.757130172211435e-16
+    },
+    {
+      "case_id": "si_ext_stage_19",
+      "theta_deg": 20.5,
+      "incident_polarization": "s",
+      "orientation_index": 1,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 9.60385280722898e-17,
+      "er2w_max_rel_error": 1.6377232700804258e-14,
+      "boundary_residual_norm": 1.7751498838701235e-16
+    },
+    {
+      "case_id": "si_ext_stage_20",
+      "theta_deg": 20.5,
+      "incident_polarization": "p",
+      "orientation_index": 1,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 2.5083171700791877e-15,
+      "er2w_max_rel_error": 6.278449818601269e-14,
+      "boundary_residual_norm": 2.302616720059357e-16
+    },
+    {
+      "case_id": "si_ext_stage_21",
+      "theta_deg": 35.0,
+      "incident_polarization": "s",
+      "orientation_index": 1,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 2.0888836804026044e-16,
+      "er2w_max_rel_error": 6.20832397060231e-15,
+      "boundary_residual_norm": 3.191142772858453e-16
+    },
+    {
+      "case_id": "si_ext_stage_22",
+      "theta_deg": 35.0,
+      "incident_polarization": "p",
+      "orientation_index": 1,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 5.620296587549416e-16,
+      "er2w_max_rel_error": 1.5945531420012922e-14,
+      "boundary_residual_norm": 2.282677925347191e-16
+    },
+    {
+      "case_id": "si_ext_stage_23",
+      "theta_deg": 48.0,
+      "incident_polarization": "s",
+      "orientation_index": 1,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 2.9061314542169387e-15,
+      "er2w_max_rel_error": 6.693193458207155e-14,
+      "boundary_residual_norm": 3.696575660523226e-16
+    },
+    {
+      "case_id": "si_ext_stage_24",
+      "theta_deg": 48.0,
+      "incident_polarization": "p",
+      "orientation_index": 1,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 3.751640323839384e-16,
+      "er2w_max_rel_error": 1.1709520301997659e-14,
+      "boundary_residual_norm": 1.3657023030358826e-16
+    },
+    {
+      "case_id": "si_ext_stage_25",
+      "theta_deg": 62.0,
+      "incident_polarization": "s",
+      "orientation_index": 1,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 2.383840817285749e-16,
+      "er2w_max_rel_error": 1.5892661819755352e-14,
+      "boundary_residual_norm": 3.611292554352466e-17
+    },
+    {
+      "case_id": "si_ext_stage_26",
+      "theta_deg": 62.0,
+      "incident_polarization": "p",
+      "orientation_index": 1,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 1.0541639236434888e-15,
+      "er2w_max_rel_error": 6.946269013218677e-14,
+      "boundary_residual_norm": 1.3229185936116583e-16
+    },
+    {
+      "case_id": "si_ext_stage_27",
+      "theta_deg": 70.0,
+      "incident_polarization": "s",
+      "orientation_index": 1,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 1.9018772770087656e-16,
+      "er2w_max_rel_error": 1.3825507632273837e-14,
+      "boundary_residual_norm": 2.216338064394449e-17
+    },
+    {
+      "case_id": "si_ext_stage_28",
+      "theta_deg": 70.0,
+      "incident_polarization": "p",
+      "orientation_index": 1,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 2.187252598295537e-16,
+      "er2w_max_rel_error": 4.4276939510485e-14,
+      "boundary_residual_norm": 4.4050641931343056e-17
+    },
+    {
+      "case_id": "si_ext_stage_29",
+      "theta_deg": 4.0,
+      "incident_polarization": "s",
+      "orientation_index": 2,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 4.8315138196741906e-15,
+      "er2w_max_rel_error": 3.0279203135876636e-14,
+      "boundary_residual_norm": 2.157895599777584e-15
+    },
+    {
+      "case_id": "si_ext_stage_30",
+      "theta_deg": 4.0,
+      "incident_polarization": "p",
+      "orientation_index": 2,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 9.889095442843935e-16,
+      "er2w_max_rel_error": 2.0502270413679075e-14,
+      "boundary_residual_norm": 7.728687105693466e-16
+    },
+    {
+      "case_id": "si_ext_stage_31",
+      "theta_deg": 12.0,
+      "incident_polarization": "s",
+      "orientation_index": 2,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 9.66102375164591e-15,
+      "er2w_max_rel_error": 2.939897556183514e-14,
+      "boundary_residual_norm": 4.8481073975108104e-15
+    },
+    {
+      "case_id": "si_ext_stage_32",
+      "theta_deg": 12.0,
+      "incident_polarization": "p",
+      "orientation_index": 2,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 6.530030066925316e-16,
+      "er2w_max_rel_error": 9.538551735743232e-15,
+      "boundary_residual_norm": 5.936101055827382e-16
+    },
+    {
+      "case_id": "si_ext_stage_33",
+      "theta_deg": 20.5,
+      "incident_polarization": "s",
+      "orientation_index": 2,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 3.8637588156733894e-14,
+      "er2w_max_rel_error": 1.7507853140015745e-13,
+      "boundary_residual_norm": 4.972966616663795e-15
+    },
+    {
+      "case_id": "si_ext_stage_34",
+      "theta_deg": 20.5,
+      "incident_polarization": "p",
+      "orientation_index": 2,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 1.9121783775756322e-14,
+      "er2w_max_rel_error": 2.207294837708109e-13,
+      "boundary_residual_norm": 8.480580325337152e-16
+    },
+    {
+      "case_id": "si_ext_stage_35",
+      "theta_deg": 35.0,
+      "incident_polarization": "s",
+      "orientation_index": 2,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 1.3701647239677444e-15,
+      "er2w_max_rel_error": 1.8727196953876126e-14,
+      "boundary_residual_norm": 8.448975987764465e-16
+    },
+    {
+      "case_id": "si_ext_stage_36",
+      "theta_deg": 35.0,
+      "incident_polarization": "p",
+      "orientation_index": 2,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 4.753798893823753e-15,
+      "er2w_max_rel_error": 4.3402505033419267e-13,
+      "boundary_residual_norm": 4.066437523421119e-16
+    },
+    {
+      "case_id": "si_ext_stage_37",
+      "theta_deg": 48.0,
+      "incident_polarization": "s",
+      "orientation_index": 2,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 4.836662906333204e-15,
+      "er2w_max_rel_error": 4.768961158418093e-14,
+      "boundary_residual_norm": 4.337016851763371e-16
+    },
+    {
+      "case_id": "si_ext_stage_38",
+      "theta_deg": 48.0,
+      "incident_polarization": "p",
+      "orientation_index": 2,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 1.088906417910692e-14,
+      "er2w_max_rel_error": 1.222034500863688e-13,
+      "boundary_residual_norm": 5.420622270441267e-16
+    },
+    {
+      "case_id": "si_ext_stage_39",
+      "theta_deg": 62.0,
+      "incident_polarization": "s",
+      "orientation_index": 2,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 2.7823960094874336e-15,
+      "er2w_max_rel_error": 2.6942428295620962e-14,
+      "boundary_residual_norm": 2.357265970496128e-16
+    },
+    {
+      "case_id": "si_ext_stage_40",
+      "theta_deg": 62.0,
+      "incident_polarization": "p",
+      "orientation_index": 2,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 4.803550480455007e-15,
+      "er2w_max_rel_error": 2.834426337125694e-14,
+      "boundary_residual_norm": 6.628823077093703e-16
+    },
+    {
+      "case_id": "si_ext_stage_41",
+      "theta_deg": 70.0,
+      "incident_polarization": "s",
+      "orientation_index": 2,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 7.708292851442856e-13,
+      "er2w_max_rel_error": 5.903730483562297e-13,
+      "boundary_residual_norm": 6.5684502106217585e-15
+    },
+    {
+      "case_id": "si_ext_stage_42",
+      "theta_deg": 70.0,
+      "incident_polarization": "p",
+      "orientation_index": 2,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 2.3616716789057356e-15,
+      "er2w_max_rel_error": 8.76963950624901e-14,
+      "boundary_residual_norm": 6.117901449147536e-16
+    },
+    {
+      "case_id": "si_ext_stage_43",
+      "theta_deg": 4.0,
+      "incident_polarization": "s",
+      "orientation_index": 3,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 8.887466309327741e-15,
+      "er2w_max_rel_error": 6.22088950104822e-14,
+      "boundary_residual_norm": 7.012575398346714e-16
+    },
+    {
+      "case_id": "si_ext_stage_44",
+      "theta_deg": 4.0,
+      "incident_polarization": "p",
+      "orientation_index": 3,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 3.0915089113605446e-16,
+      "er2w_max_rel_error": 2.2185383883292836e-15,
+      "boundary_residual_norm": 8.626670138813229e-16
+    },
+    {
+      "case_id": "si_ext_stage_45",
+      "theta_deg": 12.0,
+      "incident_polarization": "s",
+      "orientation_index": 3,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 3.9727712789460115e-15,
+      "er2w_max_rel_error": 2.2234653965740334e-14,
+      "boundary_residual_norm": 4.4014484836993057e-16
+    },
+    {
+      "case_id": "si_ext_stage_46",
+      "theta_deg": 12.0,
+      "incident_polarization": "p",
+      "orientation_index": 3,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 2.3410131871968674e-16,
+      "er2w_max_rel_error": 1.8932599582922364e-15,
+      "boundary_residual_norm": 7.808175648290115e-16
+    },
+    {
+      "case_id": "si_ext_stage_47",
+      "theta_deg": 20.5,
+      "incident_polarization": "s",
+      "orientation_index": 3,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 5.65836484593658e-15,
+      "er2w_max_rel_error": 7.369986137496669e-14,
+      "boundary_residual_norm": 7.823737499270238e-16
+    },
+    {
+      "case_id": "si_ext_stage_48",
+      "theta_deg": 20.5,
+      "incident_polarization": "p",
+      "orientation_index": 3,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 2.4137293339073208e-15,
+      "er2w_max_rel_error": 6.356736586634938e-14,
+      "boundary_residual_norm": 3.3004802365300484e-16
+    },
+    {
+      "case_id": "si_ext_stage_49",
+      "theta_deg": 35.0,
+      "incident_polarization": "s",
+      "orientation_index": 3,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 2.956272160500647e-15,
+      "er2w_max_rel_error": 7.60378085088889e-14,
+      "boundary_residual_norm": 5.276639883937809e-16
+    },
+    {
+      "case_id": "si_ext_stage_50",
+      "theta_deg": 35.0,
+      "incident_polarization": "p",
+      "orientation_index": 3,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 2.6624021409841947e-15,
+      "er2w_max_rel_error": 1.3185785518312205e-14,
+      "boundary_residual_norm": 6.957257672913387e-16
+    },
+    {
+      "case_id": "si_ext_stage_51",
+      "theta_deg": 48.0,
+      "incident_polarization": "s",
+      "orientation_index": 3,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 1.6155986282457586e-14,
+      "er2w_max_rel_error": 6.298598461795318e-14,
+      "boundary_residual_norm": 1.1109383676027893e-15
+    },
+    {
+      "case_id": "si_ext_stage_52",
+      "theta_deg": 48.0,
+      "incident_polarization": "p",
+      "orientation_index": 3,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 4.557691383740897e-15,
+      "er2w_max_rel_error": 6.472606865714905e-14,
+      "boundary_residual_norm": 3.3429341157592284e-16
+    },
+    {
+      "case_id": "si_ext_stage_53",
+      "theta_deg": 62.0,
+      "incident_polarization": "s",
+      "orientation_index": 3,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 6.381786091542851e-14,
+      "er2w_max_rel_error": 1.190799175693285e-13,
+      "boundary_residual_norm": 1.2779626727101132e-15
+    },
+    {
+      "case_id": "si_ext_stage_54",
+      "theta_deg": 62.0,
+      "incident_polarization": "p",
+      "orientation_index": 3,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 2.7641049681232128e-14,
+      "er2w_max_rel_error": 2.290872278846165e-13,
+      "boundary_residual_norm": 3.882216573176381e-16
+    },
+    {
+      "case_id": "si_ext_stage_55",
+      "theta_deg": 70.0,
+      "incident_polarization": "s",
+      "orientation_index": 3,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 1.883337090003211e-12,
+      "er2w_max_rel_error": 8.870102705407342e-13,
+      "boundary_residual_norm": 9.498078523483753e-15
+    },
+    {
+      "case_id": "si_ext_stage_56",
+      "theta_deg": 70.0,
+      "incident_polarization": "p",
+      "orientation_index": 3,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 8.564742828703092e-15,
+      "er2w_max_rel_error": 3.003799485727941e-14,
+      "boundary_residual_norm": 7.838800601857069e-16
+    },
+    {
+      "case_id": "si_ext_stage_57",
+      "theta_deg": 4.0,
+      "incident_polarization": "s",
+      "orientation_index": 4,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 1.01878125093931e-14,
+      "er2w_max_rel_error": 5.18671172655601e-14,
+      "boundary_residual_norm": 1.7762175516651297e-15
+    },
+    {
+      "case_id": "si_ext_stage_58",
+      "theta_deg": 4.0,
+      "incident_polarization": "p",
+      "orientation_index": 4,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 9.416920784678133e-15,
+      "er2w_max_rel_error": 8.460837086351348e-14,
+      "boundary_residual_norm": 8.551641319297802e-16
+    },
+    {
+      "case_id": "si_ext_stage_59",
+      "theta_deg": 12.0,
+      "incident_polarization": "s",
+      "orientation_index": 4,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 1.5190980511522317e-14,
+      "er2w_max_rel_error": 8.955545540339197e-14,
+      "boundary_residual_norm": 2.1073227720897643e-15
+    },
+    {
+      "case_id": "si_ext_stage_60",
+      "theta_deg": 12.0,
+      "incident_polarization": "p",
+      "orientation_index": 4,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 2.1384518250831983e-15,
+      "er2w_max_rel_error": 5.023985254100426e-14,
+      "boundary_residual_norm": 5.741279561054969e-16
+    },
+    {
+      "case_id": "si_ext_stage_61",
+      "theta_deg": 20.5,
+      "incident_polarization": "s",
+      "orientation_index": 4,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 3.2921157812709657e-15,
+      "er2w_max_rel_error": 3.420613841915463e-14,
+      "boundary_residual_norm": 8.92828317193108e-16
+    },
+    {
+      "case_id": "si_ext_stage_62",
+      "theta_deg": 20.5,
+      "incident_polarization": "p",
+      "orientation_index": 4,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 3.137239612748208e-15,
+      "er2w_max_rel_error": 5.46580051213705e-14,
+      "boundary_residual_norm": 4.877134252755158e-16
+    },
+    {
+      "case_id": "si_ext_stage_63",
+      "theta_deg": 35.0,
+      "incident_polarization": "s",
+      "orientation_index": 4,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 6.06920707231118e-14,
+      "er2w_max_rel_error": 1.705027335340462e-13,
+      "boundary_residual_norm": 2.4848991920598945e-15
+    },
+    {
+      "case_id": "si_ext_stage_64",
+      "theta_deg": 35.0,
+      "incident_polarization": "p",
+      "orientation_index": 4,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 2.7198824917252865e-14,
+      "er2w_max_rel_error": 1.9536908038255076e-13,
+      "boundary_residual_norm": 1.617819147625053e-15
+    },
+    {
+      "case_id": "si_ext_stage_65",
+      "theta_deg": 48.0,
+      "incident_polarization": "s",
+      "orientation_index": 4,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 2.3732259830088212e-15,
+      "er2w_max_rel_error": 7.472720355534252e-14,
+      "boundary_residual_norm": 3.2561549825531255e-16
+    },
+    {
+      "case_id": "si_ext_stage_66",
+      "theta_deg": 48.0,
+      "incident_polarization": "p",
+      "orientation_index": 4,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 6.268770491560031e-14,
+      "er2w_max_rel_error": 1.9175501396128322e-13,
+      "boundary_residual_norm": 1.0422209404125408e-15
+    },
+    {
+      "case_id": "si_ext_stage_67",
+      "theta_deg": 62.0,
+      "incident_polarization": "s",
+      "orientation_index": 4,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 1.4994434357713062e-14,
+      "er2w_max_rel_error": 1.4208423788558696e-13,
+      "boundary_residual_norm": 3.1267398165174707e-16
+    },
+    {
+      "case_id": "si_ext_stage_68",
+      "theta_deg": 62.0,
+      "incident_polarization": "p",
+      "orientation_index": 4,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 1.1020365279073516e-13,
+      "er2w_max_rel_error": 2.6807265376706064e-13,
+      "boundary_residual_norm": 1.944327104125668e-15
+    },
+    {
+      "case_id": "si_ext_stage_69",
+      "theta_deg": 70.0,
+      "incident_polarization": "s",
+      "orientation_index": 4,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 8.357542689889071e-15,
+      "er2w_max_rel_error": 3.5120199603007127e-14,
+      "boundary_residual_norm": 1.1017575202551512e-15
+    },
+    {
+      "case_id": "si_ext_stage_70",
+      "theta_deg": 70.0,
+      "incident_polarization": "p",
+      "orientation_index": 4,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 2.140230707970961e-14,
+      "er2w_max_rel_error": 1.7915778262763253e-13,
+      "boundary_residual_norm": 3.864814410154549e-16
+    },
+    {
+      "case_id": "si_ext_stage_71",
+      "theta_deg": 4.0,
+      "incident_polarization": "s",
+      "orientation_index": 5,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 1.5321528999191106e-14,
+      "er2w_max_rel_error": 4.730739319109836e-13,
+      "boundary_residual_norm": 3.341718642458406e-16
+    },
+    {
+      "case_id": "si_ext_stage_72",
+      "theta_deg": 4.0,
+      "incident_polarization": "p",
+      "orientation_index": 5,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 2.6722320971133848e-14,
+      "er2w_max_rel_error": 4.481543417872345e-14,
+      "boundary_residual_norm": 5.0077858372593245e-15
+    },
+    {
+      "case_id": "si_ext_stage_73",
+      "theta_deg": 12.0,
+      "incident_polarization": "s",
+      "orientation_index": 5,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 1.3033304304548183e-15,
+      "er2w_max_rel_error": 6.314305443884187e-15,
+      "boundary_residual_norm": 1.5220080607897474e-15
+    },
+    {
+      "case_id": "si_ext_stage_74",
+      "theta_deg": 12.0,
+      "incident_polarization": "p",
+      "orientation_index": 5,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 6.912038932467158e-14,
+      "er2w_max_rel_error": 1.8924746188741036e-13,
+      "boundary_residual_norm": 1.2511000815490806e-15
+    },
+    {
+      "case_id": "si_ext_stage_75",
+      "theta_deg": 20.5,
+      "incident_polarization": "s",
+      "orientation_index": 5,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 2.3712185393528584e-14,
+      "er2w_max_rel_error": 1.619770098825843e-13,
+      "boundary_residual_norm": 1.526485691249614e-15
+    },
+    {
+      "case_id": "si_ext_stage_76",
+      "theta_deg": 20.5,
+      "incident_polarization": "p",
+      "orientation_index": 5,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 2.5692373264534014e-14,
+      "er2w_max_rel_error": 4.7591254235741063e-14,
+      "boundary_residual_norm": 3.4411597264679417e-15
+    },
+    {
+      "case_id": "si_ext_stage_77",
+      "theta_deg": 35.0,
+      "incident_polarization": "s",
+      "orientation_index": 5,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 8.725986709683015e-16,
+      "er2w_max_rel_error": 2.5916424207009902e-14,
+      "boundary_residual_norm": 1.7298811758991195e-16
+    },
+    {
+      "case_id": "si_ext_stage_78",
+      "theta_deg": 35.0,
+      "incident_polarization": "p",
+      "orientation_index": 5,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 5.567747886992151e-15,
+      "er2w_max_rel_error": 4.476518335982421e-14,
+      "boundary_residual_norm": 5.964630426885782e-16
+    },
+    {
+      "case_id": "si_ext_stage_79",
+      "theta_deg": 48.0,
+      "incident_polarization": "s",
+      "orientation_index": 5,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 8.515519188027288e-15,
+      "er2w_max_rel_error": 4.313180600295458e-13,
+      "boundary_residual_norm": 1.5561591210899969e-16
+    },
+    {
+      "case_id": "si_ext_stage_80",
+      "theta_deg": 48.0,
+      "incident_polarization": "p",
+      "orientation_index": 5,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 6.362723562849084e-15,
+      "er2w_max_rel_error": 5.29361546625565e-14,
+      "boundary_residual_norm": 1.0109375475216492e-15
+    },
+    {
+      "case_id": "si_ext_stage_81",
+      "theta_deg": 62.0,
+      "incident_polarization": "s",
+      "orientation_index": 5,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 3.0876304115415415e-15,
+      "er2w_max_rel_error": 6.202092473192736e-14,
+      "boundary_residual_norm": 2.244104694085998e-16
+    },
+    {
+      "case_id": "si_ext_stage_82",
+      "theta_deg": 62.0,
+      "incident_polarization": "p",
+      "orientation_index": 5,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 7.810078807214649e-15,
+      "er2w_max_rel_error": 3.693574638676485e-14,
+      "boundary_residual_norm": 1.3894301224125336e-15
+    },
+    {
+      "case_id": "si_ext_stage_83",
+      "theta_deg": 70.0,
+      "incident_polarization": "s",
+      "orientation_index": 5,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 7.887671522472471e-15,
+      "er2w_max_rel_error": 5.364841117073914e-14,
+      "boundary_residual_norm": 2.295991059634945e-16
+    },
+    {
+      "case_id": "si_ext_stage_84",
+      "theta_deg": 70.0,
+      "incident_polarization": "p",
+      "orientation_index": 5,
+      "er2w_passed": true,
+      "er2w_max_abs_error": 3.043359314617865e-14,
+      "er2w_max_rel_error": 1.938614661982541e-13,
+      "boundary_residual_norm": 4.3045005520802184e-16
+    }
+  ]
+}

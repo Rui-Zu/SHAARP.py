@@ -1,0 +1,297 @@
+{
+  "benchmark_version": 1,
+  "status": "python_sample_rotation_benchmark_for_mathematica_reference",
+  "case_count": 3,
+  "notes": [
+    "Python SampleRotate-shaped outputs: rotation angle, reflected parallel/perpendicular, transmitted parallel/perpendicular.",
+    "The reflected analyzer convention follows SHAARP.ml SampleRotate, where reflected s enters the parallel channel with a minus sign.",
+    "The default inhomogeneous source policy is forward_only to match SHAARP.ml f4NL SampleRotate/Maker behavior."
+  ],
+  "cases": [
+    {
+      "id": "sample_rotation_negative_normal_positive",
+      "source_case_id": "maker_fringes_negative_normal_positive",
+      "theta_deg": 0.0,
+      "phi_deg": 30.0,
+      "psi_deg": 45.0,
+      "ellipticity_deg": 10.0,
+      "sample_rotation_deg": [
+        0.0,
+        15.0,
+        30.0
+      ],
+      "phase_matching_like": false,
+      "outputs": {
+        "sample_rotate_list": [
+          [
+            0.0,
+            0.000132809049520852,
+            3.8778616852408054e-05,
+            0.03642506393448109,
+            0.0015917161676290415
+          ],
+          [
+            15.0,
+            5.713273603264533e-05,
+            0.00015329130689961917,
+            0.02021145357949548,
+            0.0008832077135577204
+          ],
+          [
+            30.0,
+            1.3810032532393379e-06,
+            0.00020922576688491018,
+            0.0060637265362681264,
+            0.00026497500680355975
+          ]
+        ],
+        "reflected_parallel_amplitude": [
+          {
+            "real": -0.009602656196396,
+            "imag": 0.006371659398828
+          },
+          {
+            "real": -0.007500402105544,
+            "imag": 0.000936324883677
+          },
+          {
+            "real": 0.000601276261522,
+            "imag": -0.001009688125398
+          }
+        ],
+        "reflected_perpendicular_amplitude": [
+          {
+            "real": 0.002804985435493,
+            "imag": -0.005559736824624
+          },
+          {
+            "real": 0.009333312531927,
+            "imag": -0.008135144994466
+          },
+          {
+            "real": 0.012813942033373,
+            "imag": -0.006710339518256
+          }
+        ],
+        "transmitted_parallel_amplitude": [
+          {
+            "real": -0.101722676161769,
+            "imag": 0.16148548259509
+          },
+          {
+            "real": -0.112575928193019,
+            "imag": 0.086822312633192
+          },
+          {
+            "real": -0.070748071512883,
+            "imag": 0.032533627425728
+          }
+        ],
+        "transmitted_perpendicular_amplitude": [
+          {
+            "real": -0.022210399718295,
+            "imag": 0.033142334136005
+          },
+          {
+            "real": -0.024036894784093,
+            "imag": 0.017476710293879
+          },
+          {
+            "real": -0.01497569842993,
+            "imag": 0.006379926593571
+          }
+        ]
+      }
+    },
+    {
+      "id": "sample_rotation_moderate_high_oblique",
+      "source_case_id": "maker_fringes_moderate_high_oblique",
+      "theta_deg": 40.0,
+      "phi_deg": 67.5,
+      "psi_deg": 22.5,
+      "ellipticity_deg": -25.0,
+      "sample_rotation_deg": [
+        0.0,
+        15.0,
+        30.0
+      ],
+      "phase_matching_like": false,
+      "outputs": {
+        "sample_rotate_list": [
+          [
+            0.0,
+            0.0003009658927621808,
+            0.0001884312073443958,
+            0.0028876224813287584,
+            0.015523886211670647
+          ],
+          [
+            15.0,
+            0.000297694153142582,
+            0.00011412183631006997,
+            0.0030521284496038466,
+            0.01640827187813354
+          ],
+          [
+            30.0,
+            0.000708469712123431,
+            0.0003845234260018862,
+            0.004615378352329742,
+            0.024812318379099658
+          ]
+        ],
+        "reflected_parallel_amplitude": [
+          {
+            "real": -0.012358428957499,
+            "imag": 0.012175184863674
+          },
+          {
+            "real": -0.016882537266694,
+            "imag": -0.003560068620306
+          },
+          {
+            "real": -0.020680267773224,
+            "imag": -0.016756975769846
+          }
+        ],
+        "reflected_perpendicular_amplitude": [
+          {
+            "real": 0.001070028269965,
+            "imag": 0.013685256550239
+          },
+          {
+            "real": 0.006098166064413,
+            "imag": 0.008771214679901
+          },
+          {
+            "real": 0.014806035630012,
+            "imag": 0.012857088897752
+          }
+        ],
+        "transmitted_parallel_amplitude": [
+          {
+            "real": -0.030351660282453,
+            "imag": -0.044344099939308
+          },
+          {
+            "real": -0.038447361591347,
+            "imag": -0.039672771976106
+          },
+          {
+            "real": -0.053058600202718,
+            "imag": -0.042428331299473
+          }
+        ],
+        "transmitted_perpendicular_amplitude": [
+          {
+            "real": -0.074219489749705,
+            "imag": -0.100076738320971
+          },
+          {
+            "real": -0.092566468522429,
+            "imag": -0.088542197755757
+          },
+          {
+            "real": -0.126662181125319,
+            "imag": -0.093642993606977
+          }
+        ]
+      }
+    },
+    {
+      "id": "sample_rotation_phase_matching_like",
+      "source_case_id": "maker_fringes_phase_matching_like",
+      "theta_deg": 0.0,
+      "phi_deg": 20.0,
+      "psi_deg": 80.0,
+      "ellipticity_deg": 35.0,
+      "sample_rotation_deg": [
+        0.0,
+        15.0,
+        30.0
+      ],
+      "phase_matching_like": true,
+      "outputs": {
+        "sample_rotate_list": [
+          [
+            0.0,
+            0.0039989163227917525,
+            0.0027896969486642326,
+            0.024634189029520477,
+            0.000494866832743358
+          ],
+          [
+            15.0,
+            0.0021634237996305304,
+            0.0006358004757023527,
+            0.06127696328130445,
+            0.0012309695562866462
+          ],
+          [
+            30.0,
+            0.004978113908131435,
+            0.0036686148188898285,
+            0.060439861214118096,
+            0.0012141533319662513
+          ]
+        ],
+        "reflected_parallel_amplitude": [
+          {
+            "real": -0.058345936810331,
+            "imag": 0.024385815149726
+          },
+          {
+            "real": -0.046282104988523,
+            "imag": 0.004624992698574
+          },
+          {
+            "real": -0.067230506529828,
+            "imag": 0.021404973718138
+          }
+        ],
+        "reflected_perpendicular_amplitude": [
+          {
+            "real": 0.018199178831968,
+            "imag": 0.049583130583963
+          },
+          {
+            "real": -0.000402845727445,
+            "imag": 0.025211866075763
+          },
+          {
+            "real": -0.059572119019677,
+            "imag": 0.010944288665569
+          }
+        ],
+        "transmitted_parallel_amplitude": [
+          {
+            "real": -0.117650101264473,
+            "imag": 0.103887644606949
+          },
+          {
+            "real": -0.178434766257779,
+            "imag": 0.171575049094664
+          },
+          {
+            "real": -0.208715652800731,
+            "imag": 0.129913961875093
+          }
+        ],
+        "transmitted_perpendicular_amplitude": [
+          {
+            "real": 0.018739260970029,
+            "imag": -0.011987782573959
+          },
+          {
+            "real": 0.028726157953791,
+            "imag": -0.020143917332547
+          },
+          {
+            "real": 0.032059868030047,
+            "imag": -0.013649842265105
+          }
+        ]
+      }
+    }
+  ]
+}

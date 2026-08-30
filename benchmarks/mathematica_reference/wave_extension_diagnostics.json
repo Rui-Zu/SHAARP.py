@@ -1,0 +1,219 @@
+{
+	"source":"Mathematica SHAARP.ml wave extension diagnostic",
+	"status":"diagnostic_exported",
+	"wolfram_version":"13.3.0 for Microsoft Windows (64-bit) (June 3, 2023)",
+	"inputCellCount":49,
+	"downvalues":{
+		"setWave":"{}",
+		"extWave":"{HoldPattern[extWave[wav_]] :> AppendTo[wav, {H :> (1\/(wav[ω]*μ0))*Cross[wav[k], wav[EE]], neff :> wav[k0]*(c0\/wav[ω]), A :> Transpose[RotationMatrix[wav[θ], {0, 1, 0}]] . wav[EE], phase :> Exp[I*(wav[ω]*t - wav[k] . {x, y, z})], intensity :> Conjugate[wav[EE]] . wav[EE], S :> Cross[wav[EE], wav[H]]}]}"
+	},
+	"basic_wave_cases":[
+		{
+			"label":"plain_before_extWave",
+			"head":"Association",
+			"keys":"{ω, k, k0, θ, EE}",
+			"length":5,
+			"has_H":false,
+			"has_A":false,
+			"H":"Missing[\"KeyAbsent\", H]",
+			"A":"Missing[\"KeyAbsent\", A]",
+			"symbols":"{}",
+			"input_form":"<|ω -> 1., k -> {0., 0., 1.}, k0 -> 1., θ -> 0., EE -> {1., 0., 0.}|>"
+		},
+		{
+			"label":"plain_after_extWave",
+			"head":"Association",
+			"keys":"{ω, k, k0, θ, EE, H, neff, A, phase, intensity, S}",
+			"length":11,
+			"has_H":true,
+			"has_A":true,
+			"H":[
+				{
+					"real":0.0,
+					"imag":0
+				},
+				{
+					"real":1.0,
+					"imag":0
+				},
+				{
+					"real":0.0,
+					"imag":0
+				}
+			],
+			"A":[
+				{
+					"real":1.0,
+					"imag":0
+				},
+				{
+					"real":0.0,
+					"imag":0
+				},
+				{
+					"real":0.0,
+					"imag":0
+				}
+			],
+			"symbols":"{ω, 1, k, EE, k0, θ, t, x, y, z, H}",
+			"input_form":"<|ω -> 1., k -> {0., 0., 1.}, k0 -> 1., θ -> 0., EE -> {1., 0., 0.}, H :> (1\/(w$1778[ω]*μ0))*Cross[w$1778[k], w$1778[EE]], neff :> w$1778[k0]*(c0\/w$1778[ω]), A :> Transpose[RotationMatrix[w$1778[θ], {0, 1, 0}]] . w$1778[EE], phase :> Exp[I*(w$1778[ω]*t - w$1778[k] . {x, y, z})], intensity :> Conjugate[w$1778[EE]] . w$1778[EE], S :> Cross[w$1778[EE], w$1778[H]]|>"
+		},
+		{
+			"label":"module_symbol_after_extWave",
+			"head":"Association",
+			"keys":"{ω, k, k0, θ, EE, H, neff, A, phase, intensity, S}",
+			"length":11,
+			"has_H":true,
+			"has_A":true,
+			"H":[
+				{
+					"real":0.0,
+					"imag":0
+				},
+				{
+					"real":1.0,
+					"imag":0
+				},
+				{
+					"real":0.0,
+					"imag":0
+				}
+			],
+			"A":[
+				{
+					"real":1.0,
+					"imag":0
+				},
+				{
+					"real":0.0,
+					"imag":0
+				},
+				{
+					"real":0.0,
+					"imag":0
+				}
+			],
+			"symbols":"{ω, 1, k, EE, k0, θ, t, x, y, z, H}",
+			"input_form":"<|ω -> 1., k -> {0., 0., 1.}, k0 -> 1., θ -> 0., EE -> {1., 0., 0.}, H :> (1\/(tmp$1779[ω]*μ0))*Cross[tmp$1779[k], tmp$1779[EE]], neff :> tmp$1779[k0]*(c0\/tmp$1779[ω]), A :> Transpose[RotationMatrix[tmp$1779[θ], {0, 1, 0}]] . tmp$1779[EE], phase :> Exp[I*(tmp$1779[ω]*t - tmp$1779[k] . {x, y, z})], intensity :> Conjugate[tmp$1779[EE]] . tmp$1779[EE], S :> Cross[tmp$1779[EE], tmp$1779[H]]|>"
+		},
+		{
+			"label":"direct_expression_extWave_result",
+			"result":"$Failed"
+		}
+	],
+	"f4nl_case_id":"maker_fringes_negative_normal_positive",
+	"f4nl_wave_cases":[
+		{
+			"label":"incident_after_extWave",
+			"head":"Association",
+			"keys":"{ω, k, k0, θ, EE, H, neff, A, phase, intensity, S}",
+			"length":11,
+			"has_H":true,
+			"has_A":true,
+			"H":[
+				{
+					"real":-0.4876118358285623,
+					"imag":-8.597912276936209e-2
+				},
+				{
+					"real":0.8660254037844389,
+					"imag":0.0
+				},
+				{
+					"real":-6.85293744181116e-2,
+					"imag":-1.2083577680985535e-2
+				}
+			],
+			"A":[
+				{
+					"real":0.8660254037844388,
+					"imag":0.0
+				},
+				{
+					"real":0.49240387650610395,
+					"imag":8.682408883346515e-2
+				},
+				{
+					"real":-1.3877787807814457e-17,
+					"imag":0.0
+				}
+			],
+			"symbols":"{ω, 1, k, EE, k0, θ, t, x, y, z, H}",
+			"input_form":"<|ω -> 5.905249348852994, k -> {-0.8218518638222784, 0., 5.847779868126071}, k0 -> 5.905249348852994, θ -> -0.13962634015954636, EE -> {0.8575973040867548 + 0.*I, 0.49240387650610395 + 0.08682408883346515*I, 0.12052744095487312 + 0.*I}, H :> (1\/(wIncLocal$1799[ω]*μ0))*Cross[wIncLocal$1799[k], wIncLocal$1799[EE]], neff :> wIncLocal$1799[k0]*(c0\/wIncLocal$1799[ω]), A :> Transpose[RotationMatrix[wIncLocal$1799[θ], {0, 1, 0}]] . wIncLocal$1799[EE], phase :> Exp[I*(wIncLocal$1799[ω]*t - wIncLocal$1799[k] . {x, y, z})], intensity :> Conjugate[wIncLocal$1799[EE]] . wIncLocal$1799[EE], S :> Cross[wIncLocal$1799[EE], wIncLocal$1799[H]]|>"
+		},
+		{
+			"label":"transmitted_nl_wave_1_before_extWave",
+			"head":"Part",
+			"keys":"KeysFailed",
+			"length":2,
+			"has_H":"KeyExistsQFailed",
+			"has_A":"KeyExistsQFailed",
+			"H":"{}[[1]][H]",
+			"A":"{}[[1]][A]",
+			"symbols":"{}",
+			"input_form":"{}[[1]]"
+		},
+		{
+			"label":"transmitted_nl_wave_2_before_extWave",
+			"head":"Association",
+			"keys":"{ω, k, k0, θ, EE}",
+			"length":5,
+			"has_H":false,
+			"has_A":false,
+			"H":"Missing[\"KeyAbsent\", H]",
+			"A":"Missing[\"KeyAbsent\", A]",
+			"symbols":"{}",
+			"input_form":"<|ω -> 11.810498697705988, k -> {-1.643703727644556, 0, 16.10110656573156 + 0.13999769757090763*I}, k0 -> 16.184782743361172 + 0.13927390211467897*I, θ -> -0.1017263894775599 + 0.0008784120878815973*I, EE -> {(-0.5454006378247567 + 0.010655609771005962*I)*(0.0994459888211263 - 0.1468252212594826*I), (-0.8317335716604325 + 0.005608575027923504*I)*(0.0994459888211263 - 0.1468252212594826*I), (-0.10293239736000116 + 0.004163348846291704*I)*(0.0994459888211263 - 0.1468252212594826*I)}|>"
+		},
+		{
+			"label":"transmitted_nl_wave_1_after_extWave",
+			"head":"Part",
+			"keys":"KeysFailed",
+			"length":3,
+			"has_H":"KeyExistsQFailed",
+			"has_A":"KeyExistsQFailed",
+			"H":"{}[[1,{H :> (1\/(tmpw1Local$1799[ω]*μ0))*Cross[tmpw1Local$1799[k], tmpw1Local$1799[EE]], neff :> tmpw1Local$1799[k0]*(c0\/tmpw1Local$1799[ω]), A :> Transpose[RotationMatrix[tmpw1Local$1799[θ], {0, 1, 0}]] . tmpw1Local$1799[EE], phase :> Exp[I*(tmpw1Local$1799[ω]*t - tmpw1Local$1799[k] . {x, y, z})], intensity :> Conjugate[tmpw1Local$1799[EE]] . tmpw1Local$1799[EE], S :> Cross[tmpw1Local$1799[EE], tmpw1Local$1799[H]]}]][H]",
+			"A":"{}[[1,{H :> (1\/(tmpw1Local$1799[ω]*μ0))*Cross[tmpw1Local$1799[k], tmpw1Local$1799[EE]], neff :> tmpw1Local$1799[k0]*(c0\/tmpw1Local$1799[ω]), A :> Transpose[RotationMatrix[tmpw1Local$1799[θ], {0, 1, 0}]] . tmpw1Local$1799[EE], phase :> Exp[I*(tmpw1Local$1799[ω]*t - tmpw1Local$1799[k] . {x, y, z})], intensity :> Conjugate[tmpw1Local$1799[EE]] . tmpw1Local$1799[EE], S :> Cross[tmpw1Local$1799[EE], tmpw1Local$1799[H]]}]][A]",
+			"symbols":"{H, ω, 1, k, EE, neff, k0, A, θ, phase, t, x, y, z, intensity, S}",
+			"input_form":"{}[[1,{H :> (1\/(tmpw1Local$1799[ω]*μ0))*Cross[tmpw1Local$1799[k], tmpw1Local$1799[EE]], neff :> tmpw1Local$1799[k0]*(c0\/tmpw1Local$1799[ω]), A :> Transpose[RotationMatrix[tmpw1Local$1799[θ], {0, 1, 0}]] . tmpw1Local$1799[EE], phase :> Exp[I*(tmpw1Local$1799[ω]*t - tmpw1Local$1799[k] . {x, y, z})], intensity :> Conjugate[tmpw1Local$1799[EE]] . tmpw1Local$1799[EE], S :> Cross[tmpw1Local$1799[EE], tmpw1Local$1799[H]]}]]"
+		},
+		{
+			"label":"transmitted_nl_wave_2_after_extWave",
+			"head":"Association",
+			"keys":"{ω, k, k0, θ, EE, H, neff, A, phase, intensity, S}",
+			"length":11,
+			"has_H":true,
+			"has_A":true,
+			"H":[
+				{
+					"real":0.11309255278268351,
+					"imag":-0.16627364298837172
+				},
+				{
+					"real":-7.411030145045162e-2,
+					"imag":0.11215132162454494
+				},
+				{
+					"real":1.1396758200423435e-2,
+					"imag":-1.7073368564738033e-2
+				}
+			],
+			"A":[
+				{
+					"real":-5.337220072290077e-2,
+					"imag":8.229930631587812e-2
+				},
+				{
+					"real":-8.188908720007355e-2,
+					"imag":0.12267721597751206
+				},
+				{
+					"real":-4.298425328923573e-3,
+					"imag":7.16027417662746e-3
+				}
+			],
+			"symbols":"{ω, 1, k, EE, k0, θ, t, x, y, z, H}",
+			"input_form":"<|ω -> 11.810498697705988, k -> {-1.643703727644556, 0, 16.10110656573156 + 0.13999769757090763*I}, k0 -> 16.184782743361172 + 0.13927390211467897*I, θ -> -0.1017263894775599 + 0.0008784120878815973*I, EE -> {(-0.5454006378247567 + 0.010655609771005962*I)*(0.0994459888211263 - 0.1468252212594826*I), (-0.8317335716604325 + 0.005608575027923504*I)*(0.0994459888211263 - 0.1468252212594826*I), (-0.10293239736000116 + 0.004163348846291704*I)*(0.0994459888211263 - 0.1468252212594826*I)}, H :> (1\/(tmpw2Local$1799[ω]*μ0))*Cross[tmpw2Local$1799[k], tmpw2Local$1799[EE]], neff :> tmpw2Local$1799[k0]*(c0\/tmpw2Local$1799[ω]), A :> Transpose[RotationMatrix[tmpw2Local$1799[θ], {0, 1, 0}]] . tmpw2Local$1799[EE], phase :> Exp[I*(tmpw2Local$1799[ω]*t - tmpw2Local$1799[k] . {x, y, z})], intensity :> Conjugate[tmpw2Local$1799[EE]] . tmpw2Local$1799[EE], S :> Cross[tmpw2Local$1799[EE], tmpw2Local$1799[H]]|>"
+		}
+	]
+}

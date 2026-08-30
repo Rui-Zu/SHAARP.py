@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "shaarp-py"
+version = "1.0.0"
+description = "Validated Python replacement for the Mathematica SHAARP.si and SHAARP.ml SHG packages (live-Mathematica value-validated; merged GUI included)"
+readme = "README.md"
+authors = [
+  {name = "Rui Zu"},
+  {name = "Bo Wang"},
+  {name = "Lincoln Weber"},
+  {name = "Akash Saha"},
+  {name = "Long-Qing Chen"},
+  {name = "Venkatraman Gopalan"},
+]
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.23",
+  "matplotlib>=3.7",
+  "scipy>=1.9"
+]
+
+[project.optional-dependencies]
+symbolic = ["sympy>=1.12"]
+interactive = ["ipywidgets>=8", "ipython>=8"]
+desktop = ["PySide6>=6.5"]
+dev = ["pytest>=7"]
+
+[project.scripts]
+shaarp = "shaarp.cli:main"
+
+[project.gui-scripts]
+shaarp-gui = "shaarp.desktop_app:main"
+
+[tool.setuptools.packages.find]
+include = ["shaarp*"]
+
+[tool.setuptools.package-data]
+# ship the Mathematica-exported case-study dispersion data + the #SHAARP logos/icon with the wheel
+shaarp = ["*.json", "assets/*.png", "assets/*.ico"]

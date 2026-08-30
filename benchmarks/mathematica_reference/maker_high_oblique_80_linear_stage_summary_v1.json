@@ -1,0 +1,75 @@
+{
+  "agreement_claimed": true,
+  "case_id": "fine_maker_high_oblique",
+  "deltas": [
+    {
+      "max_abs_error": 1.9984014443252818e-15,
+      "stage": "linear_reflected[0].k"
+    },
+    {
+      "max_abs_error": 3.41740524767431e-16,
+      "stage": "linear_reflected[0].electric"
+    },
+    {
+      "max_abs_error": 1.9984014443252818e-15,
+      "stage": "linear_reflected[1].k"
+    },
+    {
+      "max_abs_error": 7.947987303456223e-16,
+      "stage": "linear_reflected[1].electric"
+    },
+    {
+      "max_abs_error": 1.1641412722504085e-14,
+      "stage": "linear_transmitted[0].k"
+    },
+    {
+      "max_abs_error": 9.192921513844874e-16,
+      "stage": "linear_transmitted[0].electric"
+    },
+    {
+      "mathematica_head": "Part",
+      "mathematica_input_form": "{}[[1]]",
+      "max_abs_error": null,
+      "stage": "linear_transmitted[1]",
+      "status": "mathematica_wave_absent_or_nonnumeric"
+    },
+    {
+      "max_abs_error": 8.887030186255109e-15,
+      "stage": "forward_layer_waves[0].k"
+    },
+    {
+      "max_abs_error": 2.0034065997952083e-15,
+      "stage": "forward_layer_waves[0].electric"
+    },
+    {
+      "max_abs_error": 2.131710537292855e-14,
+      "stage": "forward_layer_waves[1].k"
+    },
+    {
+      "max_abs_error": 1.4566297949443232e-15,
+      "stage": "forward_layer_waves[1].electric"
+    },
+    {
+      "max_abs_error": 1.2445095308301375e-14,
+      "stage": "backward_layer_waves[0].k"
+    },
+    {
+      "max_abs_error": 1.0513340250110747e-16,
+      "stage": "backward_layer_waves[0].electric"
+    },
+    {
+      "max_abs_error": 5.489730809681464e-15,
+      "stage": "backward_layer_waves[1].k"
+    },
+    {
+      "max_abs_error": 1.3268083282039866e-16,
+      "stage": "backward_layer_waves[1].electric"
+    }
+  ],
+  "first_failing_stage": "omega_fundamental_boundary_waves",
+  "max_abs_error": 2.131710537292855e-14,
+  "source": "Mathematica SHAARP.ml setup.nb f4L linear stage for fine Maker high-oblique theta=80",
+  "status": "python_direct_linear_stage_matches_mathematica",
+  "theta_deg": 80.0,
+  "tolerance": 1e-10
+}

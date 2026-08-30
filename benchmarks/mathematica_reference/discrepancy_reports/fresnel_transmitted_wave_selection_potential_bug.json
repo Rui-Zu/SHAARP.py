@@ -1,0 +1,70 @@
+{
+  "report_version": 1,
+  "status": "triaged_from_gui_fresnel_sweep_reference",
+  "case_id": "maker_fringes_negative_normal_positive, maker_fringes_moderate_high_oblique, maker_fringes_phase_matching_like",
+  "source_notebook_or_package": "Github/SHAARP.ml/SHAARP.ml.nb and Github/SHAARP.ml/setup.nb",
+  "mathematica_version_or_runtime": "Wolfram Mathematica 13.3.0 for Microsoft Windows (64-bit), June 3 2023",
+  "shaarp_file_path_version_or_date": "SHAARP.ml",
+  "python_git_or_worktree_state": "not a git repository in Python Ver/shaarp_py; local workspace state not recorded",
+  "first_failing_stage": "GUI Fresnel transmitted omega wave selection before listFresnel Tp/Ts values",
+  "expected_mathematica_value": "SHAARP.ml GUI Fresnel listFresnel Tp/Ts values exported in fresnel_sweep_reference_v1.json.",
+  "python_value": "Python physical_sum mode coherently sums both transmitted omega eigenwaves before computing Tp/Ts; Python shaarp_ml_selected mode matches Mathematica.",
+  "absolute_error": 0.5977,
+  "relative_error": 29780.877743474557,
+  "tolerance": {
+    "atol": 1e-10,
+    "rtol": 1e-10
+  },
+  "intermediate_values_needed_to_reproduce": {
+    "mathematica_reference": "benchmarks/mathematica_reference/fresnel_sweep_reference_v1.json",
+    "input_manifest": "benchmarks/mathematica_reference/maker_mathematica_inputs_v1.json",
+    "mathematica_exporter": "benchmarks/mathematica_reference/export_fresnel_sweep_reference.wl",
+    "python_comparator": "benchmarks/compare_fresnel_sweep_reference.py",
+    "strict_selected_wave_command": "python benchmarks/compare_fresnel_sweep_reference.py --mathematica benchmarks/mathematica_reference/fresnel_sweep_reference_v1.json --atol 1e-10 --rtol 1e-10",
+    "evidence": [
+      "Reflected GUI Fresnel curves Rp and Rs match Python to roundoff for all three cases.",
+      "Mathematica GUI Fresnel transmitted curves Tp and Ts match Python when only substrate transmitted wave 0 is included.",
+      "Python physical_sum mode includes both transmitted omega eigenwaves and therefore differs from SHAARP.ml GUI listFresnel Tp/Ts.",
+      "The same selected-wave versus physical-sum issue was previously observed for Maker transmitted SHG."
+    ]
+  },
+  "classification": "mathematica_shaarp_bug_or_ambiguity",
+  "next_action": "Review SHAARP.ml GUI intent for transmitted Fresnel curves: if Tp/Ts mean total transmitted power/intensity, patch/document Mathematica to include both transmitted eigenwaves; if they mean a selected transmitted eigenchannel, label the GUI and Python output accordingly.",
+  "minimal_reproducible_case": {
+    "case_ids": [
+      "maker_fringes_negative_normal_positive",
+      "maker_fringes_moderate_high_oblique",
+      "maker_fringes_phase_matching_like"
+    ],
+    "angle_samples": {
+      "maker_fringes_negative_normal_positive": [
+        -8.0,
+        0.0,
+        8.0
+      ],
+      "maker_fringes_moderate_high_oblique": [
+        0.0,
+        20.0,
+        40.0,
+        60.0
+      ],
+      "maker_fringes_phase_matching_like": [
+        -15.0,
+        0.0,
+        15.0
+      ]
+    },
+    "configuration": "complex non-diagonal anisotropic multilayer tensors, nontrivial real orientation, GUI Fresnel listFresnel p/s curves"
+  },
+  "equation_or_residual_check": {
+    "reflected_curve_agreement": "Rp/Rs pass at approximately 1e-15 absolute error.",
+    "selected_transmitted_wave_agreement": "Tp/Ts pass when Python uses only substrate transmitted wave 0.",
+    "physical_sum_difference": "Tp/Ts fail when Python coherently sums both transmitted waves, with max_abs up to about 0.598."
+  },
+  "why_python_result_follows_documented_equations": "For a total transmitted Fresnel intensity in an anisotropic medium, the physical field is normally the coherent sum of transmitted eigenwave electric fields projected into the wave-frame analyzer components. Python physical_sum implements that field-level sum. The SHAARP-compatible selected mode is retained separately because it reproduces SHAARP.ml listFresnel.",
+  "notes": [
+    "Do not treat this report as failure of reflected Fresnel validation; reflected curves match to roundoff.",
+    "Do not remove the SHAARP-compatible selected transmitted mode because it is required for exact SHAARP.ml GUI listFresnel compatibility.",
+    "Final Python GUI should expose or clearly label SHAARP-compatible selected-wave output versus physical total transmitted output."
+  ]
+}

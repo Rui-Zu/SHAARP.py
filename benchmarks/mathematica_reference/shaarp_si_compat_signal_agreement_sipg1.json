@@ -1,0 +1,81 @@
+{
+  "case_count": 6,
+  "cases": [
+    {
+      "boundary_residual_norm": 3.0792685469142215e-16,
+      "case_id": "si_pg_stage_01",
+      "er2w_max_abs_error": 1.3713940893150603e-15,
+      "er2w_max_rel_error": 2.531468181858902e-14,
+      "er2w_passed": true,
+      "incident_polarization": "p",
+      "orientation_index": 2,
+      "theta_deg": 12.0
+    },
+    {
+      "boundary_residual_norm": 8.157062869073851e-19,
+      "case_id": "si_pg_stage_02",
+      "er2w_max_abs_error": 4.135165920862507e-18,
+      "er2w_max_rel_error": 1.0263625526190061e-13,
+      "er2w_passed": true,
+      "incident_polarization": "s",
+      "orientation_index": 0,
+      "theta_deg": 20.5
+    },
+    {
+      "boundary_residual_norm": 4.915148488749979e-16,
+      "case_id": "si_pg_stage_03",
+      "er2w_max_abs_error": 6.961062950497062e-16,
+      "er2w_max_rel_error": 7.730852235245087e-15,
+      "er2w_passed": true,
+      "incident_polarization": "p",
+      "orientation_index": 3,
+      "theta_deg": 35.0
+    },
+    {
+      "boundary_residual_norm": 1.9473430041347877e-17,
+      "case_id": "si_pg_stage_04",
+      "er2w_max_abs_error": 5.601223055781825e-16,
+      "er2w_max_rel_error": 2.6867396600852227e-14,
+      "er2w_passed": true,
+      "incident_polarization": "s",
+      "orientation_index": 1,
+      "theta_deg": 8.0
+    },
+    {
+      "boundary_residual_norm": 1.8374664857613579e-16,
+      "case_id": "si_pg_stage_05",
+      "er2w_max_abs_error": 1.4104659380841087e-15,
+      "er2w_max_rel_error": 3.263786714760134e-14,
+      "er2w_passed": true,
+      "incident_polarization": "p",
+      "orientation_index": 4,
+      "theta_deg": 48.0
+    },
+    {
+      "boundary_residual_norm": 1.386737556090068e-15,
+      "case_id": "si_pg_stage_06",
+      "er2w_max_abs_error": 1.2700720987705527e-13,
+      "er2w_max_rel_error": 6.597312811998715e-13,
+      "er2w_passed": true,
+      "incident_polarization": "s",
+      "orientation_index": 5,
+      "theta_deg": 29.0
+    }
+  ],
+  "d_tensor_source": "constructed lab-frame d (equals SHAARP.si dSHG to ~4e-15; pure rotation input)",
+  "failing_er2w_case_count": 0,
+  "input_mapping": "benchmarks/mathematica_reference/shaarp_si_case_input_mapping_sipg1.json",
+  "mathematica_reference": "benchmarks/mathematica_reference/shaarp_si_signal_stage_reference_sipg1.json",
+  "max_er2w_abs_error": 1.2700720987705527e-13,
+  "max_er2w_rel_error": 6.597312811998715e-13,
+  "normal_incidence_2omega_branch_policy": "shaarp_reference_like",
+  "passing_er2w_case_count": 6,
+  "schema_version": 1,
+  "source": "Python SHAARP.si compatibility solver vs SHAARP.si extension ER2w stage reference",
+  "status": "si_compat_reflected_signal_matches_extension_shaarp_si_stage_reference",
+  "tag": "sipg1",
+  "tolerance": {
+    "atol": 2e-06,
+    "rtol": 0.0
+  }
+}

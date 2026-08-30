@@ -1,0 +1,65 @@
+{
+  "report_version": 1,
+  "status": "triaged_from_phase_matching_diagnostics",
+  "case_id": "maker_fringes_phase_matching_like",
+  "source_notebook_or_package": "Github/SHAARP.ml/SHAARP.ml.nb and Github/SHAARP.ml/setup.nb",
+  "mathematica_version_or_runtime": "Wolfram Mathematica 13.3.0 for Microsoft Windows (64-bit), June 3 2023",
+  "shaarp_file_path_version_or_date": "SHAARP.ml",
+  "python_git_or_worktree_state": "not a git repository in Python Ver/shaarp_py; local workspace state not recorded",
+  "first_failing_stage": "Maker phase-matching-like solveInhom particular fields F1F1/F2F2 before 2omega boundary propagation",
+  "expected_mathematica_value": "Mathematica SHAARP.ml solveInhom particular fields exported in maker_stage_diagnostics_v1.json and final MF/listMF values in maker_fringes_reference_v1.json.",
+  "python_value": "Python solve_inhomogeneous_field solves the same lab-frame curl-curl linear equation, but near phase matching the singular/near-null component chosen by numpy.linalg.solve differs from Mathematica Solve/NSolve.",
+  "absolute_error": 0.04561,
+  "relative_error": 0.3668,
+  "tolerance": {
+    "atol": 1e-10,
+    "rtol": 1e-10
+  },
+  "intermediate_values_needed_to_reproduce": {
+    "strict_comparator_command": "python -m benchmarks.compare_maker_fringes_reference --mathematica benchmarks/mathematica_reference/maker_fringes_reference_v1.json --python benchmarks/maker_fringes_benchmarks_v1.json --atol 1e-10 --rtol 1e-10",
+    "strict_comparator_result": "The two nonsingular Maker cases pass all compared outputs to roundoff; maker_fringes_phase_matching_like fails 7 outputs with max_abs up to 4.561e-02 and max_rel up to 3.668e-01.",
+    "phase_matching_diagnostic": "benchmarks/phase_matching_solve_inhom_diagnostics_v1.json",
+    "diagnostic_script": "benchmarks/diagnose_phase_matching_solve_inhom.py",
+    "mathematica_stage_diagnostics": "benchmarks/mathematica_reference/maker_stage_diagnostics_v1.json",
+    "mathematica_reference": "benchmarks/mathematica_reference/maker_fringes_reference_v1.json",
+    "python_benchmark": "benchmarks/maker_fringes_benchmarks_v1.json",
+    "fine_phase_matching_local_mathematica_reference": "benchmarks/mathematica_reference/maker_fine_phase_matching_local_reference_v1.json",
+    "fine_phase_matching_local_python_output": "benchmarks/maker_fringes_fine_sampling_phase_matching_local_output_v1.json",
+    "fine_phase_matching_local_comparison_summary": "benchmarks/mathematica_reference/maker_fine_phase_matching_local_comparison_summary_v1.json",
+    "fine_phase_matching_local_grid": "101 angles from -5 to 5 deg in 0.1 deg steps",
+    "fine_phase_matching_local_result": "diagnostic case fails 7 compared outputs at strict 1e-10 tolerance; max_abs reaches 1.7505811173168329 and max_rel reaches 46.65197738602533.",
+    "key_evidence": [
+      "For F1F2, Python and Mathematica inhomogeneous fields match to approximately 1e-14 at all three angles.",
+      "For F1F1/F2F2, the lab-frame solveInhom operator has condition numbers from about 1.10e15 to 8.13e15.",
+      "The smallest singular value for the failing operators is about 6e-14 to 5e-13, and rank at tolerance 1e-12 is 2.",
+      "The Python-Mathematica field difference projects onto the near-null vector with fraction approximately 1.0 for the failing F1F1/F2F2 fields.",
+      "Both Python and Mathematica fields have tiny relative residuals against the same Python lab-frame equation despite enormous absolute field-value differences.",
+      "Python now exposes solution_policy='minimum_norm_if_ill_conditioned' as an explicit deterministic alternative; it removes the near-null direct-solve component instead of silently matching an arbitrary singular branch."
+    ]
+  },
+  "classification": "singular_or_phase_matched_case",
+  "next_action": "Do not tune Python to one arbitrary singular nullspace component without deciding the physical phase-matching model. The Python API now exposes an explicit minimum-norm ill-conditioned policy; next decide whether final GUI defaults should use SHAARP-compatible direct solve, minimum-norm regularization, or a separately exported Mathematica singular-solve compatibility mode.",
+  "minimal_reproducible_case": {
+    "case_id": "maker_fringes_phase_matching_like",
+    "fine_local_case_id": "fine_maker_phase_matching_like_local",
+    "angles_deg": [
+      -15.0,
+      0.0,
+      15.0
+    ],
+    "configuration": "epsilon_2omega of the active layer is set equal to epsilon_omega, with complex non-diagonal tensors, complex d tensor, nontrivial real orientation, elliptic input polarization, and transmitted Maker analyzer outputs."
+  },
+  "equation_or_residual_check": {
+    "operator_condition_range": "approximately 1.10e15 to 8.13e15 for the failing F1F1/F2F2 sources",
+    "rank_at_tol_1e_minus_12": 2,
+    "relative_residuals": "Python and Mathematica relative residuals remain around 1e-17 to 4e-15 for the failing fields when evaluated in the same lab-frame equation.",
+    "near_null_projection": "The Python-Mathematica field delta is almost entirely the near-null singular vector component."
+  },
+  "why_python_result_follows_documented_equations": "Python constructs the same equation used by SHAARP.ml solveInhom, curl-curl(E) = omega^2 mu eps0 (epsilon.E + PNL), using the lab-frame 2omega dielectric tensor. In the phase-matching-like F1F1/F2F2 cases the operator is numerically rank deficient, so the particular field is not uniquely stable; adding a near-null homogeneous component changes field amplitudes enormously while preserving the equation residual to floating-point relative precision.",
+  "notes": [
+    "This is not evidence that the nonsingular Maker workflow is wrong; the two nonsingular Maker reference cases pass strict Mathematica comparison to roundoff.",
+    "This report is not classified as a Python bug yet because the first failing stage is a singular particular-solution choice, not a failed equation residual.",
+    "A final production GUI should make phase-matched handling explicit, because arbitrary particular-solution choices can dominate Maker fringe amplitudes.",
+    "The default remains solution_policy='solve' so existing Mathematica validation of nonsingular references is not disturbed."
+  ]
+}

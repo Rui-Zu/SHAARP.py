@@ -1,0 +1,53 @@
+# Cross-platform health check — runs on every push/PR so macOS breakage surfaces
+# immediately, not at release time. ~3-5 min per OS. (Linux is not a supported target:
+# no Linux bundle is built or shipped — decision.) The deep gate (full 207-module suite +
+# 312-cell GUI matrix sweep) remains the maintainer's local Windows release ritual;
+# this smoke set is additive. Release bundles are built by release.yml on v* tags.
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    env:
+      PYTHONIOENCODING: utf-8
+      MPLBACKEND: Agg
+      QT_QPA_PLATFORM: offscreen
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install package
+        run: pip install -e ".[desktop,symbolic]"
+
+      - name: Point offscreen Qt at the system fonts (Windows only)
+        if: runner.os == 'Windows'
+        run: echo "QT_QPA_FONTDIR=C:/Windows/Fonts" >> $env:GITHUB_ENV
+
+      # Measured fast subset (~130 s): package smoke, notebook PII hygiene, physics content of the
+      # plotted outputs, the compute cores + figure builders, and the PySide6 desktop shell driven
+      # headlessly through the real Update path.
+      - name: Fast test subset
+        run: python -m unittest -v tests.test_smoke tests.test_notebook_hygiene tests.test_output_physics_sanity tests.test_shaarp_gui tests.test_desktop_app
+
+      # From-source self-check: exercises the real SI/ML/Maker/Fresnel compute paths AND asserts the
+      # tracked benchmark set in this checkout is complete (catches .gitignore over-filtering —
+      # nothing else pre-build does).
+      - name: Source self-check
+        run: python -m shaarp.desktop_app --self-check

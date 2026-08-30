@@ -1,0 +1,66 @@
+{
+  "report_version": 1,
+  "status": "filled_from_stage_diagnostics",
+  "case_id": "maker_fringes_negative_normal_positive and maker_fringes_moderate_high_oblique",
+  "source_notebook_or_package": "Github/SHAARP.ml/SHAARP.ml.nb and Github/SHAARP.ml/setup.nb",
+  "mathematica_version_or_runtime": "Wolfram Mathematica 13.3.0 for Microsoft Windows (64-bit), June 3 2023",
+  "shaarp_file_path_version_or_date": "SHAARP.ml",
+  "python_git_or_worktree_state": "not a git repository in Python Ver/shaarp_py; local workspace state not recorded",
+  "first_failing_stage": "Maker transmitted 2omega wave selection before analyzer projection",
+  "expected_mathematica_value": "SHAARP.ml MF uses the selected/present transmitted nonlinear wave from wavNLLocal[[2]] and treats the non-Association slot as absent/zero.",
+  "python_value": "Python physical_sum mode coherently sums both transmitted 2omega eigenwaves before analyzer projection; Python shaarp_ml_selected mode matches Mathematica.",
+  "absolute_error": 0.043463776850174,
+  "relative_error": 25.47711746228219,
+  "tolerance": {
+    "atol": 1e-10,
+    "rtol": 1e-10
+  },
+  "intermediate_values_needed_to_reproduce": {
+    "mathematica_reference": "benchmarks/mathematica_reference/maker_fringes_reference_v1.json",
+    "mathematica_stage_diagnostics": "benchmarks/mathematica_reference/maker_stage_diagnostics_v1.json",
+    "python_benchmark": "benchmarks/maker_fringes_benchmarks_v1.json",
+    "stage_comparator": "benchmarks/compare_maker_stage_diagnostics.py",
+    "strict_comparator": "python -m benchmarks.compare_maker_fringes_reference --mathematica benchmarks/mathematica_reference/maker_fringes_reference_v1.json --python benchmarks/maker_fringes_benchmarks_v1.json --atol 1e-10 --rtol 1e-10",
+    "evidence": [
+      "For nonsingular Maker cases, forward inhomogeneous wavevectors and electric fields match Mathematica to roundoff.",
+      "For nonsingular Maker cases, the present Mathematica nonlinear transmitted wave matches Python substrate_2omega[0] to roundoff.",
+      "The other Mathematica transmitted nonlinear wave slot is absent/non-Association in the MF path.",
+      "Python shaarp_ml_selected mode matches Mathematica MFList/listMFpara/listMFperp/analyzer amplitudes to roundoff.",
+      "Python physical_sum mode includes both transmitted 2omega eigenwaves and therefore differs from SHAARP.ml Maker output."
+    ]
+  },
+  "classification": "mathematica_shaarp_bug_or_ambiguity",
+  "next_action": "Review SHAARP.ml GUI intent for transmitted SHG: if the GUI selection means analyzer-projected total transmitted SHG, patch/document Mathematica MF to sum both transmitted eigenwaves; if it means a selected transmitted eigenchannel, label the GUI output accordingly.",
+  "minimal_reproducible_case": {
+    "case_ids": [
+      "maker_fringes_negative_normal_positive",
+      "maker_fringes_moderate_high_oblique"
+    ],
+    "input_manifest": "benchmarks/mathematica_reference/maker_mathematica_inputs_v1.json",
+    "angle_samples": {
+      "maker_fringes_negative_normal_positive": [
+        -8.0,
+        0.0,
+        8.0
+      ],
+      "maker_fringes_moderate_high_oblique": [
+        0.0,
+        20.0,
+        40.0,
+        60.0
+      ]
+    },
+    "configuration": "complex non-diagonal anisotropic tensors, complex SHG tensor, nontrivial orientation, elliptic input polarization, transmitted Maker SHG analyzer psi and psi+90 degrees"
+  },
+  "equation_or_residual_check": {
+    "stage_agreement": "compare_maker_stage_diagnostics.py shows inhomogeneous_layer_1 k/electric agreement at approximately 1e-14 for nonsingular cases.",
+    "selected_wave_agreement": "The present Mathematica nonlinear_transmitted wave best matches Python substrate_2omega[0] at approximately 1e-14 for nonsingular cases.",
+    "final_compatibility_check": "After adding Python transmitted_wave_policy='shaarp_ml_selected', strict Maker comparison passes all compared outputs for the two nonsingular cases."
+  },
+  "why_python_result_follows_documented_equations": "For an analyzer-selected transmitted SHG intensity, the physical field is normally the coherent sum of all transmitted 2omega eigenwave electric fields projected onto the analyzer. Python physical_sum implements this field-level sum. The SHAARP.ml MF output instead follows an internal selected-wave/absent-slot convention, which may be a GUI ambiguity or Mathematica-side bug unless the intended output is explicitly one transmitted eigenchannel.",
+  "notes": [
+    "Do not remove shaarp_ml_selected mode because it is required for exact SHAARP.ml compatibility.",
+    "Do not use the phase-matching-like Maker case as evidence for this bug; that case is separately singular/ill-conditioned.",
+    "Final Python GUI should expose or clearly label SHAARP-compatible selected-wave output versus physical total transmitted output."
+  ]
+}

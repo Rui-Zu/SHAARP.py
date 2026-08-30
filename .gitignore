@@ -1,0 +1,43 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# --- Build / packaging artifacts (the Windows app ships as a GitHub Release asset, not in git) ---
+build/
+dist/
+docs/_build/
+*.spec.bak
+*.stackdump
+wheelhouse/
+
+# --- Scratch / logs ---
+*.log
+outputs/
+Temp/
+scratch/
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# --- Markdown: only the README and the documentation sources under docs/ are tracked.
+#     The standard community files are whitelisted so a contributor can add them. ---
+*.md
+!/README.md
+!docs/**/*.md
+!/CONTRIBUTING.md
+!/CHANGELOG.md
+!/CODE_OF_CONDUCT.md
+!/SECURITY.md
+!.github/**/*.md
+!examples/README.md
+
+# --- Guard against a nested copy of the tree being tracked at the repo root ---
+Python Ver/

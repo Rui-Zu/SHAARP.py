@@ -1,0 +1,78 @@
+{
+	"source":"Wolfram 14.3 SHAARP.ml setup.nb symbolic point-group d probe",
+	"status":"diagnostic_only_ml_material_extension_does_not_apply_gui_point_group_patterns",
+	"note":"This probe checks whether SHAARP.ml setMater\/extMater impose point-group SHG tensor patterns. They do not: dC is supplied by the material record and is not rewritten from pg here. GUI\/partial-analytical point-group tensors must be validated from the GUI expression branch instead.",
+	"wolfram_version":"14.3.0 for Microsoft Windows (64-bit) (July 8, 2025)",
+	"inputCellCount":49,
+	"functionDownValues":{
+		"setMater":0,
+		"extMater":1
+	},
+	"cases":[
+		{
+			"point_group":"1",
+			"dC":[
+				"{d11, d12, d13, d14, d15, d16}",
+				"{d21, d22, d23, d24, d25, d26}",
+				"{d31, d32, d33, d34, d35, d36}"
+			],
+			"dL":[
+				"{d11, d12, d13, d14, d15, d16}",
+				"{d21, d22, d23, d24, d25, d26}",
+				"{d31, d32, d33, d34, d35, d36}"
+			]
+		},
+		{
+			"point_group":"3m",
+			"dC":[
+				"{d11, d12, d13, d14, d15, d16}",
+				"{d21, d22, d23, d24, d25, d26}",
+				"{d31, d32, d33, d34, d35, d36}"
+			],
+			"dL":[
+				"{d11, d12, d13, d14, d15, d16}",
+				"{d21, d22, d23, d24, d25, d26}",
+				"{d31, d32, d33, d34, d35, d36}"
+			]
+		},
+		{
+			"point_group":"32",
+			"dC":[
+				"{d11, d12, d13, d14, d15, d16}",
+				"{d21, d22, d23, d24, d25, d26}",
+				"{d31, d32, d33, d34, d35, d36}"
+			],
+			"dL":[
+				"{d11, d12, d13, d14, d15, d16}",
+				"{d21, d22, d23, d24, d25, d26}",
+				"{d31, d32, d33, d34, d35, d36}"
+			]
+		},
+		{
+			"point_group":"6mm",
+			"dC":[
+				"{d11, d12, d13, d14, d15, d16}",
+				"{d21, d22, d23, d24, d25, d26}",
+				"{d31, d32, d33, d34, d35, d36}"
+			],
+			"dL":[
+				"{d11, d12, d13, d14, d15, d16}",
+				"{d21, d22, d23, d24, d25, d26}",
+				"{d31, d32, d33, d34, d35, d36}"
+			]
+		},
+		{
+			"point_group":"OverscriptBox[4, _]3m",
+			"dC":[
+				"{d11, d12, d13, d14, d15, d16}",
+				"{d21, d22, d23, d24, d25, d26}",
+				"{d31, d32, d33, d34, d35, d36}"
+			],
+			"dL":[
+				"{d11, d12, d13, d14, d15, d16}",
+				"{d21, d22, d23, d24, d25, d26}",
+				"{d31, d32, d33, d34, d35, d36}"
+			]
+		}
+	]
+}

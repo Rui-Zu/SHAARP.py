@@ -1,0 +1,66 @@
+{
+  "atol": 1e-10,
+  "full_shaarp_ml_agreement_claimed": false,
+  "nonsingular_case_count": 2,
+  "nonsingular_case_ids": [
+    "maker_fringes_moderate_high_oblique",
+    "maker_fringes_negative_normal_positive"
+  ],
+  "selected_transmitted_wave_policy": "shaarp_ml_selected",
+  "singular_case_ids": [
+    "maker_fringes_phase_matching_like"
+  ],
+  "source": "Mathematica SHAARP.ml setup.nb Maker f4NL stage diagnostics",
+  "stages": [
+    {
+      "comparison_status": "passed",
+      "max_abs_error": 1.887379141862766e-15,
+      "notes": "Omega reflected waves match Mathematica after wave-order best matching.",
+      "stage_id": "linear_reflected_best_match",
+      "tolerance": 1e-10
+    },
+    {
+      "comparison_status": "passed",
+      "max_abs_error": 2.858708265896759e-14,
+      "notes": "Omega transmitted wave 0 matches the SHAARP.ml GUI selected-wave convention.",
+      "stage_id": "linear_transmitted_selected_wave",
+      "tolerance": 1e-10
+    },
+    {
+      "comparison_status": "passed",
+      "max_abs_error": 8.584974326490713e-14,
+      "notes": "Layer-1 forward-only inhomogeneous SHG source waves match Mathematica after best matching.",
+      "stage_id": "inhomogeneous_forward_sources",
+      "tolerance": 1e-10
+    },
+    {
+      "comparison_status": "passed",
+      "max_abs_error": 1.8978320078226427e-14,
+      "notes": "2omega transmitted selected wave matches Mathematica for nonsingular Maker cases.",
+      "stage_id": "nonlinear_transmitted_selected_wave",
+      "tolerance": 1e-10
+    },
+    {
+      "comparison_status": "passed",
+      "max_abs_error": 9.048917015053566e-14,
+      "notes": "Forward/backward homogeneous 2omega layer waves match Mathematica after comparing the nonlinear boundary records.",
+      "stage_id": "homogeneous_layer_2omega_boundary",
+      "tolerance": 1e-10
+    },
+    {
+      "case_count": 2,
+      "comparison_status": "documented_caveat",
+      "max_abs_error": null,
+      "notes": "Mathematica emits absent/non-Association transmitted wave slots where Python keeps both eigenwave records; this is tied to the selected-wave policy.",
+      "stage_id": "transmitted_absent_slots"
+    },
+    {
+      "case_count": 1,
+      "comparison_status": "diagnostic_only",
+      "max_abs_error": 351767118944747.7,
+      "notes": "The phase-matching-like case is intentionally excluded from small-residual agreement claims because solveInhom is singular or nearly singular.",
+      "stage_id": "phase_matching_case"
+    }
+  ],
+  "status": "partial_stage_agreement_with_selected_wave_and_phase_matching_caveats"
+}

@@ -1,0 +1,63 @@
+{
+	"source":"Mathematica SHAARP.si import element probe",
+	"wolfram_version":"13.3.0 for Microsoft Windows (64-bit) (June 3, 2023)",
+	"notebook_path":"SHAARP_V1.03/SHAARP_V1.03.nb",
+	"elements":[
+		"Cells",
+		"Initialization",
+		"Notebook",
+		"NotebookObject",
+		"Plaintext",
+		"Summary"
+	],
+	"candidate_probes":[
+		{
+			"element":"NB",
+			"head":"Notebook",
+			"byte_count":2771230,
+			"preview":"Notebook[{Cell[BoxData[\"\"], \"Input\", CellChangeTimes -> {3.8667349610900736*^9, {3.866735226783931*^9, 3.8667352287943735*^9}, 3.8673996453035116*^9}, CellLabel -> \"In[275]:=\", ExpressionUUID -> \"439a33ef-3586-4f72-a08f-e5e719c48b97\"], Cell[BoxData[\"\"], \"Input\", CellChangeTimes -> {{3.8673996416604815*^9, 3.8673996416654406*^9}}, CellLabel -> \"In[276]:=\", ExpressionUUID -> \"12c33192-6d01-4f2a-b102-2aeb4a57cb87\"], Cell[BoxData[RowBox[{RowBox[{\"(*\", RowBox[{RowBox[{RowBox[{RowBox[{RowBox[{RowBox[{"
+		},
+		{
+			"element":"Notebook",
+			"head":"Notebook",
+			"byte_count":2771230,
+			"preview":"Notebook[{Cell[BoxData[\"\"], \"Input\", CellChangeTimes -> {3.8667349610900736*^9, {3.866735226783931*^9, 3.8667352287943735*^9}, 3.8673996453035116*^9}, CellLabel -> \"In[275]:=\", ExpressionUUID -> \"439a33ef-3586-4f72-a08f-e5e719c48b97\"], Cell[BoxData[\"\"], \"Input\", CellChangeTimes -> {{3.8673996416604815*^9, 3.8673996416654406*^9}}, CellLabel -> \"In[276]:=\", ExpressionUUID -> \"12c33192-6d01-4f2a-b102-2aeb4a57cb87\"], Cell[BoxData[RowBox[{RowBox[{\"(*\", RowBox[{RowBox[{RowBox[{RowBox[{RowBox[{RowBox[{"
+		},
+		{
+			"element":"InputText",
+			"head":"$Failed",
+			"byte_count":0,
+			"preview":""
+		},
+		{
+			"element":"Input",
+			"head":"$Failed",
+			"byte_count":0,
+			"preview":""
+		},
+		{
+			"element":"Plaintext",
+			"head":"String",
+			"byte_count":378189,
+			"preview":"\"\\r\\n\\r\\n\\r\\n\\r\\n(************************************************************************************************* * ****************************)\\r\\n(*                                                                                                                                        *)\\r\\n(*                                                                                                                                        *)\\r\\n(*SHARRP.nb is a notebook that calculates reflected second ha"
+		},
+		{
+			"element":"Text",
+			"head":"String",
+			"byte_count":4830205,
+			"preview":"\"(* Content-type: application\/vnd.wolfram.mathematica *)\\n\\n(*** Wolfram Notebook File ***)\\n(* http:\/\/www.wolfram.com\/nb *)\\n\\n(* CreatedBy='Mathematica 12.3' *)\\n\\n(*CacheID: 234*)\\n(* Internal cache information:\\nNotebookFileLineBreakTest\\nNotebookFileLineBreakTest\\nNotebookDataPosition[       158,          7]\\nNotebookDataLength[   4475183,      86842]\\nNotebookOptionsPosition[   4473533,      86807]\\nNotebookOutlinePosition[   4474025,      86826]\\nCellTagsIndexPosition[   4473982,      868"
+		},
+		{
+			"element":"Cells",
+			"head":"List",
+			"byte_count":37,
+			"preview":"{\"Input\", \"Output\", \"Print\", \"Title\"}"
+		},
+		{
+			"element":"CellExpressions",
+			"head":"$Failed",
+			"byte_count":0,
+			"preview":""
+		}
+	]
+}

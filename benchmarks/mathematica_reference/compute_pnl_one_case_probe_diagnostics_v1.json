@@ -1,0 +1,31 @@
+{
+	"source":"Live Wolfram Mathematica one-case computePNL diagnostic probe",
+	"status":"diagnostic_exported",
+	"wolfram_version":"14.3.0 for Microsoft Windows (64-bit) (July 8, 2025)",
+	"inputCellCount":49,
+	"loadResult":"Null",
+	"functionDownValues":{
+		"computePNL":1
+	},
+	"computePNLNames":[
+		"computePNL"
+	],
+	"pnlHead":"List",
+	"pnlFailed":false,
+	"pnlAborted":false,
+	"pnlInputForm":"{-0.007825 + 0.00745*I, 0.001658 - 0.004834*I, -0.0015140000000000015 - 0.0063205*I}",
+	"pnlJSONValue":[
+		{
+			"real":-7.825e-3,
+			"imag":7.45e-3
+		},
+		{
+			"real":1.658e-3,
+			"imag":-4.834e-3
+		},
+		{
+			"real":-1.5140000000000015e-3,
+			"imag":-6.3205e-3
+		}
+	]
+}

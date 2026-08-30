@@ -1,0 +1,1285 @@
+{
+  "benchmark_version": 1,
+  "status": "python_biaxial_branch_tracking_regression_not_mathematica_validation",
+  "sequence_count": 6,
+  "angle_count_per_sequence": 6,
+  "notes": [
+    "These cases track biaxial/non-uniaxial eigenmode branches across incidence-angle sweeps.",
+    "They deliberately use branch_1/branch_2 terminology, not ordinary/extraordinary labels.",
+    "They are Python regression benchmarks, not Mathematica-vs-Python validation."
+  ],
+  "sequences": [
+    {
+      "id": "biaxial_branch_orientation_01",
+      "orientation_index": 0,
+      "inputs": {
+        "orientation": [
+          [
+            {
+              "real": 1.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.0,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            {
+              "real": 1.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.0,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            {
+              "real": 1.0,
+              "imag": 0.0
+            }
+          ]
+        ],
+        "epsilon_lab": [
+          [
+            {
+              "real": 2.18,
+              "imag": 0.05
+            },
+            {
+              "real": 0.045,
+              "imag": 0.012
+            },
+            {
+              "real": -0.028,
+              "imag": 0.009
+            }
+          ],
+          [
+            {
+              "real": 0.045,
+              "imag": 0.012
+            },
+            {
+              "real": 2.83,
+              "imag": 0.08
+            },
+            {
+              "real": 0.034,
+              "imag": -0.015
+            }
+          ],
+          [
+            {
+              "real": -0.028,
+              "imag": 0.009
+            },
+            {
+              "real": 0.034,
+              "imag": -0.015
+            },
+            {
+              "real": 3.67,
+              "imag": 0.11
+            }
+          ]
+        ],
+        "incident_index": {
+          "real": 1.0,
+          "imag": 0.01
+        },
+        "angles_deg": [
+          5.0,
+          15.0,
+          25.0,
+          35.0,
+          45.0,
+          55.0
+        ]
+      },
+      "steps": [
+        {
+          "theta_deg": 5.0,
+          "fast_n": {
+            "real": 1.477256762542848,
+            "imag": 0.01626538252604
+          },
+          "slow_n": {
+            "real": 1.683196346653821,
+            "imag": 0.024305807901512
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 1.0,
+          "branch_2_alignment": 1.0,
+          "ambiguous": false
+        },
+        {
+          "theta_deg": 15.0,
+          "fast_n": {
+            "real": 1.486766325266745,
+            "imag": 0.015947711004111
+          },
+          "slow_n": {
+            "real": 1.683100268767199,
+            "imag": 0.024340773062547
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 0.997586664400261,
+          "branch_2_alignment": 0.999979921745442,
+          "ambiguous": false
+        },
+        {
+          "theta_deg": 25.0,
+          "fast_n": {
+            "real": 1.503168848196488,
+            "imag": 0.015799728450143
+          },
+          "slow_n": {
+            "real": 1.683020329950422,
+            "imag": 0.024383565451436
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 0.997700448426777,
+          "branch_2_alignment": 0.999980182956312,
+          "ambiguous": false
+        },
+        {
+          "theta_deg": 35.0,
+          "fast_n": {
+            "real": 1.524399530662768,
+            "imag": 0.015799549907197
+          },
+          "slow_n": {
+            "real": 1.68295498028898,
+            "imag": 0.024437186483402
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 0.997899525813087,
+          "branch_2_alignment": 0.999975625587533,
+          "ambiguous": false
+        },
+        {
+          "theta_deg": 45.0,
+          "fast_n": {
+            "real": 1.547850116241627,
+            "imag": 0.01590304953022
+          },
+          "slow_n": {
+            "real": 1.682904280386282,
+            "imag": 0.024505260844398
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 0.998189333699351,
+          "branch_2_alignment": 0.99996419081571,
+          "ambiguous": false
+        },
+        {
+          "theta_deg": 55.0,
+          "fast_n": {
+            "real": 1.570745364625286,
+            "imag": 0.016053264709883
+          },
+          "slow_n": {
+            "real": 1.682869685381076,
+            "imag": 0.024590816407462
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 0.998561234370202,
+          "branch_2_alignment": 0.999943698458327,
+          "ambiguous": false
+        }
+      ],
+      "metrics": {
+        "min_branch_alignment": 0.997586664400261,
+        "ambiguous_count": 0,
+        "max_residual": 1e-15,
+        "max_abs_epsilon_imag": 0.11,
+        "max_abs_epsilon_offdiag": 0.04657252408878
+      },
+      "fingerprint": "f5689e93779f5880db1d5f18c97b3f6508ffcb8e7bbac1e0d05b464a15d7dc94"
+    },
+    {
+      "id": "biaxial_branch_orientation_02",
+      "orientation_index": 1,
+      "inputs": {
+        "orientation": [
+          [
+            {
+              "real": 0.238472007447112,
+              "imag": 0.0
+            },
+            {
+              "real": -0.881275218542307,
+              "imag": 0.0
+            },
+            {
+              "real": -0.408025845808024,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": -0.381123190243159,
+              "imag": 0.0
+            },
+            {
+              "real": -0.47136746426087,
+              "imag": 0.0
+            },
+            {
+              "real": 0.795335041033119,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": -0.893239170392242,
+              "imag": 0.0
+            },
+            {
+              "real": -0.034157031772181,
+              "imag": 0.0
+            },
+            {
+              "real": -0.448282368220626,
+              "imag": 0.0
+            }
+          ]
+        ],
+        "epsilon_lab": [
+          [
+            {
+              "real": 3.490149613185076,
+              "imag": 0.086001675867538
+            },
+            {
+              "real": 0.165233254109994,
+              "imag": 0.010402161451777
+            },
+            {
+              "real": 0.389577975535425,
+              "imag": 0.029485523402294
+            }
+          ],
+          [
+            {
+              "real": 0.165233254109994,
+              "imag": 0.010402161451777
+            },
+            {
+              "real": 2.36295566235366,
+              "imag": 0.066764143939929
+            },
+            {
+              "real": -0.248944147928604,
+              "imag": -0.015512197325458
+            }
+          ],
+          [
+            {
+              "real": 0.389577975535425,
+              "imag": 0.029485523402294
+            },
+            {
+              "real": -0.248944147928604,
+              "imag": -0.015512197325458
+            },
+            {
+              "real": 2.826894724461265,
+              "imag": 0.087234180192533
+            }
+          ]
+        ],
+        "incident_index": {
+          "real": 1.0,
+          "imag": 0.01
+        },
+        "angles_deg": [
+          5.0,
+          15.0,
+          25.0,
+          35.0,
+          45.0,
+          55.0
+        ]
+      },
+      "steps": [
+        {
+          "theta_deg": 5.0,
+          "fast_n": {
+            "real": 1.516892622980342,
+            "imag": 0.019675687708261
+          },
+          "slow_n": {
+            "real": 1.852695602289153,
+            "imag": 0.022059642561967
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 1.0,
+          "branch_2_alignment": 1.0,
+          "ambiguous": false
+        },
+        {
+          "theta_deg": 15.0,
+          "fast_n": {
+            "real": 1.512767108017957,
+            "imag": 0.01923913324105
+          },
+          "slow_n": {
+            "real": 1.829998646303179,
+            "imag": 0.021338009303196
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 0.999171371219551,
+          "branch_2_alignment": 0.994023239594887,
+          "ambiguous": false
+        },
+        {
+          "theta_deg": 25.0,
+          "fast_n": {
+            "real": 1.507972092706852,
+            "imag": 0.018740462405469
+          },
+          "slow_n": {
+            "real": 1.806908899467475,
+            "imag": 0.020895688349432
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 0.998981013253384,
+          "branch_2_alignment": 0.994665177748004,
+          "ambiguous": false
+        },
+        {
+          "theta_deg": 35.0,
+          "fast_n": {
+            "real": 1.502748117011489,
+            "imag": 0.018216464317455
+          },
+          "slow_n": {
+            "real": 1.785064710473818,
+            "imag": 0.020731730317913
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 0.998872372458939,
+          "branch_2_alignment": 0.995460103008634,
+          "ambiguous": false
+        },
+        {
+          "theta_deg": 45.0,
+          "fast_n": {
+            "real": 1.497486017873551,
+            "imag": 0.017719532094226
+          },
+          "slow_n": {
+            "real": 1.765840120033385,
+            "imag": 0.020796834851474
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 0.998910085116216,
+          "branch_2_alignment": 0.996381798183168,
+          "ambiguous": false
+        },
+        {
+          "theta_deg": 55.0,
+          "fast_n": {
+            "real": 1.492674054472759,
+            "imag": 0.017302586791983
+          },
+          "slow_n": {
+            "real": 1.750159305632049,
+            "imag": 0.021005316208245
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 0.99910838740179,
+          "branch_2_alignment": 0.997384440072038,
+          "ambiguous": false
+        }
+      ],
+      "metrics": {
+        "min_branch_alignment": 0.994023239594887,
+        "ambiguous_count": 0,
+        "max_residual": 1e-15,
+        "max_abs_epsilon_imag": 0.087234180192533,
+        "max_abs_epsilon_offdiag": 0.390692199963843
+      },
+      "fingerprint": "b27a7d2258c473dea7069d3f1d383aeb43823a8176a7ca60bd1a7e0562959902"
+    },
+    {
+      "id": "biaxial_branch_orientation_03",
+      "orientation_index": 2,
+      "inputs": {
+        "orientation": [
+          [
+            {
+              "real": 0.043021194286716,
+              "imag": 0.0
+            },
+            {
+              "real": 0.446286424472599,
+              "imag": 0.0
+            },
+            {
+              "real": 0.893855471635996,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 0.141521688943479,
+              "imag": 0.0
+            },
+            {
+              "real": -0.88838439281564,
+              "imag": 0.0
+            },
+            {
+              "real": 0.436743382503013,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 0.988999893023619,
+              "imag": 0.0
+            },
+            {
+              "real": 0.107710714105197,
+              "imag": 0.0
+            },
+            {
+              "real": -0.101378566108516,
+              "imag": 0.0
+            }
+          ]
+        ],
+        "epsilon_lab": [
+          [
+            {
+              "real": 3.658101316119523,
+              "imag": 0.106001136488189
+            },
+            {
+              "real": 0.036281338094702,
+              "imag": 0.019883691140127
+            },
+            {
+              "real": -0.113111209541237,
+              "imag": -0.000764998273819
+            }
+          ],
+          [
+            {
+              "real": 0.036281338094702,
+              "imag": 0.019883691140127
+            },
+            {
+              "real": 2.665402439918362,
+              "imag": 0.068593439747548
+            },
+            {
+              "real": -0.292197778943178,
+              "imag": -0.02108241966188
+            }
+          ],
+          [
+            {
+              "real": -0.113111209541237,
+              "imag": -0.000764998273819
+            },
+            {
+              "real": -0.292197778943178,
+              "imag": -0.02108241966188
+            },
+            {
+              "real": 2.356496243962115,
+              "imag": 0.065405423764263
+            }
+          ]
+        ],
+        "incident_index": {
+          "real": 1.0,
+          "imag": 0.01
+        },
+        "angles_deg": [
+          5.0,
+          15.0,
+          25.0,
+          35.0,
+          45.0,
+          55.0
+        ]
+      },
+      "steps": [
+        {
+          "theta_deg": 5.0,
+          "fast_n": {
+            "real": 1.621207326590505,
+            "imag": 0.019382985898828
+          },
+          "slow_n": {
+            "real": 1.914863999836601,
+            "imag": 0.028116858438279
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 1.0,
+          "branch_2_alignment": 1.0,
+          "ambiguous": false
+        },
+        {
+          "theta_deg": 15.0,
+          "fast_n": {
+            "real": 1.619768732143293,
+            "imag": 0.018916372606896
+          },
+          "slow_n": {
+            "real": 1.915707974698362,
+            "imag": 0.028405477037129
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 0.999429989713391,
+          "branch_2_alignment": 0.990073508530895,
+          "ambiguous": false
+        },
+        {
+          "theta_deg": 25.0,
+          "fast_n": {
+            "real": 1.617373786011111,
+            "imag": 0.018387779917115
+          },
+          "slow_n": {
+            "real": 1.909069138909623,
+            "imag": 0.028689867330954
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 0.999298992702589,
+          "branch_2_alignment": 0.99076222216868,
+          "ambiguous": false
+        },
+        {
+          "theta_deg": 35.0,
+          "fast_n": {
+            "real": 1.614029150320814,
+            "imag": 0.017805159282453
+          },
+          "slow_n": {
+            "real": 1.896392457177188,
+            "imag": 0.028989633709941
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 0.999074171984312,
+          "branch_2_alignment": 0.99195112691173,
+          "ambiguous": false
+        },
+        {
+          "theta_deg": 45.0,
+          "fast_n": {
+            "real": 1.609799145924568,
+            "imag": 0.017191962496926
+          },
+          "slow_n": {
+            "real": 1.879906913486711,
+            "imag": 0.029312978558178
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 0.998816278611302,
+          "branch_2_alignment": 0.993479850663662,
+          "ambiguous": false
+        },
+        {
+          "theta_deg": 55.0,
+          "fast_n": {
+            "real": 1.604920085464514,
+            "imag": 0.016593079077266
+          },
+          "slow_n": {
+            "real": 1.86232043531762,
+            "imag": 0.029646336619028
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 0.998653444365267,
+          "branch_2_alignment": 0.995177726266222,
+          "ambiguous": false
+        }
+      ],
+      "metrics": {
+        "min_branch_alignment": 0.990073508530895,
+        "ambiguous_count": 0,
+        "max_residual": 2e-15,
+        "max_abs_epsilon_imag": 0.106001136488189,
+        "max_abs_epsilon_offdiag": 0.292957352592704
+      },
+      "fingerprint": "b571ed266a18662f78dc5581f20561d9b08e9443b2ba41434330b4650503d267"
+    },
+    {
+      "id": "biaxial_branch_orientation_04",
+      "orientation_index": 3,
+      "inputs": {
+        "orientation": [
+          [
+            {
+              "real": -0.652072544255525,
+              "imag": 0.0
+            },
+            {
+              "real": -0.728289488539763,
+              "imag": 0.0
+            },
+            {
+              "real": 0.210703151164421,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 0.755709399031701,
+              "imag": 0.0
+            },
+            {
+              "real": -0.602051167982724,
+              "imag": 0.0
+            },
+            {
+              "real": 0.257755107312703,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": -0.0608662570171,
+              "imag": 0.0
+            },
+            {
+              "real": 0.3273053803608,
+              "imag": 0.0
+            },
+            {
+              "real": 0.942956248583995,
+              "imag": 0.0
+            }
+          ]
+        ],
+        "epsilon_lab": [
+          [
+            {
+              "real": 2.50703248974878,
+              "imag": 0.057622848481731
+            },
+            {
+              "real": -0.318128020831744,
+              "imag": -0.022519885766103
+            },
+            {
+              "real": 0.081967413018975,
+              "imag": -0.013809140448571
+            }
+          ],
+          [
+            {
+              "real": -0.318128020831744,
+              "imag": -0.022519885766103
+            },
+            {
+              "real": 2.614635833940147,
+              "imag": 0.079445840250717
+            },
+            {
+              "real": 0.345705831387527,
+              "imag": 0.011777854871707
+            }
+          ],
+          [
+            {
+              "real": 0.081967413018975,
+              "imag": -0.013809140448571
+            },
+            {
+              "real": 0.345705831387527,
+              "imag": 0.011777854871707
+            },
+            {
+              "real": 3.558331676311074,
+              "imag": 0.102931311267552
+            }
+          ]
+        ],
+        "incident_index": {
+          "real": 1.0,
+          "imag": 0.01
+        },
+        "angles_deg": [
+          5.0,
+          15.0,
+          25.0,
+          35.0,
+          45.0,
+          55.0
+        ]
+      },
+      "steps": [
+        {
+          "theta_deg": 5.0,
+          "fast_n": {
+            "real": 1.48354888076658,
+            "imag": 0.015610315106909
+          },
+          "slow_n": {
+            "real": 1.698229217282666,
+            "imag": 0.026918397827445
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 1.0,
+          "branch_2_alignment": 1.0,
+          "ambiguous": false
+        },
+        {
+          "theta_deg": 15.0,
+          "fast_n": {
+            "real": 1.477307769143496,
+            "imag": 0.016043512201578
+          },
+          "slow_n": {
+            "real": 1.706247370582171,
+            "imag": 0.027345214653867
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 0.998486164755504,
+          "branch_2_alignment": 0.998484060300188,
+          "ambiguous": false
+        },
+        {
+          "theta_deg": 25.0,
+          "fast_n": {
+            "real": 1.475347657489661,
+            "imag": 0.016569563074282
+          },
+          "slow_n": {
+            "real": 1.715333926974376,
+            "imag": 0.027727201159372
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 0.998404719333478,
+          "branch_2_alignment": 0.998434632207708,
+          "ambiguous": false
+        },
+        {
+          "theta_deg": 35.0,
+          "fast_n": {
+            "real": 1.476928786427484,
+            "imag": 0.017122521387825
+          },
+          "slow_n": {
+            "real": 1.725105779570894,
+            "imag": 0.028065075928879
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 0.998387725155093,
+          "branch_2_alignment": 0.998430259631238,
+          "ambiguous": false
+        },
+        {
+          "theta_deg": 45.0,
+          "fast_n": {
+            "real": 1.480914688057235,
+            "imag": 0.01764820168462
+          },
+          "slow_n": {
+            "real": 1.735036180851397,
+            "imag": 0.028353488287265
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 0.998497559465988,
+          "branch_2_alignment": 0.998537152915096,
+          "ambiguous": false
+        },
+        {
+          "theta_deg": 55.0,
+          "fast_n": {
+            "real": 1.486023625497956,
+            "imag": 0.018106325957845
+          },
+          "slow_n": {
+            "real": 1.744438245471904,
+            "imag": 0.028585803628022
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 0.998758832313382,
+          "branch_2_alignment": 0.998786098060553,
+          "ambiguous": false
+        }
+      ],
+      "metrics": {
+        "min_branch_alignment": 0.998387725155093,
+        "ambiguous_count": 0,
+        "max_residual": 1e-15,
+        "max_abs_epsilon_imag": 0.102931311267552,
+        "max_abs_epsilon_offdiag": 0.345906403121885
+      },
+      "fingerprint": "9a898036e098c9a9dc53a5fad3fadd6f21f14f31484d709beb28c1c9b2e12116"
+    },
+    {
+      "id": "biaxial_branch_orientation_05",
+      "orientation_index": 4,
+      "inputs": {
+        "orientation": [
+          [
+            {
+              "real": 0.645423449040573,
+              "imag": 0.0
+            },
+            {
+              "real": 0.715541752799933,
+              "imag": 0.0
+            },
+            {
+              "real": 0.267261241912424,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": -0.717137165600636,
+              "imag": 0.0
+            },
+            {
+              "real": 0.447213595499958,
+              "imag": 0.0
+            },
+            {
+              "real": 0.534522483824849,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 0.262950294053567,
+              "imag": 0.0
+            },
+            {
+              "real": -0.53665631459995,
+              "imag": 0.0
+            },
+            {
+              "real": 0.801783725737273,
+              "imag": 0.0
+            }
+          ]
+        ],
+        "epsilon_lab": [
+          [
+            {
+              "real": 2.553324571428571,
+              "imag": 0.067180571428571
+            },
+            {
+              "real": -0.407312546944341,
+              "imag": -0.02974296908995
+            },
+            {
+              "real": 0.040645327065296,
+              "imag": 0.014796381245399
+            }
+          ],
+          [
+            {
+              "real": -0.407312546944341,
+              "imag": -0.02974296908995
+            },
+            {
+              "real": 2.773104,
+              "imag": 0.081248
+            },
+            {
+              "real": -0.472760724136126,
+              "imag": -0.009824779168729
+            }
+          ],
+          [
+            {
+              "real": 0.040645327065296,
+              "imag": 0.014796381245399
+            },
+            {
+              "real": -0.472760724136126,
+              "imag": -0.009824779168729
+            },
+            {
+              "real": 3.353571428571429,
+              "imag": 0.091571428571429
+            }
+          ]
+        ],
+        "incident_index": {
+          "real": 1.0,
+          "imag": 0.01
+        },
+        "angles_deg": [
+          5.0,
+          15.0,
+          25.0,
+          35.0,
+          45.0,
+          55.0
+        ]
+      },
+      "steps": [
+        {
+          "theta_deg": 5.0,
+          "fast_n": {
+            "real": 1.496219701971701,
+            "imag": 0.014941215371037
+          },
+          "slow_n": {
+            "real": 1.736990508482311,
+            "imag": 0.029095312662724
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 1.0,
+          "branch_2_alignment": 1.0,
+          "ambiguous": false
+        },
+        {
+          "theta_deg": 15.0,
+          "fast_n": {
+            "real": 1.510730679688071,
+            "imag": 0.014652363257381
+          },
+          "slow_n": {
+            "real": 1.724820638362158,
+            "imag": 0.028742078685623
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 0.998246264326861,
+          "branch_2_alignment": 0.998342559769733,
+          "ambiguous": false
+        },
+        {
+          "theta_deg": 25.0,
+          "fast_n": {
+            "real": 1.528113815881149,
+            "imag": 0.014506563725825
+          },
+          "slow_n": {
+            "real": 1.713688459361059,
+            "imag": 0.02836540814409
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 0.998433087452528,
+          "branch_2_alignment": 0.998482014186877,
+          "ambiguous": false
+        },
+        {
+          "theta_deg": 35.0,
+          "fast_n": {
+            "real": 1.547057577310895,
+            "imag": 0.014525236632545
+          },
+          "slow_n": {
+            "real": 1.70387193315576,
+            "imag": 0.027957400970363
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 0.998556108606018,
+          "branch_2_alignment": 0.998563070592404,
+          "ambiguous": false
+        },
+        {
+          "theta_deg": 45.0,
+          "fast_n": {
+            "real": 1.565898869531838,
+            "imag": 0.014727590716041
+          },
+          "slow_n": {
+            "real": 1.69568607406138,
+            "imag": 0.027494505493296
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 0.998454784726132,
+          "branch_2_alignment": 0.998479853216073,
+          "ambiguous": false
+        },
+        {
+          "theta_deg": 55.0,
+          "fast_n": {
+            "real": 1.582830783279302,
+            "imag": 0.015132785872268
+          },
+          "slow_n": {
+            "real": 1.689471620329483,
+            "imag": 0.026937930792094
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 0.997957618243982,
+          "branch_2_alignment": 0.998121436310149,
+          "ambiguous": false
+        }
+      ],
+      "metrics": {
+        "min_branch_alignment": 0.997957618243982,
+        "ambiguous_count": 0,
+        "max_residual": 2e-15,
+        "max_abs_epsilon_imag": 0.091571428571429,
+        "max_abs_epsilon_offdiag": 0.47286280100197
+      },
+      "fingerprint": "6545615c12943159dbb9aa332cc73d12e888908efb7da87f982786a0fb0f3036"
+    },
+    {
+      "id": "biaxial_branch_orientation_06",
+      "orientation_index": 5,
+      "inputs": {
+        "orientation": [
+          [
+            {
+              "real": 0.712087582042561,
+              "imag": 0.0
+            },
+            {
+              "real": 0.585335492170842,
+              "imag": 0.0
+            },
+            {
+              "real": 0.387703026949619,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": -0.632059125372156,
+              "imag": 0.0
+            },
+            {
+              "real": 0.294037920561016,
+              "imag": 0.0
+            },
+            {
+              "real": 0.716967895589432,
+              "imag": 0.0
+            }
+          ],
+          [
+            {
+              "real": 0.305667364196056,
+              "imag": 0.0
+            },
+            {
+              "real": -0.755595171290336,
+              "imag": 0.0
+            },
+            {
+              "real": 0.579347391111899,
+              "imag": 0.0
+            }
+          ]
+        ],
+        "epsilon_lab": [
+          [
+            {
+              "real": 2.513054671811338,
+              "imag": 0.066502869711091
+            },
+            {
+              "real": -0.442810723244851,
+              "imag": -0.033104225361508
+            },
+            {
+              "real": -0.038618759998085,
+              "imag": 0.007201094742136
+            }
+          ],
+          [
+            {
+              "real": -0.442810723244851,
+              "imag": -0.033104225361508
+            },
+            {
+              "real": 3.112024409207123,
+              "imag": 0.089684081579355
+            },
+            {
+              "real": -0.505125222725225,
+              "imag": -0.007550354062086
+            }
+          ],
+          [
+            {
+              "real": -0.038618759998085,
+              "imag": 0.007201094742136
+            },
+            {
+              "real": -0.505125222725225,
+              "imag": -0.007550354062086
+            },
+            {
+              "real": 3.054920918981541,
+              "imag": 0.083813048709554
+            }
+          ]
+        ],
+        "incident_index": {
+          "real": 1.0,
+          "imag": 0.01
+        },
+        "angles_deg": [
+          5.0,
+          15.0,
+          25.0,
+          35.0,
+          45.0,
+          55.0
+        ]
+      },
+      "steps": [
+        {
+          "theta_deg": 5.0,
+          "fast_n": {
+            "real": 1.508473894195331,
+            "imag": 0.014792441430402
+          },
+          "slow_n": {
+            "real": 1.807671421786445,
+            "imag": 0.030620333051274
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 1.0,
+          "branch_2_alignment": 1.0,
+          "ambiguous": false
+        },
+        {
+          "theta_deg": 15.0,
+          "fast_n": {
+            "real": 1.525956193042971,
+            "imag": 0.014614051107195
+          },
+          "slow_n": {
+            "real": 1.795570467759169,
+            "imag": 0.03042715267332
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 0.996959925273685,
+          "branch_2_alignment": 0.998407025988639,
+          "ambiguous": false
+        },
+        {
+          "theta_deg": 25.0,
+          "fast_n": {
+            "real": 1.545806955383406,
+            "imag": 0.014560400127598
+          },
+          "slow_n": {
+            "real": 1.783605660785728,
+            "imag": 0.030200582076337
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 0.9970478647296,
+          "branch_2_alignment": 0.998487332649141,
+          "ambiguous": false
+        },
+        {
+          "theta_deg": 35.0,
+          "fast_n": {
+            "real": 1.566736540872783,
+            "imag": 0.014626205120575
+          },
+          "slow_n": {
+            "real": 1.772098821454419,
+            "imag": 0.029948074969457
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 0.997225630052204,
+          "branch_2_alignment": 0.998603721476834,
+          "ambiguous": false
+        },
+        {
+          "theta_deg": 45.0,
+          "fast_n": {
+            "real": 1.587269663940381,
+            "imag": 0.014794216495305
+          },
+          "slow_n": {
+            "real": 1.761427468871112,
+            "imag": 0.029677440569211
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 0.997494734257323,
+          "branch_2_alignment": 0.99875197700545,
+          "ambiguous": false
+        },
+        {
+          "theta_deg": 55.0,
+          "fast_n": {
+            "real": 1.605888080091975,
+            "imag": 0.015036918355312
+          },
+          "slow_n": {
+            "real": 1.752035756730389,
+            "imag": 0.029397555717019
+          },
+          "branch_1_source_label": "fast",
+          "branch_2_source_label": "slow",
+          "branch_1_alignment": 0.99785793298041,
+          "branch_2_alignment": 0.998931586019656,
+          "ambiguous": false
+        }
+      ],
+      "metrics": {
+        "min_branch_alignment": 0.996959925273685,
+        "ambiguous_count": 0,
+        "max_residual": 2e-15,
+        "max_abs_epsilon_imag": 0.089684081579355,
+        "max_abs_epsilon_offdiag": 0.505181648993381
+      },
+      "fingerprint": "5e6b09e5d2252b7785fc1edad2bfbbc49a6c991e6ae6d10dc3556101ee21b58b"
+    }
+  ]
+}

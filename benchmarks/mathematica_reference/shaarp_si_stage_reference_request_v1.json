@@ -1,0 +1,2033 @@
+{
+  "schema_version": 1,
+  "source": "SHAARP.py request for Mathematica SHAARP.si stage-level reference export",
+  "status": "reference_values_requested_not_exported",
+  "validation_claim": false,
+  "source_benchmark_file": "benchmarks/solver_stage_benchmarks_v1.json",
+  "source_case_count": 36,
+  "case_count": 36,
+  "coverage_summary": {
+    "angles_deg": [
+      0.0,
+      8.0,
+      17.5,
+      29.0,
+      41.0,
+      55.0
+    ],
+    "has_normal_incidence": true,
+    "max_angle_deg": 55.0,
+    "orientation_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "orientation_count": 6,
+    "has_s_polarization": true,
+    "has_p_polarization": true,
+    "all_cases_have_complex_epsilon": true,
+    "all_cases_have_complex_2omega_epsilon": true,
+    "all_cases_have_nondiagonal_epsilon": true,
+    "all_cases_have_complex_d": true,
+    "phase_matching_like_cases_in_this_batch": false,
+    "trivial_real_isotropic_cases_in_this_batch": false
+  },
+  "mathematica_notebook_source": "Github/SHAARP/SHAARP_V1.03/SHAARP_V1.03.nb",
+  "extraction_evidence": [
+    "benchmarks/mathematica_reference/shaarp_si_extraction_plan_v1.json",
+    "benchmarks/mathematica_reference/shaarp_si_candidate_region_symbol_audit.json",
+    "benchmarks/mathematica_reference/shaarp_si_numerical_stage_snippets.json",
+    "benchmarks/mathematica_reference/shaarp_si_refined_extraction_map_v1.json",
+    "benchmarks/mathematica_reference/shaarp_si_refined_region_texts_v1.json",
+    "benchmarks/mathematica_reference/shaarp_si_stage_symbol_sources_v1.json",
+    "benchmarks/mathematica_reference/shaarp_si_symbol_gap_audit_v1.json"
+  ],
+  "requested_symbol_resolution": {
+    "ThetaExt": {
+      "status": "mapped_to_refined_region_sources",
+      "source_count": 2,
+      "regions": [
+        "fresnel_sweep_angle_root_assignments",
+        "omega_angle_root_assignments_active_path"
+      ]
+    },
+    "ThetaOrd": {
+      "status": "mapped_to_refined_region_sources",
+      "source_count": 2,
+      "regions": [
+        "fresnel_sweep_angle_root_assignments",
+        "omega_angle_root_assignments_active_path"
+      ]
+    },
+    "nwNumExt": {
+      "status": "mapped_to_refined_region_sources",
+      "source_count": 4,
+      "regions": [
+        "omega_angle_roots_active_numerical_path",
+        "omega_transmitted_field_directions_active_path"
+      ]
+    },
+    "nwNumOrd": {
+      "status": "mapped_to_refined_region_sources",
+      "source_count": 5,
+      "regions": [
+        "omega_angle_roots_active_numerical_path",
+        "omega_angle_roots_initial_path",
+        "omega_transmitted_field_directions_active_path"
+      ]
+    },
+    "EwrootsNum": {
+      "status": "mapped_to_refined_region_sources",
+      "source_count": 1,
+      "regions": [
+        "omega_fresnel_equations_active_path"
+      ]
+    },
+    "E2wroots": {
+      "status": "mapped_to_refined_region_sources",
+      "source_count": 1,
+      "regions": [
+        "two_omega_boundary_solution"
+      ]
+    },
+    "ERpNum": {
+      "status": "mapped_to_refined_region_sources",
+      "source_count": 1,
+      "regions": [
+        "omega_fresnel_substitution_active_path"
+      ]
+    },
+    "ERsNum": {
+      "status": "mapped_to_refined_region_sources",
+      "source_count": 1,
+      "regions": [
+        "omega_fresnel_substitution_active_path"
+      ]
+    },
+    "ER2w": {
+      "status": "mapped_to_refined_region_sources",
+      "source_count": 1,
+      "regions": [
+        "numerical_coefficients_and_two_omega_field_setup"
+      ]
+    },
+    "HR2w": {
+      "status": "mapped_to_refined_region_sources",
+      "source_count": 1,
+      "regions": [
+        "numerical_coefficients_and_two_omega_field_setup"
+      ]
+    },
+    "P2e": {
+      "status": "not_mapped_to_exact_refined_assignment",
+      "classification": "substring_only_of_active_pnl_symbols",
+      "assigned_symbols_containing_name": [
+        "P2eo"
+      ]
+    },
+    "P2o": {
+      "status": "mapped_to_refined_region_sources",
+      "source_count": 2,
+      "regions": [
+        "active_complex_field_pnl_block",
+        "commented_real_field_pnl_block"
+      ]
+    },
+    "Peo": {
+      "status": "not_mapped_to_exact_refined_assignment",
+      "classification": "substring_only_of_active_pnl_symbols",
+      "assigned_symbols_containing_name": [
+        "Peoo"
+      ]
+    },
+    "P2eo": {
+      "status": "mapped_to_refined_region_sources",
+      "source_count": 2,
+      "regions": [
+        "active_complex_field_pnl_block",
+        "commented_real_field_pnl_block"
+      ]
+    },
+    "Peoo": {
+      "status": "mapped_to_refined_region_sources",
+      "source_count": 2,
+      "regions": [
+        "active_complex_field_pnl_block",
+        "commented_real_field_pnl_block"
+      ]
+    },
+    "Croots": {
+      "status": "mapped_to_refined_region_sources",
+      "source_count": 1,
+      "regions": [
+        "inhomogeneous_particular_solution_coefficients"
+      ]
+    },
+    "ETweo": {
+      "status": "mapped_to_refined_region_sources",
+      "source_count": 2,
+      "regions": [
+        "fresnel_sweep_table_rows",
+        "omega_fresnel_substitution_active_path"
+      ]
+    },
+    "ETwo": {
+      "status": "mapped_to_refined_region_sources",
+      "source_count": 2,
+      "regions": [
+        "fresnel_sweep_table_rows",
+        "omega_fresnel_substitution_active_path"
+      ]
+    },
+    "Vktweo": {
+      "status": "mapped_to_refined_region_sources",
+      "source_count": 1,
+      "regions": [
+        "omega_fresnel_substitution_active_path"
+      ]
+    },
+    "Vktwo": {
+      "status": "mapped_to_refined_region_sources",
+      "source_count": 1,
+      "regions": [
+        "omega_fresnel_substitution_active_path"
+      ]
+    },
+    "RSignalCrystal": {
+      "status": "mapped_to_refined_region_sources",
+      "source_count": 2,
+      "regions": [
+        "reflected_signal_and_basic_intensity"
+      ]
+    },
+    "I2": {
+      "status": "not_mapped_to_exact_refined_assignment",
+      "classification": "represented_by_specific_intensity_functions_not_exact_symbol",
+      "assigned_symbols_containing_name": [
+        "I2wParallel",
+        "I2wPerpdicular",
+        "I2wx",
+        "I2wy",
+        "MaxI2w",
+        "MaxI2wParallel",
+        "MaxI2wPerpdicular",
+        "MaxI2wx",
+        "MaxI2wy"
+      ]
+    },
+    "Fresnel": {
+      "status": "mapped_to_refined_region_sources",
+      "source_count": 6,
+      "regions": [
+        "fresnel_sweep_table_initialization",
+        "fresnel_sweep_table_rows"
+      ]
+    }
+  },
+  "requested_mathematica_symbols": [
+    "ThetaExt",
+    "ThetaOrd",
+    "nwNumExt",
+    "nwNumOrd",
+    "EwrootsNum",
+    "E2wroots",
+    "ERpNum",
+    "ERsNum",
+    "ER2w",
+    "HR2w",
+    "P2e",
+    "P2o",
+    "Peo",
+    "P2eo",
+    "Peoo",
+    "Croots",
+    "ETweo",
+    "ETwo",
+    "Vktweo",
+    "Vktwo",
+    "RSignalCrystal",
+    "I2",
+    "Fresnel"
+  ],
+  "requested_outputs": [
+    {
+      "name": "ThetaExt",
+      "source": "SHAARP.si cell-4 numerical candidate symbol",
+      "required": true
+    },
+    {
+      "name": "ThetaOrd",
+      "source": "SHAARP.si cell-4 numerical candidate symbol",
+      "required": true
+    },
+    {
+      "name": "nwNumExt",
+      "source": "SHAARP.si cell-4 numerical candidate symbol",
+      "required": true
+    },
+    {
+      "name": "nwNumOrd",
+      "source": "SHAARP.si cell-4 numerical candidate symbol",
+      "required": true
+    },
+    {
+      "name": "EwrootsNum",
+      "source": "SHAARP.si cell-4 numerical candidate symbol",
+      "required": true
+    },
+    {
+      "name": "E2wroots",
+      "source": "SHAARP.si cell-4 numerical candidate symbol",
+      "required": true
+    },
+    {
+      "name": "ERpNum",
+      "source": "SHAARP.si cell-4 numerical candidate symbol",
+      "required": true
+    },
+    {
+      "name": "ERsNum",
+      "source": "SHAARP.si cell-4 numerical candidate symbol",
+      "required": true
+    },
+    {
+      "name": "ER2w",
+      "source": "SHAARP.si cell-4 numerical candidate symbol",
+      "required": true
+    },
+    {
+      "name": "HR2w",
+      "source": "SHAARP.si cell-4 numerical candidate symbol",
+      "required": true
+    },
+    {
+      "name": "P2e",
+      "source": "SHAARP.si cell-4 numerical candidate symbol",
+      "required": true
+    },
+    {
+      "name": "P2o",
+      "source": "SHAARP.si cell-4 numerical candidate symbol",
+      "required": true
+    },
+    {
+      "name": "Peo",
+      "source": "SHAARP.si cell-4 numerical candidate symbol",
+      "required": true
+    },
+    {
+      "name": "P2eo",
+      "source": "SHAARP.si cell-4 numerical candidate symbol",
+      "required": true
+    },
+    {
+      "name": "Peoo",
+      "source": "SHAARP.si cell-4 numerical candidate symbol",
+      "required": true
+    },
+    {
+      "name": "Croots",
+      "source": "SHAARP.si cell-4 numerical candidate symbol",
+      "required": true
+    },
+    {
+      "name": "ETweo",
+      "source": "SHAARP.si cell-4 numerical candidate symbol",
+      "required": true
+    },
+    {
+      "name": "ETwo",
+      "source": "SHAARP.si cell-4 numerical candidate symbol",
+      "required": true
+    },
+    {
+      "name": "Vktweo",
+      "source": "SHAARP.si cell-4 numerical candidate symbol",
+      "required": true
+    },
+    {
+      "name": "Vktwo",
+      "source": "SHAARP.si cell-4 numerical candidate symbol",
+      "required": true
+    },
+    {
+      "name": "RSignalCrystal",
+      "source": "SHAARP.si cell-4 numerical candidate symbol",
+      "required": true
+    },
+    {
+      "name": "I2",
+      "source": "SHAARP.si cell-4 numerical candidate symbol",
+      "required": true
+    },
+    {
+      "name": "Fresnel",
+      "source": "SHAARP.si cell-4 numerical candidate symbol",
+      "required": true
+    }
+  ],
+  "python_comparison_targets": [
+    "coefficients",
+    "reflected_total_2omega_electric",
+    "transmitted_total_2omega_electric",
+    "boundary_residual"
+  ],
+  "required_follow_up_case_families": [
+    {
+      "family_id": "trivial_real_isotropic_normal_incidence",
+      "reason": "Required baseline sanity check with simple normal-incidence real tensors and zero/nonzero SHG.",
+      "status": "queued_not_in_solver_stage_batch"
+    },
+    {
+      "family_id": "simple_uniaxial_ordinary_extraordinary_identity",
+      "reason": "Required to catch ordinary/extraordinary recognition and nonlinear-polarization branch swaps.",
+      "status": "queued_not_in_solver_stage_batch"
+    },
+    {
+      "family_id": "phase_matching_like_epsilon_omega_equals_epsilon_2omega",
+      "reason": "Required extreme case for singular or near-singular inhomogeneous-field behavior.",
+      "status": "queued_not_in_solver_stage_batch"
+    },
+    {
+      "family_id": "biaxial_branch_ambiguity",
+      "reason": "Required to validate branch identity without forcing ordinary/extraordinary labels where not physical.",
+      "status": "queued_not_in_solver_stage_batch"
+    },
+    {
+      "family_id": "nontrivial_reciprocal_miller_all_indices_nonzero",
+      "reason": "Required to cover reciprocal-space Miller conversion with lattice-aware orientation.",
+      "status": "queued_not_in_solver_stage_batch"
+    }
+  ],
+  "notes": [
+    "This is a request/contract for Mathematica export, not exported Mathematica data.",
+    "The requested symbols come from SHAARP.si front-end text symbol audits and numerical stage snippets.",
+    "Each exported case must preserve exact SHAARP.si symbol meanings and include enough metadata to map symbols to Python stage outputs.",
+    "Agreement requires value-by-value comparison after Mathematica exports are produced."
+  ],
+  "cases": [
+    {
+      "id": "solver_stage_01",
+      "theta_deg": 0.0,
+      "incident_polarization": "s",
+      "orientation_index": 0,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_02",
+      "theta_deg": 8.0,
+      "incident_polarization": "p",
+      "orientation_index": 0,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_03",
+      "theta_deg": 17.5,
+      "incident_polarization": "s",
+      "orientation_index": 0,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_04",
+      "theta_deg": 29.0,
+      "incident_polarization": "p",
+      "orientation_index": 0,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_05",
+      "theta_deg": 41.0,
+      "incident_polarization": "s",
+      "orientation_index": 0,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_06",
+      "theta_deg": 55.0,
+      "incident_polarization": "p",
+      "orientation_index": 0,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_07",
+      "theta_deg": 0.0,
+      "incident_polarization": "p",
+      "orientation_index": 1,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_08",
+      "theta_deg": 8.0,
+      "incident_polarization": "s",
+      "orientation_index": 1,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_09",
+      "theta_deg": 17.5,
+      "incident_polarization": "p",
+      "orientation_index": 1,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_10",
+      "theta_deg": 29.0,
+      "incident_polarization": "s",
+      "orientation_index": 1,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_11",
+      "theta_deg": 41.0,
+      "incident_polarization": "p",
+      "orientation_index": 1,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_12",
+      "theta_deg": 55.0,
+      "incident_polarization": "s",
+      "orientation_index": 1,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_13",
+      "theta_deg": 0.0,
+      "incident_polarization": "s",
+      "orientation_index": 2,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_14",
+      "theta_deg": 8.0,
+      "incident_polarization": "p",
+      "orientation_index": 2,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_15",
+      "theta_deg": 17.5,
+      "incident_polarization": "s",
+      "orientation_index": 2,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_16",
+      "theta_deg": 29.0,
+      "incident_polarization": "p",
+      "orientation_index": 2,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_17",
+      "theta_deg": 41.0,
+      "incident_polarization": "s",
+      "orientation_index": 2,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_18",
+      "theta_deg": 55.0,
+      "incident_polarization": "p",
+      "orientation_index": 2,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_19",
+      "theta_deg": 0.0,
+      "incident_polarization": "p",
+      "orientation_index": 3,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_20",
+      "theta_deg": 8.0,
+      "incident_polarization": "s",
+      "orientation_index": 3,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_21",
+      "theta_deg": 17.5,
+      "incident_polarization": "p",
+      "orientation_index": 3,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_22",
+      "theta_deg": 29.0,
+      "incident_polarization": "s",
+      "orientation_index": 3,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_23",
+      "theta_deg": 41.0,
+      "incident_polarization": "p",
+      "orientation_index": 3,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_24",
+      "theta_deg": 55.0,
+      "incident_polarization": "s",
+      "orientation_index": 3,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_25",
+      "theta_deg": 0.0,
+      "incident_polarization": "s",
+      "orientation_index": 4,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_26",
+      "theta_deg": 8.0,
+      "incident_polarization": "p",
+      "orientation_index": 4,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_27",
+      "theta_deg": 17.5,
+      "incident_polarization": "s",
+      "orientation_index": 4,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_28",
+      "theta_deg": 29.0,
+      "incident_polarization": "p",
+      "orientation_index": 4,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_29",
+      "theta_deg": 41.0,
+      "incident_polarization": "s",
+      "orientation_index": 4,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_30",
+      "theta_deg": 55.0,
+      "incident_polarization": "p",
+      "orientation_index": 4,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_31",
+      "theta_deg": 0.0,
+      "incident_polarization": "p",
+      "orientation_index": 5,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_32",
+      "theta_deg": 8.0,
+      "incident_polarization": "s",
+      "orientation_index": 5,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_33",
+      "theta_deg": 17.5,
+      "incident_polarization": "p",
+      "orientation_index": 5,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_34",
+      "theta_deg": 29.0,
+      "incident_polarization": "s",
+      "orientation_index": 5,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_35",
+      "theta_deg": 41.0,
+      "incident_polarization": "p",
+      "orientation_index": 5,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    },
+    {
+      "id": "solver_stage_36",
+      "theta_deg": 55.0,
+      "incident_polarization": "s",
+      "orientation_index": 5,
+      "input_summary": {
+        "has_complex_epsilon_omega": true,
+        "has_complex_epsilon_2omega": true,
+        "has_nondiagonal_epsilon_omega": true,
+        "has_nondiagonal_epsilon_2omega": true,
+        "has_complex_d_voigt": true
+      },
+      "requested_mathematica_symbols": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "python_output_keys_available_now": [
+        "coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric",
+        "boundary_residual"
+      ],
+      "mathematica_outputs_status": "not_exported"
+    }
+  ]
+}

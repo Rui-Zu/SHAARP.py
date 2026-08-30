@@ -1,0 +1,698 @@
+{
+  "atol": 1e-09,
+  "case_count": 36,
+  "comparison": "symbolic_computePNL_vs_live_wolfram_si_pnl_stage_P2o_P2eo_Peoo",
+  "failing_case_count": 0,
+  "full_symbolic_pnl_agreement_claimed": true,
+  "max_abs_error_over_all_cases": 1.1443916996305594e-16,
+  "passing_case_count": 36,
+  "results": [
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 2.7755575615628914e-17,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 2.7939250479261703e-20,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 1.734723475976807e-18,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_01",
+      "max_abs_error": 2.7755575615628914e-17,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 3.925231146709438e-17,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 2.710505431213761e-20,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 1.734723475976807e-18,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_02",
+      "max_abs_error": 3.925231146709438e-17,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 7.666467083416871e-20,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 2.7755575615628914e-17,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 6.938893903907228e-18,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_03",
+      "max_abs_error": 2.7755575615628914e-17,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 5.551115123125783e-17,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 5.421010862427522e-20,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 3.469446951953614e-18,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_04",
+      "max_abs_error": 5.551115123125783e-17,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 2.168404344971009e-19,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 1.5515838457795457e-17,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 3.496446946337351e-18,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_05",
+      "max_abs_error": 1.5515838457795457e-17,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 2.7755575615628914e-17,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 8.940560153363745e-19,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 9.813077866773595e-18,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_06",
+      "max_abs_error": 2.7755575615628914e-17,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 8.741117365843378e-19,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 5.594315114139762e-17,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 8.673617379884035e-18,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_07",
+      "max_abs_error": 5.594315114139762e-17,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 8.673617379884035e-19,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 2.8609792490763984e-17,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 1.3884562417838567e-17,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_08",
+      "max_abs_error": 2.8609792490763984e-17,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 5.647850449853784e-17,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 8.673617379884035e-19,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 3.469446951953614e-18,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_09",
+      "max_abs_error": 5.647850449853784e-17,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 4.336808689942018e-19,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 1.1188630228279524e-16,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 6.938893903907228e-18,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_10",
+      "max_abs_error": 1.1188630228279524e-16,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 2.7755575615628914e-17,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 1.0164395367051604e-19,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 1.734723475976807e-18,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_11",
+      "max_abs_error": 2.7755575615628914e-17,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 1.0842021724855044e-19,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 1.3877787807814457e-17,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 7.152448122690996e-18,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_12",
+      "max_abs_error": 1.3877787807814457e-17,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 2.0888836804026048e-17,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 1.1443916996305594e-16,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 1.1443916996305594e-16,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_13",
+      "max_abs_error": 1.1443916996305594e-16,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 1.1102230246251565e-16,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 3.925231146709438e-17,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 1.1102230246251565e-16,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_14",
+      "max_abs_error": 1.1102230246251565e-16,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 1.939479807224432e-18,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 5.721958498152797e-17,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 2.7755575615628914e-17,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_15",
+      "max_abs_error": 5.721958498152797e-17,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 6.206335383118183e-17,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 7.757919228897728e-18,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 2.8609792490763984e-17,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_16",
+      "max_abs_error": 6.206335383118183e-17,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 1.3877787807814457e-17,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 3.1031676915590914e-17,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 5.551115123125783e-17,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_17",
+      "max_abs_error": 5.551115123125783e-17,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 8.441528768080323e-17,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 2.7755575615628914e-17,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 1.962615573354719e-17,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_18",
+      "max_abs_error": 8.441528768080323e-17,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 1.5515838457795457e-17,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 2.7755575615628914e-17,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 5.551115123125783e-17,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_19",
+      "max_abs_error": 5.551115123125783e-17,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 1.1102230246251565e-16,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 4.177767360805209e-17,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 0.0,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_20",
+      "max_abs_error": 1.1102230246251565e-16,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 6.938893903907228e-18,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 5.551115123125783e-17,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 2.7755575615628914e-17,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_21",
+      "max_abs_error": 5.551115123125783e-17,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 1.3877787807814457e-17,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 2.7755575615628914e-17,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 3.1031676915590914e-17,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_22",
+      "max_abs_error": 3.1031676915590914e-17,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 4.3885418357208765e-17,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 2.809234570782673e-17,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 5.551115123125783e-17,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_23",
+      "max_abs_error": 5.551115123125783e-17,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 2.7755575615628914e-17,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 3.469446951953614e-17,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 2.7755575615628914e-17,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_24",
+      "max_abs_error": 3.469446951953614e-17,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 3.1031676915590914e-17,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 1.3877787807814457e-17,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 2.7755575615628914e-17,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_25",
+      "max_abs_error": 3.1031676915590914e-17,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 4.3885418357208765e-17,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 2.964296775167217e-17,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 5.551115123125783e-17,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_26",
+      "max_abs_error": 5.551115123125783e-17,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 2.7755575615628914e-17,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 5.551115123125783e-17,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 5.721958498152797e-17,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_27",
+      "max_abs_error": 5.721958498152797e-17,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 3.1031676915590914e-17,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 2.964296775167217e-17,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 5.721958498152797e-17,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_28",
+      "max_abs_error": 5.721958498152797e-17,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 1.5515838457795457e-17,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 1.4304896245381992e-17,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 3.1031676915590914e-17,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_29",
+      "max_abs_error": 3.1031676915590914e-17,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 5.551115123125783e-17,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 2.797157557069881e-17,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 1.5515838457795457e-17,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_30",
+      "max_abs_error": 5.551115123125783e-17,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 1.4304896245381992e-17,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 2.7755575615628914e-17,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 5.721958498152797e-17,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_31",
+      "max_abs_error": 5.721958498152797e-17,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 7.757919228897728e-18,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 5.721958498152797e-17,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 1.962615573354719e-17,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_32",
+      "max_abs_error": 5.721958498152797e-17,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 3.1031676915590914e-17,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 5.551284527130373e-17,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 6.938893903907228e-18,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_33",
+      "max_abs_error": 5.551284527130373e-17,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 1.3877787807814457e-17,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 1.5922644930580816e-17,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 1.3877787807814457e-17,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_34",
+      "max_abs_error": 1.5922644930580816e-17,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 2.7755575615628914e-17,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 2.797157557069881e-17,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 2.8609792490763984e-17,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_35",
+      "max_abs_error": 2.8609792490763984e-17,
+      "passed": true
+    },
+    {
+      "components": {
+        "P2eo": {
+          "max_abs_error": 1.3877787807814457e-17,
+          "passed": true
+        },
+        "P2o": {
+          "max_abs_error": 1.3877787807814457e-17,
+          "passed": true
+        },
+        "Peoo": {
+          "max_abs_error": 5.594315114139762e-17,
+          "passed": true
+        }
+      },
+      "id": "solver_stage_36",
+      "max_abs_error": 5.594315114139762e-17,
+      "passed": true
+    }
+  ],
+  "rtol": 1e-09,
+  "source": "Mathematica SHAARP.si active complex PNL snippet stage reference",
+  "status": "symbolic_pnl_matches_live_wolfram"
+}

@@ -1,0 +1,454 @@
+{
+  "atol": 1e-09,
+  "case_count": 20,
+  "comparison": "symbolic_single_interface_solveInhom_vs_live_wolfram_numeric",
+  "failing_case_count": 0,
+  "full_symbolic_solve_inhom_agreement_claimed": true,
+  "max_abs_error_over_all_cases": 1.082944113680789e-12,
+  "passing_case_count": 20,
+  "results": [
+    {
+      "components": {
+        "ee": {
+          "max_abs_error": 9.777748521290452e-17,
+          "max_rel_error": 3.971523392670278e-15,
+          "passed": true
+        },
+        "eo": {
+          "max_abs_error": 6.237289866329941e-16,
+          "max_rel_error": 3.7357979061863956e-15,
+          "passed": true
+        },
+        "oo": {
+          "max_abs_error": 4.47545209131181e-16,
+          "max_rel_error": 1.4321910482584532e-15,
+          "passed": true
+        }
+      },
+      "id": "solve_inhom_01",
+      "max_abs_error": 6.237289866329941e-16,
+      "passed": true
+    },
+    {
+      "components": {
+        "ee": {
+          "max_abs_error": 4.344434768182728e-16,
+          "max_rel_error": 4.329921029384832e-15,
+          "passed": true
+        },
+        "eo": {
+          "max_abs_error": 2.8761861709782445e-15,
+          "max_rel_error": 5.599737745218714e-15,
+          "passed": true
+        },
+        "oo": {
+          "max_abs_error": 1.2474579732659882e-15,
+          "max_rel_error": 1.848545543186941e-15,
+          "passed": true
+        }
+      },
+      "id": "solve_inhom_02",
+      "max_abs_error": 2.8761861709782445e-15,
+      "passed": true
+    },
+    {
+      "components": {
+        "ee": {
+          "max_abs_error": 7.850462293418876e-17,
+          "max_rel_error": 2.5565440520627664e-16,
+          "passed": true
+        },
+        "eo": {
+          "max_abs_error": 1.5700924586837752e-16,
+          "max_rel_error": 1.3806890505070935e-16,
+          "passed": true
+        },
+        "oo": {
+          "max_abs_error": 5.551115123125783e-16,
+          "max_rel_error": 4.379209789924159e-16,
+          "passed": true
+        }
+      },
+      "id": "solve_inhom_03",
+      "max_abs_error": 5.551115123125783e-16,
+      "passed": true
+    },
+    {
+      "components": {
+        "ee": {
+          "max_abs_error": 1.884928529521895e-15,
+          "max_rel_error": 2.712990480756664e-15,
+          "passed": true
+        },
+        "eo": {
+          "max_abs_error": 3.800791407964896e-15,
+          "max_rel_error": 1.5698356213303028e-15,
+          "passed": true
+        },
+        "oo": {
+          "max_abs_error": 1.831026719408895e-15,
+          "max_rel_error": 8.565191535617269e-16,
+          "passed": true
+        }
+      },
+      "id": "solve_inhom_04",
+      "max_abs_error": 3.800791407964896e-15,
+      "passed": true
+    },
+    {
+      "components": {
+        "ee": {
+          "max_abs_error": 7.615353076869676e-15,
+          "max_rel_error": 5.813797333494183e-15,
+          "passed": true
+        },
+        "eo": {
+          "max_abs_error": 1.4567209187227738e-14,
+          "max_rel_error": 3.510667044099427e-15,
+          "passed": true
+        },
+        "oo": {
+          "max_abs_error": 1.7183727697607988e-14,
+          "max_rel_error": 5.171621079800484e-15,
+          "passed": true
+        }
+      },
+      "id": "solve_inhom_05",
+      "max_abs_error": 1.7183727697607988e-14,
+      "passed": true
+    },
+    {
+      "components": {
+        "ee": {
+          "max_abs_error": 9.930136612989092e-16,
+          "max_rel_error": 4.525785674228598e-16,
+          "passed": true
+        },
+        "eo": {
+          "max_abs_error": 2.3687070710377943e-14,
+          "max_rel_error": 3.646301804346706e-15,
+          "passed": true
+        },
+        "oo": {
+          "max_abs_error": 2.4665947643496394e-14,
+          "max_rel_error": 5.083924374916116e-15,
+          "passed": true
+        }
+      },
+      "id": "solve_inhom_06",
+      "max_abs_error": 2.4665947643496394e-14,
+      "passed": true
+    },
+    {
+      "components": {
+        "ee": {
+          "max_abs_error": 1.7568205063913642e-14,
+          "max_rel_error": 5.194200488386481e-15,
+          "passed": true
+        },
+        "eo": {
+          "max_abs_error": 7.646592070653528e-14,
+          "max_rel_error": 8.031309988205863e-15,
+          "passed": true
+        },
+        "oo": {
+          "max_abs_error": 2.6645352591003757e-15,
+          "max_rel_error": 3.9217672043254944e-16,
+          "passed": true
+        }
+      },
+      "id": "solve_inhom_07",
+      "max_abs_error": 7.646592070653528e-14,
+      "passed": true
+    },
+    {
+      "components": {
+        "ee": {
+          "max_abs_error": 4.775766003711081e-14,
+          "max_rel_error": 9.736795095378413e-15,
+          "passed": true
+        },
+        "eo": {
+          "max_abs_error": 6.667848274987683e-14,
+          "max_rel_error": 5.0228380047095546e-15,
+          "passed": true
+        },
+        "oo": {
+          "max_abs_error": 2.6645352591003757e-14,
+          "max_rel_error": 2.9480702567945905e-15,
+          "passed": true
+        }
+      },
+      "id": "solve_inhom_08",
+      "max_abs_error": 6.667848274987683e-14,
+      "passed": true
+    },
+    {
+      "components": {
+        "ee": {
+          "max_abs_error": 1.8452761694870047e-15,
+          "max_rel_error": 3.7928232966180236e-16,
+          "passed": true
+        },
+        "eo": {
+          "max_abs_error": 1.6304788408914757e-13,
+          "max_rel_error": 9.158773046260492e-15,
+          "passed": true
+        },
+        "oo": {
+          "max_abs_error": 9.386579489043641e-14,
+          "max_rel_error": 8.001639874237756e-15,
+          "passed": true
+        }
+      },
+      "id": "solve_inhom_09",
+      "max_abs_error": 1.6304788408914757e-13,
+      "passed": true
+    },
+    {
+      "components": {
+        "ee": {
+          "max_abs_error": 3.69662589812534e-14,
+          "max_rel_error": 4.08145930167141e-15,
+          "passed": true
+        },
+        "eo": {
+          "max_abs_error": 1.103630933628286e-13,
+          "max_rel_error": 4.769451916964166e-15,
+          "passed": true
+        },
+        "oo": {
+          "max_abs_error": 1.1621993647572033e-13,
+          "max_rel_error": 7.830062716701092e-15,
+          "passed": true
+        }
+      },
+      "id": "solve_inhom_10",
+      "max_abs_error": 1.1621993647572033e-13,
+      "passed": true
+    },
+    {
+      "components": {
+        "ee": {
+          "max_abs_error": 6.041082488080018e-14,
+          "max_rel_error": 5.150893424567085e-15,
+          "passed": true
+        },
+        "eo": {
+          "max_abs_error": 1.3528330643921842e-13,
+          "max_rel_error": 4.614195649231669e-15,
+          "passed": true
+        },
+        "oo": {
+          "max_abs_error": 3.66205343881779e-15,
+          "max_rel_error": 1.99170139777586e-16,
+          "passed": true
+        }
+      },
+      "id": "solve_inhom_11",
+      "max_abs_error": 1.3528330643921842e-13,
+      "passed": true
+    },
+    {
+      "components": {
+        "ee": {
+          "max_abs_error": 5.339468714465245e-15,
+          "max_rel_error": 4.96023639891127e-16,
+          "passed": true
+        },
+        "eo": {
+          "max_abs_error": 5.767835034141583e-13,
+          "max_rel_error": 1.586037698288307e-14,
+          "passed": true
+        },
+        "oo": {
+          "max_abs_error": 6.488567369739287e-14,
+          "max_rel_error": 2.8997564822820506e-15,
+          "passed": true
+        }
+      },
+      "id": "solve_inhom_12",
+      "max_abs_error": 5.767835034141583e-13,
+      "passed": true
+    },
+    {
+      "components": {
+        "ee": {
+          "max_abs_error": 9.342459135897562e-14,
+          "max_rel_error": 5.091942026166301e-15,
+          "passed": true
+        },
+        "eo": {
+          "max_abs_error": 5.076310700690962e-13,
+          "max_rel_error": 1.1456229011717202e-14,
+          "passed": true
+        },
+        "oo": {
+          "max_abs_error": 3.447059237218225e-14,
+          "max_rel_error": 1.2853363253823218e-15,
+          "passed": true
+        }
+      },
+      "id": "solve_inhom_13",
+      "max_abs_error": 5.076310700690962e-13,
+      "passed": true
+    },
+    {
+      "components": {
+        "ee": {
+          "max_abs_error": 3.580361673049448e-15,
+          "max_rel_error": 2.1669417843589527e-16,
+          "passed": true
+        },
+        "eo": {
+          "max_abs_error": 2.1482170038296686e-14,
+          "max_rel_error": 4.3120480355539034e-16,
+          "passed": true
+        },
+        "oo": {
+          "max_abs_error": 1.432144669219779e-14,
+          "max_rel_error": 4.1140667535207776e-16,
+          "passed": true
+        }
+      },
+      "id": "solve_inhom_14",
+      "max_abs_error": 2.1482170038296686e-14,
+      "passed": true
+    },
+    {
+      "components": {
+        "ee": {
+          "max_abs_error": 3.568292035180542e-15,
+          "max_rel_error": 1.80247986662259e-16,
+          "passed": true
+        },
+        "eo": {
+          "max_abs_error": 2.1482170038296686e-14,
+          "max_rel_error": 3.412503870556275e-16,
+          "passed": true
+        },
+        "oo": {
+          "max_abs_error": 7.32410687763558e-15,
+          "max_rel_error": 1.974791648119358e-16,
+          "passed": true
+        }
+      },
+      "id": "solve_inhom_15",
+      "max_abs_error": 2.1482170038296686e-14,
+      "passed": true
+    },
+    {
+      "components": {
+        "ee": {
+          "max_abs_error": 1.4310701576247995e-13,
+          "max_rel_error": 4.519584952149554e-15,
+          "passed": true
+        },
+        "eo": {
+          "max_abs_error": 3.98953295112363e-13,
+          "max_rel_error": 5.413544644755499e-15,
+          "passed": true
+        },
+        "oo": {
+          "max_abs_error": 5.143043902448543e-13,
+          "max_rel_error": 1.1977791021342562e-14,
+          "passed": true
+        }
+      },
+      "id": "solve_inhom_16",
+      "max_abs_error": 5.143043902448543e-13,
+      "passed": true
+    },
+    {
+      "components": {
+        "ee": {
+          "max_abs_error": 1.322163290206532e-13,
+          "max_rel_error": 3.568714308353108e-15,
+          "passed": true
+        },
+        "eo": {
+          "max_abs_error": 5.647166630662196e-13,
+          "max_rel_error": 6.6124585663936195e-15,
+          "passed": true
+        },
+        "oo": {
+          "max_abs_error": 5.186475275108551e-13,
+          "max_rel_error": 1.0526737170930685e-14,
+          "passed": true
+        }
+      },
+      "id": "solve_inhom_17",
+      "max_abs_error": 5.647166630662196e-13,
+      "passed": true
+    },
+    {
+      "components": {
+        "ee": {
+          "max_abs_error": 3.552713678800501e-15,
+          "max_rel_error": 8.278591580437448e-17,
+          "passed": true
+        },
+        "eo": {
+          "max_abs_error": 2.6671393099950733e-13,
+          "max_rel_error": 2.719353825374537e-15,
+          "passed": true
+        },
+        "oo": {
+          "max_abs_error": 2.4304950118560263e-13,
+          "max_rel_error": 4.333398206928078e-15,
+          "passed": true
+        }
+      },
+      "id": "solve_inhom_18",
+      "max_abs_error": 2.6671393099950733e-13,
+      "passed": true
+    },
+    {
+      "components": {
+        "ee": {
+          "max_abs_error": 3.3314150602069037e-13,
+          "max_rel_error": 6.759994574158286e-15,
+          "passed": true
+        },
+        "eo": {
+          "max_abs_error": 2.749224273336673e-13,
+          "max_rel_error": 2.4603170291414123e-15,
+          "passed": true
+        },
+        "oo": {
+          "max_abs_error": 1.464821375527116e-14,
+          "max_rel_error": 2.310913276552574e-16,
+          "passed": true
+        }
+      },
+      "id": "solve_inhom_19",
+      "max_abs_error": 3.3314150602069037e-13,
+      "passed": true
+    },
+    {
+      "components": {
+        "ee": {
+          "max_abs_error": 3.1677174706604935e-14,
+          "max_rel_error": 7.367963451015705e-16,
+          "passed": true
+        },
+        "eo": {
+          "max_abs_error": 1.082944113680789e-12,
+          "max_rel_error": 8.566457536898155e-15,
+          "passed": true
+        },
+        "oo": {
+          "max_abs_error": 1.6267249019314495e-13,
+          "max_rel_error": 2.284798077635215e-15,
+          "passed": true
+        }
+      },
+      "id": "solve_inhom_20",
+      "max_abs_error": 1.082944113680789e-12,
+      "passed": true
+    }
+  ],
+  "rtol": 1e-09,
+  "source": "Mathematica SHAARP.ml setup.nb solveInhom reference values",
+  "status": "symbolic_solve_inhom_matches_live_wolfram"
+}

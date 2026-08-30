@@ -1,0 +1,82 @@
+{
+  "report_version": 1,
+  "status": "resolved_python_bug_branch_selection_fixed",
+  "case_id": "fine_maker_high_oblique",
+  "source_notebook_or_package": "Mathematica SHAARP.ml setup.nb Maker MFList/listMFpara/listMFperp reference values",
+  "mathematica_version_or_runtime": "13.3.0 for Microsoft Windows (64-bit) (June 3, 2023)",
+  "shaarp_file_path_version_or_date": "Github/SHAARP.ml/setup.nb as loaded by benchmarks/mathematica_reference/export_maker_fine_reference.wl on 2026-05-23",
+  "python_git_or_worktree_state": "not_a_git_repository_from_workspace_root; local workspace files under Python Ver/shaarp_py",
+  "first_failing_stage": "resolved omega complex Snell reflected slow branch selection at theta_deg=80.0 before SHG source construction",
+  "expected_mathematica_value": {
+    "theta_deg": 80.0,
+    "listMFpara_intensity": 1.0148990326969248e-05,
+    "listMFperp_intensity": 0.00022548137524189984,
+    "parallel_analyzer_amplitude": {
+      "real": -0.0029775810375103143,
+      "imag": -0.0011326965577895293
+    },
+    "perpendicular_analyzer_amplitude": {
+      "real": -0.014164615666887303,
+      "imag": -0.004984479737271546
+    }
+  },
+  "python_value": {
+    "theta_deg": 80.0,
+    "list_mf_para_intensity": 1.0148990327e-05,
+    "list_mf_perp_intensity": 0.000225481375242,
+    "parallel_analyzer_amplitude": {
+      "real": -0.00297758103751,
+      "imag": -0.00113269655779
+    },
+    "perpendicular_analyzer_amplitude": {
+      "real": -0.014164615666887,
+      "imag": -0.004984479737271
+    }
+  },
+  "absolute_error": 9.004862827621807e-12,
+  "relative_error": 1.4096320801021204e-09,
+  "tolerance": {
+    "atol": 1e-10,
+    "rtol": 1e-10
+  },
+  "intermediate_values_needed_to_reproduce": {
+    "comparison_summary": "benchmarks/mathematica_reference/maker_fine_comparison_summary_v1.json",
+    "mathematica_reference": "benchmarks/mathematica_reference/maker_fine_reference_v1.json",
+    "python_reference": "benchmarks/maker_fringes_fine_sampling_output_v1.json",
+    "pre_fix_first_bad_theta_deg": 80.0,
+    "pre_fix_last_passing_theta_deg": 79.5,
+    "pre_fix_omega_boundary_condition_number_theta_79_0": 9.298359895580433,
+    "pre_fix_omega_boundary_condition_number_theta_79_5": 9.458117458178014,
+    "pre_fix_omega_boundary_condition_number_theta_80_0": 4.452962872712895e16,
+    "pre_fix_python_direct_solve_fundamental_residual_l2_theta_80_0": 0.23556829477955726,
+    "pre_fix_python_direct_solve_fundamental_coefficient_norm_theta_80_0": 676965029192373.2,
+    "pre_fix_python_lstsq_fundamental_residual_l2_theta_80_0": 0.018169412467918675,
+    "pre_fix_python_lstsq_parallel_intensity_theta_80_0": 1.0336730423174432e-05,
+    "pre_fix_python_lstsq_perpendicular_intensity_theta_80_0": 0.00022965242021450631,
+    "stage_level_mathematica_linear_export": "benchmarks/mathematica_reference/maker_high_oblique_80_linear_stage_v1.json",
+    "stage_level_python_comparison_summary": "benchmarks/mathematica_reference/maker_high_oblique_80_linear_stage_summary_v1.json",
+    "stage_level_first_failing_stage": "resolved_omega_fundamental_boundary_waves",
+    "stage_level_max_abs_error_after_fix": 2.131710537292855e-14,
+    "stage_level_max_abs_error_location_after_fix": "forward_layer_waves[1].k",
+    "mathematica_solvefresneln_system_export": "benchmarks/mathematica_reference/maker_high_oblique_80_solvefresneln_system_v1.json",
+    "root_cause": "Before the fix, Python's complex Snell solver accepted a forward-branch root for the reflected slow layer mode. This duplicated the forward slow column in the boundary matrix and made the omega boundary system singular.",
+    "python_fix": "shaarp/anisotropic.py now validates the complex Snell branch by the sign of Re(n cos(theta)) and includes reflected-half-plane initial guesses.",
+    "post_fix_python_boundary_condition_number_theta_80_0": 9.623528076782005,
+    "mathematica_boundary_condition_number_theta_80_0": 9.623528076782016,
+    "notes": [
+      "Pre-fix, all high-oblique dense points through theta=79.5 deg matched Mathematica within tolerance and theta=80 deg failed catastrophically.",
+      "Pre-fix, the SHG boundary matrix condition at theta=80 deg was modest, about 8.58; the blow-up was inherited from the omega fundamental boundary solve.",
+      "Pre-fix, a least-squares/minimum-norm omega solve gave finite values close to Mathematica but not exact agreement; the real root cause was branch selection, not a needed minimum-norm policy.",
+      "The stage-level Mathematica f4L export contains one absent transmitted wave placeholder for linear_transmitted_2 ({}[[1]]); the Python comparator records this as nonnumeric metadata and compares the present numeric waves only."
+    ]
+  },
+  "classification": "python_bug",
+  "next_action": "Keep the regression tests for complex reflected branch selection and high-oblique f4L wave agreement; track the remaining sub-nanometric complex-amplitude residual in maker_fine_high_oblique_residual_amplitude_precision.json.",
+  "minimal_reproducible_case": "Run fine_maker_high_oblique at theta_deg=80.0 using benchmarks/mathematica_reference/export_maker_fine_reference.wl and benchmarks/run_maker_fringes_fine_sampling.py.",
+  "equation_or_residual_check": "Post-fix Python and Mathematica omega boundary condition numbers agree at about 9.623528076782; the high-oblique f4L linear-stage summary reports python_direct_linear_stage_matches_mathematica with max_abs_error below 1e-10.",
+  "why_python_result_follows_documented_equations": "The corrected Python branch now matches the exported Mathematica f4L omega-stage wave values. The old result did not follow the intended reflected branch because a complex root from the transmitted half-plane was accepted for the reflected slow mode.",
+  "notes": [
+    "This is not a phase-matching solveInhom issue; the inhomogeneous operator condition remains about 138.",
+    "This report covers the high-oblique endpoint branch bug. The remaining strict-comparator amplitude residual is tracked separately."
+  ]
+}

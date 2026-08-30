@@ -1,0 +1,145 @@
+{
+  "atol": 1e-09,
+  "diagnostic_case_ids": [],
+  "diagnostic_fail_count": 0,
+  "full_sample_rotation_agreement_claimed": true,
+  "nonsingular_case_count": 12,
+  "nonsingular_fail_count": 0,
+  "results": [
+    {
+      "case_id": "sample_rotation_ext1_b11_o2",
+      "comparison_status": "passed",
+      "key": "sampleRotateList",
+      "max_abs_error": 4.541506060107281e-15,
+      "max_rel_error": 5.669505064645146e-13,
+      "shape": [
+        3,
+        5
+      ]
+    },
+    {
+      "case_id": "sample_rotation_ext1_b12_o3",
+      "comparison_status": "passed",
+      "key": "sampleRotateList",
+      "max_abs_error": 3.519406988061746e-14,
+      "max_rel_error": 9.133137500489111e-13,
+      "shape": [
+        3,
+        5
+      ]
+    },
+    {
+      "case_id": "sample_rotation_ext1_b15_o0",
+      "comparison_status": "passed",
+      "key": "sampleRotateList",
+      "max_abs_error": 2.727852665973529e-16,
+      "max_rel_error": 4.88604382846569e-13,
+      "shape": [
+        3,
+        5
+      ]
+    },
+    {
+      "case_id": "sample_rotation_ext1_b16_o1",
+      "comparison_status": "passed",
+      "key": "sampleRotateList",
+      "max_abs_error": 1.2975731600306517e-15,
+      "max_rel_error": 9.722949510700775e-14,
+      "shape": [
+        3,
+        5
+      ]
+    },
+    {
+      "case_id": "sample_rotation_ext1_b18_o2",
+      "comparison_status": "passed",
+      "key": "sampleRotateList",
+      "max_abs_error": 3.4208746946262636e-15,
+      "max_rel_error": 2.706310895126008e-13,
+      "shape": [
+        3,
+        5
+      ]
+    },
+    {
+      "case_id": "sample_rotation_ext1_b19_o3",
+      "comparison_status": "passed",
+      "key": "sampleRotateList",
+      "max_abs_error": 4.152928001488476e-15,
+      "max_rel_error": 4.5362386023470197e-13,
+      "shape": [
+        3,
+        5
+      ]
+    },
+    {
+      "case_id": "sample_rotation_ext1_b1_o0",
+      "comparison_status": "passed",
+      "key": "sampleRotateList",
+      "max_abs_error": 8.873110579621368e-16,
+      "max_rel_error": 6.843520159324703e-13,
+      "shape": [
+        3,
+        5
+      ]
+    },
+    {
+      "case_id": "sample_rotation_ext1_b2_o1",
+      "comparison_status": "passed",
+      "key": "sampleRotateList",
+      "max_abs_error": 6.47051856539349e-16,
+      "max_rel_error": 2.664694309279351e-13,
+      "shape": [
+        3,
+        5
+      ]
+    },
+    {
+      "case_id": "sample_rotation_ext1_b4_o2",
+      "comparison_status": "passed",
+      "key": "sampleRotateList",
+      "max_abs_error": 3.0279598273175168e-15,
+      "max_rel_error": 5.990183158729935e-13,
+      "shape": [
+        3,
+        5
+      ]
+    },
+    {
+      "case_id": "sample_rotation_ext1_b5_o3",
+      "comparison_status": "passed",
+      "key": "sampleRotateList",
+      "max_abs_error": 7.580741590018647e-16,
+      "max_rel_error": 5.812516474701629e-13,
+      "shape": [
+        3,
+        5
+      ]
+    },
+    {
+      "case_id": "sample_rotation_ext1_b8_o0",
+      "comparison_status": "passed",
+      "key": "sampleRotateList",
+      "max_abs_error": 1.1657341758564144e-14,
+      "max_rel_error": 3.6931647196136885e-13,
+      "shape": [
+        3,
+        5
+      ]
+    },
+    {
+      "case_id": "sample_rotation_ext1_b9_o1",
+      "comparison_status": "passed",
+      "key": "sampleRotateList",
+      "max_abs_error": 2.099882767669925e-15,
+      "max_rel_error": 5.759370275510125e-13,
+      "shape": [
+        3,
+        5
+      ]
+    }
+  ],
+  "rtol": 1e-09,
+  "source": "Mathematica SHAARP.ml setup.nb SampleRotate ext1 reference values",
+  "status": "sample_rotation_outputs_match"
+}

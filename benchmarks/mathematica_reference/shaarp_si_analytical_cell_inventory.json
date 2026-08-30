@@ -1,0 +1,34 @@
+{
+	"source":"SHAARP.si SHAARP_V1.03.nb analytical cell inventory",
+	"wolfram_version":"14.3.0 for Microsoft Windows (64-bit) (July 8, 2025)",
+	"notebook_path":"SHAARP_V1.03/SHAARP_V1.03.nb",
+	"inputCellCount":8,
+	"matchedCells":[
+		{
+			"index":3,
+			"byte_count":6687,
+			"patterns":[
+				"Analytical"
+			],
+			"preview":"BoxData[RowBox[{RowBox[{\"(*\", RowBox[{RowBox[{RowBox[{RowBox[{RowBox[{RowBox[{RowBox[{RowBox[{RowBox[{RowBox[{RowBox[{RowBox[{RowBox[{RowBox[{RowBox[{RowBox[{RowBox[{\"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\"}], \"**\"}], \"**\"}], \"**\"}], \"**\"}], \"**\"}], \"**\"}], \"**\"}], \"**\"}], \"**\"}]"
+		},
+		{
+			"index":4,
+			"byte_count":1043241,
+			"patterns":[
+				"doldExp",
+				"dnewExp",
+				"P2eo",
+				"P2o",
+				"Peoo",
+				"P2e",
+				"Peo",
+				"Analytical",
+				"FullAnalytical",
+				"Subscript",
+				"PointGroup"
+			],
+			"preview":"BoxData[{RowBox[{RowBox[{RowBox[{\"SetDirectory\", \"[\", RowBox[{\"NotebookDirectory\", \"[\", \"]\"}], \"]\"}], \";\"}], \"\"}], \"\", RowBox[{\"ClearAll\", \"[\", \"\\\"Global`*\\\"\", \"]\"}], \"\", RowBox[{RowBox[{\"Clear\", \"@@\", RowBox[{\"DeleteCases\", \"[\", RowBox[{RowBox[{\"Names\", \"@\", \"\\\"`*\\\"\"}], \",\", RowBox[{\"\\\"startupvar\\\"\", \"|\", \"\\\"presetval1\\\"\", \"|\", \"\\\"presetval2\\\"\", \"|\", \"\\\"presetval3\\\"\", \"|\", \"\\\"presetval4\\\"\", \"|"
+		}
+	]
+}

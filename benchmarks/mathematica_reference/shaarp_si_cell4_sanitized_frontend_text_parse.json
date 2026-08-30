@@ -1,0 +1,73 @@
+{
+	"source":"Mathematica SHAARP.si sanitized cell 4 front-end text parse probe",
+	"wolfram_version":"13.3.0 for Microsoft Windows (64-bit) (June 3, 2023)",
+	"notebook_path":"SHAARP_V1.03/SHAARP_V1.03.nb",
+	"inputCellCount":8,
+	"sanitization":"remove_initial_Symbolize_declaration_block_before_LogoExists",
+	"results":[
+		{
+			"format":"InputText",
+			"inputTextBytes":468960,
+			"sanitizedBytes":460557,
+			"removedByteCount":8403,
+			"parse_status":"failed",
+			"held_head":"$Failed",
+			"held_byte_count":0,
+			"message_count":253,
+			"messages_preview":[
+				"HoldForm[Message[General::newsym, FullAnalyticalFlag]]",
+				"HoldForm[Message[General::newsym, Notation`AutoLoadNotationPalette]]",
+				"HoldForm[Message[General::newsym, LogoExists]]",
+				"HoldForm[Message[General::newsym, Logo]]",
+				"HoldForm[Message[General::newsym, startupvar]]",
+				"HoldForm[Message[Syntax::com, HoldForm[\"\\n\"]]]",
+				"HoldForm[Message[General::newsym, ptest1]]",
+				"HoldForm[Message[General::newsym, ptest2]]",
+				"HoldForm[Message[General::newsym, ptest3]]",
+				"HoldForm[Message[General::newsym, ptest4]]",
+				"HoldForm[Message[Syntax::com, HoldForm[\"\\n\"]]]",
+				"HoldForm[Message[General::newsym, plabel1]]",
+				"HoldForm[Message[General::newsym, plabel2]]",
+				"HoldForm[Message[General::newsym, plabel3]]",
+				"HoldForm[Message[General::newsym, plabel4]]",
+				"HoldForm[Message[General::newsym, ap1]]",
+				"HoldForm[Message[General::newsym, ap2]]",
+				"HoldForm[Message[General::newsym, ap3]]",
+				"HoldForm[Message[General::newsym, ap4]]",
+				"HoldForm[Message[General::newsym, Lab1]]"
+			]
+		},
+		{
+			"format":"PlainText",
+			"inputTextBytes":307138,
+			"sanitizedBytes":302575,
+			"removedByteCount":4563,
+			"parse_status":"failed",
+			"held_head":"$Failed",
+			"held_byte_count":0,
+			"message_count":22,
+			"messages_preview":[
+				"HoldForm[Message[Syntax::com, HoldForm[\"\\n\"]]]",
+				"HoldForm[Message[Syntax::com, HoldForm[\"\\n\"]]]",
+				"HoldForm[Message[Syntax::com, HoldForm[\"\\n\"]]]",
+				"HoldForm[Message[General::newsym, kROmega]]",
+				"HoldForm[Message[General::newsym, kiOmega]]",
+				"HoldForm[Message[General::newsym, kR2Omega]]",
+				"HoldForm[Message[General::newsym, e0]]",
+				"HoldForm[Message[General::newsym, w]]",
+				"HoldForm[Message[General::newsym, μ0]]",
+				"HoldForm[Message[General::newsym, μ]]",
+				"HoldForm[Message[General::newsym, aCryToPrinw]]",
+				"HoldForm[Message[General::newsym, αω]]",
+				"HoldForm[Message[General::newsym, βω]]",
+				"HoldForm[Message[General::newsym, γω]]",
+				"HoldForm[Message[General::newsym, aCryToPrin2w]]",
+				"HoldForm[Message[General::newsym, α2ω]]",
+				"HoldForm[Message[General::newsym, β2ω]]",
+				"HoldForm[Message[General::newsym, γ2ω]]",
+				"HoldForm[Message[General::newsym, nwPrinciple]]",
+				"HoldForm[Message[ToExpression::sntx, HoldForm[\"\\\"Private`zztop$1\\\" , 0 , 0\\n                   ^\"], HoldForm[\"\"], HoldForm[\"\"], HoldForm[\"\\n\"]]]"
+			]
+		}
+	]
+}

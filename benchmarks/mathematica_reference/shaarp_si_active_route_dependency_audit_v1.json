@@ -1,0 +1,1555 @@
+{
+  "schema_version": 1,
+  "source": "SHAARP.si active-route dependency audit from refined snippet text",
+  "status": "dependency_audit_not_validation_evidence",
+  "contract_file": "benchmarks/mathematica_reference/shaarp_si_stage_export_contract_v1.json",
+  "snippet_file": "benchmarks/mathematica_reference/shaarp_si_refined_region_texts_v1.json",
+  "active_numeric_route": {
+    "region_order": [
+      "principal_axis_and_index_setup",
+      "shg_tensor_input_matrix",
+      "active_wave_equation_setup",
+      "active_backward_wave_equation_setup",
+      "omega_angle_root_assignments_active_path",
+      "two_omega_angle_root_assignments_active_path",
+      "omega_angle_roots_active_numerical_path",
+      "omega_fresnel_field_setup_active_path",
+      "omega_fresnel_equations_active_path",
+      "omega_fresnel_substitution_active_path",
+      "shg_tensor_transformation_active_path",
+      "active_complex_field_pnl_block",
+      "inhomogeneous_particular_solution_coefficients",
+      "numerical_coefficients_and_two_omega_field_setup",
+      "two_omega_boundary_solution",
+      "reflected_signal_and_basic_intensity"
+    ],
+    "assigned_symbols": [
+      "A2wNum",
+      "A2wNumExt",
+      "A2wNumOrd",
+      "AMB2wNum",
+      "AMBwNum",
+      "AwNum",
+      "AwNumExt",
+      "AwNumOrd",
+      "Croots",
+      "Cstandard2wNum",
+      "CstandardMB2wNum",
+      "CstandardMBwNum",
+      "CstandardwNum",
+      "DIwNum",
+      "DR2w",
+      "DRwNum",
+      "DT2w2eo",
+      "DT2w2o",
+      "DT2weoo",
+      "E2wroots",
+      "EIwNum",
+      "ER2w",
+      "ER2wp",
+      "ER2ws",
+      "ERpNum",
+      "ERsNum",
+      "ERwNum",
+      "ET2weoA",
+      "ET2woA",
+      "ETweo",
+      "ETwo",
+      "EwrootsNum",
+      "Ext2wFactor",
+      "ExtwFactor",
+      "HIwNum",
+      "HR2w",
+      "HRwNum",
+      "HT2w2eo",
+      "HT2w2o",
+      "HT2weoo",
+      "Inv",
+      "L",
+      "LMB",
+      "LNumExt",
+      "LNumOrd",
+      "Lg2eo",
+      "Lg2o",
+      "Lgeoo",
+      "MaxI2w",
+      "MaxI2wx",
+      "MaxI2wy",
+      "P2eo",
+      "P2o",
+      "Peoo",
+      "Q2w",
+      "Qw",
+      "R2eo",
+      "R2o",
+      "RC11",
+      "RC12",
+      "RC13",
+      "RC21",
+      "RC22",
+      "RC23",
+      "RC31",
+      "RC32",
+      "RC33",
+      "RNum",
+      "RSignal",
+      "RSignalCrystal",
+      "Reoo",
+      "RootExt",
+      "RootExt2w",
+      "RootOrd",
+      "RootOrd2w",
+      "Rstandard2wNum",
+      "RstandardMB2wNum",
+      "RstandardMBwNum",
+      "RstandardwNum",
+      "T",
+      "ThetaExt",
+      "ThetaExt2w",
+      "ThetaOrd",
+      "ThetaOrd2w",
+      "V2w",
+      "V2wNumExt",
+      "V2wNumOrd",
+      "VkiwNum",
+      "Vkr2w",
+      "VkrwNum",
+      "Vkt2w2eo",
+      "Vkt2w2o",
+      "Vkt2weoo",
+      "Vktweo",
+      "Vktwo",
+      "Vw",
+      "VwNumExt",
+      "VwNumOrd",
+      "W2w",
+      "W2wNumExt",
+      "W2wNumOrd",
+      "Ww",
+      "WwNumExt",
+      "WwNumOrd",
+      "aCryToPrin2w",
+      "aCryToPrinw",
+      "dSHG",
+      "dold",
+      "elab2w",
+      "elab2wNum",
+      "elabwNum",
+      "fe",
+      "fe2w",
+      "fo",
+      "fo2w",
+      "g2eo",
+      "g2o",
+      "geoo",
+      "i",
+      "j",
+      "k",
+      "kiw",
+      "kr2w",
+      "krw",
+      "kt2weo",
+      "kt2wo",
+      "ktMB2weo",
+      "ktMB2wo",
+      "ktweo",
+      "ktwo",
+      "l",
+      "m",
+      "n",
+      "n2wNumExt",
+      "n2wNumOrd",
+      "n2wPrinciple",
+      "neMB2w",
+      "noMB2w",
+      "nwNumExt",
+      "nwNumOrd",
+      "nwPrinciple",
+      "progress",
+      "r",
+      "t",
+      "twe",
+      "two",
+      "uMBx",
+      "uMBy",
+      "uMBz",
+      "ux",
+      "uxNumExt",
+      "uxNumOrd",
+      "uy",
+      "uyNumExt",
+      "uyNumOrd",
+      "uz",
+      "uzNumExt",
+      "uzNumOrd",
+      "weoEff",
+      "woEff",
+      "x",
+      "y",
+      "z"
+    ],
+    "required_external_symbols": [
+      "AnalyzerAngle",
+      "C11",
+      "C12",
+      "C13",
+      "C21",
+      "C22",
+      "C23",
+      "C31",
+      "C32",
+      "C33",
+      "EIw",
+      "ER2wp",
+      "ER2ws",
+      "ERpNum",
+      "ERsNum",
+      "ET2wNumExt",
+      "ET2wNumOrd",
+      "ETwNumExt",
+      "ETwNumOrd",
+      "HT2wNumExt",
+      "HT2wNumOrd",
+      "HTwNumExt",
+      "HTwNumOrd",
+      "I2wParallel",
+      "I2wPerpdicular",
+      "I2wx",
+      "I2wy",
+      "PointGroup",
+      "RHTilt",
+      "RotateAnalyzer",
+      "ThetaIn",
+      "ThetaTout",
+      "VktwNumExt",
+      "VktwNumOrd",
+      "\\[CurlyEpsilon]2\\[Omega]Cry",
+      "\\[CurlyEpsilon]2weoEff",
+      "\\[CurlyEpsilon]2woEff",
+      "\\[CurlyEpsilon]\\[Omega]Cry",
+      "\\[CurlyEpsilon]weoEff",
+      "\\[CurlyEpsilon]woEff",
+      "\\[CurlyPhi]",
+      "\\[Mu]",
+      "\\[Mu]0",
+      "\\[Or]",
+      "a",
+      "d11",
+      "d12",
+      "d13",
+      "d14",
+      "d15",
+      "d16",
+      "d21",
+      "d22",
+      "d23",
+      "d24",
+      "d25",
+      "d26",
+      "d31",
+      "d32",
+      "d33",
+      "d34",
+      "d35",
+      "d36",
+      "e0",
+      "kiw",
+      "krw",
+      "nMB2wNumExt",
+      "nMB2wNumOrd",
+      "twe",
+      "two",
+      "w"
+    ],
+    "first_external_use": {
+      "AnalyzerAngle": {
+        "first_region_id": "reflected_signal_and_basic_intensity",
+        "first_line_index": 920
+      },
+      "C11": {
+        "first_region_id": "inhomogeneous_particular_solution_coefficients",
+        "first_line_index": 815
+      },
+      "C12": {
+        "first_region_id": "inhomogeneous_particular_solution_coefficients",
+        "first_line_index": 815
+      },
+      "C13": {
+        "first_region_id": "inhomogeneous_particular_solution_coefficients",
+        "first_line_index": 815
+      },
+      "C21": {
+        "first_region_id": "inhomogeneous_particular_solution_coefficients",
+        "first_line_index": 815
+      },
+      "C22": {
+        "first_region_id": "inhomogeneous_particular_solution_coefficients",
+        "first_line_index": 815
+      },
+      "C23": {
+        "first_region_id": "inhomogeneous_particular_solution_coefficients",
+        "first_line_index": 815
+      },
+      "C31": {
+        "first_region_id": "inhomogeneous_particular_solution_coefficients",
+        "first_line_index": 815
+      },
+      "C32": {
+        "first_region_id": "inhomogeneous_particular_solution_coefficients",
+        "first_line_index": 815
+      },
+      "C33": {
+        "first_region_id": "inhomogeneous_particular_solution_coefficients",
+        "first_line_index": 815
+      },
+      "EIw": {
+        "first_region_id": "omega_fresnel_field_setup_active_path",
+        "first_line_index": 720
+      },
+      "ER2wp": {
+        "first_region_id": "numerical_coefficients_and_two_omega_field_setup",
+        "first_line_index": 840
+      },
+      "ER2ws": {
+        "first_region_id": "numerical_coefficients_and_two_omega_field_setup",
+        "first_line_index": 840
+      },
+      "ERpNum": {
+        "first_region_id": "omega_fresnel_field_setup_active_path",
+        "first_line_index": 720
+      },
+      "ERsNum": {
+        "first_region_id": "omega_fresnel_field_setup_active_path",
+        "first_line_index": 720
+      },
+      "ET2wNumExt": {
+        "first_region_id": "two_omega_boundary_solution",
+        "first_line_index": 899
+      },
+      "ET2wNumOrd": {
+        "first_region_id": "two_omega_boundary_solution",
+        "first_line_index": 899
+      },
+      "ETwNumExt": {
+        "first_region_id": "omega_fresnel_equations_active_path",
+        "first_line_index": 732
+      },
+      "ETwNumOrd": {
+        "first_region_id": "omega_fresnel_equations_active_path",
+        "first_line_index": 732
+      },
+      "HT2wNumExt": {
+        "first_region_id": "two_omega_boundary_solution",
+        "first_line_index": 899
+      },
+      "HT2wNumOrd": {
+        "first_region_id": "two_omega_boundary_solution",
+        "first_line_index": 899
+      },
+      "HTwNumExt": {
+        "first_region_id": "omega_fresnel_equations_active_path",
+        "first_line_index": 732
+      },
+      "HTwNumOrd": {
+        "first_region_id": "omega_fresnel_equations_active_path",
+        "first_line_index": 732
+      },
+      "I2wParallel": {
+        "first_region_id": "reflected_signal_and_basic_intensity",
+        "first_line_index": 920
+      },
+      "I2wPerpdicular": {
+        "first_region_id": "reflected_signal_and_basic_intensity",
+        "first_line_index": 920
+      },
+      "I2wx": {
+        "first_region_id": "reflected_signal_and_basic_intensity",
+        "first_line_index": 920
+      },
+      "I2wy": {
+        "first_region_id": "reflected_signal_and_basic_intensity",
+        "first_line_index": 920
+      },
+      "PointGroup": {
+        "first_region_id": "principal_axis_and_index_setup",
+        "first_line_index": 277
+      },
+      "RHTilt": {
+        "first_region_id": "omega_fresnel_field_setup_active_path",
+        "first_line_index": 720
+      },
+      "RotateAnalyzer": {
+        "first_region_id": "reflected_signal_and_basic_intensity",
+        "first_line_index": 920
+      },
+      "ThetaIn": {
+        "first_region_id": "omega_angle_root_assignments_active_path",
+        "first_line_index": 508
+      },
+      "ThetaTout": {
+        "first_region_id": "active_wave_equation_setup",
+        "first_line_index": 481
+      },
+      "VktwNumExt": {
+        "first_region_id": "omega_fresnel_substitution_active_path",
+        "first_line_index": 740
+      },
+      "VktwNumOrd": {
+        "first_region_id": "omega_fresnel_substitution_active_path",
+        "first_line_index": 740
+      },
+      "\\[CurlyEpsilon]2\\[Omega]Cry": {
+        "first_region_id": "principal_axis_and_index_setup",
+        "first_line_index": 277
+      },
+      "\\[CurlyEpsilon]2weoEff": {
+        "first_region_id": "numerical_coefficients_and_two_omega_field_setup",
+        "first_line_index": 840
+      },
+      "\\[CurlyEpsilon]2woEff": {
+        "first_region_id": "numerical_coefficients_and_two_omega_field_setup",
+        "first_line_index": 840
+      },
+      "\\[CurlyEpsilon]\\[Omega]Cry": {
+        "first_region_id": "principal_axis_and_index_setup",
+        "first_line_index": 277
+      },
+      "\\[CurlyEpsilon]weoEff": {
+        "first_region_id": "numerical_coefficients_and_two_omega_field_setup",
+        "first_line_index": 840
+      },
+      "\\[CurlyEpsilon]woEff": {
+        "first_region_id": "numerical_coefficients_and_two_omega_field_setup",
+        "first_line_index": 840
+      },
+      "\\[CurlyPhi]": {
+        "first_region_id": "numerical_coefficients_and_two_omega_field_setup",
+        "first_line_index": 840
+      },
+      "\\[Mu]": {
+        "first_region_id": "omega_fresnel_field_setup_active_path",
+        "first_line_index": 720
+      },
+      "\\[Mu]0": {
+        "first_region_id": "omega_fresnel_field_setup_active_path",
+        "first_line_index": 720
+      },
+      "\\[Or]": {
+        "first_region_id": "principal_axis_and_index_setup",
+        "first_line_index": 277
+      },
+      "a": {
+        "first_region_id": "principal_axis_and_index_setup",
+        "first_line_index": 277
+      },
+      "d11": {
+        "first_region_id": "shg_tensor_input_matrix",
+        "first_line_index": 309
+      },
+      "d12": {
+        "first_region_id": "shg_tensor_input_matrix",
+        "first_line_index": 309
+      },
+      "d13": {
+        "first_region_id": "shg_tensor_input_matrix",
+        "first_line_index": 309
+      },
+      "d14": {
+        "first_region_id": "shg_tensor_input_matrix",
+        "first_line_index": 309
+      },
+      "d15": {
+        "first_region_id": "shg_tensor_input_matrix",
+        "first_line_index": 309
+      },
+      "d16": {
+        "first_region_id": "shg_tensor_input_matrix",
+        "first_line_index": 309
+      },
+      "d21": {
+        "first_region_id": "shg_tensor_input_matrix",
+        "first_line_index": 309
+      },
+      "d22": {
+        "first_region_id": "shg_tensor_input_matrix",
+        "first_line_index": 309
+      },
+      "d23": {
+        "first_region_id": "shg_tensor_input_matrix",
+        "first_line_index": 309
+      },
+      "d24": {
+        "first_region_id": "shg_tensor_input_matrix",
+        "first_line_index": 309
+      },
+      "d25": {
+        "first_region_id": "shg_tensor_input_matrix",
+        "first_line_index": 309
+      },
+      "d26": {
+        "first_region_id": "shg_tensor_input_matrix",
+        "first_line_index": 309
+      },
+      "d31": {
+        "first_region_id": "shg_tensor_input_matrix",
+        "first_line_index": 309
+      },
+      "d32": {
+        "first_region_id": "shg_tensor_input_matrix",
+        "first_line_index": 309
+      },
+      "d33": {
+        "first_region_id": "shg_tensor_input_matrix",
+        "first_line_index": 309
+      },
+      "d34": {
+        "first_region_id": "shg_tensor_input_matrix",
+        "first_line_index": 309
+      },
+      "d35": {
+        "first_region_id": "shg_tensor_input_matrix",
+        "first_line_index": 309
+      },
+      "d36": {
+        "first_region_id": "shg_tensor_input_matrix",
+        "first_line_index": 309
+      },
+      "e0": {
+        "first_region_id": "omega_fresnel_field_setup_active_path",
+        "first_line_index": 720
+      },
+      "kiw": {
+        "first_region_id": "omega_fresnel_field_setup_active_path",
+        "first_line_index": 720
+      },
+      "krw": {
+        "first_region_id": "omega_fresnel_field_setup_active_path",
+        "first_line_index": 720
+      },
+      "nMB2wNumExt": {
+        "first_region_id": "numerical_coefficients_and_two_omega_field_setup",
+        "first_line_index": 840
+      },
+      "nMB2wNumOrd": {
+        "first_region_id": "numerical_coefficients_and_two_omega_field_setup",
+        "first_line_index": 840
+      },
+      "twe": {
+        "first_region_id": "omega_fresnel_equations_active_path",
+        "first_line_index": 732
+      },
+      "two": {
+        "first_region_id": "omega_fresnel_equations_active_path",
+        "first_line_index": 732
+      },
+      "w": {
+        "first_region_id": "omega_fresnel_field_setup_active_path",
+        "first_line_index": 720
+      }
+    },
+    "regions": [
+      {
+        "region_id": "principal_axis_and_index_setup",
+        "line_start": 277,
+        "line_end": 307,
+        "assigned_symbols": [
+          "Inv",
+          "Q2w",
+          "Qw",
+          "aCryToPrin2w",
+          "aCryToPrinw",
+          "elab2wNum",
+          "elabwNum",
+          "n2wPrinciple",
+          "nwPrinciple"
+        ],
+        "referenced_symbols": [
+          "Inv",
+          "PointGroup",
+          "Q2w",
+          "Qw",
+          "\\[CurlyEpsilon]2\\[Omega]Cry",
+          "\\[CurlyEpsilon]\\[Omega]Cry",
+          "\\[Or]",
+          "a",
+          "aCryToPrin2w",
+          "aCryToPrinw",
+          "elab2wNum",
+          "elabwNum",
+          "n2wPrinciple",
+          "nwPrinciple"
+        ],
+        "unresolved_before_region": [
+          "PointGroup",
+          "\\[CurlyEpsilon]2\\[Omega]Cry",
+          "\\[CurlyEpsilon]\\[Omega]Cry",
+          "\\[Or]",
+          "a"
+        ]
+      },
+      {
+        "region_id": "shg_tensor_input_matrix",
+        "line_start": 309,
+        "line_end": 311,
+        "assigned_symbols": [
+          "dold"
+        ],
+        "referenced_symbols": [
+          "d11",
+          "d12",
+          "d13",
+          "d14",
+          "d15",
+          "d16",
+          "d21",
+          "d22",
+          "d23",
+          "d24",
+          "d25",
+          "d26",
+          "d31",
+          "d32",
+          "d33",
+          "d34",
+          "d35",
+          "d36",
+          "dold"
+        ],
+        "unresolved_before_region": [
+          "d11",
+          "d12",
+          "d13",
+          "d14",
+          "d15",
+          "d16",
+          "d21",
+          "d22",
+          "d23",
+          "d24",
+          "d25",
+          "d26",
+          "d31",
+          "d32",
+          "d33",
+          "d34",
+          "d35",
+          "d36"
+        ]
+      },
+      {
+        "region_id": "active_wave_equation_setup",
+        "line_start": 481,
+        "line_end": 491,
+        "assigned_symbols": [
+          "A2wNum",
+          "AwNum",
+          "Cstandard2wNum",
+          "CstandardwNum",
+          "L",
+          "Rstandard2wNum",
+          "RstandardwNum",
+          "progress",
+          "ux",
+          "uy",
+          "uz"
+        ],
+        "referenced_symbols": [
+          "A2wNum",
+          "AwNum",
+          "Cstandard2wNum",
+          "CstandardwNum",
+          "L",
+          "Q2w",
+          "Qw",
+          "Rstandard2wNum",
+          "RstandardwNum",
+          "ThetaTout",
+          "n2wPrinciple",
+          "nwPrinciple",
+          "ux",
+          "uy",
+          "uz"
+        ],
+        "unresolved_before_region": [
+          "ThetaTout"
+        ]
+      },
+      {
+        "region_id": "active_backward_wave_equation_setup",
+        "line_start": 493,
+        "line_end": 504,
+        "assigned_symbols": [
+          "AMB2wNum",
+          "AMBwNum",
+          "CstandardMB2wNum",
+          "CstandardMBwNum",
+          "LMB",
+          "RstandardMB2wNum",
+          "RstandardMBwNum",
+          "uMBx",
+          "uMBy",
+          "uMBz"
+        ],
+        "referenced_symbols": [
+          "AMB2wNum",
+          "AMBwNum",
+          "CstandardMB2wNum",
+          "CstandardMBwNum",
+          "LMB",
+          "Q2w",
+          "Qw",
+          "RstandardMB2wNum",
+          "RstandardMBwNum",
+          "ThetaTout",
+          "n2wPrinciple",
+          "nwPrinciple",
+          "uMBx",
+          "uMBy",
+          "uMBz",
+          "ux",
+          "uy",
+          "uz"
+        ],
+        "unresolved_before_region": [
+          "ThetaTout"
+        ]
+      },
+      {
+        "region_id": "omega_angle_root_assignments_active_path",
+        "line_start": 508,
+        "line_end": 519,
+        "assigned_symbols": [
+          "ExtwFactor",
+          "RootExt",
+          "RootOrd",
+          "ThetaExt",
+          "ThetaOrd",
+          "Vw",
+          "Ww",
+          "fe",
+          "fo"
+        ],
+        "referenced_symbols": [
+          "AwNum",
+          "ExtwFactor",
+          "RootExt",
+          "RootOrd",
+          "ThetaExt",
+          "ThetaIn",
+          "ThetaOrd",
+          "ThetaTout",
+          "Vw",
+          "Ww",
+          "fe",
+          "fo"
+        ],
+        "unresolved_before_region": [
+          "ThetaIn",
+          "ThetaTout"
+        ]
+      },
+      {
+        "region_id": "two_omega_angle_root_assignments_active_path",
+        "line_start": 524,
+        "line_end": 533,
+        "assigned_symbols": [
+          "Ext2wFactor",
+          "RootExt2w",
+          "RootOrd2w",
+          "ThetaExt2w",
+          "ThetaOrd2w",
+          "V2w",
+          "W2w",
+          "fe2w",
+          "fo2w",
+          "progress"
+        ],
+        "referenced_symbols": [
+          "A2wNum",
+          "Ext2wFactor",
+          "RootExt2w",
+          "RootOrd2w",
+          "ThetaExt2w",
+          "ThetaIn",
+          "ThetaOrd2w",
+          "ThetaTout",
+          "V2w",
+          "W2w",
+          "fe2w",
+          "fo2w"
+        ],
+        "unresolved_before_region": [
+          "ThetaIn",
+          "ThetaTout"
+        ]
+      },
+      {
+        "region_id": "omega_angle_roots_active_numerical_path",
+        "line_start": 536,
+        "line_end": 574,
+        "assigned_symbols": [
+          "A2wNumExt",
+          "A2wNumOrd",
+          "AwNumExt",
+          "AwNumOrd",
+          "Ext2wFactor",
+          "ExtwFactor",
+          "LNumExt",
+          "LNumOrd",
+          "V2wNumExt",
+          "V2wNumOrd",
+          "VwNumExt",
+          "VwNumOrd",
+          "W2wNumExt",
+          "W2wNumOrd",
+          "WwNumExt",
+          "WwNumOrd",
+          "n2wNumExt",
+          "n2wNumOrd",
+          "nwNumExt",
+          "nwNumOrd",
+          "uxNumExt",
+          "uxNumOrd",
+          "uyNumExt",
+          "uyNumOrd",
+          "uzNumExt",
+          "uzNumOrd"
+        ],
+        "referenced_symbols": [
+          "A2wNumExt",
+          "A2wNumOrd",
+          "AwNumExt",
+          "AwNumOrd",
+          "Cstandard2wNum",
+          "CstandardwNum",
+          "Ext2wFactor",
+          "ExtwFactor",
+          "LNumExt",
+          "LNumOrd",
+          "ThetaExt",
+          "ThetaExt2w",
+          "ThetaOrd",
+          "ThetaOrd2w",
+          "V2wNumExt",
+          "V2wNumOrd",
+          "VwNumExt",
+          "VwNumOrd",
+          "W2wNumExt",
+          "W2wNumOrd",
+          "WwNumExt",
+          "WwNumOrd",
+          "n2wNumExt",
+          "n2wNumOrd",
+          "nwNumExt",
+          "nwNumOrd",
+          "uxNumExt",
+          "uxNumOrd",
+          "uyNumExt",
+          "uyNumOrd",
+          "uzNumExt",
+          "uzNumOrd"
+        ],
+        "unresolved_before_region": []
+      },
+      {
+        "region_id": "omega_fresnel_field_setup_active_path",
+        "line_start": 720,
+        "line_end": 728,
+        "assigned_symbols": [
+          "DIwNum",
+          "DRwNum",
+          "EIwNum",
+          "ERwNum",
+          "HIwNum",
+          "HRwNum",
+          "RNum",
+          "VkiwNum",
+          "VkrwNum"
+        ],
+        "referenced_symbols": [
+          "DIwNum",
+          "DRwNum",
+          "EIw",
+          "EIwNum",
+          "ERpNum",
+          "ERsNum",
+          "ERwNum",
+          "HIwNum",
+          "HRwNum",
+          "RHTilt",
+          "RNum",
+          "VkiwNum",
+          "VkrwNum",
+          "\\[Mu]",
+          "\\[Mu]0",
+          "e0",
+          "kiw",
+          "krw",
+          "w"
+        ],
+        "unresolved_before_region": [
+          "EIw",
+          "ERpNum",
+          "ERsNum",
+          "RHTilt",
+          "\\[Mu]",
+          "\\[Mu]0",
+          "e0",
+          "kiw",
+          "krw",
+          "w"
+        ]
+      },
+      {
+        "region_id": "omega_fresnel_equations_active_path",
+        "line_start": 732,
+        "line_end": 737,
+        "assigned_symbols": [
+          "EwrootsNum",
+          "x",
+          "y",
+          "z"
+        ],
+        "referenced_symbols": [
+          "EIwNum",
+          "ERpNum",
+          "ERsNum",
+          "ERwNum",
+          "ETwNumExt",
+          "ETwNumOrd",
+          "EwrootsNum",
+          "HIwNum",
+          "HRwNum",
+          "HTwNumExt",
+          "HTwNumOrd",
+          "twe",
+          "two"
+        ],
+        "unresolved_before_region": [
+          "ERpNum",
+          "ERsNum",
+          "ETwNumExt",
+          "ETwNumOrd",
+          "HTwNumExt",
+          "HTwNumOrd",
+          "twe",
+          "two"
+        ]
+      },
+      {
+        "region_id": "omega_fresnel_substitution_active_path",
+        "line_start": 740,
+        "line_end": 753,
+        "assigned_symbols": [
+          "ERpNum",
+          "ERsNum",
+          "ETweo",
+          "ETwo",
+          "Vktweo",
+          "Vktwo",
+          "elab2w",
+          "twe",
+          "two"
+        ],
+        "referenced_symbols": [
+          "ERpNum",
+          "ERsNum",
+          "ETwNumExt",
+          "ETwNumOrd",
+          "ETweo",
+          "ETwo",
+          "EwrootsNum",
+          "ThetaExt",
+          "ThetaOrd",
+          "VktwNumExt",
+          "VktwNumOrd",
+          "Vktweo",
+          "Vktwo",
+          "elab2w",
+          "elab2wNum",
+          "twe",
+          "two"
+        ],
+        "unresolved_before_region": [
+          "ETwNumExt",
+          "ETwNumOrd",
+          "VktwNumExt",
+          "VktwNumOrd"
+        ]
+      },
+      {
+        "region_id": "shg_tensor_transformation_active_path",
+        "line_start": 759,
+        "line_end": 773,
+        "assigned_symbols": [
+          "T",
+          "dSHG",
+          "i",
+          "j",
+          "k",
+          "l",
+          "m",
+          "n",
+          "progress"
+        ],
+        "referenced_symbols": [
+          "T",
+          "a",
+          "dSHG",
+          "dold"
+        ],
+        "unresolved_before_region": [
+          "a"
+        ]
+      },
+      {
+        "region_id": "active_complex_field_pnl_block",
+        "line_start": 790,
+        "line_end": 810,
+        "assigned_symbols": [
+          "P2eo",
+          "P2o",
+          "Peoo",
+          "progress"
+        ],
+        "referenced_symbols": [
+          "ETweo",
+          "ETwo",
+          "P2eo",
+          "P2o",
+          "Peoo",
+          "dSHG",
+          "e0"
+        ],
+        "unresolved_before_region": [
+          "e0"
+        ]
+      },
+      {
+        "region_id": "inhomogeneous_particular_solution_coefficients",
+        "line_start": 815,
+        "line_end": 838,
+        "assigned_symbols": [
+          "Croots",
+          "Lg2eo",
+          "Lg2o",
+          "Lgeoo",
+          "R2eo",
+          "R2o",
+          "Reoo",
+          "g2eo",
+          "g2o",
+          "geoo",
+          "r",
+          "t",
+          "x",
+          "y",
+          "z"
+        ],
+        "referenced_symbols": [
+          "C11",
+          "C12",
+          "C13",
+          "C21",
+          "C22",
+          "C23",
+          "C31",
+          "C32",
+          "C33",
+          "Croots",
+          "Lg2eo",
+          "Lg2o",
+          "Lgeoo",
+          "P2eo",
+          "P2o",
+          "Peoo",
+          "R2eo",
+          "R2o",
+          "Reoo",
+          "Vktweo",
+          "Vktwo",
+          "\\[Mu]0",
+          "e0",
+          "elab2wNum",
+          "g2eo",
+          "g2o",
+          "geoo",
+          "r",
+          "t",
+          "w"
+        ],
+        "unresolved_before_region": [
+          "C11",
+          "C12",
+          "C13",
+          "C21",
+          "C22",
+          "C23",
+          "C31",
+          "C32",
+          "C33",
+          "\\[Mu]0",
+          "e0",
+          "w"
+        ]
+      },
+      {
+        "region_id": "numerical_coefficients_and_two_omega_field_setup",
+        "line_start": 840,
+        "line_end": 890,
+        "assigned_symbols": [
+          "DR2w",
+          "DT2w2eo",
+          "DT2w2o",
+          "DT2weoo",
+          "ER2w",
+          "HR2w",
+          "HT2w2eo",
+          "HT2w2o",
+          "HT2weoo",
+          "RC11",
+          "RC12",
+          "RC13",
+          "RC21",
+          "RC22",
+          "RC23",
+          "RC31",
+          "RC32",
+          "RC33",
+          "Vkr2w",
+          "Vkt2w2eo",
+          "Vkt2w2o",
+          "Vkt2weoo",
+          "kiw",
+          "kr2w",
+          "krw",
+          "kt2weo",
+          "kt2wo",
+          "ktMB2weo",
+          "ktMB2wo",
+          "ktweo",
+          "ktwo",
+          "neMB2w",
+          "noMB2w",
+          "progress",
+          "weoEff",
+          "woEff"
+        ],
+        "referenced_symbols": [
+          "C11",
+          "C12",
+          "C13",
+          "C21",
+          "C22",
+          "C23",
+          "C31",
+          "C32",
+          "C33",
+          "Croots",
+          "DR2w",
+          "DT2w2eo",
+          "DT2w2o",
+          "DT2weoo",
+          "ER2w",
+          "ER2wp",
+          "ER2ws",
+          "HR2w",
+          "HT2w2eo",
+          "HT2w2o",
+          "HT2weoo",
+          "P2eo",
+          "P2o",
+          "Peoo",
+          "RC11",
+          "RC12",
+          "RC13",
+          "RC21",
+          "RC22",
+          "RC23",
+          "RC31",
+          "RC32",
+          "RC33",
+          "RNum",
+          "Vkr2w",
+          "Vkt2w2eo",
+          "Vkt2w2o",
+          "Vkt2weoo",
+          "VktwNumExt",
+          "VktwNumOrd",
+          "Vktwo",
+          "\\[CurlyEpsilon]2weoEff",
+          "\\[CurlyEpsilon]2woEff",
+          "\\[CurlyEpsilon]weoEff",
+          "\\[CurlyEpsilon]woEff",
+          "\\[CurlyPhi]",
+          "\\[Mu]",
+          "\\[Mu]0",
+          "e0",
+          "elab2wNum",
+          "kiw",
+          "kr2w",
+          "krw",
+          "kt2weo",
+          "kt2wo",
+          "ktMB2weo",
+          "ktMB2wo",
+          "ktweo",
+          "ktwo",
+          "n2wNumExt",
+          "n2wNumOrd",
+          "nMB2wNumExt",
+          "nMB2wNumOrd",
+          "neMB2w",
+          "noMB2w",
+          "nwNumExt",
+          "nwNumOrd",
+          "t",
+          "w"
+        ],
+        "unresolved_before_region": [
+          "C11",
+          "C12",
+          "C13",
+          "C21",
+          "C22",
+          "C23",
+          "C31",
+          "C32",
+          "C33",
+          "ER2wp",
+          "ER2ws",
+          "VktwNumExt",
+          "VktwNumOrd",
+          "\\[CurlyEpsilon]2weoEff",
+          "\\[CurlyEpsilon]2woEff",
+          "\\[CurlyEpsilon]weoEff",
+          "\\[CurlyEpsilon]woEff",
+          "\\[CurlyPhi]",
+          "\\[Mu]",
+          "\\[Mu]0",
+          "e0",
+          "nMB2wNumExt",
+          "nMB2wNumOrd",
+          "w"
+        ]
+      },
+      {
+        "region_id": "two_omega_boundary_solution",
+        "line_start": 899,
+        "line_end": 908,
+        "assigned_symbols": [
+          "E2wroots",
+          "ER2wp",
+          "ER2ws",
+          "ET2weoA",
+          "ET2woA",
+          "RSignal"
+        ],
+        "referenced_symbols": [
+          "E2wroots",
+          "ER2w",
+          "ER2wp",
+          "ER2ws",
+          "ET2wNumExt",
+          "ET2wNumOrd",
+          "ET2weoA",
+          "ET2woA",
+          "HR2w",
+          "HT2w2eo",
+          "HT2w2o",
+          "HT2wNumExt",
+          "HT2wNumOrd",
+          "HT2weoo",
+          "RC11",
+          "RC12",
+          "RC13",
+          "RC21",
+          "RC22",
+          "RC23",
+          "RSignal"
+        ],
+        "unresolved_before_region": [
+          "ET2wNumExt",
+          "ET2wNumOrd",
+          "HT2wNumExt",
+          "HT2wNumOrd"
+        ]
+      },
+      {
+        "region_id": "reflected_signal_and_basic_intensity",
+        "line_start": 920,
+        "line_end": 938,
+        "assigned_symbols": [
+          "MaxI2w",
+          "MaxI2wx",
+          "MaxI2wy",
+          "RSignalCrystal",
+          "progress"
+        ],
+        "referenced_symbols": [
+          "AnalyzerAngle",
+          "ER2wp",
+          "ER2ws",
+          "I2wParallel",
+          "I2wPerpdicular",
+          "I2wx",
+          "I2wy",
+          "MaxI2w",
+          "MaxI2wx",
+          "MaxI2wy",
+          "RSignal",
+          "RSignalCrystal",
+          "RotateAnalyzer",
+          "\\[CurlyPhi]"
+        ],
+        "unresolved_before_region": [
+          "AnalyzerAngle",
+          "I2wParallel",
+          "I2wPerpdicular",
+          "I2wx",
+          "I2wy",
+          "RotateAnalyzer",
+          "\\[CurlyPhi]"
+        ]
+      }
+    ]
+  },
+  "fresnel_sweep_route": {
+    "region_order": [
+      "fresnel_sweep_table_initialization",
+      "fresnel_sweep_angle_root_assignments",
+      "omega_angle_roots_initial_path",
+      "fresnel_sweep_table_rows"
+    ],
+    "assigned_symbols": [
+      "ERp",
+      "ERs",
+      "ETweo",
+      "ETwo",
+      "ExtwFactor",
+      "Fresnel",
+      "Index",
+      "RootExt",
+      "RootOrd",
+      "Start",
+      "ThetaExt",
+      "ThetaOrd",
+      "Vw",
+      "Ww",
+      "count",
+      "fe",
+      "fo",
+      "nwNumOrd",
+      "step",
+      "twe",
+      "two"
+    ],
+    "required_external_symbols": [
+      "AwNum",
+      "EIw",
+      "EIwNum",
+      "ERpNum",
+      "ERsNum",
+      "ERwNum",
+      "ETwNumExt",
+      "ETwNumOrd",
+      "EwrootsNum",
+      "ThetaForIn",
+      "ThetaTout",
+      "VwNumOrd",
+      "WwNumOrd",
+      "nwNumExt"
+    ],
+    "first_external_use": {
+      "AwNum": {
+        "first_region_id": "fresnel_sweep_angle_root_assignments",
+        "first_line_index": 340
+      },
+      "EIw": {
+        "first_region_id": "fresnel_sweep_table_rows",
+        "first_line_index": 449
+      },
+      "EIwNum": {
+        "first_region_id": "fresnel_sweep_table_rows",
+        "first_line_index": 449
+      },
+      "ERpNum": {
+        "first_region_id": "fresnel_sweep_table_rows",
+        "first_line_index": 449
+      },
+      "ERsNum": {
+        "first_region_id": "fresnel_sweep_table_rows",
+        "first_line_index": 449
+      },
+      "ERwNum": {
+        "first_region_id": "fresnel_sweep_table_rows",
+        "first_line_index": 449
+      },
+      "ETwNumExt": {
+        "first_region_id": "fresnel_sweep_table_rows",
+        "first_line_index": 449
+      },
+      "ETwNumOrd": {
+        "first_region_id": "fresnel_sweep_table_rows",
+        "first_line_index": 449
+      },
+      "EwrootsNum": {
+        "first_region_id": "fresnel_sweep_table_rows",
+        "first_line_index": 449
+      },
+      "ThetaForIn": {
+        "first_region_id": "fresnel_sweep_angle_root_assignments",
+        "first_line_index": 340
+      },
+      "ThetaTout": {
+        "first_region_id": "fresnel_sweep_angle_root_assignments",
+        "first_line_index": 340
+      },
+      "VwNumOrd": {
+        "first_region_id": "omega_angle_roots_initial_path",
+        "first_line_index": 368
+      },
+      "WwNumOrd": {
+        "first_region_id": "omega_angle_roots_initial_path",
+        "first_line_index": 368
+      },
+      "nwNumExt": {
+        "first_region_id": "omega_angle_roots_initial_path",
+        "first_line_index": 368
+      }
+    },
+    "regions": [
+      {
+        "region_id": "fresnel_sweep_table_initialization",
+        "line_start": 318,
+        "line_end": 320,
+        "assigned_symbols": [
+          "Fresnel",
+          "Index",
+          "Start",
+          "count",
+          "step"
+        ],
+        "referenced_symbols": [
+          "Fresnel",
+          "Index",
+          "Start",
+          "count",
+          "step"
+        ],
+        "unresolved_before_region": []
+      },
+      {
+        "region_id": "fresnel_sweep_angle_root_assignments",
+        "line_start": 340,
+        "line_end": 348,
+        "assigned_symbols": [
+          "ExtwFactor",
+          "RootExt",
+          "RootOrd",
+          "ThetaExt",
+          "ThetaOrd",
+          "Vw",
+          "Ww",
+          "fe",
+          "fo"
+        ],
+        "referenced_symbols": [
+          "AwNum",
+          "ExtwFactor",
+          "RootExt",
+          "RootOrd",
+          "ThetaExt",
+          "ThetaForIn",
+          "ThetaOrd",
+          "ThetaTout",
+          "Vw",
+          "Ww",
+          "fe",
+          "fo"
+        ],
+        "unresolved_before_region": [
+          "AwNum",
+          "ThetaForIn",
+          "ThetaTout"
+        ]
+      },
+      {
+        "region_id": "omega_angle_roots_initial_path",
+        "line_start": 368,
+        "line_end": 371,
+        "assigned_symbols": [
+          "ExtwFactor",
+          "nwNumOrd"
+        ],
+        "referenced_symbols": [
+          "ExtwFactor",
+          "ThetaExt",
+          "ThetaOrd",
+          "VwNumOrd",
+          "WwNumOrd",
+          "nwNumExt",
+          "nwNumOrd"
+        ],
+        "unresolved_before_region": [
+          "VwNumOrd",
+          "WwNumOrd",
+          "nwNumExt"
+        ]
+      },
+      {
+        "region_id": "fresnel_sweep_table_rows",
+        "line_start": 449,
+        "line_end": 465,
+        "assigned_symbols": [
+          "ERp",
+          "ERs",
+          "ETweo",
+          "ETwo",
+          "twe",
+          "two"
+        ],
+        "referenced_symbols": [
+          "EIw",
+          "EIwNum",
+          "ERp",
+          "ERpNum",
+          "ERs",
+          "ERsNum",
+          "ERwNum",
+          "ETwNumExt",
+          "ETwNumOrd",
+          "ETweo",
+          "ETwo",
+          "EwrootsNum",
+          "Fresnel",
+          "Index",
+          "ThetaExt",
+          "ThetaOrd",
+          "count",
+          "nwNumExt",
+          "nwNumOrd",
+          "step",
+          "twe",
+          "two"
+        ],
+        "unresolved_before_region": [
+          "EIw",
+          "EIwNum",
+          "ERpNum",
+          "ERsNum",
+          "ERwNum",
+          "ETwNumExt",
+          "ETwNumOrd",
+          "EwrootsNum",
+          "nwNumExt"
+        ]
+      }
+    ]
+  },
+  "notes": [
+    "This is a lexical dependency audit for exporter construction, not a Mathematica evaluation.",
+    "External symbols include user inputs, constants, GUI controls, and upstream notebook assignments that are outside the refined route.",
+    "Escaped Mathematica symbols are preserved in their front-end text spelling."
+  ]
+}

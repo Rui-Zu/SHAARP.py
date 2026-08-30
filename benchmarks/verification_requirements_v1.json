@@ -1,0 +1,327 @@
+{
+  "verification_requirements_version": 1,
+  "status": "user_requested_requirements_queue_not_full_validation_claim",
+  "full_end_to_end_agreement_proven": false,
+  "acceptance_standard": {
+    "compare_values_not_patterns": true,
+    "strict_mathematica_source_required_for_validation_claims": true,
+    "document_discrepancies_instead_of_guessing": true,
+    "do_not_skip_complex_symbolic_cases_due_to_runtime": true
+  },
+  "requirements": [
+    {
+      "requirement_id": "value_level_mathematica_comparison",
+      "description": "Every accepted SHAARP agreement claim must compare numerical values against Mathematica/Wolfram exports, not only shapes or patterns.",
+      "status": "partially_met_stage_level_only",
+      "validation_level": "mathematica_value_validated",
+      "evidence": [
+        "benchmarks/mathematica_reference/compute_pnl_reference_v1.json",
+        "benchmarks/mathematica_reference/solve_inhom_reference_v1.json",
+        "benchmarks/mathematica_reference/solve_snell_reference_v1.json",
+        "benchmarks/mathematica_reference/solve_snell_2omega_reference_v1.json",
+        "benchmarks/mathematica_reference/solve_fresnel_reference_v1.json"
+      ],
+      "next_action": "Export full SHAARP.si and full SHAARP.ml end-to-end reference cases and compare values stage by stage.",
+      "measured": {
+        "stage_reference_case_counts": {
+          "compute_pnl": 20,
+          "solve_inhom": 20,
+          "solve_snell_omega": 20,
+          "solve_snell_2omega": 20,
+          "solve_fresnel": 20
+        },
+        "full_end_to_end_agreement_proven": false
+      }
+    },
+    {
+      "requirement_id": "at_least_20_complex_numerical_cases",
+      "description": "Maintain at least 20 numerical cases with anisotropy, complex dielectric permittivity, and complex SHG coefficients.",
+      "status": "met_for_python_and_stage_references_not_full_end_to_end",
+      "validation_level": "mixed_python_regression_and_mathematica_stage_validation",
+      "evidence": [
+        "benchmarks/numeric_benchmarks_v1.json",
+        "benchmarks/solver_stage_benchmarks_v1.json",
+        "benchmarks/mathematica_reference/compute_pnl_reference_v1.json",
+        "benchmarks/mathematica_reference/solve_inhom_reference_v1.json"
+      ],
+      "next_action": "Carry the same level of complexity into full SHAARP.si/SHAARP.ml end-to-end exports.",
+      "measured": {
+        "numeric_reduced_model_cases": 20,
+        "solver_stage_cases": 36,
+        "solve_inhom_mathematica_cases": 20,
+        "complex_d_covered": true,
+        "complex_epsilon_covered": true,
+        "nondiagonal_epsilon_covered": true
+      }
+    },
+    {
+      "requirement_id": "incidence_angle_sweeps",
+      "description": "Check across multiple incidence angles, including normal incidence and high oblique angles.",
+      "status": "met_for_python_and_stage_references_not_full_end_to_end",
+      "validation_level": "mixed_python_regression_and_mathematica_stage_validation",
+      "evidence": [
+        "benchmarks/solver_stage_benchmarks_v1.json",
+        "benchmarks/reflected_snell_benchmarks_v1.json",
+        "benchmarks/multilayer_system_benchmarks_v1.json",
+        "benchmarks/mathematica_reference/solve_snell_reference_v1.json",
+        "benchmarks/mathematica_reference/solve_snell_2omega_reference_v1.json"
+      ],
+      "next_action": "Add the same angle grid to full SHAARP.si/SHAARP.ml reference exports.",
+      "measured": {
+        "has_normal_incidence": true,
+        "max_any_angle_deg": 60.0,
+        "solver_stage_angles_deg": [
+          0.0,
+          8.0,
+          17.5,
+          29.0,
+          41.0,
+          55.0
+        ],
+        "reflected_snell_angles_deg": [
+          0.0,
+          10.0,
+          22.5,
+          37.0,
+          52.0
+        ]
+      }
+    },
+    {
+      "requirement_id": "fresnel_coefficient_sweep_plots",
+      "description": "Port and validate SHAARP.ml Fresnel coefficient angle sweeps, not only one-off solveFresnel boundary equations.",
+      "status": "mathematica_value_validated_for_exported_gui_list_fresnel_cases",
+      "validation_level": "mathematica_gui_list_fresnel_value_validated_with_transmitted_wave_policy_caveat",
+      "evidence": [
+        "Github/SHAARP.ml/docs/examples.md",
+        "benchmarks/mathematica_reference/WORKAROUND.md",
+        "benchmarks/mathematica_reference/solve_fresnel_reference_v1.json",
+        "benchmarks/mathematica_reference/fresnel_sweep_reference_v1.json",
+        "benchmarks/compare_fresnel_sweep_reference.py",
+        "tests/test_fresnel_sweep_reference.py",
+        "tests/test_fresnel_sweep_python_comparison.py",
+        "shaarp/linear.py",
+        "tests/test_linear.py"
+      ],
+      "next_action": "Expand SHAARP.ml FresnelList convention coverage beyond the current three exported cases and keep the transmitted-wave policy caveat visible.",
+      "measured": {
+        "basic_solve_fresnel_reference_cases": 20,
+        "linear_interface_sweep_exists": true,
+        "fresnel_coefficient_sweep_api_present": true,
+        "fresnel_list_mathematica_export_present": true,
+        "first_class_fresnel_coefficient_plot_workflow_present": true
+      }
+    },
+    {
+      "requirement_id": "maker_fringes_multilayer_angle_scan",
+      "description": "Port and validate SHAARP.ml Maker fringes angle scans with full multiple reflection, backward waves, standing waves, and thickness-dependent fringes.",
+      "status": "partially_mathematica_value_validated_not_full_ml_end_to_end",
+      "validation_level": "mathematica_mf_list_value_validated_with_phase_matching_diagnostic",
+      "evidence": [
+        "Github/SHAARP.ml/docs/examples.md",
+        "benchmarks/mathematica_reference/WORKAROUND.md",
+        "shaarp/multilayer_shg_boundary.py",
+        "tests/test_multilayer_shg_boundary.py",
+        "benchmarks/maker_fringes_fine_sampling_plan_v1.json",
+        "benchmarks/run_maker_fringes_fine_sampling.py",
+        "benchmarks/compare_maker_fine_to_coarse.py",
+        "benchmarks/compare_maker_fringes_reference.py",
+        "benchmarks/build_maker_fringes_manual_reference.py",
+        "benchmarks/mathematica_reference/maker_fringes_reference_v1.json",
+        "benchmarks/mathematica_reference/maker_fine_reference_v1.json",
+        "benchmarks/mathematica_reference/maker_fine_fringe_resolution_reference_v1.json",
+        "benchmarks/mathematica_reference/maker_fine_phase_matching_local_reference_v1.json",
+        "tests/test_maker_fine_to_coarse_comparison.py",
+        "tests/test_maker_fringes_reference_comparison.py",
+        "tests/test_maker_fringes_manual_reference.py"
+      ],
+      "next_action": "Expand Maker fringes validation into broader full SHAARP.ml end-to-end cases, including additional GUI assumptions and documented singular diagnostics.",
+      "measured": {
+        "multilayer_system_angle_sweep_exists": true,
+        "multilayer_polarimetry_sweep_exists": true,
+        "maker_fringes_sweep_api_present": true,
+        "maker_fringes_copy_lists_present": true,
+        "maker_fringes_saved_python_case_count": 3,
+        "maker_fringes_saved_python_total_angles": 10,
+        "maker_fringes_saved_angles_deg": [
+          -15.0,
+          -8.0,
+          0.0,
+          8.0,
+          15.0,
+          20.0,
+          40.0,
+          60.0
+        ],
+        "maker_fringes_has_negative_angle": true,
+        "maker_fringes_has_normal_incidence": true,
+        "maker_fringes_max_angle_deg": 60.0,
+        "maker_fringes_has_phase_matching_like_case": true,
+        "maker_fringes_slow_path_small_grid": true,
+        "maker_fringes_fine_sampling_plan_present": true,
+        "maker_fringes_fine_sampling_total_planned_angles": 840,
+        "maker_fringes_fine_sampling_requires_confirm_slow": true,
+        "maker_fringes_fine_sampling_not_routine_suite": true,
+        "maker_fringes_agreement_requires_mathematica_mf_values": true,
+        "maker_fringes_required_mathematica_outputs": [
+          "MFList",
+          "listMFpara",
+          "listMFperp"
+        ],
+        "maker_fringes_python_only_regression_is_not_agreement": false,
+        "maker_fringes_comparator_present": true,
+        "maker_fringes_manual_reference_builder_present": true,
+        "maker_fringes_fine_to_coarse_comparator_present": true,
+        "full_multiple_reflection_standing_wave_claim_validated": false,
+        "maker_fringes_reference_export_present": true
+      }
+    },
+    {
+      "requirement_id": "phase_matching_and_singular_limits",
+      "description": "Include extreme phase-matching cases such as same dielectric permittivity at omega and 2omega, and treat singular systems explicitly.",
+      "status": "met_for_python_diagnostics_not_mathematica_value_validated",
+      "validation_level": "python_residual_and_symbolic_regression",
+      "evidence": [
+        "tests/test_shg.py",
+        "tests/test_nonlinear.py",
+        "tests/test_symbolic.py",
+        "benchmarks/compare_symbolic_reference.py"
+      ],
+      "next_action": "Export Mathematica singular diagnostics or limiting expressions before claiming agreement for phase-matched analytical cases.",
+      "measured": {
+        "has_numeric_phase_matching_test": true,
+        "has_exact_singular_phase_matching_diagnostic_test": true,
+        "has_symbolic_phase_matching_test": true,
+        "has_normal_incidence_all_complex_test": true,
+        "has_reflected_complex_anisotropic_test": true
+      }
+    },
+    {
+      "requirement_id": "all_complex_properties",
+      "description": "Exercise simultaneous complex epsilon, complex nonlinear coefficients, complex fields, and complex wavevectors.",
+      "status": "met_for_python_and_selected_stage_references_not_full_end_to_end",
+      "validation_level": "mixed_python_regression_and_mathematica_stage_validation",
+      "evidence": [
+        "benchmarks/complex_inhomogeneous_benchmarks_v1.json",
+        "benchmarks/mathematica_reference/solve_inhom_reference_v1.json",
+        "tests/test_shg.py",
+        "tests/test_multilayer_shg_boundary.py"
+      ],
+      "next_action": "Promote these all-complex cases into the full interface and multilayer Mathematica export set.",
+      "measured": {
+        "complex_inhomogeneous_cases": 24,
+        "all_complex_normal_incidence_test": true,
+        "complex_inhomogeneous_has_complex_epsilon": true,
+        "complex_inhomogeneous_has_nondiagonal_epsilon": true
+      }
+    },
+    {
+      "requirement_id": "nondiagonal_dielectric_permittivity",
+      "description": "Cover non-diagonal dielectric tensors, including rotated anisotropic tensors and explicitly complex off-diagonal terms.",
+      "status": "met_for_python_and_selected_stage_references_not_full_end_to_end",
+      "validation_level": "mixed_python_regression_and_mathematica_stage_validation",
+      "evidence": [
+        "benchmarks/solver_stage_benchmarks_v1.json",
+        "benchmarks/complex_inhomogeneous_benchmarks_v1.json",
+        "benchmarks/mathematica_reference/solve_inhom_reference_v1.json",
+        "tests/test_multilayer_shg_boundary.py"
+      ],
+      "next_action": "Export non-diagonal dielectric full SHAARP.si/SHAARP.ml cases, including stage intermediates.",
+      "measured": {
+        "solver_stage_has_nondiagonal_epsilon": true,
+        "complex_inhomogeneous_has_nondiagonal_epsilon": true
+      }
+    },
+    {
+      "requirement_id": "biaxial_and_branch_identity",
+      "description": "Cover biaxial/non-uniaxial branch tracking and prevent ordinary/extraordinary wave identity swaps.",
+      "status": "met_for_python_regression_not_mathematica_value_validated",
+      "validation_level": "python_residual_and_regression",
+      "evidence": [
+        "benchmarks/biaxial_branch_benchmarks_v1.json",
+        "tests/test_anisotropic.py",
+        "tests/test_shg.py"
+      ],
+      "next_action": "Export Mathematica branch identities/eigenvectors for the biaxial sweeps and compare phase-aligned modes.",
+      "measured": {
+        "biaxial_branch_sequences": 6,
+        "angles_per_sequence": 6,
+        "has_mode_identity_tests": true
+      }
+    },
+    {
+      "requirement_id": "miller_indices_and_lattice_orientation",
+      "description": "Treat Miller indices as reciprocal-space plane indices requiring a crystal lattice, not as direct Cartesian vectors.",
+      "status": "met_for_python_regression_not_mathematica_value_validated",
+      "validation_level": "python_regression",
+      "evidence": [
+        "tests/test_orientation.py",
+        "benchmarks/mathematica_reference/export_orientation_reference.wl",
+        "benchmarks/mathematica_reference/EXACT_SYMBOL_AUDIT_2026_05_17.md"
+      ],
+      "next_action": "Generate accepted orientation_reference_v1.json from Mathematica hklConvert/QC/QP outputs.",
+      "measured": {
+        "has_nonzero_cubic_miller_orientation": true,
+        "has_noncubic_reciprocal_miller_orientation": true,
+        "solver_stage_orientation_count": 6,
+        "biaxial_branch_orientation_count": 6,
+        "complex_orientation_matrix_rejected": true
+      }
+    },
+    {
+      "requirement_id": "multilayer_solve_fresnel_n_boundary",
+      "description": "Compare SHAARP.ml solveFresnelN-style multilayer matrix/RHS/coefficients/residuals with explicit row and column metadata.",
+      "status": "met_for_python_benchmark_not_mathematica_value_validated",
+      "validation_level": "python_residual_and_regression",
+      "evidence": [
+        "benchmarks/multilayer_boundary_system_benchmarks_v1.json",
+        "benchmarks/compare_multilayer_boundary_reference.py",
+        "tests/test_multilayer_boundary_reference_comparison.py"
+      ],
+      "next_action": "Export solveFresnelN matrix/RHS/known residual/coefficients from Mathematica and compare values.",
+      "measured": {
+        "saved_case_count": 6,
+        "layer_counts": [
+          1,
+          2,
+          3
+        ],
+        "has_known_sources": true
+      }
+    },
+    {
+      "requirement_id": "symbolic_si_full_and_ml_partial",
+      "description": "Validate full SHAARP.si analytical expressions and SHAARP.ml partial analytical expressions by symbolic residuals and deterministic substitutions.",
+      "status": "scaffolded_not_mathematica_value_validated",
+      "validation_level": "symbolic_comparator_scaffold",
+      "evidence": [
+        "benchmarks/compare_symbolic_reference.py",
+        "tests/test_symbolic_reference_comparison.py"
+      ],
+      "next_action": "Export real Mathematica InputForm expressions with exact symbol metadata, then compare canonical residuals and numeric substitutions.",
+      "measured": {
+        "has_dense_complex_symbolic_known_waves": true,
+        "has_nondiagonal_complex_symbolic_inhomogeneous": true,
+        "has_phase_matching_singular_diagnostics": true
+      }
+    },
+    {
+      "requirement_id": "shaarp_ml_gui_feature_parity",
+      "description": "Track SHAARP.ml GUI capabilities from the updated notebook/docs so GUI-only features are not lost during the Python port.",
+      "status": "merged_gui_implemented_complete",
+      "validation_level": "gui_capability_audit_not_physics_validation",
+      "evidence": [
+        "benchmarks/gui_capability_audit_v1.json",
+        "Github/SHAARP.ml/SHAARP.ml.nb",
+        "Github/SHAARP.ml/docs/input.md",
+        "Github/SHAARP.ml/docs/examples.md"
+      ],
+      "next_action": "Convert each GUI audit item marked missing or partial into explicit Python API, notebook, or documentation work, then validate numerical outputs against Mathematica.",
+      "measured": {
+        "full_gui_feature_parity_claimed": false,
+        "gui_audit_present": true,
+        "gui_capabilities_audited": 16
+      }
+    }
+  ]
+}

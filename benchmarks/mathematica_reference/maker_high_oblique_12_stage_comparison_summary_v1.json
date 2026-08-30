@@ -1,0 +1,314 @@
+{
+  "agreement_claimed": true,
+  "case_id": "maker_fringes_moderate_high_oblique",
+  "first_understood_residual_max_abs": null,
+  "first_understood_residual_stage": null,
+  "known_caveats": [
+    "Direct reflected-wave indices include Mathematica/Python ordering differences; use best-match reflected records.",
+    "Mathematica emits absent selected-wave slots for some transmitted waves; those are selection-policy diagnostics."
+  ],
+  "max_understood_residual_abs": 7.645173419883149e-14,
+  "max_understood_residual_stage": "inhomogeneous_layer_1[0].best_electric_py[0]",
+  "source": "Mathematica SHAARP.ml setup.nb Maker f4NL stage diagnostics for high-oblique theta=12",
+  "status": "high_oblique_12_stage_passes",
+  "theta_deg": 12.0,
+  "tolerance": 1e-10,
+  "top_finite_deltas": [
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 0.7580055132623439,
+      "stage": "nonlinear_transmitted[1].k",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 0.2670081252118231,
+      "stage": "linear_reflected[0].electric",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 0.2670081252118211,
+      "stage": "linear_reflected[1].electric",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 0.20989088501495046,
+      "stage": "nonlinear_transmitted[1].electric",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 7.645173419883149e-14,
+      "stage": "inhomogeneous_layer_1[0].electric",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 7.645173419883149e-14,
+      "stage": "inhomogeneous_layer_1[0].best_electric_py[0]",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 7.498042251208259e-14,
+      "stage": "forward_homogeneous_layer_1[0].electric",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 7.498042251208259e-14,
+      "stage": "forward_homogeneous_layer_1[0].best_electric_py[0]",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 5.330406810537551e-14,
+      "stage": "backward_homogeneous_layer_1[1].k",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 5.330406810537551e-14,
+      "stage": "backward_homogeneous_layer_1[1].best_k_py[1]",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 4.9883132524166664e-14,
+      "stage": "forward_homogeneous_layer_1[1].k",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 4.9883132524166664e-14,
+      "stage": "forward_homogeneous_layer_1[1].best_k_py[1]",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 4.218847519409056e-14,
+      "stage": "forward_homogeneous_layer_1[0].k",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 4.218847519409056e-14,
+      "stage": "forward_homogeneous_layer_1[0].best_k_py[0]",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 3.86357613299812e-14,
+      "stage": "inhomogeneous_layer_1[0].k",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 3.86357613299812e-14,
+      "stage": "inhomogeneous_layer_1[0].best_k_py[0]",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 3.730350462620726e-14,
+      "stage": "backward_homogeneous_layer_1[0].k",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 3.730350462620726e-14,
+      "stage": "backward_homogeneous_layer_1[0].best_k_py[0]",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 1.9558254437941956e-14,
+      "stage": "linear_transmitted[0].k",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 1.9558254437941956e-14,
+      "stage": "linear_transmitted[0].best_k_py[0]",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 1.8207660756818095e-14,
+      "stage": "inhomogeneous_layer_1[2].k",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 1.8207660756818095e-14,
+      "stage": "inhomogeneous_layer_1[2].best_k_py[2]",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 1.6264862039409702e-14,
+      "stage": "linear_transmitted[0].electric",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 1.6264862039409702e-14,
+      "stage": "linear_transmitted[0].best_electric_py[0]",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 6.6616995386720105e-15,
+      "stage": "inhomogeneous_layer_1[1].electric",
+      "theta_deg": 12.0
+    }
+  ],
+  "top_understood_deltas": [
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 7.645173419883149e-14,
+      "stage": "inhomogeneous_layer_1[0].best_electric_py[0]",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 7.498042251208259e-14,
+      "stage": "forward_homogeneous_layer_1[0].best_electric_py[0]",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 5.330406810537551e-14,
+      "stage": "backward_homogeneous_layer_1[1].best_k_py[1]",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 4.9883132524166664e-14,
+      "stage": "forward_homogeneous_layer_1[1].best_k_py[1]",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 4.218847519409056e-14,
+      "stage": "forward_homogeneous_layer_1[0].best_k_py[0]",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 3.86357613299812e-14,
+      "stage": "inhomogeneous_layer_1[0].best_k_py[0]",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 3.730350462620726e-14,
+      "stage": "backward_homogeneous_layer_1[0].best_k_py[0]",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 1.9558254437941956e-14,
+      "stage": "linear_transmitted[0].k",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 1.9558254437941956e-14,
+      "stage": "linear_transmitted[0].best_k_py[0]",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 1.8207660756818095e-14,
+      "stage": "inhomogeneous_layer_1[2].best_k_py[2]",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 1.6264862039409702e-14,
+      "stage": "linear_transmitted[0].electric",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 1.6264862039409702e-14,
+      "stage": "linear_transmitted[0].best_electric_py[0]",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 6.6616995386720105e-15,
+      "stage": "inhomogeneous_layer_1[1].best_electric_py[1]",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 6.516947685352962e-15,
+      "stage": "forward_homogeneous_layer_1[1].best_electric_py[1]",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 6.3320781176852775e-15,
+      "stage": "nonlinear_transmitted[1].best_electric_py[0]",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 4.3751803280840456e-15,
+      "stage": "nonlinear_transmitted[1].best_k_py[0]",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 3.684284767501181e-15,
+      "stage": "inhomogeneous_layer_1[2].best_electric_py[2]",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 2.0122792321330962e-15,
+      "stage": "inhomogeneous_layer_1[1].best_k_py[1]",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 1.994735888558691e-15,
+      "stage": "linear_reflected[1].best_electric_py[0]",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 8.3566331141088e-16,
+      "stage": "backward_homogeneous_layer_1[1].best_electric_py[1]",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 6.196848925478562e-16,
+      "stage": "backward_homogeneous_layer_1[0].best_electric_py[0]",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 5.061588988174682e-16,
+      "stage": "linear_reflected[0].best_electric_py[1]",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 2.220446049250313e-16,
+      "stage": "linear_reflected[0].best_k_py[0]",
+      "theta_deg": 12.0
+    },
+    {
+      "case_id": "maker_fringes_moderate_high_oblique",
+      "max_abs": 2.220446049250313e-16,
+      "stage": "linear_reflected[1].best_k_py[0]",
+      "theta_deg": 12.0
+    }
+  ]
+}

@@ -1,0 +1,860 @@
+{
+  "manifest_version": 1,
+  "status": "mathematica_reference_values_requested_not_yet_available",
+  "coverage_report": "coverage_report_v1.json",
+  "coverage_snapshot": {
+    "coverage_report_version": 1,
+    "status": "generated_python_coverage_report_not_mathematica_validation",
+    "coverage_matrix_version": 1,
+    "benchmark_counts": {
+      "numeric_reduced_model_cases": 20,
+      "solver_stage_cases": 36,
+      "complex_inhomogeneous_cases": 24,
+      "reflected_snell_cases": 20,
+      "biaxial_branch_sequences": 6,
+      "biaxial_branch_angles_per_sequence": 6,
+      "multilayer_boundary_system_cases": 6,
+      "multilayer_system_cases": 20,
+      "multilayer_polarimetry_cases": 20,
+      "maker_fringes_cases": 3,
+      "maker_fringes_total_angles": 10
+    },
+    "incidence_angle": {
+      "solver_stage_deg": [
+        0.0,
+        8.0,
+        17.5,
+        29.0,
+        41.0,
+        55.0
+      ],
+      "complex_inhomogeneous_deg": [
+        0.0,
+        12.0,
+        24.0,
+        36.0,
+        48.0,
+        60.0
+      ],
+      "reflected_snell_deg": [
+        0.0,
+        10.0,
+        22.5,
+        37.0,
+        52.0
+      ],
+      "biaxial_branch_deg": [
+        5.0,
+        15.0,
+        25.0,
+        35.0,
+        45.0,
+        55.0
+      ],
+      "has_normal_incidence": true,
+      "max_solver_angle_deg": 55.0,
+      "max_any_angle_deg": 60.0
+    },
+    "polarization": {
+      "solver_stage_polarizations": [
+        "p",
+        "s"
+      ]
+    },
+    "orientation": {
+      "solver_stage_orientation_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "biaxial_branch_orientation_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "solver_stage_orientation_count": 6,
+      "biaxial_branch_orientation_count": 6,
+      "has_nonzero_cubic_miller_orientation": true,
+      "has_noncubic_reciprocal_miller_orientation": true,
+      "has_mathematica_point_group_axis_alias_test": true,
+      "last_solver_surface_normal": [
+        0.387703026949619,
+        0.716967895589432,
+        0.579347391111899
+      ],
+      "last_branch_surface_normal": [
+        0.387703026949619,
+        0.716967895589432,
+        0.579347391111899
+      ]
+    },
+    "tensor_complexity": {
+      "solver_stage_has_complex_epsilon_omega": true,
+      "solver_stage_has_complex_epsilon_2omega": true,
+      "solver_stage_has_nondiagonal_epsilon": true,
+      "complex_inhomogeneous_has_complex_epsilon": true,
+      "complex_inhomogeneous_has_nondiagonal_epsilon": true,
+      "numeric_reduced_cases_have_complex_d": true,
+      "numeric_reduced_cases_have_nondiagonal_epsilon": true
+    },
+    "mode_identity": {
+      "has_uniaxial_identity_test": true,
+      "has_shg_source_identity_test": true,
+      "has_biaxial_branch_tracking_test": true,
+      "has_ambiguous_branch_test": true
+    },
+    "phase_matching_and_extremes": {
+      "has_numeric_phase_matching_test": true,
+      "has_exact_singular_phase_matching_diagnostic_test": true,
+      "has_symbolic_phase_matching_test": true,
+      "has_normal_incidence_all_complex_test": true,
+      "has_reflected_complex_anisotropic_test": true
+    },
+    "multilayer_nonlinear": {
+      "has_tensor_basis_generation_test": true,
+      "has_boundary_system_matrix_benchmark_test": true,
+      "has_ten_source_terms_test": true,
+      "has_ten_source_inhomogeneous_residual_test": true,
+      "has_ten_source_boundary_bridge_test": true,
+      "has_automatic_fundamental_to_shg_workflow_test": true,
+      "has_tensor_driven_complex_nondiagonal_workflow_test": true,
+      "has_manual_anisotropic_top_workflow_test": true,
+      "has_system_config_to_tensor_workflow_test": true,
+      "has_system_angle_sweep_test": true,
+      "has_jones_incidence_test": true,
+      "has_polarimetry_incidence_test": true,
+      "has_reflected_analyzer_projection_test": true,
+      "has_phi_psi_polarimetry_sweep_test": true,
+      "has_sample_azimuth_sweep_test": true,
+      "has_maker_fringes_sweep_test": true,
+      "has_transmitted_analyzer_projection_test": true,
+      "saved_multilayer_boundary_system_case_count": 6,
+      "saved_multilayer_boundary_system_layer_counts": [
+        1,
+        2,
+        3
+      ],
+      "saved_multilayer_boundary_system_has_known_sources": true,
+      "saved_multilayer_system_case_count": 20,
+      "saved_multilayer_system_angles_deg": [
+        0.0,
+        8.0,
+        18.0,
+        33.0,
+        52.0
+      ],
+      "saved_multilayer_system_orientation_count": 4,
+      "saved_multilayer_polarimetry_case_count": 20,
+      "saved_multilayer_polarimetry_angles_deg": [
+        0.0,
+        8.0,
+        18.0,
+        33.0,
+        52.0
+      ],
+      "saved_multilayer_polarimetry_phi_deg": [
+        0.0,
+        30.0,
+        67.5,
+        90.0
+      ],
+      "saved_multilayer_polarimetry_psi_deg": [
+        0.0,
+        22.5,
+        45.0,
+        90.0
+      ],
+      "saved_multilayer_polarimetry_ellipticity_deg": [
+        -35.0,
+        0.0,
+        15.0
+      ],
+      "saved_multilayer_polarimetry_sample_azimuth_deg": [
+        0.0,
+        15.0,
+        37.5,
+        72.0
+      ],
+      "saved_multilayer_polarimetry_orientation_count": 4,
+      "saved_maker_fringes_case_count": 3,
+      "saved_maker_fringes_total_angle_count": 10,
+      "saved_maker_fringes_angles_deg": [
+        -15.0,
+        -8.0,
+        0.0,
+        8.0,
+        15.0,
+        20.0,
+        40.0,
+        60.0
+      ],
+      "saved_maker_fringes_has_negative_angle": true,
+      "saved_maker_fringes_has_normal_incidence": true,
+      "saved_maker_fringes_max_angle_deg": 60.0,
+      "saved_maker_fringes_has_phase_matching_like_case": true,
+      "saved_maker_fringes_slow_path_small_grid": true
+    },
+    "symbolic": {
+      "symbolic_test_count_markers": 24,
+      "has_dense_complex_symbolic_known_waves": true,
+      "has_nondiagonal_complex_symbolic_inhomogeneous": true,
+      "has_mathematica_point_group_label_aliases": true,
+      "has_point_group_source_reference_test": true
+    },
+    "mathematica_validation": {
+      "comparator_present": true,
+      "wolfram_batch_detector_present": true,
+      "wolfram_batch_detector_test_present": true,
+      "strict_comparator_rejects_missing_source": true,
+      "strict_comparator_rejects_python_reference": true,
+      "strict_comparator_rejects_unfilled_placeholders": true,
+      "strict_comparator_accepts_filled_mathematica_reference": true,
+      "suite_template_comparator_present": true,
+      "suite_template_requires_suite_id": true,
+      "suite_template_rejects_unfilled_outputs": true,
+      "compute_pnl_reference_present": true,
+      "compute_pnl_reference_case_count": 20,
+      "compute_pnl_reference_source_is_mathematica": true,
+      "compute_pnl_reference_test_present": true,
+      "solve_inhom_reference_present": true,
+      "solve_inhom_reference_case_count": 20,
+      "solve_inhom_reference_source_is_mathematica": true,
+      "solve_inhom_reference_test_present": true,
+      "solve_snell_reference_present": true,
+      "solve_snell_reference_case_count": 20,
+      "solve_snell_reference_source_is_mathematica": true,
+      "solve_snell_reference_test_present": true,
+      "solve_snell_2omega_reference_present": true,
+      "solve_snell_2omega_reference_case_count": 20,
+      "solve_snell_2omega_reference_source_is_mathematica": true,
+      "solve_snell_2omega_reference_test_present": true,
+      "solve_fresnel_reference_present": true,
+      "solve_fresnel_reference_case_count": 20,
+      "solve_fresnel_reference_source_is_mathematica": true,
+      "solve_fresnel_reference_test_present": true,
+      "fresnel_sweep_reference_present": true,
+      "fresnel_sweep_reference_case_count": 3,
+      "fresnel_sweep_reference_test_present": true,
+      "maker_fringes_reference_present": true,
+      "maker_fine_reference_present": true,
+      "maker_fine_fringe_resolution_reference_present": true,
+      "maker_fine_phase_matching_local_reference_present": true,
+      "sample_rotation_reference_present": true,
+      "sample_rotation_reference_case_count": 3,
+      "solve_fresnel_n_reference_present": true,
+      "live_symbolic_compute_pnl_reference_present": true,
+      "live_symbolic_ml_partial_pnl_reference_present": true,
+      "live_symbolic_ml_partial_pnl_expression_count": 10,
+      "point_group_tensor_source_reference_present": true,
+      "point_group_tensor_source_reference_pattern_count": 16,
+      "live_symbolic_point_group_d_probe_present": true,
+      "live_symbolic_point_group_d_probe_status": "diagnostic_only_ml_material_extension_does_not_apply_gui_point_group_patterns",
+      "validation_plan_present": true,
+      "status": "partial_reference_values_plus_live_gui_and_symbolic_validation_artifacts"
+    }
+  },
+  "suite_count": 10,
+  "total_reference_items": 191,
+  "validated_artifacts": [
+    {
+      "path": "mathematica_reference/wolfram_live_compute_pnl_smoke_v1.json",
+      "exists": true,
+      "validation_level": "numeric_stage_value_comparison",
+      "tests": [
+        "tests/test_wolfram_live_compute_pnl_smoke.py"
+      ],
+      "notes": "Live Wolfram 14.3 computePNL smoke reference."
+    },
+    {
+      "path": "mathematica_reference/wolfram_live_solve_inhom_smoke_v1.json",
+      "exists": true,
+      "validation_level": "numeric_stage_value_comparison",
+      "tests": [
+        "tests/test_wolfram_live_solve_inhom_smoke.py"
+      ],
+      "notes": "Live Wolfram 14.3 complex non-diagonal solveInhom smoke reference."
+    },
+    {
+      "path": "mathematica_reference/solve_fresnel_smoke_output.json",
+      "exists": true,
+      "validation_level": "numeric_stage_value_comparison",
+      "tests": [
+        "tests/test_wolfram_live_solve_fresnel_smoke.py"
+      ],
+      "notes": "Live Wolfram 14.3 SHAARP.ml solveFresnel smoke reference."
+    },
+    {
+      "path": "mathematica_reference/solve_snell_smoke_output.json",
+      "exists": true,
+      "validation_level": "numeric_stage_value_comparison",
+      "tests": [
+        "tests/test_wolfram_live_solve_snell_smoke.py"
+      ],
+      "notes": "Live Wolfram 14.3 SHAARP.ml solveSnell smoke reference."
+    },
+    {
+      "path": "mathematica_reference/solve_fresnel_n_reference_v1.json",
+      "exists": true,
+      "validation_level": "matrix_rhs_coefficient_value_comparison",
+      "tests": [
+        "tests/test_mathematica_solve_fresnel_n_reference.py",
+        "tests/test_multilayer_boundary.py"
+      ],
+      "notes": "solveFresnelN-style multilayer boundary matrix/RHS/coefficient reference."
+    },
+    {
+      "path": "mathematica_reference/fresnel_sweep_reference_v1.json",
+      "exists": true,
+      "validation_level": "gui_list_fresnel_value_comparison_with_transmitted_wave_policy_caveat",
+      "tests": [
+        "tests/test_fresnel_sweep_reference.py",
+        "tests/test_fresnel_sweep_python_comparison.py"
+      ],
+      "notes": "SHAARP.ml GUI-shaped FresnelList Rp/Rs/Tp/Ts reference."
+    },
+    {
+      "path": "mathematica_reference/maker_fringes_reference_v1.json",
+      "exists": true,
+      "validation_level": "maker_mflist_value_comparison_with_phase_matching_diagnostic",
+      "tests": [
+        "tests/test_maker_fringes_reference_comparison.py"
+      ],
+      "notes": "SHAARP.ml coarse Maker MFList/listMFpara/listMFperp reference."
+    },
+    {
+      "path": "mathematica_reference/maker_fine_reference_v1.json",
+      "exists": true,
+      "validation_level": "maker_mflist_value_comparison",
+      "tests": [
+        "tests/test_maker_fine_reference_comparison.py"
+      ],
+      "notes": "SHAARP.ml three-case fine Maker reference including dense fringe-resolution grid."
+    },
+    {
+      "path": "mathematica_reference/maker_fine_fringe_resolution_reference_v1.json",
+      "exists": true,
+      "validation_level": "maker_mflist_value_comparison",
+      "tests": [
+        "tests/test_maker_fine_fringe_resolution_reference_comparison.py"
+      ],
+      "notes": "SHAARP.ml standalone 481-angle dense Maker fringe-resolution reference."
+    },
+    {
+      "path": "mathematica_reference/maker_fine_phase_matching_local_reference_v1.json",
+      "exists": true,
+      "validation_level": "phase_matching_diagnostic_value_comparison",
+      "tests": [
+        "tests/test_maker_fine_phase_matching_local_reference_comparison.py"
+      ],
+      "notes": "SHAARP.ml local phase-matching-like Maker diagnostic reference."
+    },
+    {
+      "path": "mathematica_reference/sample_rotation_reference_v1.json",
+      "exists": true,
+      "validation_level": "sample_rotation_value_comparison_with_phase_matching_diagnostic",
+      "tests": [
+        "tests/test_sample_rotation_reference_comparison.py"
+      ],
+      "notes": "SHAARP.ml SampleRotate reference after JSON export bug fix."
+    },
+    {
+      "path": "mathematica_reference/wolfram_live_symbolic_compute_pnl_reference_v1.json",
+      "exists": true,
+      "validation_level": "symbolic_residual_and_complex_substitution_grid",
+      "tests": [
+        "tests/test_wolfram_live_symbolic_compute_pnl_reference.py"
+      ],
+      "notes": "Live Wolfram 14.3 symbolic computePNL same-wave and mixed-wave reference."
+    },
+    {
+      "path": "mathematica_reference/wolfram_live_symbolic_ml_partial_pnl_reference_v1.json",
+      "exists": true,
+      "validation_level": "symbolic_residual_and_complex_substitution_grid",
+      "tests": [
+        "tests/test_wolfram_live_symbolic_ml_partial_pnl_reference.py"
+      ],
+      "notes": "Live Wolfram 14.3 symbolic SHAARP.ml ten-source partial PNL reference."
+    },
+    {
+      "path": "mathematica_reference/shaarp_si_compat_signal_agreement_v1.json",
+      "exists": true,
+      "validation_level": "si_compat_reflected_er2w_36_case_value_comparison",
+      "tests": [
+        "tests/test_shaarp_si_compat_signal_agreement.py"
+      ],
+      "notes": "Self-contained SHAARP.si compatibility reflected ER2w agreement diagnostic."
+    }
+  ],
+  "source_reference_artifacts": [
+    {
+      "path": "mathematica_reference/point_group_tensor_patterns_from_si_source_v1.json",
+      "exists": true,
+      "validation_level": "source_text_pattern_extraction_not_live_symbolic_execution",
+      "tests": [
+        "tests/test_point_group_tensor_source_reference.py"
+      ],
+      "notes": "Machine-readable point-group d tensor table parsed from the SHAARP.si Partial Analytical Expressions source branch."
+    }
+  ],
+  "diagnostic_artifacts": [
+    {
+      "path": "mathematica_reference/wolfram_live_symbolic_point_group_d_probe_v1.json",
+      "exists": true,
+      "validation_level": "diagnostic_only_not_point_group_tensor_validation",
+      "tests": [
+        "tests/test_coverage_report.py"
+      ],
+      "notes": "Live Wolfram 14.3 probe showing SHAARP.ml material extension does not rewrite dC from point group; GUI point-group tensor patterns still need a separate source-branch validation."
+    }
+  ],
+  "notes": [
+    "This manifest is the comprehensive request list for Mathematica SHAARP reference exports.",
+    "It does not contain Mathematica values and is not validation by itself.",
+    "After exporting Mathematica values, compare value-by-value with explicit tolerances."
+  ],
+  "suites": [
+    {
+      "suite_id": "reduced_numeric_si_ml",
+      "source_benchmark_file": "numeric_benchmarks_v1.json",
+      "source_key": "cases",
+      "item_count": 20,
+      "item_ids": [
+        "complex_aniso_01",
+        "complex_aniso_02",
+        "complex_aniso_03",
+        "complex_aniso_04",
+        "complex_aniso_05",
+        "complex_aniso_06",
+        "complex_aniso_07",
+        "complex_aniso_08",
+        "complex_aniso_09",
+        "complex_aniso_10",
+        "complex_aniso_11",
+        "complex_aniso_12",
+        "complex_aniso_13",
+        "complex_aniso_14",
+        "complex_aniso_15",
+        "complex_aniso_16",
+        "complex_aniso_17",
+        "complex_aniso_18",
+        "complex_aniso_19",
+        "complex_aniso_20"
+      ],
+      "requested_outputs": [
+        "single_interface_intensity",
+        "multilayer_reflected_intensity",
+        "multilayer_transmitted_intensity"
+      ],
+      "notes": [
+        "Reduced-model Python regression cases. Useful for legacy SI/ML intensity comparisons only.",
+        "Do not use these to claim full anisotropic SHAARP equivalence."
+      ]
+    },
+    {
+      "suite_id": "single_interface_solver_stage",
+      "source_benchmark_file": "solver_stage_benchmarks_v1.json",
+      "source_key": "cases",
+      "item_count": 36,
+      "item_ids": [
+        "solver_stage_01",
+        "solver_stage_02",
+        "solver_stage_03",
+        "solver_stage_04",
+        "solver_stage_05",
+        "solver_stage_06",
+        "solver_stage_07",
+        "solver_stage_08",
+        "solver_stage_09",
+        "solver_stage_10",
+        "solver_stage_11",
+        "solver_stage_12",
+        "solver_stage_13",
+        "solver_stage_14",
+        "solver_stage_15",
+        "solver_stage_16",
+        "solver_stage_17",
+        "solver_stage_18",
+        "solver_stage_19",
+        "solver_stage_20",
+        "solver_stage_21",
+        "solver_stage_22",
+        "solver_stage_23",
+        "solver_stage_24",
+        "solver_stage_25",
+        "solver_stage_26",
+        "solver_stage_27",
+        "solver_stage_28",
+        "solver_stage_29",
+        "solver_stage_30",
+        "solver_stage_31",
+        "solver_stage_32",
+        "solver_stage_33",
+        "solver_stage_34",
+        "solver_stage_35",
+        "solver_stage_36"
+      ],
+      "requested_outputs": [
+        "rotated_epsilon_omega_lab",
+        "rotated_epsilon_2omega_lab",
+        "omega_reflected_wavevectors",
+        "omega_transmitted_wavevectors",
+        "omega_transmitted_electric_fields",
+        "P2eo",
+        "P2o",
+        "Peoo",
+        "inhomogeneous_ee_field",
+        "inhomogeneous_oo_field",
+        "inhomogeneous_eo_field",
+        "two_omega_boundary_coefficients",
+        "reflected_total_2omega_electric",
+        "transmitted_total_2omega_electric"
+      ],
+      "notes": [
+        "Primary current full-port solver-stage target.",
+        "Includes complex anisotropic non-diagonal epsilon, complex SHG coefficients, s/p polarization, and cubic/non-cubic Miller orientations."
+      ]
+    },
+    {
+      "suite_id": "shaarp_si_stage_reference_request",
+      "source_benchmark_file": "mathematica_reference/shaarp_si_stage_reference_request_v1.json",
+      "source_key": "cases",
+      "item_count": 36,
+      "item_ids": [
+        "solver_stage_01",
+        "solver_stage_02",
+        "solver_stage_03",
+        "solver_stage_04",
+        "solver_stage_05",
+        "solver_stage_06",
+        "solver_stage_07",
+        "solver_stage_08",
+        "solver_stage_09",
+        "solver_stage_10",
+        "solver_stage_11",
+        "solver_stage_12",
+        "solver_stage_13",
+        "solver_stage_14",
+        "solver_stage_15",
+        "solver_stage_16",
+        "solver_stage_17",
+        "solver_stage_18",
+        "solver_stage_19",
+        "solver_stage_20",
+        "solver_stage_21",
+        "solver_stage_22",
+        "solver_stage_23",
+        "solver_stage_24",
+        "solver_stage_25",
+        "solver_stage_26",
+        "solver_stage_27",
+        "solver_stage_28",
+        "solver_stage_29",
+        "solver_stage_30",
+        "solver_stage_31",
+        "solver_stage_32",
+        "solver_stage_33",
+        "solver_stage_34",
+        "solver_stage_35",
+        "solver_stage_36"
+      ],
+      "requested_outputs": [
+        "ThetaExt",
+        "ThetaOrd",
+        "nwNumExt",
+        "nwNumOrd",
+        "EwrootsNum",
+        "E2wroots",
+        "ERpNum",
+        "ERsNum",
+        "ER2w",
+        "HR2w",
+        "P2e",
+        "P2o",
+        "Peo",
+        "P2eo",
+        "Peoo",
+        "Croots",
+        "ETweo",
+        "ETwo",
+        "Vktweo",
+        "Vktwo",
+        "RSignalCrystal",
+        "I2",
+        "Fresnel"
+      ],
+      "notes": [
+        "Targets original SHAARP.si notebook stage-symbol export, not Python surrogate stage names.",
+        "Request is based on front-end text extraction, symbol audit, and numerical stage snippets from SHAARP_V1.03.nb cell 4.",
+        "The request contains 36 complex, non-diagonal, angle/orientation-varied cases plus an explicit follow-up queue for trivial and phase-matching-like extremes.",
+        "This suite is not validation until Mathematica exports are produced and compared value-by-value."
+      ]
+    },
+    {
+      "suite_id": "complex_inhomogeneous_field",
+      "source_benchmark_file": "complex_inhomogeneous_benchmarks_v1.json",
+      "source_key": "cases",
+      "item_count": 24,
+      "item_ids": [
+        "complex_inhom_01",
+        "complex_inhom_02",
+        "complex_inhom_03",
+        "complex_inhom_04",
+        "complex_inhom_05",
+        "complex_inhom_06",
+        "complex_inhom_07",
+        "complex_inhom_08",
+        "complex_inhom_09",
+        "complex_inhom_10",
+        "complex_inhom_11",
+        "complex_inhom_12",
+        "complex_inhom_13",
+        "complex_inhom_14",
+        "complex_inhom_15",
+        "complex_inhom_16",
+        "complex_inhom_17",
+        "complex_inhom_18",
+        "complex_inhom_19",
+        "complex_inhom_20",
+        "complex_inhom_21",
+        "complex_inhom_22",
+        "complex_inhom_23",
+        "complex_inhom_24"
+      ],
+      "requested_outputs": [
+        "source_wavevector",
+        "source_polarization",
+        "inhomogeneous_electric_field",
+        "solveInhom_residual"
+      ],
+      "notes": [
+        "Isolates Mathematica solveInhom against Python solve_inhomogeneous_field.",
+        "All cases use complex non-diagonal anisotropic epsilon and complex source polarizations."
+      ]
+    },
+    {
+      "suite_id": "reflected_complex_snell",
+      "source_benchmark_file": "reflected_snell_benchmarks_v1.json",
+      "source_key": "cases",
+      "item_count": 20,
+      "item_ids": [
+        "reflected_snell_01",
+        "reflected_snell_02",
+        "reflected_snell_03",
+        "reflected_snell_04",
+        "reflected_snell_05",
+        "reflected_snell_06",
+        "reflected_snell_07",
+        "reflected_snell_08",
+        "reflected_snell_09",
+        "reflected_snell_10",
+        "reflected_snell_11",
+        "reflected_snell_12",
+        "reflected_snell_13",
+        "reflected_snell_14",
+        "reflected_snell_15",
+        "reflected_snell_16",
+        "reflected_snell_17",
+        "reflected_snell_18",
+        "reflected_snell_19",
+        "reflected_snell_20"
+      ],
+      "requested_outputs": [
+        "fast_theta",
+        "slow_theta",
+        "fast_refractive_index",
+        "slow_refractive_index",
+        "fast_electric_direction",
+        "slow_electric_direction",
+        "fast_wavevector_direction",
+        "slow_wavevector_direction"
+      ],
+      "notes": [
+        "Isolates reflected/backward complex anisotropic solveSnell roots.",
+        "Use Mathematica branch labels exactly as SHAARP emits them."
+      ]
+    },
+    {
+      "suite_id": "biaxial_branch_sweeps",
+      "source_benchmark_file": "biaxial_branch_benchmarks_v1.json",
+      "source_key": "sequences",
+      "item_count": 6,
+      "item_ids": [
+        "biaxial_branch_orientation_01",
+        "biaxial_branch_orientation_02",
+        "biaxial_branch_orientation_03",
+        "biaxial_branch_orientation_04",
+        "biaxial_branch_orientation_05",
+        "biaxial_branch_orientation_06"
+      ],
+      "requested_outputs": [
+        "fast_slow_theta_by_angle",
+        "fast_slow_refractive_index_by_angle",
+        "fast_slow_electric_direction_by_angle",
+        "mathematica_branch_labels_by_angle"
+      ],
+      "notes": [
+        "Tracks branch continuity across angle sweeps for biaxial/non-uniaxial cases.",
+        "Do not force ordinary/extraordinary labels unless Mathematica explicitly does so."
+      ]
+    },
+    {
+      "suite_id": "multilayer_system_workflow",
+      "source_benchmark_file": "multilayer_system_benchmarks_v1.json",
+      "source_key": "cases",
+      "item_count": 20,
+      "item_ids": [
+        "multilayer_system_01",
+        "multilayer_system_02",
+        "multilayer_system_03",
+        "multilayer_system_04",
+        "multilayer_system_05",
+        "multilayer_system_06",
+        "multilayer_system_07",
+        "multilayer_system_08",
+        "multilayer_system_09",
+        "multilayer_system_10",
+        "multilayer_system_11",
+        "multilayer_system_12",
+        "multilayer_system_13",
+        "multilayer_system_14",
+        "multilayer_system_15",
+        "multilayer_system_16",
+        "multilayer_system_17",
+        "multilayer_system_18",
+        "multilayer_system_19",
+        "multilayer_system_20"
+      ],
+      "requested_outputs": [
+        "fundamental_boundary_coefficients",
+        "fundamental_layer_wavevectors",
+        "fundamental_layer_electric_fields",
+        "ten_source_wavevectors",
+        "ten_source_polarizations",
+        "ten_inhomogeneous_electric_fields",
+        "two_omega_boundary_coefficients",
+        "reflected_two_omega_electric_fields",
+        "substrate_two_omega_electric_fields"
+      ],
+      "notes": [
+        "Targets the staged SHAARP.ml-style system workflow.",
+        "Includes complex non-diagonal tensors, nontrivial orientations, s/p polarization, and all ten forward/backward nonlinear source terms."
+      ]
+    },
+    {
+      "suite_id": "multilayer_boundary_system",
+      "source_benchmark_file": "multilayer_boundary_system_benchmarks_v1.json",
+      "source_key": "cases",
+      "item_count": 6,
+      "item_ids": [
+        "boundary_system_01",
+        "boundary_system_02",
+        "boundary_system_03",
+        "boundary_system_04",
+        "boundary_system_05",
+        "boundary_system_06"
+      ],
+      "requested_outputs": [
+        "solveFresnelN_matrix",
+        "solveFresnelN_rhs",
+        "solveFresnelN_known_residual",
+        "solveFresnelN_coefficients",
+        "solveFresnelN_residual",
+        "equation_labels",
+        "equation_metadata",
+        "unknown_labels",
+        "unknown_metadata",
+        "unknown_basis_waves",
+        "known_waves"
+      ],
+      "notes": [
+        "Targets direct solveFresnelN matrix/RHS/unknown-order validation.",
+        "Includes one-, two-, and three-layer systems, normal and oblique incidence, complex indices, and known in-layer source waves.",
+        "Use this suite to catch equation ordering, layer propagation phase, and unknown ordering mismatches.",
+        "Equation metadata is Python-side row bookkeeping for preserving the exact E_x, E_y, H_x, H_y interface order.",
+        "Unknown metadata is Python-side column bookkeeping for mapping each column to exact Mathematica symbols during export.",
+        "Unknown and known wave records expose k, E, H, and tangential E/H values used to construct the matrix and RHS."
+      ]
+    },
+    {
+      "suite_id": "multilayer_polarimetry_workflow",
+      "source_benchmark_file": "multilayer_polarimetry_benchmarks_v1.json",
+      "source_key": "cases",
+      "item_count": 20,
+      "item_ids": [
+        "multilayer_polarimetry_01",
+        "multilayer_polarimetry_02",
+        "multilayer_polarimetry_03",
+        "multilayer_polarimetry_04",
+        "multilayer_polarimetry_05",
+        "multilayer_polarimetry_06",
+        "multilayer_polarimetry_07",
+        "multilayer_polarimetry_08",
+        "multilayer_polarimetry_09",
+        "multilayer_polarimetry_10",
+        "multilayer_polarimetry_11",
+        "multilayer_polarimetry_12",
+        "multilayer_polarimetry_13",
+        "multilayer_polarimetry_14",
+        "multilayer_polarimetry_15",
+        "multilayer_polarimetry_16",
+        "multilayer_polarimetry_17",
+        "multilayer_polarimetry_18",
+        "multilayer_polarimetry_19",
+        "multilayer_polarimetry_20"
+      ],
+      "requested_outputs": [
+        "incident_jones_sp",
+        "analyzer_jones_sp",
+        "sample_azimuth_deg",
+        "fundamental_boundary_coefficients",
+        "fundamental_layer_wavevectors",
+        "fundamental_layer_electric_fields",
+        "ten_source_wavevectors",
+        "ten_source_polarizations",
+        "ten_inhomogeneous_electric_fields",
+        "two_omega_boundary_coefficients",
+        "reflected_two_omega_jones_sp",
+        "analyzer_amplitude",
+        "analyzer_intensity"
+      ],
+      "notes": [
+        "Targets polarizer/analyzer convention validation for the staged SHAARP.ml-style workflow.",
+        "Includes phi, psi, ellipticity, normal incidence, oblique incidence, nontrivial orientations, complex non-diagonal tensors, and all ten source terms.",
+        "Use this suite to catch value-level polarimetry sign/order/conjugation mismatches against Mathematica."
+      ]
+    },
+    {
+      "suite_id": "maker_fringes_workflow",
+      "source_benchmark_file": "maker_fringes_benchmarks_v1.json",
+      "source_key": "cases",
+      "item_count": 3,
+      "item_ids": [
+        "maker_fringes_negative_normal_positive",
+        "maker_fringes_moderate_high_oblique",
+        "maker_fringes_phase_matching_like"
+      ],
+      "requested_outputs": [
+        "MFList",
+        "listMFpara",
+        "listMFperp",
+        "transmitted_two_omega_jones_sp",
+        "parallel_analyzer_amplitude",
+        "perpendicular_analyzer_amplitude",
+        "fundamental_boundary_residual",
+        "two_omega_boundary_residual"
+      ],
+      "notes": [
+        "Targets SHAARP.ml Maker fringes value validation for transmitted SHG angle scans.",
+        "The saved Python grid is intentionally small because Maker fringes can be slow.",
+        "Includes negative, normal, moderate, high-angle, complex anisotropic, and phase-matching-like cases.",
+        "Use this suite to confirm listMFpara/listMFperp analyzer and normalization conventions."
+      ]
+    }
+  ]
+}

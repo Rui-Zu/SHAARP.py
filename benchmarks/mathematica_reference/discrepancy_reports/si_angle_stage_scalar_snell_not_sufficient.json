@@ -1,0 +1,46 @@
+{
+  "report_version": 1,
+  "status": "diagnostic_resolved_by_root_equation_comparator",
+  "case_id": "solver_stage_02 and other non-normal SHAARP.si angle-stage cases",
+  "source_notebook_or_package": "Github/SHAARP.si/SHAARP.si.nb",
+  "mathematica_version_or_runtime": "Wolfram Mathematica 13.3.0 for Microsoft Windows (64-bit), wolframscript trial runtime",
+  "shaarp_file_path_version_or_date": "SHAARP.si",
+  "python_git_or_worktree_state": "not a git repository in workspace root; local workspace state not recorded",
+  "first_failing_stage": "SHAARP.si active angle/root labels before omega Fresnel solve",
+  "expected_mathematica_value": "shaarp_si_angle_stage_reference_v1.json exports ThetaOrd, ThetaExt, ThetaOrd2w, ThetaExt2w, nwNumOrd, nwNumExt, n2wNumOrd, n2wNumExt, ExtwFactor, and Ext2wFactor with Mathematica root residual diagnostics near roundoff.",
+  "python_value": "A naive scalar check using final exported n*sin(theta)-sin(theta_in) fails for non-normal cases. The implemented Python SHAARP.si V/W root-equation comparator now matches the exported ordinary/extraordinary angle-root residuals, 6-digit index labels, and ExtwFactor/Ext2wFactor branch-flip metadata for all 36 exported stage cases.",
+  "absolute_error": 0.2305330177435562,
+  "relative_error": 7.737091982115497e305,
+  "tolerance": {
+    "atol": 1e-12,
+    "rtol": 1e-12
+  },
+  "intermediate_values_needed_to_reproduce": {
+    "mathematica_reference": "benchmarks/mathematica_reference/shaarp_si_angle_stage_reference_v1.json",
+    "python_test": "tests/test_shaarp_si_stage_python_comparison.py::test_angle_stage_reference_is_not_validated_by_naive_scalar_snell_equations",
+    "stage_comparator": "benchmarks/compare_shaarp_si_stage_reference.py::compare_angle_stage_reference",
+    "observed_control": "The Mathematica-exported root residual fields in shaarp_si_angle_stage_reference_v1.json remain near roundoff, so this report is not evidence that the Mathematica angle solve itself failed.",
+    "needed_next_values": [
+      "No additional data needed for the current 36-case angle-root stage check",
+      "Future end-to-end SI cases should still export downstream eigensystem branch indices k1Num/k2Num when field vectors are compared"
+    ]
+  },
+  "classification": "convention_mismatch",
+  "next_action": "Keep the naive scalar Snell comparison as diagnostic-only. Use benchmarks.compare_shaarp_si_stage_reference.compare_angle_stage_reference_against_shaarp_si_root_equations for SHAARP.si active angle-root stage validation.",
+  "minimal_reproducible_case": {
+    "case_id": "solver_stage_02",
+    "theta_deg": 8.0,
+    "reference_file": "benchmarks/mathematica_reference/shaarp_si_angle_stage_reference_v1.json"
+  },
+  "equation_or_residual_check": {
+    "mathematica_exported_root_residuals": "solver_stage_02 reports omega_ord_root_abs_residual and omega_ext_root_abs_residual near 2.8e-17.",
+    "naive_scalar_check": "Using final nwNumOrd/nwNumExt and ThetaOrd/ThetaExt directly in n*sin(theta)-sin(theta_in) gives nonzero residuals for non-normal cases.",
+    "python_root_equation_check": "The Python V/W root-equation comparator passes all 360 comparisons across the 36 exported cases with residual_atol=1e-12 and index_atol=1e-5."
+  },
+  "why_python_result_follows_documented_equations": "The passing Python comparator directly implements the SHAARP.si active snippets for V, W, fo/fe, fo2w/fe2w, the 6-digit index formulas, and the ExtwFactor/Ext2wFactor branch-flip heuristic. The scalar check is documented only as the wrong convention for this stage.",
+  "notes": [
+    "This report prevents an accidental false-positive angle-stage validation claim.",
+    "Existing standalone Mathematica solveSnell omega and 2omega references remain valid for their exported setup.nb function-level cases.",
+    "The current SHAARP.si GUI-stage angle-root equations are value-validated for the exported 36-case set, but full SI end-to-end branch-vector agreement is still open."
+  ]
+}

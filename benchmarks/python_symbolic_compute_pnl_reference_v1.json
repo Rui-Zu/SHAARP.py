@@ -1,0 +1,476 @@
+{
+  "source": "Python SymPy symbolic computePNL output",
+  "status": "python_symbolic_output",
+  "expressions": [
+    {
+      "expression_id": "compute_pnl_same_symbolic",
+      "source_stage": "computePNL",
+      "output_component": "same_wave_vector",
+      "expression_format": "sympy",
+      "expression": [
+        "d11*e1x**2 + d12*e1y**2 + d13*e1z**2 + 2*d14*e1y*e1z + 2*d15*e1x*e1z + 2*d16*e1x*e1y",
+        "d21*e1x**2 + d22*e1y**2 + d23*e1z**2 + 2*d24*e1y*e1z + 2*d25*e1x*e1z + 2*d26*e1x*e1y",
+        "d31*e1x**2 + d32*e1y**2 + d33*e1z**2 + 2*d34*e1y*e1z + 2*d35*e1x*e1z + 2*d36*e1x*e1y"
+      ],
+      "symbol_roles": {
+        "d11": "Subscript[d,11]",
+        "d12": "Subscript[d,12]",
+        "d13": "Subscript[d,13]",
+        "d14": "Subscript[d,14]",
+        "d15": "Subscript[d,15]",
+        "d16": "Subscript[d,16]",
+        "d21": "Subscript[d,21]",
+        "d22": "Subscript[d,22]",
+        "d23": "Subscript[d,23]",
+        "d24": "Subscript[d,24]",
+        "d25": "Subscript[d,25]",
+        "d26": "Subscript[d,26]",
+        "d31": "Subscript[d,31]",
+        "d32": "Subscript[d,32]",
+        "d33": "Subscript[d,33]",
+        "d34": "Subscript[d,34]",
+        "d35": "Subscript[d,35]",
+        "d36": "Subscript[d,36]",
+        "e1x": "Subscript[Superscript[E,omega],1,x]",
+        "e1y": "Subscript[Superscript[E,omega],1,y]",
+        "e1z": "Subscript[Superscript[E,omega],1,z]",
+        "e2x": "Subscript[Superscript[E,omega],2,x]",
+        "e2y": "Subscript[Superscript[E,omega],2,y]",
+        "e2z": "Subscript[Superscript[E,omega],2,z]"
+      },
+      "numeric_substitutions": [
+        {
+          "d11": {
+            "real": 0.04000000000000001,
+            "imag": 0.011
+          },
+          "d12": {
+            "real": 0.010000000000000009,
+            "imag": 0.022
+          },
+          "d13": {
+            "real": -0.01999999999999999,
+            "imag": 0.033
+          },
+          "d14": {
+            "real": -0.04999999999999999,
+            "imag": 0.044
+          },
+          "d15": {
+            "real": -0.07999999999999999,
+            "imag": 0.05499999999999999
+          },
+          "d16": {
+            "real": -0.10999999999999999,
+            "imag": 0.066
+          },
+          "d21": {
+            "real": 0.11000000000000001,
+            "imag": 0.022
+          },
+          "d22": {
+            "real": 0.08000000000000002,
+            "imag": 0.044
+          },
+          "d23": {
+            "real": 0.05000000000000002,
+            "imag": 0.066
+          },
+          "d24": {
+            "real": 0.020000000000000018,
+            "imag": 0.088
+          },
+          "d25": {
+            "real": -0.009999999999999981,
+            "imag": 0.10999999999999999
+          },
+          "d26": {
+            "real": -0.03999999999999998,
+            "imag": 0.132
+          },
+          "d31": {
+            "real": 0.18000000000000002,
+            "imag": 0.033
+          },
+          "d32": {
+            "real": 0.15000000000000002,
+            "imag": 0.066
+          },
+          "d33": {
+            "real": 0.12000000000000002,
+            "imag": 0.099
+          },
+          "d34": {
+            "real": 0.09000000000000002,
+            "imag": 0.132
+          },
+          "d35": {
+            "real": 0.060000000000000026,
+            "imag": 0.165
+          },
+          "d36": {
+            "real": 0.030000000000000027,
+            "imag": 0.198
+          },
+          "e1x": {
+            "real": 0.23,
+            "imag": -0.17
+          },
+          "e1y": {
+            "real": -0.41,
+            "imag": 0.09
+          },
+          "e1z": {
+            "real": 0.13,
+            "imag": 0.31
+          },
+          "e2x": {
+            "real": -0.29,
+            "imag": 0.19
+          },
+          "e2y": {
+            "real": 0.37,
+            "imag": -0.23
+          },
+          "e2z": {
+            "real": -0.11,
+            "imag": -0.07
+          }
+        },
+        {
+          "d11": {
+            "real": 0.030000000000000002,
+            "imag": -0.026
+          },
+          "d12": {
+            "real": 0.08,
+            "imag": -0.039
+          },
+          "d13": {
+            "real": 0.13000000000000003,
+            "imag": -0.052
+          },
+          "d14": {
+            "real": 0.18000000000000002,
+            "imag": -0.065
+          },
+          "d15": {
+            "real": 0.23,
+            "imag": -0.078
+          },
+          "d16": {
+            "real": 0.28,
+            "imag": -0.091
+          },
+          "d21": {
+            "real": 0.010000000000000002,
+            "imag": -0.039
+          },
+          "d22": {
+            "real": 0.060000000000000005,
+            "imag": -0.052
+          },
+          "d23": {
+            "real": 0.11000000000000001,
+            "imag": -0.065
+          },
+          "d24": {
+            "real": 0.16,
+            "imag": -0.078
+          },
+          "d25": {
+            "real": 0.21,
+            "imag": -0.091
+          },
+          "d26": {
+            "real": 0.26000000000000006,
+            "imag": -0.104
+          },
+          "d31": {
+            "real": -0.009999999999999995,
+            "imag": -0.052
+          },
+          "d32": {
+            "real": 0.04000000000000001,
+            "imag": -0.065
+          },
+          "d33": {
+            "real": 0.09000000000000002,
+            "imag": -0.078
+          },
+          "d34": {
+            "real": 0.14,
+            "imag": -0.091
+          },
+          "d35": {
+            "real": 0.19,
+            "imag": -0.104
+          },
+          "d36": {
+            "real": 0.24000000000000005,
+            "imag": -0.11699999999999999
+          },
+          "e1x": {
+            "real": 0.08,
+            "imag": 0.44
+          },
+          "e1y": {
+            "real": 0.51,
+            "imag": -0.12
+          },
+          "e1z": {
+            "real": -0.33,
+            "imag": 0.27
+          },
+          "e2x": {
+            "real": 0.19,
+            "imag": -0.38
+          },
+          "e2y": {
+            "real": -0.47,
+            "imag": -0.16
+          },
+          "e2z": {
+            "real": 0.22,
+            "imag": 0.29
+          }
+        }
+      ]
+    },
+    {
+      "expression_id": "compute_pnl_mixed_symbolic",
+      "source_stage": "computePNL",
+      "output_component": "mixed_wave_vector_factor_2",
+      "expression_format": "sympy",
+      "expression": [
+        "2*d11*e1x*e2x + 2*d12*e1y*e2y + 2*d13*e1z*e2z + 2*d14*(e1y*e2z + e1z*e2y) + 2*d15*(e1x*e2z + e1z*e2x) + 2*d16*(e1x*e2y + e1y*e2x)",
+        "2*d21*e1x*e2x + 2*d22*e1y*e2y + 2*d23*e1z*e2z + 2*d24*(e1y*e2z + e1z*e2y) + 2*d25*(e1x*e2z + e1z*e2x) + 2*d26*(e1x*e2y + e1y*e2x)",
+        "2*d31*e1x*e2x + 2*d32*e1y*e2y + 2*d33*e1z*e2z + 2*d34*(e1y*e2z + e1z*e2y) + 2*d35*(e1x*e2z + e1z*e2x) + 2*d36*(e1x*e2y + e1y*e2x)"
+      ],
+      "symbol_roles": {
+        "d11": "Subscript[d,11]",
+        "d12": "Subscript[d,12]",
+        "d13": "Subscript[d,13]",
+        "d14": "Subscript[d,14]",
+        "d15": "Subscript[d,15]",
+        "d16": "Subscript[d,16]",
+        "d21": "Subscript[d,21]",
+        "d22": "Subscript[d,22]",
+        "d23": "Subscript[d,23]",
+        "d24": "Subscript[d,24]",
+        "d25": "Subscript[d,25]",
+        "d26": "Subscript[d,26]",
+        "d31": "Subscript[d,31]",
+        "d32": "Subscript[d,32]",
+        "d33": "Subscript[d,33]",
+        "d34": "Subscript[d,34]",
+        "d35": "Subscript[d,35]",
+        "d36": "Subscript[d,36]",
+        "e1x": "Subscript[Superscript[E,omega],1,x]",
+        "e1y": "Subscript[Superscript[E,omega],1,y]",
+        "e1z": "Subscript[Superscript[E,omega],1,z]",
+        "e2x": "Subscript[Superscript[E,omega],2,x]",
+        "e2y": "Subscript[Superscript[E,omega],2,y]",
+        "e2z": "Subscript[Superscript[E,omega],2,z]"
+      },
+      "numeric_substitutions": [
+        {
+          "d11": {
+            "real": 0.04000000000000001,
+            "imag": 0.011
+          },
+          "d12": {
+            "real": 0.010000000000000009,
+            "imag": 0.022
+          },
+          "d13": {
+            "real": -0.01999999999999999,
+            "imag": 0.033
+          },
+          "d14": {
+            "real": -0.04999999999999999,
+            "imag": 0.044
+          },
+          "d15": {
+            "real": -0.07999999999999999,
+            "imag": 0.05499999999999999
+          },
+          "d16": {
+            "real": -0.10999999999999999,
+            "imag": 0.066
+          },
+          "d21": {
+            "real": 0.11000000000000001,
+            "imag": 0.022
+          },
+          "d22": {
+            "real": 0.08000000000000002,
+            "imag": 0.044
+          },
+          "d23": {
+            "real": 0.05000000000000002,
+            "imag": 0.066
+          },
+          "d24": {
+            "real": 0.020000000000000018,
+            "imag": 0.088
+          },
+          "d25": {
+            "real": -0.009999999999999981,
+            "imag": 0.10999999999999999
+          },
+          "d26": {
+            "real": -0.03999999999999998,
+            "imag": 0.132
+          },
+          "d31": {
+            "real": 0.18000000000000002,
+            "imag": 0.033
+          },
+          "d32": {
+            "real": 0.15000000000000002,
+            "imag": 0.066
+          },
+          "d33": {
+            "real": 0.12000000000000002,
+            "imag": 0.099
+          },
+          "d34": {
+            "real": 0.09000000000000002,
+            "imag": 0.132
+          },
+          "d35": {
+            "real": 0.060000000000000026,
+            "imag": 0.165
+          },
+          "d36": {
+            "real": 0.030000000000000027,
+            "imag": 0.198
+          },
+          "e1x": {
+            "real": 0.23,
+            "imag": -0.17
+          },
+          "e1y": {
+            "real": -0.41,
+            "imag": 0.09
+          },
+          "e1z": {
+            "real": 0.13,
+            "imag": 0.31
+          },
+          "e2x": {
+            "real": -0.29,
+            "imag": 0.19
+          },
+          "e2y": {
+            "real": 0.37,
+            "imag": -0.23
+          },
+          "e2z": {
+            "real": -0.11,
+            "imag": -0.07
+          }
+        },
+        {
+          "d11": {
+            "real": 0.030000000000000002,
+            "imag": -0.026
+          },
+          "d12": {
+            "real": 0.08,
+            "imag": -0.039
+          },
+          "d13": {
+            "real": 0.13000000000000003,
+            "imag": -0.052
+          },
+          "d14": {
+            "real": 0.18000000000000002,
+            "imag": -0.065
+          },
+          "d15": {
+            "real": 0.23,
+            "imag": -0.078
+          },
+          "d16": {
+            "real": 0.28,
+            "imag": -0.091
+          },
+          "d21": {
+            "real": 0.010000000000000002,
+            "imag": -0.039
+          },
+          "d22": {
+            "real": 0.060000000000000005,
+            "imag": -0.052
+          },
+          "d23": {
+            "real": 0.11000000000000001,
+            "imag": -0.065
+          },
+          "d24": {
+            "real": 0.16,
+            "imag": -0.078
+          },
+          "d25": {
+            "real": 0.21,
+            "imag": -0.091
+          },
+          "d26": {
+            "real": 0.26000000000000006,
+            "imag": -0.104
+          },
+          "d31": {
+            "real": -0.009999999999999995,
+            "imag": -0.052
+          },
+          "d32": {
+            "real": 0.04000000000000001,
+            "imag": -0.065
+          },
+          "d33": {
+            "real": 0.09000000000000002,
+            "imag": -0.078
+          },
+          "d34": {
+            "real": 0.14,
+            "imag": -0.091
+          },
+          "d35": {
+            "real": 0.19,
+            "imag": -0.104
+          },
+          "d36": {
+            "real": 0.24000000000000005,
+            "imag": -0.11699999999999999
+          },
+          "e1x": {
+            "real": 0.08,
+            "imag": 0.44
+          },
+          "e1y": {
+            "real": 0.51,
+            "imag": -0.12
+          },
+          "e1z": {
+            "real": -0.33,
+            "imag": 0.27
+          },
+          "e2x": {
+            "real": 0.19,
+            "imag": -0.38
+          },
+          "e2y": {
+            "real": -0.47,
+            "imag": -0.16
+          },
+          "e2z": {
+            "real": 0.22,
+            "imag": 0.29
+          }
+        }
+      ]
+    }
+  ]
+}

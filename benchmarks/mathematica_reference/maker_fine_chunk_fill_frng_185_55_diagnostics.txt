@@ -1,0 +1,4 @@
+"Starting Maker export with 1 cases"
+"Running case 1: fine_maker_fringe_resolution"
+"Finished case 1 keys: {\"id\", \"inputs\", \"batch_export_notes\", \
+\"mathematica_outputs\"}"

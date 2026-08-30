@@ -1,0 +1,112 @@
+cff-version: 1.2.0
+title: SHAARP.py
+message: >-
+  If you use this software, please cite the two ♯SHAARP papers below (the
+  original packages this port reproduces).
+type: software
+version: 1.0.0
+license: GPL-3.0-only
+repository-code: https://github.com/Rui-Zu/SHAARP.py
+abstract: >-
+  A validated Python port of the Mathematica ♯SHAARP.si (single-interface
+  reflected second-harmonic generation) and ♯SHAARP.ml (multilayer /
+  Maker-fringe SHG) packages, merged into one scriptable library and one
+  installation-free desktop application. Every solver is validated
+  value-by-value against live Mathematica ♯SHAARP output.
+keywords:
+  - second harmonic generation
+  - nonlinear optics
+  - anisotropic crystals
+  - Maker fringes
+  - polarimetry
+  - ferroelectrics
+authors:
+  - family-names: Zu
+    given-names: Rui
+    affiliation: The Pennsylvania State University
+  - family-names: Wang
+    given-names: Bo
+    affiliation: The Pennsylvania State University
+  - family-names: Weber
+    given-names: Lincoln
+    affiliation: The Pennsylvania State University
+  - family-names: Saha
+    given-names: Akash
+    affiliation: The Pennsylvania State University
+  - family-names: Chen
+    given-names: Long-Qing
+    affiliation: The Pennsylvania State University
+  - family-names: Gopalan
+    given-names: Venkatraman
+    affiliation: The Pennsylvania State University
+preferred-citation:
+  type: article
+  title: >-
+    Analytical and numerical modeling of optical second harmonic generation in
+    anisotropic crystals using ♯SHAARP package
+  journal: npj Computational Materials
+  volume: 8
+  issue: 1
+  start: 246
+  year: 2022
+  doi: 10.1038/s41524-022-00930-4
+  authors:
+    - family-names: Zu
+      given-names: Rui
+    - family-names: Wang
+      given-names: Bo
+    - family-names: He
+      given-names: Jingyang
+    - family-names: Wang
+      given-names: Jian-Jun
+    - family-names: Weber
+      given-names: Lincoln
+    - family-names: Chen
+      given-names: Long-Qing
+    - family-names: Gopalan
+      given-names: Venkatraman
+references:
+  - type: article
+    title: >-
+      Optical second harmonic generation in anisotropic multilayers with
+      complete multireflection of linear and nonlinear waves using ♯SHAARP.ml
+      package
+    journal: npj Computational Materials
+    volume: 10
+    issue: 1
+    start: 64
+    year: 2024
+    doi: 10.1038/s41524-024-01229-2
+    authors:
+      - family-names: Zu
+        given-names: Rui
+      - family-names: Wang
+        given-names: Bo
+      - family-names: He
+        given-names: Jingyang
+      - family-names: Weber
+        given-names: Lincoln
+      - family-names: Saha
+        given-names: Akash
+      - family-names: Chen
+        given-names: Long-Qing
+      - family-names: Gopalan
+        given-names: Venkatraman
+  - type: software
+    title: "♯SHAARP.si — the original Mathematica package (single interface)"
+    authors:
+      - family-names: Zu
+        given-names: Rui
+      - family-names: Gopalan
+        given-names: Venkatraman
+    repository-code: https://github.com/Rui-Zu/SHAARP
+  - type: software
+    title: "♯SHAARP.ml — the original Mathematica package (multilayer)"
+    authors:
+      - family-names: Wang
+        given-names: Bo
+      - family-names: Zu
+        given-names: Rui
+      - family-names: Gopalan
+        given-names: Venkatraman
+    repository-code: https://github.com/bzw133/SHAARP.ml

@@ -1,0 +1,35 @@
+{
+	"source":"Mathematica SHAARP.ml setup.nb batch smoke",
+	"version":"13.3.0 for Microsoft Windows (64-bit) (June 3, 2023)",
+	"inputCellCount":49,
+	"defined":{
+		"solveSnell":{
+			"names":1,
+			"downValues":1
+		},
+		"solveFresnel":{
+			"names":1,
+			"downValues":1
+		},
+		"solveFresnelN":{
+			"names":1,
+			"downValues":1
+		},
+		"computePNL":{
+			"names":1,
+			"downValues":1
+		},
+		"solveInhom":{
+			"names":1,
+			"downValues":2
+		},
+		"f1L":{
+			"names":1,
+			"downValues":1
+		},
+		"f1NL":{
+			"names":1,
+			"downValues":1
+		}
+	}
+}

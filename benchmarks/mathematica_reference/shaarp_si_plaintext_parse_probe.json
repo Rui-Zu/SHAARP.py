@@ -1,0 +1,32 @@
+{
+	"source":"Mathematica SHAARP.si plaintext parse probe",
+	"wolfram_version":"13.3.0 for Microsoft Windows (64-bit) (June 3, 2023)",
+	"notebook_path":"SHAARP_V1.03/SHAARP_V1.03.nb",
+	"plain_byte_count":339027,
+	"parse_status":"failed",
+	"held_head":"$Failed",
+	"held_byte_count":0,
+	"message_count":542,
+	"messages_preview":[
+		"HoldForm[Message[General::newsym, Setup]]",
+		"HoldForm[Message[General::newsym, FullAnalyticalFlag]]",
+		"HoldForm[Message[General::newsym, Notation`AutoLoadNotationPalette]]",
+		"HoldForm[Message[General::newsym, Symbolize]]",
+		"HoldForm[Message[General::newsym, n]]",
+		"HoldForm[Message[General::newsym, ω]]",
+		"HoldForm[Message[General::newsym, n1ω]]",
+		"HoldForm[Message[General::newsym, n2ω]]",
+		"HoldForm[Message[General::newsym, n3ω]]",
+		"HoldForm[Message[General::newsym, n12ω]]",
+		"HoldForm[Message[General::newsym, n22ω]]",
+		"HoldForm[Message[General::newsym, n32ω]]",
+		"HoldForm[Message[General::newsym, εL1L1ω]]",
+		"HoldForm[Message[General::newsym, εL1L2ω]]",
+		"HoldForm[Message[General::newsym, εL1L3ω]]",
+		"HoldForm[Message[General::newsym, εL2L2ω]]",
+		"HoldForm[Message[General::newsym, εL2L3ω]]",
+		"HoldForm[Message[General::newsym, εL3L3ω]]",
+		"HoldForm[Message[General::newsym, εL1L12ω]]",
+		"HoldForm[Message[General::newsym, εL1L22ω]]"
+	]
+}

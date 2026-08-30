@@ -1,0 +1,40 @@
+{
+	"source":"Mathematica SHAARP.si cell 4 front-end InputText parse probe",
+	"wolfram_version":"13.3.0 for Microsoft Windows (64-bit) (June 3, 2023)",
+	"notebook_path":"SHAARP_V1.03/SHAARP_V1.03.nb",
+	"inputCellCount":8,
+	"results":[
+		{
+			"format":"InputText",
+			"inputTextBytes":468960,
+			"parse_status":"failed",
+			"held_head":"$Failed",
+			"held_byte_count":0,
+			"message_count":11,
+			"messages_preview":[
+				"HoldForm[Message[General::newsym, FullAnalyticalFlag]]",
+				"HoldForm[Message[General::newsym, Notation`AutoLoadNotationPalette]]",
+				"HoldForm[Message[General::newsym, Symbolize]]",
+				"HoldForm[Message[General::newsym, NotationTemplateTag]]",
+				"HoldForm[Message[General::newsym, n]]",
+				"HoldForm[Message[General::newsym, ω]]",
+				"HoldForm[Message[General::newsym, ε]]",
+				"HoldForm[Message[General::newsym, L]]",
+				"HoldForm[Message[General::newsym, k]]",
+				"HoldForm[Message[General::newsym, i]]",
+				"HoldForm[Message[ToExpression::sntx, HoldForm[\"Quiet[Symbolize[NotationTemplateTag[k^(i, \\\\[Omega])]]]; Quiet[\\n                                         ^\"], HoldForm[\"\"], HoldForm[\"\"], HoldForm[\"\\n\"]]]"
+			]
+		},
+		{
+			"format":"PlainText",
+			"inputTextBytes":307138,
+			"parse_status":"failed",
+			"held_head":"$Failed",
+			"held_byte_count":0,
+			"message_count":1,
+			"messages_preview":[
+				"HoldForm[Message[ToExpression::sntx, HoldForm[\"Quiet[Symbolize[k^(i,\\\\[Omega])]];Quiet[Symbolize[k^(R,\\\\[Omega])]];Quiet[Symbolize[k^(R,2\\\\[Omega])]];\\n                     ^\"], HoldForm[\"\"], HoldForm[\"\"], HoldForm[\"\\n\"]]]"
+			]
+		}
+	]
+}

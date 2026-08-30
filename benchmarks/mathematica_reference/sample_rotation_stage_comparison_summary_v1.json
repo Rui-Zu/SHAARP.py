@@ -1,0 +1,58 @@
+{
+  "atol": 1e-10,
+  "diagnostic_case_ids": [
+    "sample_rotation_phase_matching_like"
+  ],
+  "full_sample_rotation_agreement_claimed": false,
+  "nonsingular_case_count": 2,
+  "nonsingular_case_ids": [
+    "sample_rotation_moderate_high_oblique",
+    "sample_rotation_negative_normal_positive"
+  ],
+  "source": "Mathematica SHAARP.ml setup.nb SampleRotate stage diagnostics",
+  "stages": [
+    {
+      "comparison_status": "passed",
+      "max_abs_error": 2.078718497056994e-15,
+      "notes": "Direct reflected 2omega nonlinear wave records from SampleRotate.",
+      "stage_id": "nonlinear_reflected_waves",
+      "tolerance": 1e-10
+    },
+    {
+      "case_count": 2,
+      "comparison_status": "documented_caveat",
+      "max_abs_error": 1.825492201308151,
+      "notes": "Mathematica SampleRotate emits an absent transmitted wave slot where Python retains both substrate 2omega eigenwave records; selected wave-frame sums and final transmitted amplitudes are the parity checks.",
+      "stage_id": "nonlinear_transmitted_raw_wave_slots"
+    },
+    {
+      "comparison_status": "passed",
+      "max_abs_error": 1.8978320078226427e-14,
+      "notes": "Wave-frame xy sums before SHAARP.ml SampleRotate analyzer projection.",
+      "stage_id": "sample_rotate_wave_frame_sums",
+      "tolerance": 1e-10
+    },
+    {
+      "comparison_status": "passed",
+      "max_abs_error": 1.840044471474364e-14,
+      "notes": "Complex reflected/transmitted parallel and perpendicular SampleRotate amplitudes.",
+      "stage_id": "sample_rotate_amplitudes",
+      "tolerance": 1e-10
+    },
+    {
+      "comparison_status": "passed",
+      "max_abs_error": 4.208439152719734e-15,
+      "notes": "Final four SampleRotate intensity columns excluding the rotation angle.",
+      "stage_id": "sample_rotate_intensities",
+      "tolerance": 1e-10
+    },
+    {
+      "case_count": 1,
+      "comparison_status": "diagnostic_only",
+      "max_abs_error": 1.255582717650796,
+      "notes": "The phase-matching-like case remains diagnostic because solveInhom can be singular or nearly singular.",
+      "stage_id": "phase_matching_case"
+    }
+  ],
+  "status": "sample_rotation_stage_nonsingular_match_with_phase_matching_diagnostic"
+}

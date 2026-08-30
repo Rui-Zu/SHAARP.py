@@ -1,0 +1,21 @@
+{
+	"source":"Mathematica SHAARP.si cell 4 FrontEndExecute ExportPacket text probe",
+	"wolfram_version":"13.3.0 for Microsoft Windows (64-bit) (June 3, 2023)",
+	"notebook_path":"SHAARP_V1.03/SHAARP_V1.03.nb",
+	"inputCellCount":8,
+	"cell4InputFormBytes":1043241,
+	"results":[
+		{
+			"format":"InputText",
+			"head":"List",
+			"byte_count":502636,
+			"preview":"{\"SetDirectory[NotebookDirectory[]];\\r\\n\\r\\nClearAll[\\\"Global`*\\\"]\\r\\nClear @@ \\r\\n  DeleteCases[Names@\\\"`*\\\", \\r\\n   \\\"startupvar\\\" | \\\"presetval1\\\" | \\\"presetval2\\\" | \\\"presetval3\\\" | \\r\\n    \\\"presetval4\\\" | \\\"ptest1\\\" | \\\"ptest2\\\" | \\\"ptest3\\\" | \\\"ptest4\\\" | \\\"ap1\\\" |\\r\\n     \\\"ap2\\\" | \\\"ap3\\\" | \\\"ap4\\\" | \\\"plabel1\\\" | \\\"plabel2\\\" | \\\"plabel3\\\" | \\r\\n    \\\"plabel4\\\"];\\r\\nFullAnalyticalFlag = True;\\r\\nNeeds[\\\"Notation`\\\"];\\r\\nNotation`AutoLoadNotationPalette = False;\\r\\nOff[Join::incpt];\\r\\n$Messages = {};\\r\\nQuiet[Symbolize[NotationTemplateTag[n^\\\\[Omega]]]]; Quiet[\\r\\n Symbolize[NotationTemplateTag[n^\\\\[Omega]]]]; Quiet[\\r\\n Symbolize[NotationTemplateTag[n^\\\\[Omega]]]]; Quiet[\\r\\n Symbolize[NotationTemplateTag[n^(2 \\\\[Omega])]]]; Quiet[\\r\\n Symbolize[NotationTemplateTag[n^(2 \\\\[Omega])]]]; Quiet[\\r\\n Symbolize[NotationTemplateTag[n^(2 \\\\[Omega])]]];\\r\\nQuiet[Symbolize[NotationTemplateTag[\\r\\n\\\\!\\\\(\\\\*SubsuperscriptBox[\\\\(n\\\\), \\\\(1\\\\), \\\\(\\\\[Omega]\\\\)]\\\\)]]]; Quiet[\\r\\n Symbolize["
+		},
+		{
+			"format":"PlainText",
+			"head":"List",
+			"byte_count":322475,
+			"preview":"{\"SetDirectory[NotebookDirectory[]];\\r\\n\\r\\nClearAll[\\\"Global`*\\\"]\\r\\nClear@@DeleteCases[Names@\\\"`*\\\",\\\"startupvar\\\"|\\\"presetval1\\\"|\\\"presetval2\\\"|\\\"presetval3\\\"|\\\"presetval4\\\"|\\\"ptest1\\\"|\\\"ptest2\\\"|\\\"ptest3\\\"|\\\"ptest4\\\"|\\\"ap1\\\"|\\\"ap2\\\"|\\\"ap3\\\"|\\\"ap4\\\"|\\\"plabel1\\\"|\\\"plabel2\\\"|\\\"plabel3\\\"|\\\"plabel4\\\"];\\r\\nFullAnalyticalFlag=True;\\r\\nNeeds[\\\"Notation`\\\"];\\r\\nNotation`AutoLoadNotationPalette=False;\\r\\nOff[Join::incpt];\\r\\n$Messages={};\\r\\nQuiet[Symbolize[n^\\\\[Omega]]]; Quiet[Symbolize[n^\\\\[Omega]]]; Quiet[Symbolize[n^\\\\[Omega]]];Quiet[Symbolize[n^(2\\\\[Omega])]]; Quiet[Symbolize[n^(2\\\\[Omega])]]; Quiet[Symbolize[n^(2\\\\[Omega])]];\\r\\nQuiet[Symbolize[Subsuperscript[n, 1, \\\\[Omega]]]]; Quiet[Symbolize[Subsuperscript[n, 2, \\\\[Omega]]]]; Quiet[Symbolize[Subsuperscript[n, 3, \\\\[Omega]]]];\\r\\nQuiet[Symbolize[Subsuperscript[n, 1, 2\\\\[Omega]]]]; Quiet[Symbolize[Subsuperscript[n, 2, 2\\\\[Omega]]]];Quiet[Symbolize[Subsuperscript[n, 3, 2\\\\[Omega]]]];\\r\\nQuiet[Symbolize[Subsuperscript[\\\\[CurlyEpsilon], "
+		}
+	]
+}

@@ -1,0 +1,37 @@
+{
+	"source":"Mathematica SHAARP.si SHAARP_V1.03.nb cell inventory",
+	"wolfram_version":"13.3.0 for Microsoft Windows (64-bit) (June 3, 2023)",
+	"notebook_path":"SHAARP_V1.03/SHAARP_V1.03.nb",
+	"inputCellCount":8,
+	"matchedCells":[
+		{
+			"index":3,
+			"byte_count":6687,
+			"patterns":[
+				"Analytical",
+				"Partial",
+				"SHG"
+			],
+			"preview":"BoxData[RowBox[{RowBox[{\"(*\", RowBox[{RowBox[{RowBox[{RowBox[{RowBox[{RowBox[{RowBox[{RowBox[{RowBox[{RowBox[{RowBox[{RowBox[{RowBox[{RowBox[{RowBox[{RowBox[{RowBox[{\"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\"}], \"**\"}], \"**\"}], \"**\"}], \"**\"}], \"**\"}], \"**\"}], \"**\"}], \"**\"}], \"**\"}], \"**\"}], \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\", \"**\"}], \"*\", RowBox[{\"**\", \"**"
+		},
+		{
+			"index":4,
+			"byte_count":1043241,
+			"patterns":[
+				"Analytical",
+				"Full",
+				"Partial",
+				"SHG",
+				"I2",
+				"E2",
+				"doldExp",
+				"dnewExp",
+				"P2e",
+				"P2o",
+				"Peo",
+				"Coo"
+			],
+			"preview":"BoxData[{RowBox[{RowBox[{RowBox[{\"SetDirectory\", \"[\", RowBox[{\"NotebookDirectory\", \"[\", \"]\"}], \"]\"}], \";\"}], \"\"}], \"\", RowBox[{\"ClearAll\", \"[\", \"\\\"Global`*\\\"\", \"]\"}], \"\", RowBox[{RowBox[{\"Clear\", \"@@\", RowBox[{\"DeleteCases\", \"[\", RowBox[{RowBox[{\"Names\", \"@\", \"\\\"`*\\\"\"}], \",\", RowBox[{\"\\\"startupvar\\\"\", \"|\", \"\\\"presetval1\\\"\", \"|\", \"\\\"presetval2\\\"\", \"|\", \"\\\"presetval3\\\"\", \"|\", \"\\\"presetval4\\\"\", \"|\", \"\\\"ptest1\\\"\", \"|\", \"\\\"ptest2\\\"\", \"|\", \"\\\"ptest3\\\"\", \"|\", \"\\\"ptest4\\\"\", \"|\", \"\\\"ap1\\\"\", \"|\", \"\\\"ap"
+		}
+	]
+}

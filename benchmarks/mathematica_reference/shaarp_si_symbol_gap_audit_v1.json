@@ -1,0 +1,238 @@
+{
+  "schema_version": 1,
+  "source": "SHAARP.si exact requested-symbol gap audit from normalized PlainText line audit",
+  "status": "gap_audit_not_validation_evidence",
+  "line_audit": "benchmarks/mathematica_reference/shaarp_si_candidate_region_line_audit.json",
+  "symbol_source_map": "benchmarks/mathematica_reference/shaarp_si_stage_symbol_sources_v1.json",
+  "requested_symbols": [
+    "ThetaExt",
+    "ThetaOrd",
+    "nwNumExt",
+    "nwNumOrd",
+    "EwrootsNum",
+    "E2wroots",
+    "ERpNum",
+    "ERsNum",
+    "ER2w",
+    "HR2w",
+    "P2e",
+    "P2o",
+    "Peo",
+    "P2eo",
+    "Peoo",
+    "Croots",
+    "ETweo",
+    "ETwo",
+    "Vktweo",
+    "Vktwo",
+    "RSignalCrystal",
+    "I2",
+    "Fresnel"
+  ],
+  "missing_from_refined_symbol_sources": [
+    "P2e",
+    "Peo",
+    "I2"
+  ],
+  "records": [
+    {
+      "symbol": "P2e",
+      "exact_assignment_count": 0,
+      "exact_assignments": [],
+      "substring_hit_count": 5,
+      "substring_hits_preview": [
+        {
+          "line_index": 778,
+          "offset": 54996,
+          "text": "P2eo=e0*Simplify["
+        },
+        {
+          "line_index": 793,
+          "offset": 57136,
+          "text": "P2eo=e0*Simplify["
+        },
+        {
+          "line_index": 809,
+          "offset": 59190,
+          "text": "Print[\"P2eo = \",MatrixForm[P2eo],\" ;  P2o = \",MatrixForm[P2o],\" ;  Peoo = \",MatrixForm[Peoo]];"
+        },
+        {
+          "line_index": 826,
+          "offset": 59991,
+          "text": "MatrixForm[R2eo = 4*w^2*\\[Mu]0*e0*elab2wNum.g2eo+4*\\[Mu]0*w^2*P2eo];"
+        },
+        {
+          "line_index": 876,
+          "offset": 61772,
+          "text": "DT2w2eo = e0*elab2wNum.{RC12,RC22,RC32}+P2eo;"
+        }
+      ],
+      "assigned_symbols_containing_name": [
+        "P2eo"
+      ],
+      "classification": "substring_only_of_active_pnl_symbols"
+    },
+    {
+      "symbol": "Peo",
+      "exact_assignment_count": 0,
+      "exact_assignments": [],
+      "substring_hit_count": 5,
+      "substring_hits_preview": [
+        {
+          "line_index": 786,
+          "offset": 56098,
+          "text": "Peoo=e0*Simplify["
+        },
+        {
+          "line_index": 803,
+          "offset": 58294,
+          "text": "Peoo=e0*Simplify["
+        },
+        {
+          "line_index": 809,
+          "offset": 59190,
+          "text": "Print[\"P2eo = \",MatrixForm[P2eo],\" ;  P2o = \",MatrixForm[P2o],\" ;  Peoo = \",MatrixForm[Peoo]];"
+        },
+        {
+          "line_index": 827,
+          "offset": 60060,
+          "text": "MatrixForm[Reoo = 4*w^2*\\[Mu]0*e0*elab2wNum.geoo+4*\\[Mu]0*w^2*Peoo];"
+        },
+        {
+          "line_index": 882,
+          "offset": 61965,
+          "text": "DT2weoo = e0*elab2wNum.{RC13,RC23,RC33}+Peoo;"
+        }
+      ],
+      "assigned_symbols_containing_name": [
+        "Peoo"
+      ],
+      "classification": "substring_only_of_active_pnl_symbols"
+    },
+    {
+      "symbol": "I2",
+      "exact_assignment_count": 0,
+      "exact_assignments": [],
+      "substring_hit_count": 27,
+      "substring_hits_preview": [
+        {
+          "line_index": 912,
+          "offset": 63612,
+          "text": "(*I2wx[\\[CurlyPhi]:_] = Abs[Chop[Simplify[ComplexExpand[RSignal[[1]]*Conjugate[RSignal[[1]]]],  Element[d11,Reals] && Element[d12,Reals] && Element[d13,Reals] && Element[d14,Reals] && Element[d15,Reals] && Element[d16,Reals] && "
+        },
+        {
+          "line_index": 916,
+          "offset": 64105,
+          "text": "I2wy[\\[CurlyPhi]:_] =Abs[Chop[Simplify[ComplexExpand[RSignal[[2]]*Conjugate[RSignal[[2]]]], Element[d11,Reals] && Element[d12,Reals] && Element[d13,Reals] && Element[d14,Reals] && Element[d15,Reals] && Element[d16,Reals] && "
+        },
+        {
+          "line_index": 921,
+          "offset": 64609,
+          "text": "I2wx[\\[CurlyPhi]:_] = Abs[Chop[Simplify[ComplexExpand[RSignal[[1]]*Conjugate[RSignal[[1]]]]]]];"
+        },
+        {
+          "line_index": 923,
+          "offset": 64706,
+          "text": "I2wy[\\[CurlyPhi]:_] =Abs[Chop[Simplify[ComplexExpand[RSignal[[2]]*Conjugate[RSignal[[2]]]]]]];"
+        },
+        {
+          "line_index": 924,
+          "offset": 64801,
+          "text": "If[DebugFlag,Print[\"I2wx = \",I2wx[\\[CurlyPhi]],\" ; I2wy = \",I2wy[\\[CurlyPhi]]]];"
+        },
+        {
+          "line_index": 932,
+          "offset": 65306,
+          "text": "I2wParallel[\\[CurlyPhi]:_] = Abs[Chop[Simplify[ComplexExpand[RSignalCrystal[[1]]*Conjugate[RSignalCrystal[[1]]]],  Element[\\[CurlyPhi],Reals]]]];"
+        },
+        {
+          "line_index": 934,
+          "offset": 65453,
+          "text": "I2wPerpdicular[\\[CurlyPhi]:_] = Abs[Chop[Simplify[ComplexExpand[RSignalCrystal[[2]]*Conjugate[RSignalCrystal[[2]]]], Element[\\[CurlyPhi],Reals]]]];"
+        },
+        {
+          "line_index": 936,
+          "offset": 65602,
+          "text": "MaxI2wx = If[ValueQ[Unevaluated[I2wx[\\[CurlyPhi]]]],MaxValue[I2wx[\\[CurlyPhi]],\\[CurlyPhi]],1];"
+        },
+        {
+          "line_index": 937,
+          "offset": 65698,
+          "text": "MaxI2wy = If[ValueQ[Unevaluated[I2wy[\\[CurlyPhi]]]],MaxValue[I2wy[\\[CurlyPhi]],\\[CurlyPhi]],1];"
+        },
+        {
+          "line_index": 938,
+          "offset": 65794,
+          "text": "MaxI2w=Max[MaxI2wx,MaxI2wy]*1.1;"
+        },
+        {
+          "line_index": 939,
+          "offset": 65827,
+          "text": "(*Print[MaxI2wx];Print[MaxI2wy];Print[MaxI2w];*)"
+        },
+        {
+          "line_index": 941,
+          "offset": 65898,
+          "text": "If[MaxI2wx>MaxI2wy,"
+        },
+        {
+          "line_index": 943,
+          "offset": 65930,
+          "text": "factory = IntegerPart[MaxI2wx/MaxI2wy];},"
+        },
+        {
+          "line_index": 944,
+          "offset": 65972,
+          "text": "If[MaxI2wx<MaxI2wy,"
+        },
+        {
+          "line_index": 945,
+          "offset": 65992,
+          "text": "{factorx = IntegerPart[MaxI2wy/MaxI2wx];"
+        },
+        {
+          "line_index": 949,
+          "offset": 66074,
+          "text": "(*Plot3Ix =PolarPlot[Quiet[I2wx[\\[CurlyPhi]]*factorx/MaxI2w],{\\[CurlyPhi],0,2Pi},PlotStyle\\[Rule]{Blue,Thickness[0.01]},PolarAxesOrigin\\[Rule]{Pi/2,1},PolarGridLines\\[Rule]Automatic,PolarAxes\\[Rule]True,PlotRange\\[Rule]1.1,PlotLabel\\[Rule]Style[\"I^(2\\[Omega])(\\[CurlyPhi],\\[Psi])\",Black,FontFamily\\[Rule]\"Times New Roman\",28],PolarTicks\\[Rule]{Table[{N[Pi/4+Pi/2 i],Style[If[i\\[NotEqual]4,ToString[90*i+45]<>\"\u00b0\",\"\"],FontFamily\\[Rule]\"Times New Roman\",16]},{i,0,3}],None},Frame\\[Rule]{{True,False},{Fa"
+        },
+        {
+          "line_index": 953,
+          "offset": 66975,
+          "text": "PolarPlot[Quiet[I2wy[\\[CurlyPhi]]*factory/MaxI2w],{\\[CurlyPhi],0,2Pi},PlotStyle\\[Rule]{Red,Thickness[0.01]},PolarAxesOrigin\\[Rule]{Pi/2,1},PolarGridLines\\[Rule]Automatic,PolarAxes\\[Rule]True,PlotRange\\[Rule]1.1,PlotLabel\\[Rule]Style[\"I^(2\\[Omega])(\\[CurlyPhi],\\[Psi]+90\u00b0)\",Black,FontFamily\\[Rule]\"Times New Roman\",28],PolarTicks\\[Rule]{Table[{N[Pi/4+Pi/2 i],Style[If[i\\[NotEqual]4,ToString[90*i+45]<>\"\u00b0\",\"\"],FontFamily\\[Rule]\"Times New Roman\",16]},{i,0,3}],None},Frame\\[Rule]{{True,False},{False,Fals"
+        },
+        {
+          "line_index": 956,
+          "offset": 67860,
+          "text": "MaxI2wParallel = If[ValueQ[Unevaluated[I2wParallel[\\[CurlyPhi]]]],MaxValue[I2wParallel[\\[CurlyPhi]],\\[CurlyPhi]],1];"
+        },
+        {
+          "line_index": 957,
+          "offset": 67977,
+          "text": "MaxI2wPerpdicular = If[ValueQ[Unevaluated[I2wPerpdicular[\\[CurlyPhi]]]],MaxValue[I2wPerpdicular[\\[CurlyPhi]],\\[CurlyPhi]],1];"
+        },
+        {
+          "line_index": 958,
+          "offset": 68103,
+          "text": "MaxI2w=Max[MaxI2wParallel,MaxI2wPerpdicular]*1.1;"
+        }
+      ],
+      "assigned_symbols_containing_name": [
+        "I2wParallel",
+        "I2wPerpdicular",
+        "I2wx",
+        "I2wy",
+        "MaxI2w",
+        "MaxI2wParallel",
+        "MaxI2wPerpdicular",
+        "MaxI2wx",
+        "MaxI2wy"
+      ],
+      "classification": "represented_by_specific_intensity_functions_not_exact_symbol"
+    }
+  ],
+  "notes": [
+    "Exact assignment hits use the same assignment detector as the refined symbol-source map.",
+    "Substring hits are diagnostic only and must not be treated as exact symbol matches.",
+    "This audit resolves naming/routing gaps; it does not validate Mathematica values."
+  ]
+}

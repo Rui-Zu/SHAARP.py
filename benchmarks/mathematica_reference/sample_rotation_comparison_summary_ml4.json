@@ -1,0 +1,57 @@
+{
+  "source": "Mathematica SHAARP.ml setup.nb SampleRotate reference values (ml4 multilayer)",
+  "status": "sample_rotation_outputs_match",
+  "full_sample_rotation_agreement_claimed": true,
+  "atol": 1e-09,
+  "rtol": 1e-09,
+  "nonsingular_case_count": 4,
+  "nonsingular_fail_count": 0,
+  "diagnostic_case_ids": [],
+  "diagnostic_fail_count": 0,
+  "results": [
+    {
+      "case_id": "sample_rotation_ml4_b15_o3",
+      "key": "sampleRotateList",
+      "comparison_status": "passed",
+      "max_abs_error": 2.7929047963226594e-15,
+      "max_rel_error": 1.2058651726027607e-12,
+      "shape": [
+        3,
+        5
+      ]
+    },
+    {
+      "case_id": "sample_rotation_ml4_b1_o0",
+      "key": "sampleRotateList",
+      "comparison_status": "passed",
+      "max_abs_error": 4.73232564246473e-15,
+      "max_rel_error": 3.2393245383263294e-13,
+      "shape": [
+        3,
+        5
+      ]
+    },
+    {
+      "case_id": "sample_rotation_ml4_b4_o1",
+      "key": "sampleRotateList",
+      "comparison_status": "passed",
+      "max_abs_error": 2.9837243786801082e-15,
+      "max_rel_error": 4.087450278530131e-13,
+      "shape": [
+        3,
+        5
+      ]
+    },
+    {
+      "case_id": "sample_rotation_ml4_b8_o2",
+      "key": "sampleRotateList",
+      "comparison_status": "passed",
+      "max_abs_error": 1.4953316362920077e-15,
+      "max_rel_error": 1.3657635715511858e-13,
+      "shape": [
+        3,
+        5
+      ]
+    }
+  ]
+}

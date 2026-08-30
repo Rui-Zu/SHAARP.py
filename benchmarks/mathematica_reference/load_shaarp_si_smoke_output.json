@@ -1,0 +1,13 @@
+{
+	"source":"Mathematica SHAARP.si SHAARP_V1.03.nb smoke-loaded cell 4 symbol inventory",
+	"status":"mathematica_smoke_loaded",
+	"wolfram_version":"13.3.0 for Microsoft Windows (64-bit) (June 3, 2023)",
+	"notebook_path":"SHAARP_V1.03/SHAARP_V1.03.nb",
+	"inputCellCount":8,
+	"matchedNames":[
+		"FullAnalyticalFlag"
+	],
+	"downValueCounts":{
+		"FullAnalyticalFlag":1
+	}
+}

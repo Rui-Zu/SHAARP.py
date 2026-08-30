@@ -1,0 +1,533 @@
+{
+  "reference_version": 1,
+  "source": "Mathematica SHAARP.si front-end text extraction",
+  "source_file": "mathematica_reference/shaarp_si_frontend_sections.json",
+  "notebook_path": "SHAARP_V1.03/SHAARP_V1.03.nb",
+  "wolfram_version_at_extraction": "13.3.0 for Microsoft Windows (64-bit) (June 3, 2023)",
+  "status": "source_derived_from_shaarp_si_partial_analytical_branch",
+  "validation_level": "source_text_pattern_extraction_not_live_symbolic_execution",
+  "note": "Patterns are parsed from the SHAARP.si Partial Analytical Expressions doldExp branch. This validates Python's point-group tensor table against the extracted notebook source branch; it is not a full Wolfram execution of the complete analytical workflow.",
+  "pattern_count": 16,
+  "label_count": 23,
+  "patterns": [
+    {
+      "condition_source": "PointGroup[[1]] == \"1\"",
+      "point_group_labels": [
+        "1"
+      ],
+      "matrix_tokens": [
+        [
+          "d11",
+          "d12",
+          "d13",
+          "d14",
+          "d15",
+          "d16"
+        ],
+        [
+          "d21",
+          "d22",
+          "d23",
+          "d24",
+          "d25",
+          "d26"
+        ],
+        [
+          "d31",
+          "d32",
+          "d33",
+          "d34",
+          "d35",
+          "d36"
+        ]
+      ]
+    },
+    {
+      "condition_source": "PointGroup[[1]] == \"2\"",
+      "point_group_labels": [
+        "2"
+      ],
+      "matrix_tokens": [
+        [
+          "0",
+          "0",
+          "0",
+          "d14",
+          "0",
+          "d16"
+        ],
+        [
+          "d21",
+          "d22",
+          "d23",
+          "0",
+          "d25",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "d34",
+          "0",
+          "d36"
+        ]
+      ]
+    },
+    {
+      "condition_source": "PointGroup[[1]] == \"m\"",
+      "point_group_labels": [
+        "m"
+      ],
+      "matrix_tokens": [
+        [
+          "d11",
+          "d12",
+          "d13",
+          "0",
+          "d15",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "d24",
+          "0",
+          "d26"
+        ],
+        [
+          "d31",
+          "d32",
+          "d33",
+          "0",
+          "d35",
+          "0"
+        ]
+      ]
+    },
+    {
+      "condition_source": "PointGroup[[1]] == \"mm2\"",
+      "point_group_labels": [
+        "mm2"
+      ],
+      "matrix_tokens": [
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "d15",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "d24",
+          "0",
+          "0"
+        ],
+        [
+          "d31",
+          "d32",
+          "d33",
+          "0",
+          "0",
+          "0"
+        ]
+      ]
+    },
+    {
+      "condition_source": "PointGroup[[1]] == \"222\"",
+      "point_group_labels": [
+        "222"
+      ],
+      "matrix_tokens": [
+        [
+          "0",
+          "0",
+          "0",
+          "d14",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "d25",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "d36"
+        ]
+      ]
+    },
+    {
+      "condition_source": "PointGroup[[1]] == \"3\"",
+      "point_group_labels": [
+        "3"
+      ],
+      "matrix_tokens": [
+        [
+          "d11",
+          "-d11",
+          "0",
+          "d14",
+          "d15",
+          "-d22"
+        ],
+        [
+          "-d22",
+          "d22",
+          "0",
+          "d15",
+          "-d14",
+          "-d11"
+        ],
+        [
+          "d31",
+          "d31",
+          "d33",
+          "0",
+          "0",
+          "0"
+        ]
+      ]
+    },
+    {
+      "condition_source": "PointGroup[[1]] == \"32\"",
+      "point_group_labels": [
+        "32"
+      ],
+      "matrix_tokens": [
+        [
+          "d11",
+          "-d11",
+          "0",
+          "d14",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "-d14",
+          "-d11"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ]
+      ]
+    },
+    {
+      "condition_source": "PointGroup[[1]] == \"3m\"",
+      "point_group_labels": [
+        "3m"
+      ],
+      "matrix_tokens": [
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "d15",
+          "-d22"
+        ],
+        [
+          "-d22",
+          "d22",
+          "0",
+          "d15",
+          "0",
+          "0"
+        ],
+        [
+          "d31",
+          "d31",
+          "d33",
+          "0",
+          "0",
+          "0"
+        ]
+      ]
+    },
+    {
+      "condition_source": "PointGroup[[1]] == \"4\" || PointGroup[[1]] ==\"6\"||PointGroup ==\"\\[Infinity]\"",
+      "point_group_labels": [
+        "4",
+        "6",
+        "\\[Infinity]"
+      ],
+      "matrix_tokens": [
+        [
+          "0",
+          "0",
+          "0",
+          "d14",
+          "d15",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "d15",
+          "-d14",
+          "0"
+        ],
+        [
+          "d31",
+          "d31",
+          "d33",
+          "0",
+          "0",
+          "0"
+        ]
+      ]
+    },
+    {
+      "condition_source": "PointGroup[[1]] == \"Overscript[4, _]\"",
+      "point_group_labels": [
+        "Overscript[4, _]"
+      ],
+      "matrix_tokens": [
+        [
+          "0",
+          "0",
+          "0",
+          "d14",
+          "d15",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "-d15",
+          "d14",
+          "0"
+        ],
+        [
+          "d31",
+          "-d31",
+          "0",
+          "0",
+          "0",
+          "d36"
+        ]
+      ]
+    },
+    {
+      "condition_source": "PointGroup[[1]] == \"4mm\"||PointGroup[[1]] ==\"6mm\"||PointGroup ==\"\\[Infinity]m\"",
+      "point_group_labels": [
+        "4mm",
+        "6mm",
+        "\\[Infinity]m"
+      ],
+      "matrix_tokens": [
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "d15",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "d15",
+          "0",
+          "0"
+        ],
+        [
+          "d31",
+          "d31",
+          "d33",
+          "0",
+          "0",
+          "0"
+        ]
+      ]
+    },
+    {
+      "condition_source": "PointGroup[[1]] == \"422\"||PointGroup[[1]] ==\"622\"||PointGroup ==\"\\[Infinity]2\"",
+      "point_group_labels": [
+        "422",
+        "622",
+        "\\[Infinity]2"
+      ],
+      "matrix_tokens": [
+        [
+          "0",
+          "0",
+          "0",
+          "d14",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "-d14",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ]
+      ]
+    },
+    {
+      "condition_source": "PointGroup[[1]] == \"Overscript[4, _]2m\"",
+      "point_group_labels": [
+        "Overscript[4, _]2m"
+      ],
+      "matrix_tokens": [
+        [
+          "0",
+          "0",
+          "0",
+          "d14",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "d14",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "d36"
+        ]
+      ]
+    },
+    {
+      "condition_source": "PointGroup[[1]] == \"Overscript[6, _]\"",
+      "point_group_labels": [
+        "Overscript[6, _]"
+      ],
+      "matrix_tokens": [
+        [
+          "d11",
+          "-d11",
+          "0",
+          "0",
+          "0",
+          "-d22"
+        ],
+        [
+          "-d22",
+          "d22",
+          "0",
+          "0",
+          "0",
+          "-d11"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ]
+      ]
+    },
+    {
+      "condition_source": "PointGroup[[1]] == \"Overscript[6, _]m2\"",
+      "point_group_labels": [
+        "Overscript[6, _]m2"
+      ],
+      "matrix_tokens": [
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "-d22"
+        ],
+        [
+          "-d22",
+          "d22",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ]
+      ]
+    },
+    {
+      "condition_source": "PointGroup[[1]] == \"Overscript[4, _]3m\"||PointGroup[[1]] ==\"23\"",
+      "point_group_labels": [
+        "Overscript[4, _]3m",
+        "23"
+      ],
+      "matrix_tokens": [
+        [
+          "0",
+          "0",
+          "0",
+          "d14",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "d14",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "d14"
+        ]
+      ]
+    }
+  ]
+}

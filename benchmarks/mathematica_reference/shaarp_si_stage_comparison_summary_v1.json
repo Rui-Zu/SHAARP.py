@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "status": "partial_stage_value_comparison_not_full_shaarp_si_agreement",
+  "source": "SHAARP.si Mathematica stage references compared with Python stage formulas",
+  "full_shaarp_si_agreement_claimed": false,
+  "passed_value_comparison_count": 1116,
+  "diagnostic_only_count": 144,
+  "stages": [
+    {
+      "stage_id": "pnl",
+      "reference_path": "benchmarks/mathematica_reference/shaarp_si_pnl_stage_reference_v1.json",
+      "comparison_status": "passed",
+      "comparison_count": 108,
+      "failed_count": 0,
+      "max_abs_error": 1.2412670766236366e-16,
+      "max_rel_error": 1.4321552052832027e-15,
+      "tolerance": {
+        "atol": 1e-12,
+        "rtol": 1e-12
+      }
+    },
+    {
+      "stage_id": "inhomogeneous_croots",
+      "reference_path": "benchmarks/mathematica_reference/shaarp_si_inhomogeneous_stage_reference_v1.json",
+      "comparison_status": "passed",
+      "comparison_count": 108,
+      "failed_count": 0,
+      "max_abs_error": 1.5543376107943443e-13,
+      "max_rel_error": 2.2965213095850875e-14,
+      "tolerance": {
+        "atol": 1e-11,
+        "rtol": 1e-11
+      }
+    },
+    {
+      "stage_id": "omega_fresnel_boundary",
+      "reference_path": "benchmarks/mathematica_reference/shaarp_si_fresnel_stage_reference_v1.json",
+      "comparison_status": "passed",
+      "comparison_count": 144,
+      "failed_count": 0,
+      "max_abs_error": 5.554393866409443e-16,
+      "max_rel_error": 2.4962739304914028e+292,
+      "tolerance": {
+        "atol": 1e-12,
+        "rtol": 1e-12
+      }
+    },
+    {
+      "stage_id": "two_omega_boundary",
+      "reference_path": "benchmarks/mathematica_reference/shaarp_si_two_omega_boundary_stage_reference_v1.json",
+      "comparison_status": "passed",
+      "comparison_count": 144,
+      "failed_count": 0,
+      "max_abs_error": 6.008553267260378e-15,
+      "max_rel_error": 2.70038373975213e+293,
+      "tolerance": {
+        "atol": 1e-12,
+        "rtol": 1e-12
+      }
+    },
+    {
+      "stage_id": "signal_intensity",
+      "reference_path": "benchmarks/mathematica_reference/shaarp_si_signal_stage_reference_v1.json",
+      "comparison_status": "passed",
+      "comparison_count": 252,
+      "failed_count": 0,
+      "max_abs_error": 0.0,
+      "max_rel_error": 0.0,
+      "tolerance": {
+        "atol": 1e-12,
+        "rtol": 1e-12
+      }
+    },
+    {
+      "stage_id": "angle_root_equations",
+      "reference_path": "benchmarks/mathematica_reference/shaarp_si_angle_stage_reference_v1.json",
+      "comparison_status": "passed",
+      "comparison_count": 360,
+      "failed_count": 0,
+      "max_abs_error": 6.451015445587837e-06,
+      "max_rel_error": 3.608156460060556e+293,
+      "tolerance": {
+        "residual_atol": 1e-12,
+        "index_atol": 1e-05
+      }
+    },
+    {
+      "stage_id": "angle_root_labels",
+      "reference_path": "benchmarks/mathematica_reference/shaarp_si_angle_stage_reference_v1.json",
+      "comparison_status": "diagnostic_only",
+      "comparison_count": 144,
+      "failed_count": 120,
+      "max_abs_error": 0.2032787562614845,
+      "max_rel_error": 9.135820614865518e+306,
+      "tolerance": {
+        "atol": 1e-12,
+        "rtol": 1e-12
+      }
+    }
+  ],
+  "next_action": "Use passed stages to build facade-level SI stage records; keep the scalar angle check as a diagnostic guard against mis-validating anisotropic branch labels."
+}

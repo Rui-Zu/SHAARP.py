@@ -1,0 +1,538 @@
+{
+  "schema_version": 1,
+  "status": "diagnostic_current_python_si_solver_not_full_shaarp_si_agreement",
+  "source": "Current Python solve_single_interface_shg compared against SHAARP.si reflected signal stage ER2w values",
+  "full_shaarp_si_agreement_claimed": false,
+  "mathematica_reference": "benchmarks/mathematica_reference/shaarp_si_signal_stage_reference_v1.json",
+  "mapping_path": "benchmarks/mathematica_reference/shaarp_si_case_input_mapping_v1.json",
+  "case_count": 36,
+  "passing_er2w_case_count": 5,
+  "failing_er2w_case_count": 31,
+  "max_er2w_abs_error": 1.9405303172144195,
+  "max_er2w_rel_error": 6.836184977082492,
+  "tolerance": {
+    "atol": 1e-10,
+    "rtol": 1e-10
+  },
+  "likely_first_gap": "ordinary/extraordinary source-mode identity: current Python full-SI solver uses fast/slow fallback for low-symmetry complex cases, while SHAARP.si uses its active angle-root and eigensystem branch-label path before nonlinear polarization",
+  "first_failing_case": {
+    "case_id": "solver_stage_02",
+    "theta_deg": 8.0,
+    "incident_polarization": "p",
+    "er2w_passed": false,
+    "er2w_max_abs_error": 0.14150177341472556,
+    "er2w_max_rel_error": 5.439246553810488,
+    "python_boundary_residual_norm": 2.1619415426381845e-16,
+    "python_source_mode_basis": "fast_slow_unclassified",
+    "python_source_mode_order": [
+      "fast",
+      "slow"
+    ]
+  },
+  "cases": [
+    {
+      "case_id": "solver_stage_01",
+      "theta_deg": 0.0,
+      "incident_polarization": "s",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 2.3294095660861525e-16,
+      "er2w_max_rel_error": 1.6000791242458413e-14,
+      "python_boundary_residual_norm": 3.5412373280632144e-16,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_02",
+      "theta_deg": 8.0,
+      "incident_polarization": "p",
+      "er2w_passed": false,
+      "er2w_max_abs_error": 0.14150177341472556,
+      "er2w_max_rel_error": 5.439246553810488,
+      "python_boundary_residual_norm": 2.1619415426381845e-16,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_03",
+      "theta_deg": 17.5,
+      "incident_polarization": "s",
+      "er2w_passed": false,
+      "er2w_max_abs_error": 0.06061041021951649,
+      "er2w_max_rel_error": 1.4752695320382185,
+      "python_boundary_residual_norm": 6.16698529834644e-15,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_04",
+      "theta_deg": 29.0,
+      "incident_polarization": "p",
+      "er2w_passed": false,
+      "er2w_max_abs_error": 0.17579842057423314,
+      "er2w_max_rel_error": 1.5256674872659486,
+      "python_boundary_residual_norm": 1.656865259197723e-16,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_05",
+      "theta_deg": 41.0,
+      "incident_polarization": "s",
+      "er2w_passed": false,
+      "er2w_max_abs_error": 0.023932150484177024,
+      "er2w_max_rel_error": 1.8855203078490226,
+      "python_boundary_residual_norm": 1.8234050119721027e-16,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_06",
+      "theta_deg": 55.0,
+      "incident_polarization": "p",
+      "er2w_passed": false,
+      "er2w_max_abs_error": 0.014639052447901807,
+      "er2w_max_rel_error": 1.3340602278823914,
+      "python_boundary_residual_norm": 9.25928968001074e-17,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_07",
+      "theta_deg": 0.0,
+      "incident_polarization": "p",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 5.696871578617954e-16,
+      "er2w_max_rel_error": 1.1445951896470858e-14,
+      "python_boundary_residual_norm": 1.685094348028006e-16,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_08",
+      "theta_deg": 8.0,
+      "incident_polarization": "s",
+      "er2w_passed": false,
+      "er2w_max_abs_error": 0.10761641442127436,
+      "er2w_max_rel_error": 1.0569640964553126,
+      "python_boundary_residual_norm": 2.9156516736177313e-16,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_09",
+      "theta_deg": 17.5,
+      "incident_polarization": "p",
+      "er2w_passed": false,
+      "er2w_max_abs_error": 0.0801535853485617,
+      "er2w_max_rel_error": 1.9077850194327433,
+      "python_boundary_residual_norm": 1.3172480819008146e-16,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_10",
+      "theta_deg": 29.0,
+      "incident_polarization": "s",
+      "er2w_passed": false,
+      "er2w_max_abs_error": 0.1250062935245024,
+      "er2w_max_rel_error": 2.781682395923391,
+      "python_boundary_residual_norm": 4.798329486777688e-16,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_11",
+      "theta_deg": 41.0,
+      "incident_polarization": "p",
+      "er2w_passed": false,
+      "er2w_max_abs_error": 0.09972969997978635,
+      "er2w_max_rel_error": 6.836184977082492,
+      "python_boundary_residual_norm": 4.0776634707288974e-16,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_12",
+      "theta_deg": 55.0,
+      "incident_polarization": "s",
+      "er2w_passed": false,
+      "er2w_max_abs_error": 0.21553910144545035,
+      "er2w_max_rel_error": 1.1577635165029847,
+      "python_boundary_residual_norm": 1.5589485124252403e-16,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_13",
+      "theta_deg": 0.0,
+      "incident_polarization": "s",
+      "er2w_passed": false,
+      "er2w_max_abs_error": 0.001788276754305194,
+      "er2w_max_rel_error": 0.06188066410295743,
+      "python_boundary_residual_norm": 1.925464916051557e-16,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_14",
+      "theta_deg": 8.0,
+      "incident_polarization": "p",
+      "er2w_passed": false,
+      "er2w_max_abs_error": 0.01337840260482898,
+      "er2w_max_rel_error": 1.9324430729131097,
+      "python_boundary_residual_norm": 3.8152185572326796e-16,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_15",
+      "theta_deg": 17.5,
+      "incident_polarization": "s",
+      "er2w_passed": false,
+      "er2w_max_abs_error": 0.040695628133969784,
+      "er2w_max_rel_error": 2.0088139977326454,
+      "python_boundary_residual_norm": 1.3690144885234817e-15,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_16",
+      "theta_deg": 29.0,
+      "incident_polarization": "p",
+      "er2w_passed": false,
+      "er2w_max_abs_error": 0.031052838485780714,
+      "er2w_max_rel_error": 2.6783654952549396,
+      "python_boundary_residual_norm": 2.9317339971313326e-16,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_17",
+      "theta_deg": 41.0,
+      "incident_polarization": "s",
+      "er2w_passed": false,
+      "er2w_max_abs_error": 0.08317894400557445,
+      "er2w_max_rel_error": 2.210832659730838,
+      "python_boundary_residual_norm": 6.523310751754974e-16,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_18",
+      "theta_deg": 55.0,
+      "incident_polarization": "p",
+      "er2w_passed": false,
+      "er2w_max_abs_error": 0.0807121142608475,
+      "er2w_max_rel_error": 1.608823173601884,
+      "python_boundary_residual_norm": 1.1619190273666602e-15,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_19",
+      "theta_deg": 0.0,
+      "incident_polarization": "p",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 3.602154968680262e-15,
+      "er2w_max_rel_error": 2.8334076068743626e-13,
+      "python_boundary_residual_norm": 2.4326390438669163e-15,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_20",
+      "theta_deg": 8.0,
+      "incident_polarization": "s",
+      "er2w_passed": false,
+      "er2w_max_abs_error": 0.7566492944045963,
+      "er2w_max_rel_error": 1.0516544775368597,
+      "python_boundary_residual_norm": 1.1366744564742264e-15,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_21",
+      "theta_deg": 17.5,
+      "incident_polarization": "p",
+      "er2w_passed": false,
+      "er2w_max_abs_error": 0.40670222012307,
+      "er2w_max_rel_error": 1.013041602358405,
+      "python_boundary_residual_norm": 6.085983892653883e-16,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_22",
+      "theta_deg": 29.0,
+      "incident_polarization": "s",
+      "er2w_passed": false,
+      "er2w_max_abs_error": 0.677764113978303,
+      "er2w_max_rel_error": 1.0281609781429293,
+      "python_boundary_residual_norm": 1.2908686452744816e-15,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_23",
+      "theta_deg": 41.0,
+      "incident_polarization": "p",
+      "er2w_passed": false,
+      "er2w_max_abs_error": 0.39918528228526007,
+      "er2w_max_rel_error": 1.0145263774273423,
+      "python_boundary_residual_norm": 2.3245485930894e-15,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_24",
+      "theta_deg": 55.0,
+      "incident_polarization": "s",
+      "er2w_passed": false,
+      "er2w_max_abs_error": 1.9405303172144195,
+      "er2w_max_rel_error": 1.0010152781790074,
+      "python_boundary_residual_norm": 2.8042088027215047e-16,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_25",
+      "theta_deg": 0.0,
+      "incident_polarization": "s",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 1.638466553723007e-14,
+      "er2w_max_rel_error": 4.387538580940222e-13,
+      "python_boundary_residual_norm": 6.078724530114316e-15,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_26",
+      "theta_deg": 8.0,
+      "incident_polarization": "p",
+      "er2w_passed": false,
+      "er2w_max_abs_error": 0.09971670365794764,
+      "er2w_max_rel_error": 1.1100779598725183,
+      "python_boundary_residual_norm": 3.249844242993812e-16,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_27",
+      "theta_deg": 17.5,
+      "incident_polarization": "s",
+      "er2w_passed": false,
+      "er2w_max_abs_error": 0.025180758021471503,
+      "er2w_max_rel_error": 1.3188048746308283,
+      "python_boundary_residual_norm": 2.429705496370934e-15,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_28",
+      "theta_deg": 29.0,
+      "incident_polarization": "p",
+      "er2w_passed": false,
+      "er2w_max_abs_error": 0.07548447110468426,
+      "er2w_max_rel_error": 1.0205542965590475,
+      "python_boundary_residual_norm": 3.5704674003807724e-15,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_29",
+      "theta_deg": 41.0,
+      "incident_polarization": "s",
+      "er2w_passed": false,
+      "er2w_max_abs_error": 0.022917100723599326,
+      "er2w_max_rel_error": 1.186398137602489,
+      "python_boundary_residual_norm": 7.495989745426764e-15,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_30",
+      "theta_deg": 55.0,
+      "incident_polarization": "p",
+      "er2w_passed": false,
+      "er2w_max_abs_error": 0.0615720573155697,
+      "er2w_max_rel_error": 5.585774987140573,
+      "python_boundary_residual_norm": 2.549158293041854e-16,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_31",
+      "theta_deg": 0.0,
+      "incident_polarization": "p",
+      "er2w_passed": true,
+      "er2w_max_abs_error": 2.3318865064807996e-15,
+      "er2w_max_rel_error": 7.995379305536917e-14,
+      "python_boundary_residual_norm": 4.3177542613803813e-16,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_32",
+      "theta_deg": 8.0,
+      "incident_polarization": "s",
+      "er2w_passed": false,
+      "er2w_max_abs_error": 0.09839372140025042,
+      "er2w_max_rel_error": 1.1096004591475794,
+      "python_boundary_residual_norm": 3.2358173225510095e-16,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_33",
+      "theta_deg": 17.5,
+      "incident_polarization": "p",
+      "er2w_passed": false,
+      "er2w_max_abs_error": 0.11606947875021287,
+      "er2w_max_rel_error": 1.231196490656947,
+      "python_boundary_residual_norm": 5.37317295572439e-16,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_34",
+      "theta_deg": 29.0,
+      "incident_polarization": "s",
+      "er2w_passed": false,
+      "er2w_max_abs_error": 0.04823637889617381,
+      "er2w_max_rel_error": 1.5638269804063538,
+      "python_boundary_residual_norm": 1.0476251991782595e-14,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_35",
+      "theta_deg": 41.0,
+      "incident_polarization": "p",
+      "er2w_passed": false,
+      "er2w_max_abs_error": 0.05336497029714548,
+      "er2w_max_rel_error": 3.0178101603459973,
+      "python_boundary_residual_norm": 2.6979272569082565e-16,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    },
+    {
+      "case_id": "solver_stage_36",
+      "theta_deg": 55.0,
+      "incident_polarization": "s",
+      "er2w_passed": false,
+      "er2w_max_abs_error": 0.04464497081427802,
+      "er2w_max_rel_error": 1.5154498426387284,
+      "python_boundary_residual_norm": 6.217244460725115e-16,
+      "python_source_mode_basis": "fast_slow_unclassified",
+      "python_source_mode_order": [
+        "fast",
+        "slow"
+      ]
+    }
+  ]
+}

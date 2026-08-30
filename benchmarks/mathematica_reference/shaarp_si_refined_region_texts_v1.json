@@ -1,0 +1,245 @@
+{
+  "schema_version": 1,
+  "source": "SHAARP.si refined region text snippets reconstructed from normalized PlainText line audit",
+  "status": "snippet_export_not_validation_evidence",
+  "coordinate_system": "PlainText normalized to LF newlines",
+  "line_audit": "benchmarks/mathematica_reference/shaarp_si_candidate_region_line_audit.json",
+  "refined_map": "benchmarks/mathematica_reference/shaarp_si_refined_extraction_map_v1.json",
+  "records": [
+    {
+      "region_id": "principal_axis_and_index_setup",
+      "line_start": 277,
+      "line_end": 307,
+      "line_count": 31,
+      "status": "snippet_ready",
+      "missing_lines": [],
+      "text": "(*Q is the rotation matrix from lab to principle*)\nIf [PointGroup[[1]]== \"1\"\\[Or] PointGroup[[1]]== \"2\"\\[Or] PointGroup[[1]]== \"m\"\\[Or] PointGroup[[1]]== \"mm2\"\\[Or] PointGroup[[1]]== \"2\",\n{\nInv={{0,0,1},{0,1,0},{1,0,0}};\naCryToPrinw = Inv.Eigenvectors[Re[MatrixPower[\\[CurlyEpsilon]\\[Omega]Cry,0.5]]];\naCryToPrin2w = Inv.Eigenvectors[Re[MatrixPower[\\[CurlyEpsilon]2\\[Omega]Cry,0.5]]];\n\nIf [SetPrecision[aCryToPrinw.\\[CurlyEpsilon]\\[Omega]Cry.Transpose[aCryToPrinw],6]==SetPrecision[\\[CurlyEpsilon]\\[Omega]Cry,6],\naCryToPrinw = IdentityMatrix[3]];\n\nIf [SetPrecision[aCryToPrin2w.\\[CurlyEpsilon]2\\[Omega]Cry.Transpose[aCryToPrin2w],6]==SetPrecision[\\[CurlyEpsilon]2\\[Omega]Cry,6],\naCryToPrin2w = IdentityMatrix[3]];\n},\n{\naCryToPrinw = IdentityMatrix[3];\naCryToPrin2w = IdentityMatrix[3];\n}\n];\n\nQw=aCryToPrinw.Inverse[a];\nQ2w=aCryToPrin2w.Inverse[a];\n\nnwPrinciple=Chop[aCryToPrinw.MatrixPower[\\[CurlyEpsilon]\\[Omega]Cry,0.5].Transpose[aCryToPrinw]];\nn2wPrinciple = Chop[aCryToPrin2w.MatrixPower[\\[CurlyEpsilon]2\\[Omega]Cry,0.5].Transpose[aCryToPrin2w]];\n\nelabwNum =Chop[a.\\[CurlyEpsilon]\\[Omega]Cry.Transpose[a]];\nelab2wNum =Chop[a.\\[CurlyEpsilon]2\\[Omega]Cry.Transpose[a]];\n\nIf [DebugFlag,Print[\"a = \",a//MatrixForm,\" ; Det[a] = \",Det[a],\" ; \\[CurlyEpsilon]\\[Omega]Cry = \",\\[CurlyEpsilon]\\[Omega]Cry//MatrixForm,\" ; elabwNum =\",elabwNum//MatrixForm,\" ; nwPrinciple =\",nwPrinciple//MatrixForm,\" ; Qw = \",Qw//MatrixForm];];\n\nIf [DebugFlag,Print[\"\\[CurlyEpsilon]2\\[Omega]Cry = \",\\[CurlyEpsilon]2\\[Omega]Cry//MatrixForm,\" ; elab2wNum =\",elab2wNum//MatrixForm,\" ; n2wPrinciple =\",n2wPrinciple//MatrixForm,\" ; Q2w = \",Q2w//MatrixForm];];",
+      "byte_count": 1629
+    },
+    {
+      "region_id": "shg_tensor_input_matrix",
+      "line_start": 309,
+      "line_end": 311,
+      "line_count": 3,
+      "status": "snippet_ready",
+      "missing_lines": [],
+      "text": "dold = {{d11,d12,d13,d14,d15,d16},\n            {d21,d22,d23,d24,d25,d26},\n            {d31,d32,d33,d34,d35,d36}};",
+      "byte_count": 113
+    },
+    {
+      "region_id": "fresnel_sweep_table_initialization",
+      "line_start": 318,
+      "line_end": 320,
+      "line_count": 3,
+      "status": "snippet_ready",
+      "missing_lines": [],
+      "text": "step = 15; Start=1;count = 0;\nIndex = ConstantArray[0,{Round[90/step]+1,5}];\nFresnel = ConstantArray[0,{Round[90/step]+1,5}];",
+      "byte_count": 125
+    },
+    {
+      "region_id": "fresnel_sweep_angle_root_assignments",
+      "line_start": 340,
+      "line_end": 348,
+      "line_count": 9,
+      "status": "snippet_ready",
+      "missing_lines": [],
+      "text": "Vw = Simplify[(AwNum[[1,1]]+AwNum[[2,2]]+AwNum[[3,3]]) / 2];\nWw = Simplify[(AwNum[[1,1]]*AwNum[[2,2]]+AwNum[[1,1]]*AwNum[[3,3]]+AwNum[[2,2]]*AwNum[[3,3]]-AwNum[[1,3]]*AwNum[[3,1]]-AwNum[[1,2]]*AwNum[[2,1]]-AwNum[[2,3]]*AwNum[[3,2]])];\nfo = Simplify[Sin[ThetaForIn]- Sqrt[(Vw+Sqrt[Vw^2-Ww])/Ww]*Sin[ThetaTout]];\nRootOrd = Quiet[FindRoot[fo==0,{ThetaTout,Pi/4}]];\nThetaOrd=ThetaTout/.RootOrd;\nfe = Simplify[Sin[ThetaForIn]- Sqrt[(Vw-Sqrt[Vw^2-Ww])/Ww]*Sin[ThetaTout]];\nRootExt =Quiet[FindRoot[fe==0,{ThetaTout,Pi/4}]];\nThetaExt=ThetaTout/.RootExt;\nExtwFactor=1;",
+      "byte_count": 559
+    },
+    {
+      "region_id": "omega_angle_roots_initial_path",
+      "line_start": 368,
+      "line_end": 371,
+      "line_count": 4,
+      "status": "snippet_ready",
+      "missing_lines": [],
+      "text": "nwNumOrd = SetPrecision[Sqrt[(VwNumOrd-ExtwFactor*Sqrt[VwNumOrd^2-WwNumOrd])/WwNumOrd],6];\n\nIf [Abs[nwNumExt]>Abs[ nwNumOrd] && Abs[ThetaExt]>Abs[ThetaOrd], ExtwFactor=ExtwFactor*(-1)];\nIf [Abs[nwNumExt]< Abs[nwNumOrd] && Abs[ThetaExt]<Abs[ThetaOrd], ExtwFactor=ExtwFactor*(-1)];",
+      "byte_count": 279
+    },
+    {
+      "region_id": "fresnel_sweep_table_rows",
+      "line_start": 449,
+      "line_end": 465,
+      "line_count": 17,
+      "status": "snippet_ready",
+      "missing_lines": [],
+      "text": "(*Use Numerical Solution with Fresnel*)\nERp = ERpNum/.EwrootsNum[[1,1]];\nERs = ERsNum/.EwrootsNum[[1,2]];\ntwe = twe/.EwrootsNum[[1,3]];\ntwo = two/.EwrootsNum[[1,4]];\nETweo=Expand[ETwNumExt];\nETwo  =Expand[ETwNumOrd];\nIndex[[count+1,1]]=(count)*step;\nIndex[[count+1,2]]=ThetaOrd*180/Pi;\nIndex[[count+1,3]]=nwNumOrd;\nIndex[[count+1,4]]=ThetaExt*180/Pi;\nIndex[[count+1,5]]=nwNumExt;\nFresnel[[count+1,1]]=(count)*step;\nFresnel[[count+1,2]]=-ERwNum[[1]]/EIwNum[[1]];(*rp*)\nFresnel[[count+1,3]]=ERs/EIwNum[[2]];(*rs*)\nFresnel[[count+1,4]]=Sqrt[((ETwo[[1]]+ETweo[[1]])^2+(ETwo[[3]]+ETweo[[3]])^2)]/Sqrt[EIw[[1]]^2+EIw[[3]]^2];(*rp*)\nFresnel[[count+1,5]]=(ETwo[[2]]+ETweo[[2]])/EIw[[2]]; (*rs*)",
+      "byte_count": 686
+    },
+    {
+      "region_id": "active_wave_equation_setup",
+      "line_start": 481,
+      "line_end": 491,
+      "line_count": 11,
+      "status": "snippet_ready",
+      "missing_lines": [],
+      "text": "progress=30;\nuy = 0; \nux = Sin[ThetaTout]; \nuz = -Cos[ThetaTout];\nL = {{uy^2+uz^2,-ux*uy,-ux*uz},{-ux*uy, ux^2+uz^2,-uy*uz},{-uz*ux,-uz*uy,ux^2+uy^2}}; (*Curl * Curl of WaveEquation*)\nRstandardwNum = nwPrinciple.Qw;\nRstandard2wNum = n2wPrinciple.Q2w;\nCstandardwNum = Inverse[RstandardwNum];\nCstandard2wNum = Inverse[Rstandard2wNum];\nAwNum = Transpose[CstandardwNum].L.CstandardwNum;\nA2wNum = Transpose[Cstandard2wNum].L.Cstandard2wNum;",
+      "byte_count": 435
+    },
+    {
+      "region_id": "active_backward_wave_equation_setup",
+      "line_start": 493,
+      "line_end": 504,
+      "line_count": 12,
+      "status": "snippet_ready",
+      "missing_lines": [],
+      "text": "(*Determine Eigen Equations for Backward wave*)\nuMBy = 0; \nuMBx = Sin[ThetaTout]; \nuMBz = Cos[ThetaTout]; (*Change Sign due to Backward Wave*)\nLMB = {{uy^2+uz^2,-ux*uy,-ux*uz},{-ux*uy, ux^2+uz^2,-uy*uz},{-uz*ux,-uz*uy,ux^2+uy^2}};\n\nRstandardMBwNum= nwPrinciple.Qw;\nRstandardMB2wNum = n2wPrinciple.Q2w;\nCstandardMBwNum = Inverse[RstandardMBwNum];\nCstandardMB2wNum = Inverse[RstandardMB2wNum];\nAMBwNum = Transpose[CstandardMBwNum].LMB.CstandardMBwNum;\nAMB2wNum = Transpose[CstandardMB2wNum].LMB.CstandardMB2wNum;",
+      "byte_count": 510
+    },
+    {
+      "region_id": "omega_angle_root_assignments_active_path",
+      "line_start": 508,
+      "line_end": 519,
+      "line_count": 12,
+      "status": "snippet_ready",
+      "missing_lines": [],
+      "text": "Vw = Simplify[(AwNum[[1,1]]+AwNum[[2,2]]+AwNum[[3,3]]) / 2];\nWw = Simplify[(AwNum[[1,1]]*AwNum[[2,2]]+AwNum[[1,1]]*AwNum[[3,3]]+AwNum[[2,2]]*AwNum[[3,3]]-AwNum[[1,3]]*AwNum[[3,1]]-AwNum[[1,2]]*AwNum[[2,1]]-AwNum[[2,3]]*AwNum[[3,2]])];\nfo = Simplify[Sin[ThetaIn*Pi /180]- Sqrt[(Vw+Sqrt[Vw^2-Ww])/Ww]*Sin[ThetaTout]];\nRootOrd = Quiet[FindRoot[fo==0,{ThetaTout,Pi/4}]];\n\nIf[DebugFlag,Print[\"Vw = \",Simplify[Vw],\" ; Ww = \",Simplify[Ww]]];\n\nThetaOrd=ThetaTout/.RootOrd;\nfe = Simplify[Sin[ThetaIn*Pi /180]- Sqrt[(Vw-Sqrt[Vw^2-Ww])/Ww]*Sin[ThetaTout]];\nRootExt = Quiet[FindRoot[fe==0,{ThetaTout,Pi/4}]];\nThetaExt=ThetaTout/.RootExt;\nExtwFactor=1;",
+      "byte_count": 639
+    },
+    {
+      "region_id": "two_omega_angle_root_assignments_active_path",
+      "line_start": 524,
+      "line_end": 533,
+      "line_count": 10,
+      "status": "snippet_ready",
+      "missing_lines": [],
+      "text": "progress=35;\nV2w = Simplify[(A2wNum[[1,1]]+A2wNum[[2,2]]+A2wNum[[3,3]]) / 2];\nW2w = Simplify[(A2wNum[[1,1]]*A2wNum[[2,2]]+A2wNum[[1,1]]*A2wNum[[3,3]]+A2wNum[[2,2]]*A2wNum[[3,3]]-A2wNum[[1,3]]*A2wNum[[3,1]]-A2wNum[[1,2]]*A2wNum[[2,1]]-A2wNum[[2,3]]*A2wNum[[3,2]])];\nfe2w = Simplify[Sin[ThetaIn*Pi /180]- Sqrt[(V2w-Sqrt[V2w^2-W2w])/W2w]*Sin[ThetaTout]];\nRootExt2w = Quiet[FindRoot[fe2w==0,{ThetaTout,Pi/4}]];\nThetaExt2w=ThetaTout/.RootExt2w;\nfo2w = Simplify[Sin[ThetaIn*Pi /180]- Sqrt[(V2w+Sqrt[V2w^2-W2w])/W2w]*Sin[ThetaTout]];\nRootOrd2w = Quiet[FindRoot[fo2w==0,{ThetaTout,Pi/4}]];\nThetaOrd2w=ThetaTout/.RootOrd2w;\nExt2wFactor=1;",
+      "byte_count": 629
+    },
+    {
+      "region_id": "omega_angle_roots_active_numerical_path",
+      "line_start": 536,
+      "line_end": 574,
+      "line_count": 39,
+      "status": "snippet_ready",
+      "missing_lines": [],
+      "text": "\nuyNumExt = 0;  \nuxNumExt = Sin[ThetaExt]; \nuzNumExt = -Cos[ThetaExt];\nLNumExt = {{uyNumExt^2+uzNumExt^2,-uxNumExt*uyNumExt,-uxNumExt*uzNumExt},{-uxNumExt*uyNumExt, uxNumExt^2+uzNumExt^2,-uyNumExt*uzNumExt},{-uzNumExt*uxNumExt,-uzNumExt*uyNumExt,uxNumExt^2+uyNumExt^2}};\nAwNumExt = Transpose[CstandardwNum].LNumExt.CstandardwNum;\nVwNumExt = Simplify[(AwNumExt[[1,1]]+AwNumExt[[2,2]]+AwNumExt[[3,3]]) / 2];\nWwNumExt = Simplify[(AwNumExt[[1,1]]*AwNumExt[[2,2]]+AwNumExt[[1,1]]*AwNumExt[[3,3]]+AwNumExt[[2,2]]*AwNumExt[[3,3]]-AwNumExt[[1,3]]*AwNumExt[[3,1]]-AwNumExt[[1,2]]*AwNumExt[[2,1]]-AwNumExt[[2,3]]*AwNumExt[[3,2]])];\nnwNumExt =SetPrecision[Sqrt[(VwNumExt +ExtwFactor*Sqrt[VwNumExt^2-WwNumExt])/WwNumExt],6];\nuyNumOrd = 0; \nuxNumOrd = Sin[ThetaOrd]; \nuzNumOrd = -Cos[ThetaOrd];\nLNumOrd = {{uyNumOrd^2+uzNumOrd^2,-uxNumOrd*uyNumOrd,-uxNumOrd*uzNumOrd},{-uxNumOrd*uyNumOrd, uxNumOrd^2+uzNumOrd^2,-uyNumOrd*uzNumOrd},{-uzNumOrd*uxNumOrd,-uzNumOrd*uyNumOrd,uxNumOrd^2+uyNumOrd^2}};\nAwNumOrd = Transpose[CstandardwNum].LNumOrd.CstandardwNum;\nVwNumOrd = Simplify[(AwNumOrd[[1,1]]+AwNumOrd[[2,2]]+AwNumOrd[[3,3]]) / 2];\nWwNumOrd = Simplify[(AwNumOrd[[1,1]]*AwNumOrd[[2,2]]+AwNumOrd[[1,1]]*AwNumOrd[[3,3]]+AwNumOrd[[2,2]]*AwNumOrd[[3,3]]-AwNumOrd[[1,3]]*AwNumOrd[[3,1]]-AwNumOrd[[1,2]]*AwNumOrd[[2,1]]-AwNumOrd[[2,3]]*AwNumOrd[[3,2]])];\nnwNumOrd = SetPrecision[Sqrt[(VwNumOrd-ExtwFactor*Sqrt[VwNumOrd^2-WwNumOrd])/WwNumOrd],6];\nIf [Abs[nwNumExt]>Abs[ nwNumOrd] && Abs[ThetaExt]>Abs[ThetaOrd], ExtwFactor=ExtwFactor*(-1)];\nIf [Abs[nwNumExt]< Abs[nwNumOrd] && Abs[ThetaExt]<Abs[ThetaOrd], ExtwFactor=ExtwFactor*(-1)];\n\nuyNumExt = 0;  \nuxNumExt = Sin[ThetaExt2w]; \nuzNumExt = -Cos[ThetaExt2w];\nLNumExt = {{uyNumExt^2+uzNumExt^2,-uxNumExt*uyNumExt,-uxNumExt*uzNumExt},{-uxNumExt*uyNumExt, uxNumExt^2+uzNumExt^2,-uyNumExt*uzNumExt},{-uzNumExt*uxNumExt,-uzNumExt*uyNumExt,uxNumExt^2+uyNumExt^2}};\nA2wNumExt = Transpose[Cstandard2wNum].LNumExt.Cstandard2wNum;\nV2wNumExt = Simplify[(A2wNumExt[[1,1]]+A2wNumExt[[2,2]]+A2wNumExt[[3,3]]) / 2];\nW2wNumExt = Simplify[(A2wNumExt[[1,1]]*A2wNumExt[[2,2]]+A2wNumExt[[1,1]]*A2wNumExt[[3,3]]+A2wNumExt[[2,2]]*A2wNumExt[[3,3]]-A2wNumExt[[1,3]]*A2wNumExt[[3,1]]-A2wNumExt[[1,2]]*A2wNumExt[[2,1]]-A2wNumExt[[2,3]]*A2wNumExt[[3,2]])];\nn2wNumExt = SetPrecision[Sqrt[(V2wNumExt +Ext2wFactor*Sqrt[V2wNumExt^2-W2wNumExt])/W2wNumExt],6];\n\nuyNumOrd = 0; \nuxNumOrd = Sin[ThetaOrd2w]; \nuzNumOrd = -Cos[ThetaOrd2w];\nLNumOrd = {{uyNumOrd^2+uzNumOrd^2,-uxNumOrd*uyNumOrd,-uxNumOrd*uzNumOrd},{-uxNumOrd*uyNumOrd, uxNumOrd^2+uzNumOrd^2,-uyNumOrd*uzNumOrd},{-uzNumOrd*uxNumOrd,-uzNumOrd*uyNumOrd,uxNumOrd^2+uyNumOrd^2}};\nA2wNumOrd = Transpose[Cstandard2wNum].LNumOrd.Cstandard2wNum;\nV2wNumOrd = Simplify[(A2wNumOrd[[1,1]]+A2wNumOrd[[2,2]]+A2wNumOrd[[3,3]]) / 2];\nW2wNumOrd = Simplify[(A2wNumOrd[[1,1]]*A2wNumOrd[[2,2]]+A2wNumOrd[[1,1]]*A2wNumOrd[[3,3]]+A2wNumOrd[[2,2]]*A2wNumOrd[[3,3]]-A2wNumOrd[[1,3]]*A2wNumOrd[[3,1]]-A2wNumOrd[[1,2]]*A2wNumOrd[[2,1]]-A2wNumOrd[[2,3]]*A2wNumOrd[[3,2]])];\nn2wNumOrd = SetPrecision[Sqrt[(V2wNumOrd-Ext2wFactor*Sqrt[V2wNumOrd^2-W2wNumOrd])/W2wNumOrd],6];\nIf [Abs[n2wNumExt]>Abs[n2wNumOrd] && Abs[ThetaExt2w]>Abs[ThetaOrd2w], Ext2wFactor=Ext2wFactor*(-1)];\nIf [Abs[n2wNumExt]< Abs[n2wNumOrd] && Abs[ThetaExt2w]<Abs[ThetaOrd2w], Ext2wFactor=Ext2wFactor*(-1)];",
+      "byte_count": 3300
+    },
+    {
+      "region_id": "omega_transmitted_field_directions_active_path",
+      "line_start": 576,
+      "line_end": 695,
+      "line_count": 120,
+      "status": "snippet_ready",
+      "missing_lines": [],
+      "text": "(*Determine Field Directions at Linear and Nonlinear Frequency*)\n\nprogress=40;\nuyNumExt = 0;  \nuxNumExt = Sin[ThetaExt]; \nuzNumExt = -Cos[ThetaExt];\n\nLNumExt = {{uyNumExt^2+uzNumExt^2,-uxNumExt*uyNumExt,-uxNumExt*uzNumExt},{-uxNumExt*uyNumExt, uxNumExt^2+uzNumExt^2,-uyNumExt*uzNumExt},{-uzNumExt*uxNumExt,-uzNumExt*uyNumExt,uxNumExt^2+uyNumExt^2}};\nAwNumExt = Transpose[CstandardwNum].LNumExt.CstandardwNum;\nVwNumExt = Simplify[(AwNumExt[[1,1]]+AwNumExt[[2,2]]+AwNumExt[[3,3]]) / 2];\nWwNumExt = Simplify[(AwNumExt[[1,1]]*AwNumExt[[2,2]]+AwNumExt[[1,1]]*AwNumExt[[3,3]]+AwNumExt[[2,2]]*AwNumExt[[3,3]]-AwNumExt[[1,3]]*AwNumExt[[3,1]]-AwNumExt[[1,2]]*AwNumExt[[2,1]]-AwNumExt[[2,3]]*AwNumExt[[3,2]])];\nnwNumExt =SetPrecision[Sqrt[(VwNumExt +ExtwFactor*Sqrt[VwNumExt^2-WwNumExt])/WwNumExt],6];\nEigenwNumExt = Eigensystem[{LNumExt,elabwNum}];\nIf[DebugFlag,Print[\"EigenwNumExt = \",EigenwNumExt ]];\nIf [nwNumExt == SetPrecision[Sqrt[1/EigenwNumExt[[1,1]]],6],k1Num=1,\nIf[nwNumExt == SetPrecision[Sqrt[1/EigenwNumExt[[1,2]]],6],k1Num=2,k1Num=3]\n];\nnwNumExt =Quiet[Sqrt[1/EigenwNumExt[[1,k1Num]]]];\nETwNumExt = twe*Chop[Normalize[EigenwNumExt[[2,k1Num]]]];\n(*EigenwNumExt = Eigensystem[N[AwNumExt]];\nIf [nwNumExt \\[Equal] SetPrecision[Sqrt[1/EigenwNumExt[[1,1]]],6],k1Num=1,\nIf[nwNumExt \\[Equal] SetPrecision[Sqrt[1/EigenwNumExt[[1,2]]],6],k1Num=2,k1Num=3]\n];\nnwNumExt =Sqrt[1/EigenwNumExt[[1,k1Num]]];\nFwNumExt = EigenwNumExt[[2,All,k1Num]];\nNormalize[Inverse[RstandardwNum].FwNumExt];\nETwNumExt = twe*Chop[Transpose[Normalize[Inverse[RstandardwNum].FwNumExt],{1}]];\n*)\nDTwNumExt = e0*elabwNum.ETwNumExt;\nVktwNumExt = ktweo*{Sin[ThetaExt],0,-Cos[ThetaExt]};\nHTwNumExt=Simplify[Inverse[\\[Mu]].Cross[VktwNumExt,ETwNumExt]/(w*\\[Mu]0)];\n\nIf [DebugFlag, Print[\"ktweo = \",ktweo,\" ; nwNumExt = \",nwNumExt,\" ; ETwNumExt = \",ETwNumExt,\" ; VktwNumExt = \",VktwNumExt,\" ; HTwNumExt = \",HTwNumExt]];\n(*********************************************************************************************************************)\nuyNumOrd = 0; \nuxNumOrd = Sin[ThetaOrd]; \nuzNumOrd = -Cos[ThetaOrd];\nLNumOrd = {{uyNumOrd^2+uzNumOrd^2,-uxNumOrd*uyNumOrd,-uxNumOrd*uzNumOrd},{-uxNumOrd*uyNumOrd, uxNumOrd^2+uzNumOrd^2,-uyNumOrd*uzNumOrd},{-uzNumOrd*uxNumOrd,-uzNumOrd*uyNumOrd,uxNumOrd^2+uyNumOrd^2}};\nAwNumOrd = Transpose[CstandardwNum].LNumOrd.CstandardwNum;\nVwNumOrd = Simplify[(AwNumOrd[[1,1]]+AwNumOrd[[2,2]]+AwNumOrd[[3,3]]) / 2];\nWwNumOrd = Simplify[(AwNumOrd[[1,1]]*AwNumOrd[[2,2]]+AwNumOrd[[1,1]]*AwNumOrd[[3,3]]+AwNumOrd[[2,2]]*AwNumOrd[[3,3]]-AwNumOrd[[1,3]]*AwNumOrd[[3,1]]-AwNumOrd[[1,2]]*AwNumOrd[[2,1]]-AwNumOrd[[2,3]]*AwNumOrd[[3,2]])];\nnwNumOrd = SetPrecision[Sqrt[(VwNumOrd-ExtwFactor*Sqrt[VwNumOrd^2-WwNumOrd])/WwNumOrd],6];\nEigenwNumOrd = Eigensystem[{LNumOrd,elabwNum}];\nIf [nwNumOrd == SetPrecision[Sqrt[1/EigenwNumOrd[[1,1]]],6] && MatrixRank[{SetPrecision[elabwNum.Chop[EigenwNumOrd[[2,1]]],6],SetPrecision[DTwNumExt,6]}]==2,k2Num=1,\nk2Num=2];\nnwNumOrd =Quiet[Sqrt[1/EigenwNumOrd[[1,k2Num]]]];\nETwNumOrd =two*Chop[Normalize[EigenwNumOrd[[2,k2Num]]]];\n(*EigenwNumOrd = Eigensystem[N[AwNumOrd]];\nIf [nwNumOrd \\[Equal] SetPrecision[Sqrt[1/EigenwNumOrd[[1,1]]],6] && MatrixRank[{SetPrecision[elabwNum.Chop[Transpose[Normalize[Inverse[RstandardwNum].EigenwNumOrd[[2,All,1]]],{1}]],6],SetPrecision[DTwNumExt,6]}]\\[Equal]2,k2Num=1,\nk2Num=2];\nnwNumOrd =Sqrt[1/EigenwNumOrd[[1,k2Num]]];\nFwNumOrd = EigenwNumOrd[[2,All,k2Num]];\nETwNumOrd =two*Chop[Transpose[Normalize[Inverse[RstandardwNum].FwNumOrd],{1}]];*)\nDTwNumOrd= e0*elabwNum.ETwNumOrd;\nVktwNumOrd = ktwo*{Sin[ThetaOrd],0,-Cos[ThetaOrd]};\nHTwNumOrd = Simplify[Inverse[\\[Mu]].Cross[VktwNumOrd,ETwNumOrd]/(w*\\[Mu]0)];\n\nIf [DebugFlag, Print[\"nwNumOrd = \",nwNumOrd,\" ; ETwNumOrd  = \",ETwNumOrd ,\" ; VktwNumOrd = \",VktwNumOrd,\" ; HTwNumOrd = \",HTwNumOrd]];\n(*********************************************************************************************************************)\nuyNumExt = 0;  \nuxNumExt = Sin[ThetaExt2w]; \nuzNumExt = -Cos[ThetaExt2w];\nLNumExt = {{uyNumExt^2+uzNumExt^2,-uxNumExt*uyNumExt,-uxNumExt*uzNumExt},{-uxNumExt*uyNumExt, uxNumExt^2+uzNumExt^2,-uyNumExt*uzNumExt},{-uzNumExt*uxNumExt,-uzNumExt*uyNumExt,uxNumExt^2+uyNumExt^2}};\nA2wNumExt = Transpose[Cstandard2wNum].LNumExt.Cstandard2wNum;\nV2wNumExt = Simplify[(A2wNumExt[[1,1]]+A2wNumExt[[2,2]]+A2wNumExt[[3,3]]) / 2];\nW2wNumExt = Simplify[(A2wNumExt[[1,1]]*A2wNumExt[[2,2]]+A2wNumExt[[1,1]]*A2wNumExt[[3,3]]+A2wNumExt[[2,2]]*A2wNumExt[[3,3]]-A2wNumExt[[1,3]]*A2wNumExt[[3,1]]-A2wNumExt[[1,2]]*A2wNumExt[[2,1]]-A2wNumExt[[2,3]]*A2wNumExt[[3,2]])];\nn2wNumExt = SetPrecision[Sqrt[(V2wNumExt +Ext2wFactor*Sqrt[V2wNumExt^2-W2wNumExt])/W2wNumExt],6];\nIf[DebugFlag,Print[\"n2wNumExt = \",n2wNumExt]];\nIf[DebugFlag,Print[\"Sqrt[(V2wNumExt +Ext2wFactor*Sqrt[V2wNumExt^2-W2wNumExt])/W2wNumExt = \",SetPrecision[Sqrt[(V2wNumExt +Ext2wFactor*Sqrt[V2wNumExt^2-W2wNumExt])/W2wNumExt],6],\" ; Sqrt[(V2wNumExt -Ext2wFactor*Sqrt[V2wNumExt^2-W2wNumExt])/W2wNumExt] = \",Sqrt[(V2wNumExt -Ext2wFactor*Sqrt[V2wNumExt^2-W2wNumExt])/W2wNumExt]]];\nEigen2wNumExt = Eigensystem[{LNumExt,elab2wNum}];\nIf[DebugFlag,Print[\" SetPrecision[Chop[Eigen2wNumExt[[2,1]]],6].SetPrecision[Chop[DTwNumOrd],6] = \", SetPrecision[Chop[Eigen2wNumExt[[2,1]]],6].SetPrecision[Chop[e0*elabwNum.EigenwNumOrd[[2,k2Num]]],6],\" ; SetPrecision[Chop[e0*elabwNum.EigenwNumOrd[[2,k2Num]]],6] = \",SetPrecision[Chop[e0*elabwNum.EigenwNumOrd[[2,k2Num]]],6]]];\nIf [n2wNumExt == SetPrecision[Sqrt[1/Eigen2wNumExt[[1,1]]],6],If[((Isotropic || Uniaxial) && SetPrecision[Chop[Eigen2wNumExt[[2,1]]],6].SetPrecision[Chop[e0*elabwNum.EigenwNumOrd[[2,k2Num]]],6]==0) || (Biaxial),k1Num=1,k1Num=2],k1Num=2];\nn2wNumExt =Quiet[Sqrt[1/Eigen2wNumExt[[1,k1Num]]]];\nET2wNumExt =Chop[Normalize[Eigen2wNumExt[[2,k1Num]]]];\n\n(*Eigen2wNumExt = Eigensystem[A2wNumExt];\nIf [n2wNumExt \\[Equal] SetPrecision[Sqrt[1/Eigen2wNumExt[[1,1]]],6],If[((Isotropic || Uniaxial) && SetPrecision[Chop[elab2wNum.Chop[Transpose[Normalize[Inverse[Rstandard2wNum].Eigen2wNumExt[[2,All,1]]],{1}]]],6].SetPrecision[Chop[e0*elabwNum.Chop[Transpose[Normalize[Inverse[RstandardwNum].FwNumOrd],{1}]]],6]\\[Equal]0) || (Biaxial),k1Num=1,k1Num=2],k1Num=2];\nn2wNumExt =Sqrt[1/Eigen2wNumExt[[1,k1Num]]];\nF2wNumExt = Eigen2wNumExt[[2,All,k1Num]];\nET2wNumExt =Chop[Transpose[Normalize[Inverse[Rstandard2wNum].F2wNumExt],{1}]];*)\nDT2wNumExt = e0*elab2wNum.ET2wNumExt;\nVkt2wNumExt = kt2weo*{Sin[ThetaExt2w],0,-Cos[ThetaExt2w]};\n\\[CurlyEpsilon]2weoEff=n2wNumExt^2;\nHT2wNumExt = Simplify[Inverse[\\[Mu]].Cross[Vkt2wNumExt,ET2wNumExt]/(2*w*\\[Mu]0)];\nIf[DebugFlag,Print[\"Eigen2wNumExt = \",Eigen2wNumExt]];\nIf [DebugFlag, Print[\"n2wNumExt = \",n2wNumExt,\" ; ET2wNumExt = \",ET2wNumExt,\" ; Vkt2wNumExt = \",Vkt2wNumExt,\" ; HT2wNumExt = \",HT2wNumExt]];\n(*********************************************************************************************************************)\n\nuyNumOrd = 0; \nuxNumOrd = Sin[ThetaOrd2w]; \nuzNumOrd = -Cos[ThetaOrd2w];\nLNumOrd = {{uyNumOrd^2+uzNumOrd^2,-uxNumOrd*uyNumOrd,-uxNumOrd*uzNumOrd},{-uxNumOrd*uyNumOrd, uxNumOrd^2+uzNumOrd^2,-uyNumOrd*uzNumOrd},{-uzNumOrd*uxNumOrd,-uzNumOrd*uyNumOrd,uxNumOrd^2+uyNumOrd^2}};\nA2wNumOrd = Transpose[Cstandard2wNum].LNumOrd.Cstandard2wNum;\nV2wNumOrd = Simplify[(A2wNumOrd[[1,1]]+A2wNumOrd[[2,2]]+A2wNumOrd[[3,3]]) / 2];\nW2wNumOrd = Simplify[(A2wNumOrd[[1,1]]*A2wNumOrd[[2,2]]+A2wNumOrd[[1,1]]*A2wNumOrd[[3,3]]+A2wNumOrd[[2,2]]*A2wNumOrd[[3,3]]-A2wNumOrd[[1,3]]*A2wNumOrd[[3,1]]-A2wNumOrd[[1,2]]*A2wNumOrd[[2,1]]-A2wNumOrd[[2,3]]*A2wNumOrd[[3,2]])];\nn2wNumOrd = SetPrecision[Sqrt[(V2wNumOrd-Ext2wFactor*Sqrt[V2wNumOrd^2-W2wNumOrd])/W2wNumOrd],6];\nEigen2wNumOrd = Eigensystem[{LNumOrd,elab2wNum}];\n(*If [n2wNumOrd \\[Equal] SetPrecision[Sqrt[1/Eigen2wNumOrd[[1,1]]],6] && MatrixRank[{SetPrecision[elab2wNum.Chop[Eigen2wNumOrd[[2,1]]],6],SetPrecision[DT2wNumExt,6]}]\\[Equal]2,k2Num=1,\nk2Num=2];*)\n\nIf [SetPrecision[elab2wNum.Chop[Eigen2wNumOrd[[2,1]]],6].SetPrecision[DT2wNumExt,6]==0,k2Num=1,\nk2Num=2];\n\nn2wNumOrd =Quiet[Sqrt[1/Eigen2wNumOrd[[1,k2Num]]]];\nET2wNumOrd =Chop[Normalize[Eigen2wNumOrd[[2,k2Num]]]];\n(*Eigen2wNumOrd = Eigensystem[A2wNumOrd];\nIf [n2wNumOrd \\[Equal] SetPrecision[Sqrt[1/Eigen2wNumOrd[[1,1]]],6] && MatrixRank[{SetPrecision[elab2wNum.Chop[Transpose[Normalize[Inverse[Rstandard2wNum].Eigen2wNumOrd[[2,All,1]]],{1}]],6],SetPrecision[DT2wNumExt,6]}]\\[Equal]2,k2Num=1,\nk2Num=2];\nn2wNumOrd =Sqrt[1/Eigen2wNumOrd[[1,k2Num]]];\nF2wNumOrd = Eigen2wNumOrd[[2,All,k2Num]];\nET2wNumOrd =Chop[Transpose[Normalize[Inverse[Rstandard2wNum].F2wNumOrd],{1}]];*)\nDT2wNumOrd= e0*elab2wNum.ET2wNumOrd;\nVkt2wNumOrd = kt2wo*{Sin[ThetaOrd2w],0,-Cos[ThetaOrd2w]};\nHT2wNumOrd = Simplify[Inverse[\\[Mu]].Cross[Vkt2wNumOrd,ET2wNumOrd]/(2*w*\\[Mu]0)];\n\n\nIf[DebugFlag,Print[\"Eigen2wNumOrd = \",Eigen2wNumOrd]];\nIf [DebugFlag,Print[\"n2wNumOrd = \",n2wNumOrd,\"; SetPrecision[Sqrt[1/Eigen2wNumOrd[[1,1]]],6] = \",SetPrecision[Sqrt[1/Eigen2wNumOrd[[1,1]]],6],\"; n2wNumOrd == SetPrecision[Sqrt[1/Eigen2wNumOrd[[1,1]]],6] : \",n2wNumOrd == SetPrecision[Sqrt[1/Eigen2wNumOrd[[1,1]]],6]]];\nIf [DebugFlag,Print[\"SetPrecision[elab2wNum.Chop[Eigen2wNumOrd[[2,1]]],6] = \",SetPrecision[elab2wNum.Chop[Eigen2wNumOrd[[2,1]]],6],\"; SetPrecision[DT2wNumExt,6] = \",SetPrecision[DT2wNumExt,6],\"; MatrixRank[{SetPrecision[elab2wNum.Chop[Eigen2wNumOrd[[2,1]]],6],SetPrecision[DT2wNumExt,6]}] = \",MatrixRank[{SetPrecision[elab2wNum.Chop[Eigen2wNumOrd[[2,1]]],6],SetPrecision[DT2wNumExt,6]}]]];\nIf [DebugFlag, Print[\"n2wNumOrd = \",n2wNumOrd,\" ; ET2wNumOrd  = \",ET2wNumOrd ,\" ; Vkt2wNumOrd = \",Vkt2wNumOrd,\" ; HT2wNumOrd = \",HT2wNumOrd]];",
+      "byte_count": 9548
+    },
+    {
+      "region_id": "omega_incident_controls_active_path",
+      "line_start": 697,
+      "line_end": 716,
+      "line_count": 20,
+      "status": "snippet_ready",
+      "missing_lines": [],
+      "text": "(*Calculate Linear Boundary Conditions*)\nprogress=45;\nClear[\\[Beta],\\[Gamma]];\nw=1;e0=1;\n(*e0=8.854187*10^(-12);*) \n(*e0=Subscript[\\[CurlyEpsilon], 0];*) \\[Mu]0=1; Eiw=1; ThetaR = ThetaIn*Pi /180; \nIf[RotatePolarizer,\n{\nEIw = Eiw*{Cos[\\[CurlyPhi]],Sin[\\[CurlyPhi]]*Exp[I (Ellipticity Degree)],0};\n},\n{\nEIw = Eiw*{Cos[PolarizerAngle Degree],Sin[PolarizerAngle Degree]*Exp[I (Ellipticity Degree)],0};\n}];\n\n(*********************************************************************************************************************)\n\\[Alpha]=ThetaIn*Pi /180;\n\\[Beta]=0*Pi/180;\n\\[Gamma]=0*Pi/180;\n\nRHTilt = {{Cos[\\[Alpha]],0,-Sin[\\[Alpha]]},{0,1,0},{Sin[\\[Alpha]],0,Cos[\\[Alpha]]}}; (*Sample Rightwards*)",
+      "byte_count": 694
+    },
+    {
+      "region_id": "omega_fresnel_field_setup_active_path",
+      "line_start": 720,
+      "line_end": 728,
+      "line_count": 9,
+      "status": "snippet_ready",
+      "missing_lines": [],
+      "text": "RNum =RHTilt;\nEIwNum = RNum.EIw;\nDIwNum = e0*EIwNum;\nVkiwNum = kiw*RNum.{0,0,-1};\nERwNum =Simplify[Inverse[RNum]].{-ERpNum,ERsNum,0};\nDRwNum =e0*ERwNum;\nVkrwNum = krw*Simplify[Inverse[RNum].{0,0,1}];\nHIwNum = Simplify[Inverse[\\[Mu]].Cross[VkiwNum,EIwNum]/(w*\\[Mu]0)];\nHRwNum = Simplify[Inverse[\\[Mu]].Cross[VkrwNum,ERwNum]/(w*\\[Mu]0)];",
+      "byte_count": 335
+    },
+    {
+      "region_id": "omega_fresnel_equations_active_path",
+      "line_start": 732,
+      "line_end": 737,
+      "line_count": 6,
+      "status": "snippet_ready",
+      "missing_lines": [],
+      "text": "x=y=z=0;\n\nIf [DebugFlag,Print[\"Linear Equations:\\n\",\"1: \",EIwNum[[1]]+ERwNum[[1]]== ETwNumOrd[[1]]+ETwNumExt[[1]],\"\\n\",\"2: \",EIwNum[[2]]+ERwNum[[2]]== ETwNumOrd[[2]]+ETwNumExt[[2]],\"\\n\",\"3: \",HIwNum[[1]]+HRwNum[[1]]== HTwNumOrd[[1]]+HTwNumExt[[1]],\"\\n\",\"4: \",HIwNum[[2]]+HRwNum[[2]]== HTwNumOrd[[2]]+HTwNumExt[[2]]]];\n\nEwrootsNum = Simplify[NSolve[{EIwNum[[1]]+ERwNum[[1]]== ETwNumOrd[[1]]+ETwNumExt[[1]], EIwNum[[2]]+ERwNum[[2]]== ETwNumOrd[[2]]+ETwNumExt[[2]],HIwNum[[1]]+HRwNum[[1]]== HTwNumOrd[[1]]+HTwNumExt[[1]],HIwNum[[2]]+HRwNum[[2]]== HTwNumOrd[[2]]+HTwNumExt[[2]]},{ERpNum,ERsNum,twe,two}]];\nClear[x,y,z];",
+      "byte_count": 615
+    },
+    {
+      "region_id": "omega_fresnel_substitution_active_path",
+      "line_start": 740,
+      "line_end": 753,
+      "line_count": 14,
+      "status": "snippet_ready",
+      "missing_lines": [],
+      "text": "(*Use Numerical Solution with Fresnel*)\nIf [DebugFlag,Print[\"ThetaExt = \",ThetaExt,\" ; ThetaOrd = \",ThetaOrd]];\nERpNum = ERpNum/.EwrootsNum[[1,1]];\nERsNum = ERsNum/.EwrootsNum[[1,2]];\ntwe = twe/.EwrootsNum[[1,3]];\ntwo = two/.EwrootsNum[[1,4]];\nETweo=Expand[ETwNumExt];\nETwo  =Expand[ETwNumOrd];\nVktwo=Chop[VktwNumOrd];\nVktweo=Chop[VktwNumExt];\n(*Need Chop for normal incidence otherwise there will be a infinite small value for the vector*)\nelab2w=elab2wNum;\nIf [DebugFlag,Print[\"ETweo = \",ETweo,\"; ETwo = \",ETwo]];\nIf [DebugFlag,Print[\"Linear Boundary Complete\"];];",
+      "byte_count": 566
+    },
+    {
+      "region_id": "shg_tensor_transformation_active_path",
+      "line_start": 759,
+      "line_end": 773,
+      "line_count": 15,
+      "status": "snippet_ready",
+      "missing_lines": [],
+      "text": "(*SHG Tensor Transformation*)\nprogress=50;\nT = {{1,6,5},\n       {6,2,4},\n       {5,4,3}};\ndSHG = ConstantArray[0,{3,6}];\nFor [i=1,i<4,i++,\n         For [j=1,j<4,j++,\n                 For [k=j,k<4,k++,\n                         For [l=1,l<4,l++,\n                                 For [m=1,m<4,m++,\n                                         For [n=1,n<4,n++,\ndSHG[[i,T[[j,k]]]] =dSHG[[i,T[[j,k]]]] + a[[i,l]]*a[[j,m]]*a[[k,n]]*dold[[l,T[[m,n]]]];\n]]]]]];\nIf[DebugFlag,Print[\"dold = \",dold//MatrixForm,\" ; dSHG = \",dSHG//MatrixForm]];",
+      "byte_count": 528
+    },
+    {
+      "region_id": "commented_real_field_pnl_block",
+      "line_start": 775,
+      "line_end": 789,
+      "line_count": 15,
+      "status": "snippet_ready",
+      "missing_lines": [],
+      "text": "(*Real Field of E*)\n(*RETweo=ComplexExpand[Re[ETweo],Element[\\[CurlyPhi],Reals]];\nRETwo=  ComplexExpand[Re[ETwo],Element[\\[CurlyPhi],Reals]];\nP2eo=e0*Simplify[\n\t{d[[1,1]]*RETweo[[1]]^2+d[[1,2]]*RETweo[[2]]^2+d[[1,3]]*RETweo[[3]]^2+2*d[[1,4]]*RETweo[[2]]*RETweo[[3]]+2*d[[1,5]]*RETweo[[1]]*RETweo[[3]]+2*d[[1,6]]*RETweo[[1]]*RETweo[[2]],\n         d[[2,1]]*RETweo[[1]]^2+d[[2,2]]*RETweo[[2]]^2+d[[2,3]]*RETweo[[3]]^2+2*d[[2,4]]*RETweo[[2]]*RETweo[[3]]+2*d[[2,5]]*RETweo[[1]]*RETweo[[3]]+2*d[[2,6]]*RETweo[[1]]*RETweo[[2]],\n         d[[3,1]]*RETweo[[1]]^2+d[[3,2]]*RETweo[[2]]^2+d[[3,3]]*RETweo[[3]]^2+2*d[[3,4]]*RETweo[[2]]*RETweo[[3]]+2*d[[3,5]]*RETweo[[1]]*RETweo[[3]]+2*d[[3,6]]*RETweo[[1]]*RETweo[[2]]}];\nP2o=e0*Simplify[\n\t{d[[1,1]]*RETwo[[1]]^2+d[[1,2]]*RETwo[[2]]^2+d[[1,3]]*RETwo[[3]]^2+2*d[[1,4]]*RETwo[[2]]*RETwo[[3]]+2*d[[1,5]]*RETwo[[1]]*RETwo[[3]]+2*d[[1,6]]*RETwo[[1]]*RETwo[[2]],\n         d[[2,1]]*RETwo[[1]]^2+d[[2,2]]*RETwo[[2]]^2+d[[2,3]]*RETwo[[3]]^2+2*d[[2,4]]*RETwo[[2]]*RETwo[[3]]+2*d[[2,5]]*RETwo[[1]]*RETwo[[3]]+2*d[[2,6]]*RETwo[[1]]*RETwo[[2]],\n         d[[3,1]]*RETwo[[1]]^2+d[[3,2]]*RETwo[[2]]^2+d[[3,3]]*RETwo[[3]]^2+2*d[[3,4]]*RETwo[[2]]*RETwo[[3]]+2*d[[3,5]]*RETwo[[1]]*RETwo[[3]]+2*d[[3,6]]*RETwo[[1]]*RETwo[[2]]}];\nPeoo=e0*Simplify[\n\t{d[[1,1]]*2*RETweo[[1]]*RETwo[[1]]+d[[1,2]]*2*RETweo[[2]]*RETwo[[2]]+d[[1,3]]*2*RETweo[[3]]*RETwo[[3]]+2*d[[1,4]]*(RETweo[[2]]*RETwo[[3]]+RETweo[[3]]*RETwo[[2]])+2*d[[1,5]]*(RETweo[[1]]*RETwo[[3]]+RETweo[[3]]*RETwo[[1]])+2*d[[1,6]]*(RETweo[[1]]*RETwo[[2]]+RETweo[[2]]*RETwo[[1]]),\n         d[[2,1]]*2*RETweo[[1]]*RETwo[[1]]+d[[2,2]]*2*RETweo[[2]]*RETwo[[2]]+d[[2,3]]*2*RETweo[[3]]*RETwo[[3]]+2*d[[2,4]]*(RETweo[[2]]*RETwo[[3]]+RETweo[[3]]*RETwo[[2]])+2*d[[2,5]]*(RETweo[[1]]*RETwo[[3]]+RETweo[[3]]*RETwo[[1]])+2*d[[2,6]]*(RETweo[[1]]*RETwo[[2]]+RETweo[[2]]*RETwo[[1]]),\n         d[[3,1]]*2*RETweo[[1]]*RETwo[[1]]+d[[3,2]]*2*RETweo[[2]]*RETwo[[2]]+d[[3,3]]*2*RETweo[[3]]*RETwo[[3]]+2*d[[3,4]]*(RETweo[[2]]*RETwo[[3]]+RETweo[[3]]*RETwo[[2]])+2*d[[3,5]]*(RETweo[[1]]*RETwo[[3]]+RETweo[[3]]*RETwo[[1]])+2*d[[3,6]]*(RETweo[[1]]*RETwo[[2]]+RETweo[[2]]*RETwo[[1]])}];*)",
+      "byte_count": 2125
+    },
+    {
+      "region_id": "active_complex_field_pnl_block",
+      "line_start": 790,
+      "line_end": 810,
+      "line_count": 21,
+      "status": "snippet_ready",
+      "missing_lines": [],
+      "text": "(*********************************************************************************************************************)\n(*Complex Field of E*)\nprogress=55;\nP2eo=e0*Simplify[\n\t{dSHG[[1,1]]*ETweo[[1]]^2+dSHG[[1,2]]*ETweo[[2]]^2+dSHG[[1,3]]*ETweo[[3]]^2+2*dSHG[[1,4]]*ETweo[[2]]*ETweo[[3]]+2*dSHG[[1,5]]*ETweo[[1]]*ETweo[[3]]+2*dSHG[[1,6]]*ETweo[[1]]*ETweo[[2]],\n         dSHG[[2,1]]*ETweo[[1]]^2+dSHG[[2,2]]*ETweo[[2]]^2+dSHG[[2,3]]*ETweo[[3]]^2+2*dSHG[[2,4]]*ETweo[[2]]*ETweo[[3]]+2*dSHG[[2,5]]*ETweo[[1]]*ETweo[[3]]+2*dSHG[[2,6]]*ETweo[[1]]*ETweo[[2]],\n         dSHG[[3,1]]*ETweo[[1]]^2+dSHG[[3,2]]*ETweo[[2]]^2+dSHG[[3,3]]*ETweo[[3]]^2+2*dSHG[[3,4]]*ETweo[[2]]*ETweo[[3]]+2*dSHG[[3,5]]*ETweo[[1]]*ETweo[[3]]+2*dSHG[[3,6]]*ETweo[[1]]*ETweo[[2]]}];\n\nP2o=e0*Simplify[\n\t{dSHG[[1,1]]*ETwo[[1]]^2+dSHG[[1,2]]*ETwo[[2]]^2+dSHG[[1,3]]*ETwo[[3]]^2+2*dSHG[[1,4]]*ETwo[[2]]*ETwo[[3]]+2*dSHG[[1,5]]*ETwo[[1]]*ETwo[[3]]+2*dSHG[[1,6]]*ETwo[[1]]*ETwo[[2]],\n         dSHG[[2,1]]*ETwo[[1]]^2+dSHG[[2,2]]*ETwo[[2]]^2+dSHG[[2,3]]*ETwo[[3]]^2+2*dSHG[[2,4]]*ETwo[[2]]*ETwo[[3]]+2*dSHG[[2,5]]*ETwo[[1]]*ETwo[[3]]+2*dSHG[[2,6]]*ETwo[[1]]*ETwo[[2]],\n         dSHG[[3,1]]*ETwo[[1]]^2+dSHG[[3,2]]*ETwo[[2]]^2+dSHG[[3,3]]*ETwo[[3]]^2+2*dSHG[[3,4]]*ETwo[[2]]*ETwo[[3]]+2*dSHG[[3,5]]*ETwo[[1]]*ETwo[[3]]+2*dSHG[[3,6]]*ETwo[[1]]*ETwo[[2]]}];\n\nPeoo=e0*Simplify[\n\t{dSHG[[1,1]]*2*ETweo[[1]]*ETwo[[1]]+dSHG[[1,2]]*2*ETweo[[2]]*ETwo[[2]]+dSHG[[1,3]]*2*ETweo[[3]]*ETwo[[3]]+2*dSHG[[1,4]]*(ETweo[[2]]*ETwo[[3]]+ETweo[[3]]*ETwo[[2]])+2*dSHG[[1,5]]*(ETweo[[1]]*ETwo[[3]]+ETweo[[3]]*ETwo[[1]])+2*dSHG[[1,6]]*(ETweo[[1]]*ETwo[[2]]+ETweo[[2]]*ETwo[[1]]),\n         dSHG[[2,1]]*2*ETweo[[1]]*ETwo[[1]]+dSHG[[2,2]]*2*ETweo[[2]]*ETwo[[2]]+dSHG[[2,3]]*2*ETweo[[3]]*ETwo[[3]]+2*dSHG[[2,4]]*(ETweo[[2]]*ETwo[[3]]+ETweo[[3]]*ETwo[[2]])+2*dSHG[[2,5]]*(ETweo[[1]]*ETwo[[3]]+ETweo[[3]]*ETwo[[1]])+2*dSHG[[2,6]]*(ETweo[[1]]*ETwo[[2]]+ETweo[[2]]*ETwo[[1]]),\n         dSHG[[3,1]]*2*ETweo[[1]]*ETwo[[1]]+dSHG[[3,2]]*2*ETweo[[2]]*ETwo[[2]]+dSHG[[3,3]]*2*ETweo[[3]]*ETwo[[3]]+2*dSHG[[3,4]]*(ETweo[[2]]*ETwo[[3]]+ETweo[[3]]*ETwo[[2]])+2*dSHG[[3,5]]*(ETweo[[1]]*ETwo[[3]]+ETweo[[3]]*ETwo[[1]])+2*dSHG[[3,6]]*(ETweo[[1]]*ETwo[[2]]+ETweo[[2]]*ETwo[[1]])}];\nIf[DebugFlag,\n{\nPrint[\"P2eo = \",MatrixForm[P2eo],\" ;  P2o = \",MatrixForm[P2o],\" ;  Peoo = \",MatrixForm[Peoo]];\n}];",
+      "byte_count": 2308
+    },
+    {
+      "region_id": "inhomogeneous_particular_solution_coefficients",
+      "line_start": 815,
+      "line_end": 838,
+      "line_count": 24,
+      "status": "snippet_ready",
+      "missing_lines": [],
+      "text": "r={x,y,z};\n\ng2o = {C11*Exp[I*(2*Vktwo.r-2*w*t)],C21*Exp[I*(2*Vktwo.r-2*w*t)],C31*Exp[I*(2*Vktwo.r-2*w*t)]};\ng2eo = {C12*Exp[I*(2*Vktweo.r-2*w*t)],C22*Exp[I*(2*Vktweo.r-2*w*t)],C32*Exp[I*(2*Vktweo.r-2*w*t)]};\ngeoo = {C13*Exp[I*((Vktwo+Vktweo).r-2*w*t)],C23*Exp[I*((Vktwo+Vktweo).r-2*w*t)],C33*Exp[I*((Vktwo+Vktweo).r-2*w*t)]};\nMatrixForm[Lg2o   =Curl[Curl[g2o ,{x,y,z}],{x,y,z}]];\nMatrixForm[Lg2eo =Simplify[Curl[Curl[g2eo ,{x,y,z}],{x,y,z}]]];\nMatrixForm[Lgeoo =Curl[Curl[geoo,{x,y,z}],{x,y,z}]];\n\n\nMatrixForm[R2o    =4*w^2*\\[Mu]0*e0*elab2wNum.g2o+4*\\[Mu]0*w^2*P2o];\nMatrixForm[R2eo = 4*w^2*\\[Mu]0*e0*elab2wNum.g2eo+4*\\[Mu]0*w^2*P2eo];\nMatrixForm[Reoo = 4*w^2*\\[Mu]0*e0*elab2wNum.geoo+4*\\[Mu]0*w^2*Peoo];\nx=y=z=0; t=0;\nIf[DebugFlag,\n{\nPrint[\"C Equation : \\n\"];\nPrint[\"2o : \",MatrixForm[Lg2o],\" = \",MatrixForm[R2o],\"\\n\"];\nPrint[\"2e : \",MatrixForm[Lg2eo],\" = \",MatrixForm[R2eo],\"\\n\"];\nPrint[\"eoo : \",MatrixForm[Lgeoo],\" = \",MatrixForm[Reoo],\"\\n\"];\n}];\nCroots = NSolve[{\nLg2o== R2o, Lg2eo == R2eo, Lgeoo == Reoo },{C11,C12,C13,C21,C22,C23,C31,C32,C33}];\nIf [DebugFlag,Print[\"Croots = \",Croots]];",
+      "byte_count": 1092
+    },
+    {
+      "region_id": "numerical_coefficients_and_two_omega_field_setup",
+      "line_start": 840,
+      "line_end": 890,
+      "line_count": 51,
+      "status": "snippet_ready",
+      "missing_lines": [],
+      "text": "(*Numerical Solution*)\nClear[n];\n\\[CurlyEpsilon]weoEff=nwNumExt^2;\n\\[CurlyEpsilon]woEff=nwNumOrd^2;\n\\[CurlyEpsilon]2weoEff=n2wNumExt^2;\n\\[CurlyEpsilon]2woEff=n2wNumOrd^2;\nneMB2w=nMB2wNumExt;\nnoMB2w=nMB2wNumOrd;\n(*********************************************************************************************************************)\nClear[x,y,z,t];\nktwo=w*Sqrt[\\[CurlyEpsilon]woEff*e0];\nktweo = w*Sqrt[\\[CurlyEpsilon]weoEff*e0];\nkt2weo = 2*w*Sqrt[\\[CurlyEpsilon]2weoEff*e0];\nkt2wo = 2*w*Sqrt[\\[CurlyEpsilon]2woEff*e0];\nkr2w = 2*w*Sqrt[e0];\nkiw = w*Sqrt[e0];\nkrw = w*Sqrt[e0];\nktMB2wo=2*w*Sqrt[noMB2w^2*e0];\nktMB2weo=2*w*Sqrt[neMB2w^2*e0];\nRC11 = C11/.Croots;\nRC12 = C12/.Croots;\nRC13 = Simplify[C13/.Croots,Element[\\[CurlyPhi],Reals]];\nRC21 = C21/.Croots;\nRC22 = C22/.Croots;\nRC23 = C23/.Croots;\nRC31 = C31/.Croots;\nRC32 = C32/.Croots;\nRC33 = C33/.Croots;\n\n(*Calculate Nonlinear Displacement, Magnetic Flux and Solve Nonlinear Boundary Conditions*)\n\nprogress=70;\nER2w = Simplify[Inverse[RNum]].{-ER2wp,ER2ws,0};\nDR2w =ER2w*e0;\nVkr2w = kr2w*Simplify[Inverse[RNum]].{0,0,1};\n(*D^(2\\[Omega])=\\[CurlyEpsilon]^(2\\[Omega])E^(2\\[Omega])+P^NL*)\nDT2w2eo = e0*elab2wNum.{RC12,RC22,RC32}+P2eo;\nDT2w2eo = DT2w2eo[[All,1]];\nVkt2w2eo = 2*VktwNumExt;\nDT2w2o = e0*elab2wNum.{RC11,RC21,RC31}+P2o;\nDT2w2o = DT2w2o[[All,1]];\nVkt2w2o = 2*VktwNumOrd;\nDT2weoo = e0*elab2wNum.{RC13,RC23,RC33}+Peoo;\nDT2weoo = DT2weoo[[All,1]];\nVkt2weoo = Vktwo+VktwNumExt;\n\nHR2w = Simplify[Inverse[\\[Mu]].Cross[Vkr2w,ER2w]/(2*w*\\[Mu]0)];\nHT2w2o =   Simplify[Inverse[\\[Mu]].Cross[Vkt2w2o,Flatten[{RC11,RC21,RC31}]]/(2*w*\\[Mu]0)];\nHT2w2eo = Simplify[Inverse[\\[Mu]].Cross[Vkt2w2eo,Flatten[{RC12,RC22,RC32}]]/(2*w*\\[Mu]0)];\nHT2weoo = Simplify[Inverse[\\[Mu]].Cross[Vkt2weoo,Flatten[{RC13,RC23,RC33}]]/(2*w*\\[Mu]0)];\nIf [DebugFlag,{Print[\"ER2w = \",ER2w,\" ; Vkr2w = \",Vkr2w,\" ;HR2w = \",HR2w ]}];",
+      "byte_count": 1846
+    },
+    {
+      "region_id": "two_omega_boundary_solution",
+      "line_start": 899,
+      "line_end": 908,
+      "line_count": 10,
+      "status": "snippet_ready",
+      "missing_lines": [],
+      "text": "E2wroots=NSolve[{\nER2w[[1]]== ET2weoA*ET2wNumExt[[1]]+ET2woA*ET2wNumOrd[[1]]+RC11+RC12+RC13,\nER2w[[2]]== ET2weoA*ET2wNumExt[[2]]+ET2woA*ET2wNumOrd[[2]]+RC21+RC22+RC23,HR2w[[1]]== ET2weoA*HT2wNumExt[[1]]+ET2woA*HT2wNumOrd[[1]]+HT2w2eo[[1]]+HT2w2o[[1]]+HT2weoo[[1]],HR2w[[2]]== ET2weoA*HT2wNumExt[[2]]+ET2woA*HT2wNumOrd[[2]]+HT2w2eo[[2]]+HT2w2o[[2]]+HT2weoo[[2]]},\n{ER2wp,ER2ws,ET2weoA,ET2woA}];\nIf[DebugFlag,Print[\"E2wroots = \",E2wroots]];\nER2wp = Simplify[TrigReduce[ER2wp/.E2wroots]][[1]];\nER2ws = TrigReduce[FullSimplify[ER2ws/.E2wroots]][[1]];\nET2weoA = Chop[TrigReduce[FullSimplify[ET2weoA/.E2wroots]]][[1]];\nET2woA = Chop[TrigReduce[FullSimplify[ET2woA/.E2wroots]]][[1]];\nRSignal = {ER2wp,ER2ws};",
+      "byte_count": 701
+    },
+    {
+      "region_id": "reflected_signal_and_basic_intensity",
+      "line_start": 920,
+      "line_end": 938,
+      "line_count": 19,
+      "status": "snippet_ready",
+      "missing_lines": [],
+      "text": "progress=80;\nI2wx[\\[CurlyPhi]:_] = Abs[Chop[Simplify[ComplexExpand[RSignal[[1]]*Conjugate[RSignal[[1]]]]]]];\n\nI2wy[\\[CurlyPhi]:_] =Abs[Chop[Simplify[ComplexExpand[RSignal[[2]]*Conjugate[RSignal[[2]]]]]]];\nIf[DebugFlag,Print[\"I2wx = \",I2wx[\\[CurlyPhi]],\" ; I2wy = \",I2wy[\\[CurlyPhi]]]];\n(*********************************************************************************************************************)\n(*Rotating Crystals*)\nIf [RotateAnalyzer,\n{RSignalCrystal  ={{Cos[\\[CurlyPhi]],Sin[\\[CurlyPhi]]},{-Sin[\\[CurlyPhi]],Cos[\\[CurlyPhi]]}}. {-ER2wp,ER2ws};},\n{RSignalCrystal  ={{Cos[AnalyzerAngle Degree],-Sin[AnalyzerAngle Degree]},{Sin[AnalyzerAngle Degree],Cos[AnalyzerAngle Degree]}}. {ER2wp,ER2ws};}\n];\n\nI2wParallel[\\[CurlyPhi]:_] = Abs[Chop[Simplify[ComplexExpand[RSignalCrystal[[1]]*Conjugate[RSignalCrystal[[1]]]],  Element[\\[CurlyPhi],Reals]]]];\n\nI2wPerpdicular[\\[CurlyPhi]:_] = Abs[Chop[Simplify[ComplexExpand[RSignalCrystal[[2]]*Conjugate[RSignalCrystal[[2]]]], Element[\\[CurlyPhi],Reals]]]];\n\nMaxI2wx = If[ValueQ[Unevaluated[I2wx[\\[CurlyPhi]]]],MaxValue[I2wx[\\[CurlyPhi]],\\[CurlyPhi]],1];\nMaxI2wy = If[ValueQ[Unevaluated[I2wy[\\[CurlyPhi]]]],MaxValue[I2wy[\\[CurlyPhi]],\\[CurlyPhi]],1];\nMaxI2w=Max[MaxI2wx,MaxI2wy]*1.1;",
+      "byte_count": 1230
+    }
+  ],
+  "notes": [
+    "Snippets are reconstructed from line-audit text using LF newlines.",
+    "This avoids reopening the Mathematica front end during small parse probes.",
+    "These snippets are routing evidence for exporter construction, not Mathematica value validation."
+  ]
+}

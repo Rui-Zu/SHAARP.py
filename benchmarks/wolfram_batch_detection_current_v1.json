@@ -1,0 +1,37 @@
+{
+  "status": "wolfram_batch_detection",
+  "default_probe_scope": "wolfram_player_and_engine",
+  "usable_kernel_found": true,
+  "usable_candidates": [
+    "C:\\Program Files\\Wolfram Research\\Wolfram\\14.3\\WolframKernel.exe"
+  ],
+  "notes": [
+    "A Wolfram installation is only usable for automated SHAARP validation if it can execute code and export JSON.",
+    "Default detection probes Wolfram Player and Wolfram Engine because an expired Mathematica license may make Mathematica executables unusable.",
+    "Use --include-mathematica only when a valid Mathematica license is available or when explicitly testing Mathematica.",
+    "Wolfram Player may be installed but still fail this batch-code probe; Wolfram Engine is the expected free command-line runtime."
+  ],
+  "probes": [
+    {
+      "executable": "C:\\Program Files\\Wolfram Research\\Wolfram\\14.3\\WolframKernel.exe",
+      "exists": true,
+      "usable": true,
+      "strategies": [
+        {
+          "name": "script",
+          "usable": true,
+          "timed_out": false,
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "\n   The Wolfram 14.3.0 Kernel license you are using is expiring.\n\tPlease contact Wolfram Research or an authorized\n\tWolfram product distributor to extend your license and\n\tobtain a new password.\n",
+          "output_created": true,
+          "output_payload": {
+            "source": "Wolfram batch probe",
+            "result": 4,
+            "version": "14.3.0 for Microsoft Windows (64-bit) (July 8, 2025)"
+          }
+        }
+      ]
+    }
+  ]
+}
