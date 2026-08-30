@@ -1,5 +1,5 @@
-"""Bundle-hygiene check for the frozen SHAARP.py app — shared by verify_release.py (Windows gate
-step 2b) and scripts/build_gui_bundle.py (all CI platforms).
+"""Bundle-hygiene check for the frozen SHAARP.py app — used by scripts/build_gui_bundle.py on
+every build platform.
 
 Permanent ratchet (extracted cross-platform): the built app must carry
 EXACTLY the git-shippable benchmarks set and ZERO dev-scratch / local-path / username content.

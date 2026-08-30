@@ -5,8 +5,8 @@ ON-DISK folder verbatim — .gitignore does not apply — so the Release-asset z
 dev-scratch file the public repo filters out (one-off Wolfram diagnostic scripts, ``.wolfram_tmp``
 transients, ``__pycache__`` bytecode with absolute source paths, internal notes — several carrying
 the developer's local paths). This helper stages ONLY the files git would ship into
-``build/bundle_benchmarks/``; both build entry points (``verify_release.py`` and
-``build_desktop_exe.bat``) point ``--add-data`` at the staged tree, and the release gate's
+``build/bundle_benchmarks/``; the build entry point (
+``build_desktop_exe.bat`` -> ``scripts/build_gui_bundle.py``) point ``--add-data`` at the staged tree, and the release gate's
 "bundle hygiene" step verifies the built app against the same git listing.
 
 Single source of truth = .gitignore, via::

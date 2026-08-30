@@ -9,7 +9,7 @@ that job — and two rows had drifted:
   * **R7** described a fallback ("biaxial ... falls back to the substituted form, >2 min CAS") that
     FA-1 had eliminated the day before.
 
-Neither was catchable by anything that existed. `scripts/repo_audit.py` checks stale NUMBERS and is
+Neither was catchable by anything that existed. A numeric-staleness check is
 advisory-only; prose that describes behaviour reads perfectly well after the behaviour changes.
 There was also a second register at the repo root that COULD NOT SHIP (gitignored) yet read
 authoritative and was doubly stale — deleted.

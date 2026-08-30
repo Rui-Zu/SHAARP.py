@@ -95,8 +95,7 @@ def build_manifest() -> dict:
             "mathematica_gui_list_fresnel_value_validated_with_transmitted_wave_policy_caveat",
             [
                 "Github/SHAARP.ml/docs/examples.md",
-                "benchmarks/mathematica_reference/WORKAROUND.md",
-                "benchmarks/mathematica_reference/solve_fresnel_reference_v1.json",
+                                "benchmarks/mathematica_reference/solve_fresnel_reference_v1.json",
                 "benchmarks/mathematica_reference/fresnel_sweep_reference_v1.json",
                 "benchmarks/compare_fresnel_sweep_reference.py",
                 "tests/test_fresnel_sweep_reference.py",
@@ -120,8 +119,7 @@ def build_manifest() -> dict:
             "mathematica_mf_list_value_validated_with_phase_matching_diagnostic",
             [
                 "Github/SHAARP.ml/docs/examples.md",
-                "benchmarks/mathematica_reference/WORKAROUND.md",
-                "shaarp/multilayer_shg_boundary.py",
+                                "shaarp/multilayer_shg_boundary.py",
                 "tests/test_multilayer_shg_boundary.py",
                 "benchmarks/maker_fringes_fine_sampling_plan_v1.json",
                 "benchmarks/run_maker_fringes_fine_sampling.py",
@@ -266,8 +264,7 @@ def build_manifest() -> dict:
             [
                 "tests/test_orientation.py",
                 "benchmarks/mathematica_reference/export_orientation_reference.wl",
-                "benchmarks/mathematica_reference/EXACT_SYMBOL_AUDIT_2026_05_17.md",
-            ],
+                            ],
             "Generate accepted orientation_reference_v1.json from Mathematica hklConvert/QC/QP outputs.",
             {
                 "has_nonzero_cubic_miller_orientation": coverage["orientation"]["has_nonzero_cubic_miller_orientation"],

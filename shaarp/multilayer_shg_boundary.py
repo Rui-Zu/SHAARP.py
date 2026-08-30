@@ -885,7 +885,7 @@ def solve_multilayer_maker_fringes_sweep(
     first-class output shape using the current Python multilayer workflow.
     It is Mathematica `MFList` validated: live SHAARP.ml agreement to ~1e-15
     across multilayer depth 4-9 layers including the 739-angle 0.1-deg fine grid
-    and the docs quartz+Au case (see VALIDATION.md).
+    and the docs quartz+Au case (see docs/validation.md).
 
     `mrassumption` selects the SHAARP.ml MF assumption mode: 0 = full (default),
     1 = JK (Jerphagnon-Kurtz) and 2 = HH (Herman-Hayden) -- both implemented via

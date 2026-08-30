@@ -137,8 +137,8 @@ repositories and are not vendored here. Each exporter resolves its paths from th
 | Variable | Points at | Needed by |
 |---|---|---|
 | `SHAARP_REF_DIR` | this checkout's `benchmarks/mathematica_reference` | optional; defaults to the directory holding the script |
-| `SHAARP_ML_DIR` | a checkout of [SHAARP.ml](https://github.com/-Zu/SHAARP.ml) (provides `setup.nb`) | the multilayer exporters |
-| `SHAARP_SI_DIR` | a checkout of [SHAARP](https://github.com/-Zu/SHAARP) (provides `SHAARP_V1.03`) | four single-interface exporters |
+| `SHAARP_ML_DIR` | a checkout of [SHAARP.ml](https://github.com/bzw133/SHAARP.ml) (provides `setup.nb`) | the multilayer exporters |
+| `SHAARP_SI_DIR` | a checkout of [SHAARP](https://github.com/Rui-Zu/SHAARP) (provides `SHAARP_V1.03`) | four single-interface exporters |
 
 ```bash
 SHAARP_ML_DIR=/path/to/SHAARP.ml \

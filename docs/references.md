@@ -5,7 +5,7 @@ SHAARP publications when using it:
 
 - **♯SHAARP.si** (single-interface reflected-SHG polarimetry) — *npj Computational Materials*,
   s41524-022-00930-4 (2022). Original Mathematica package:
-  [github.com/Rui-Zu/SHAARP](https://github.com/-Zu/SHAARP).
+  [github.com/Rui-Zu/SHAARP](https://github.com/Rui-Zu/SHAARP).
 - **♯SHAARP.ml** (multilayer / Maker-fringe SHG) — *npj Computational Materials* **10**, 64 (2024).
   Original Mathematica package: [github.com/bzw133/SHAARP.ml](https://github.com/bzw133/SHAARP.ml).
 

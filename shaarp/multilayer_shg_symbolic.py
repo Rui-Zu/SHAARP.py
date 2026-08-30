@@ -76,7 +76,7 @@ class SymbolicThicknessBudget:
     ATOMIC -- it cannot be interrupted in-process -- so the real protection is the
     pre-flight cap, and a stack that passes pre-flight is committed to at least one
     decomposition. (Same class as the in-process hang limit recorded in
-    docs/residual_risks.md R13; ``scripts/gui_hang_probe.py`` is what catches a true hang,
+    docs/residual_risks.md R13; a true hang is caught by driving the case in its own subprocess,
     from a subprocess.)"""
 
     max_symbolic_layers: int = 3

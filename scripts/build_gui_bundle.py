@@ -2,9 +2,6 @@
 
 Used by all three build paths so they can never drift:
   * GitHub Actions release workflow (all platforms): python scripts/build_gui_bundle.py
-  * local Windows release gate (verify_release.py): ... --no-package --skip-smoke --skip-hygiene
-                                                      (the gate runs hygiene + the frozen smokes as
-                                                      its own named steps 2b/3/4)
   * build_desktop_exe.bat convenience build: ... --no-package
 
 Pipeline: stage the git-shippable benchmarks tree (scripts/stage_bundle_data.py — .gitignore is the
@@ -192,7 +189,10 @@ def package(app: Path, version: str) -> Path:
         subprocess.run(["ditto", str(app), str(staging / app.name)], check=True)
         shutil.copyfile(ROOT / "RELEASE_README.txt", staging / "README.txt")
         shutil.copyfile(ROOT / "LICENSE", staging / "LICENSE.txt")
-        archive = base.with_suffix(".zip")
+        # NOT base.with_suffix(): the version makes the stem look suffixed, so pathlib would
+        # read ".0_macos" as the extension and replace it -- v1.0.0_macos -> v1.0.zip, losing
+        # both the patch digit and the platform token.
+        archive = base.parent / (base.name + ".zip")
         archive.unlink(missing_ok=True)
         subprocess.run(["ditto", "-c", "-k", "--keepParent", str(staging), str(archive)], check=True)
     else:

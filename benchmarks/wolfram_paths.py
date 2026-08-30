@@ -7,7 +7,7 @@ test suite compares against. They read and write files in three places:
     This checkout's ``benchmarks/mathematica_reference``. Optional -- it defaults to the directory
     the script itself lives in.
 ``SHAARP_ML_DIR``
-    A local checkout of ``github.com/Rui-Zu/SHAARP.ml``, which provides ``setup.nb``.
+    A local checkout of ``github.com/bzw133/SHAARP.ml``, which provides ``setup.nb``.
 ``SHAARP_SI_DIR``
     A local checkout of ``github.com/Rui-Zu/SHAARP``, which provides ``SHAARP_V1.03``.
 
@@ -25,7 +25,7 @@ from pathlib import Path
 PREAMBLE = '''(* --- Path resolution ---------------------------------------------------------------
    SHAARP_REF_DIR is this checkout's benchmarks/mathematica_reference, and defaults to the
    directory containing this script.
-   SHAARP_ML_DIR is a local checkout of github.com/Rui-Zu/SHAARP.ml, which provides setup.nb.
+   SHAARP_ML_DIR is a local checkout of github.com/bzw133/SHAARP.ml, which provides setup.nb.
    SHAARP_SI_DIR is a local checkout of github.com/Rui-Zu/SHAARP, which provides SHAARP_V1.03.
    The environment is consulted FIRST: the batch runner executes a COPY of this script from a
    temporary directory, where $InputFileName would point at the copy rather than the checkout. *)
@@ -45,7 +45,7 @@ SHAARPPaths`ExternalDir[var_String, repo_String] :=
       (Print["Set " <> var <> " to a local checkout of " <> repo <>
          ": this script re-exports a reference from the original Mathematica package, " <>
          "which SHAARP.py does not vendor."]; Quit[2])]];
-SHAARPPaths`MLDir[] := SHAARPPaths`ExternalDir["SHAARP_ML_DIR", "github.com/Rui-Zu/SHAARP.ml"];
+SHAARPPaths`MLDir[] := SHAARPPaths`ExternalDir["SHAARP_ML_DIR", "github.com/bzw133/SHAARP.ml"];
 SHAARPPaths`SIDir[] := SHAARPPaths`ExternalDir["SHAARP_SI_DIR", "github.com/Rui-Zu/SHAARP"];
 SHAARPPaths`ML[rel_String] := FileNameJoin[{SHAARPPaths`MLDir[], rel}];
 SHAARPPaths`SI[rel_String] := FileNameJoin[{SHAARPPaths`SIDir[], rel}];

@@ -16,11 +16,11 @@
 <br>
 *Both published ♯SHAARP packages, one Python library and one desktop app.*
 
-[![Release](https://img.shields.io/github/v/release/-Zu/SHAARP.py?color=%2350C878&include_prereleases&label=download)](https://github.com/-Zu/SHAARP.py/releases)
-[![CI](https://github.com/-Zu/SHAARP.py/actions/workflows/ci.yml/badge.svg)](https://github.com/-Zu/SHAARP.py/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/Rui-Zu/SHAARP.py?color=%2350C878&include_prereleases&label=download)](https://github.com/Rui-Zu/SHAARP.py/releases)
+[![CI](https://github.com/Rui-Zu/SHAARP.py/actions/workflows/ci.yml/badge.svg)](https://github.com/Rui-Zu/SHAARP.py/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/downloads/)
-[![License](https://img.shields.io/github/license/-Zu/SHAARP.py)](LICENSE)
-[![Visitors](https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2F-Zu%2FSHAARP.py&countColor=%23263759&style=flat)](https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2F-Zu%2FSHAARP.py&countColor=%23263759&style=flat)
+[![License](https://img.shields.io/github/license/Rui-Zu/SHAARP.py)](LICENSE)
+[![Visitors](https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2FRui-Zu%2FSHAARP.py&countColor=%23263759&style=flat)](https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2FRui-Zu%2FSHAARP.py&countColor=%23263759&style=flat)
 
 </div>
 
@@ -30,7 +30,7 @@ crystals and multilayers. It brings both published Mathematica packages together
 
 - **♯SHAARP.si** — single-interface reflected SHG polarimetry for any SHG-active point group and
   orientation (*npj Comput. Mater.* **8**, 246 (2022)) · original Mathematica package:
-  [github.com/Rui-Zu/SHAARP](https://github.com/-Zu/SHAARP)
+  [github.com/Rui-Zu/SHAARP](https://github.com/Rui-Zu/SHAARP)
 - **♯SHAARP.ml** — multilayer / Maker-fringe SHG with complete multiple reflections
   (Full / Jerphagnon–Kurtz / Herman–Hayden assumptions) (*npj Comput. Mater.* **10**, 64 (2024)) ·
   original Mathematica package: [github.com/bzw133/SHAARP.ml](https://github.com/bzw133/SHAARP.ml)
@@ -98,6 +98,8 @@ file for your computer (open the newest release and look under *Assets*):
 | macOS (Apple Silicon) | `SHAARP_py_v…_macos.zip` | unzip, open `SHAARP_py.app` (see the note below) |
 
 On any other system, run it from Python instead — see **[Use it from Python](#use-it-from-python)** below.
+If the Releases page is empty, the first packaged build has not been published yet; the same
+approach works in the meantime.
 
 **Step 2 — first launch.**
 
@@ -167,7 +169,7 @@ Each line installs the library plus the optional parts named in brackets — pic
 requirements (NumPy, SciPy, matplotlib) always come along.
 
 ```bash
-pip install. # solvers only — polarimetry, Maker fringes, Fresnel
+pip install . # solvers only — polarimetry, Maker fringes, Fresnel
 pip install ".[symbolic]" # + closed-form symbolic expressions & d-extraction (SymPy)
 pip install ".[interactive]" # + the Jupyter-widget session (ipywidgets)
 pip install ".[desktop,symbolic]" # everything (recommended)

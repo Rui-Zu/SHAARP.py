@@ -329,7 +329,7 @@ def run_ml_numeric(case: MultilayerSystem, options: dict[str, Any] | None = None
         stages=stages,
         validation=ValidationStatus(
             "staged_python_not_fully_mathematica_validated",
-            notes=("The multilayer solver is Mathematica-value-validated END-TO-END for the exported case families (Maker depth 4-9 layers, JK/HH, sample rotation, point-group d; see VALIDATION.md); this per-run status stays conservative because an arbitrary user configuration outside those families is not individually validated.",),
+            notes=("The multilayer solver is Mathematica-value-validated END-TO-END for the exported case families (Maker depth 4-9 layers, JK/HH, sample rotation, point-group d; see docs/validation.md); this per-run status stays conservative because an arbitrary user configuration outside those families is not individually validated.",),
         ),
         raw=raw,
     )

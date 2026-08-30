@@ -5,6 +5,8 @@
 Download the bundle for your system from this repository's **Releases** page (the app and the
 library live in one repo; each bundle is built by CI directly from the tagged source), extract it,
 and run. The bundle contains the interpreter, all dependencies, and the validation benchmark data.
+If that page is empty, no packaged build has been published yet — use Option 2 below in the
+meantime.
 
 | System | Download | Run |
 |---|---|---|
@@ -39,7 +41,7 @@ brackets (the base requirements — NumPy, SciPy, matplotlib — always come alo
 says `pip` is not found, write `python -m pip install …` instead:
 
 ```bash
-pip install. # library only
+pip install . # library only
 pip install ".[symbolic]" # + closed-form symbolic expressions & d-extraction (SymPy)
 pip install ".[interactive]" # + the Jupyter-widget session (ipywidgets)
 pip install ".[desktop,symbolic]" # everything, incl. the desktop GUI — recommended

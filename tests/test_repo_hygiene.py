@@ -185,6 +185,40 @@ class RepoHygieneTests(unittest.TestCase):
                                 offenders.append(f"{rel}: {label} ({m.group(0)!r})")
         return sorted(set(offenders))
 
+    def test_every_referenced_repo_path_is_actually_shipped(self):
+        """A pointer to a file the package does not contain sends a reader nowhere.
+
+        Checking existence ON DISK is not enough: a maintainer-only file is present in the working
+        tree while being excluded from the package, so `(ROOT / ref).exists()` is True here and
+        False for everyone else. Membership in the shipped set is the only question a clone can
+        answer. Six such pointers survived the publication scrub -- to a release gate, a repo audit
+        and a hang probe that no longer ship -- because the checks above look for banned
+        identifiers and never resolve a path.
+        """
+        shipped = {p.relative_to(ROOT).as_posix() for p in self.files}
+        # a backticked token that looks like a repo path: has a slash, ends in a known extension
+        token = re.compile(r"`([A-Za-z0-9_./-]+\.(?:py|md|ipynb|json|toml|cff|yml|yaml|bat|wl))`")
+        # this module documents the anchor FORMAT with invented examples ("path/like/this.py"),
+        # which are illustrations rather than pointers
+        skip = DETECTOR_FILES | {"tests/test_residual_risk_register_integrity.py"}
+        offenders = []
+        for path in self.files:
+            rel = path.relative_to(ROOT).as_posix()
+            if path.suffix.lower() not in {".py", ".md"} or rel in skip:
+                continue
+            try:
+                text = path.read_text(encoding="utf-8", errors="replace")
+            except Exception:
+                continue
+            for ref in set(token.findall(text)):
+                if "/" not in ref or ref.startswith(("http", "..")):
+                    continue
+                if ref not in shipped and not (ROOT / ref).is_dir():
+                    offenders.append(f"{rel}: points at {ref!r}, which the package does not ship")
+        self.assertEqual(sorted(set(offenders)), [],
+                         "references to files that are not in the shipped set:\n  "
+                         + "\n  ".join(sorted(set(offenders))))
+
     def test_the_shipped_set_is_plausible(self):
         """A broken enumerator would make every check below vacuously green."""
         self.assertGreater(len(self.files), 800, "shipped set unexpectedly small")

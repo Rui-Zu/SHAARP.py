@@ -1,9 +1,9 @@
-[![GitHub release version](https://img.shields.io/github/v/release/-Zu/SHAARP.py?color=%2350C878&include_prereleases)](https://github.com/-Zu/SHAARP.py/releases)
-[![License](https://img.shields.io/github/license/-Zu/SHAARP.py)](https://github.com/-Zu/SHAARP.py/blob/master/LICENSE)
-![GitHub Size](https://img.shields.io/github/repo-size/-Zu/SHAARP.py)
+[![GitHub release version](https://img.shields.io/github/v/release/Rui-Zu/SHAARP.py?color=%2350C878&include_prereleases)](https://github.com/Rui-Zu/SHAARP.py/releases)
+[![License](https://img.shields.io/github/license/Rui-Zu/SHAARP.py)](https://github.com/Rui-Zu/SHAARP.py/blob/master/LICENSE)
+![GitHub Size](https://img.shields.io/github/repo-size/Rui-Zu/SHAARP.py)
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
-[![CI](https://github.com/-Zu/SHAARP.py/actions/workflows/ci.yml/badge.svg)](https://github.com/-Zu/SHAARP.py/actions/workflows/ci.yml)
-[![HitCount](https://hits.dwyl.com/-Zu/SHAARP.py.svg?style=flat-square&show=unique)](http://hits.dwyl.com/-Zu/SHAARP.py)
+[![CI](https://github.com/Rui-Zu/SHAARP.py/actions/workflows/ci.yml/badge.svg)](https://github.com/Rui-Zu/SHAARP.py/actions/workflows/ci.yml)
+[![HitCount](https://hits.dwyl.com/Rui-Zu/SHAARP.py.svg?style=flat-square&show=unique)](http://hits.dwyl.com/Rui-Zu/SHAARP.py)
 
 # SHAARP.py documentation
 
@@ -11,7 +11,7 @@
 *Second Harmonic Analysis of Anisotropic Rotational Polarimetry* toolset — covering both:
 
 - **♯SHAARP.si** — single-interface **reflected** second-harmonic generation (SHG) — original
-  Mathematica package: [github.com/Rui-Zu/SHAARP](https://github.com/-Zu/SHAARP), and
+  Mathematica package: [github.com/Rui-Zu/SHAARP](https://github.com/Rui-Zu/SHAARP), and
 - **♯SHAARP.ml** — **multilayer** (Maker-fringe / transmitted + reflected) SHG — original
   Mathematica package: [github.com/bzw133/SHAARP.ml](https://github.com/bzw133/SHAARP.ml).
 
