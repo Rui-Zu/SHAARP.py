@@ -196,22 +196,36 @@ class RepoHygieneTests(unittest.TestCase):
         identifiers and never resolve a path.
         """
         shipped = {p.relative_to(ROOT).as_posix() for p in self.files}
-        # a backticked token that looks like a repo path: has a slash, ends in a known extension
-        token = re.compile(r"`([A-Za-z0-9_./-]+\.(?:py|md|ipynb|json|toml|cff|yml|yaml|bat|wl))`")
-        # this module documents the anchor FORMAT with invented examples ("path/like/this.py"),
-        # which are illustrations rather than pointers
-        skip = DETECTOR_FILES | {"tests/test_residual_risk_register_integrity.py"}
+        # A repo-path-shaped token in any of three wrappings. Scanning only backticked tokens in
+        # .py/.md missed a live one: "tests/test_coverage_report.py" sat as a JSON string value in
+        # a shipped manifest, pointing at a maintainer-only file.
+        patterns = (
+            re.compile(r"`([A-Za-z0-9_./-]+\.(?:py|md|ipynb|json|toml|cff|yml|yaml|bat|wl|wls|txt|rst))`"),
+            re.compile(r'"([A-Za-z0-9_./-]+\.(?:py|md|ipynb|json|toml|cff|yml|yaml|bat|wl|wls|txt|rst))"'),
+            re.compile(r"\]\(([A-Za-z0-9_./-]+\.(?:py|md|ipynb|json|toml|cff|yml|yaml|bat|wl|wls|txt|rst))\)"),
+        )
+        # Two kinds of file name paths that are deliberately not real: one documents the anchor
+        # FORMAT with invented examples ("path/like/this.py"), the other asserts what happens when
+        # a reference is MISSING, so its path must not exist.
+        skip = DETECTOR_FILES | {"tests/test_residual_risk_register_integrity.py",
+                                 "tests/test_api_multilayer_validation_metadata.py"}
+        scanned = {".py", ".md", ".json", ".txt", ".yml", ".yaml", ".cff", ".toml"}
         offenders = []
         for path in self.files:
             rel = path.relative_to(ROOT).as_posix()
-            if path.suffix.lower() not in {".py", ".md"} or rel in skip:
+            if path.suffix.lower() not in scanned or rel in skip:
                 continue
             try:
                 text = path.read_text(encoding="utf-8", errors="replace")
             except Exception:
                 continue
-            for ref in set(token.findall(text)):
-                if "/" not in ref or ref.startswith(("http", "..")):
+            refs = {r for pattern in patterns for r in pattern.findall(text)}
+            for ref in refs:
+                # only tokens that name a location INSIDE this repository
+                if "/" not in ref or ref.startswith(("http", "..", "/")):
+                    continue
+                if not ref.split("/")[0] in {"shaarp", "tests", "docs", "scripts", "benchmarks",
+                                             "examples", "notebooks", ".github"}:
                     continue
                 if ref not in shipped and not (ROOT / ref).is_dir():
                     offenders.append(f"{rel}: points at {ref!r}, which the package does not ship")

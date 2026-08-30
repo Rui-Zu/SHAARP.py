@@ -14,7 +14,7 @@ SHAARP_py_MASTER_BENCHMARK
 ```
 
 - **Reproduce the SHAARP.si paper** — every case figure of *npj Comput. Mater.* **8**, 246 (2022)
-  (GaAs (111), LiNbO₃ (11̄20), KTP (100), TaAs (112)) reproduced with SHAARP.py and shown beside the
+  (GaAs (111), LiNbO₃ (112̄0), KTP (100), TaAs (112)) reproduced with SHAARP.py and shown beside the
   published panel, with parameters sourced from the author's original Mathematica case studies.
 - **Reproduce the SHAARP.ml paper** — every case figure of *npj Comput. Mater.* **10**, 64 (2024)
   (quartz Maker fringes with HH/JK/FMR **+ the raw Herman-1995 analytic benchmark**, single-crystal

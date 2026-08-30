@@ -6,7 +6,7 @@ __pycache__/
 .pytest_cache/
 .ipynb_checkpoints/
 
-# --- Build / packaging artifacts (the Windows app ships as a GitHub Release asset, not in git) ---
+# --- Build / packaging artifacts (the apps ship as GitHub Release assets, not in git) ---
 build/
 dist/
 docs/_build/

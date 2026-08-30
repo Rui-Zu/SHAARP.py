@@ -10,8 +10,8 @@ Mathematica kernel — not against a Python re-derivation.
 > **Bottom line:** SHAARP.py reproduces the original Mathematica SHAARP package to
 > machine precision (typical max error 10⁻¹³ – 10⁻¹⁷) across solver stages,
 > geometries, the Full / JK / HH assumption modes, single-interface reflected SHG,
-> crystal orientation, and the symbolic engine. The full automated suite (215
-> modules / 1,255 tests) passes, including an offscreen pass over every selectable
+> crystal orientation, and the symbolic engine. The full automated suite (216
+> modules / 1,263 tests) passes, including an offscreen pass over every selectable
 > case × functionality on both GUI tabs.
 
 ## Additions since the evidence table below
@@ -30,7 +30,7 @@ Mathematica kernel — not against a Python re-derivation.
   + dispersion-contract warning); suite logs warning-free.
 - **Merged SHAARP.si + .ml GUI** (`shaarp.make_shaarp_gui()`) with all controls on
   the validated backends; 49 GUI tests including continuity gates.
-- Suite total: **215 modules, 1,255 tests, 0 failures**, measured by running every module in its
+- Suite total: **216 modules, 1,263 tests, 0 failures**, measured by running every module in its
   own subprocess from a clean checkout copied outside the development tree — so this is the figure
   a user reproduces after cloning, not one that holds only on the author's machine.
   Earlier editions of this file quoted **1,250 / 1,257 / 1,258** tests. Those were UNDERCOUNTS
@@ -148,7 +148,7 @@ SHAARP_ML_DIR=/path/to/SHAARP.ml \
 An exporter that needs one of the external packages and cannot find it stops immediately with a
 message naming the variable to set, rather than failing part-way through.
 
-## Additions .. (v1.0.0 evaluation ladder)
+## Additions (v1.0.0 evaluation ladder)
 
 The release now carries a four-layer evaluation ladder on top of the evidence table:
 
@@ -167,18 +167,18 @@ The release now carries a four-layer evaluation ladder on top of the evidence ta
   This layer immediately caught two latent defects the whole gate suite had passed (surprise): float-noise-broken isotropic degeneracy (NaN GaAs polarimetry) and a silent real-cast of
   complex ε/d in the curve/expression paths — both fixed, verified vs the numeric reference to
   5×10⁻¹⁴, and fenced.
-- **T4 residual-risk register** (doc}``): the honest complement of the green stamps —
+- **T4 residual-risk register** (`residual_risks.md`): the honest complement of the green stamps —
   what is NOT verified, row by row with closing conditions. Includes the Monte-Carlo d-extraction
   noise characterization (`benchmarks/dextraction_noise_benchmark.py`, fenced): the phase-resolved
   field method degrades gracefully (median error ≈ noise level); the phase-less intensity method
   amplifies catastrophically at realistic conditioning — its noisy-data output is an initial guess.
 
-All three tutorial notebooks execute cleanly against the current API
-(jupyter nbconvert --execute`).
+All five tutorial notebooks execute cleanly against the current API
+(`jupyter nbconvert --execute`).
 
 ## Honesty discipline
 
-The port is **released as v1.0.0** (`RELEASE GATE: PASS`, 214 test modules / 1,250 tests, plus the
+The port is **released as v1.0.0** (`RELEASE GATE: PASS`, with the suite total recorded above, plus the
 312-cell GUI matrix sweep `CLEAN`). The old planning-era "~91%" figure is retired: the numerical
 core and end-to-end pipelines are fully validated as tabulated above, and the remaining
 NOT-verified surface is enumerated explicitly in {doc}`residual_risks` instead of being summarized as

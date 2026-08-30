@@ -379,7 +379,7 @@ def _diagnostic_artifacts() -> list[dict]:
         _artifact(
             "mathematica_reference/wolfram_live_symbolic_point_group_d_probe_v1.json",
             "diagnostic_only_not_point_group_tensor_validation",
-            ["tests/test_coverage_report.py"],
+            ["tests/test_mathematica_reference_manifest.py"],
             "Live Wolfram 14.3 probe showing SHAARP.ml material extension does not rewrite dC from point group; GUI point-group tensor patterns still need a separate source-branch validation.",
         )
     ]

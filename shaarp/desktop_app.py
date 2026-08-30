@@ -166,7 +166,7 @@ TOOLTIPS = {
         "wavelength; selecting one syncs this field to it (the row label then says 'set by the preset')."
     ),
     "thickness": (
-        "Per-layer thickness in um — the ONLY thickness input (F55): the stack editor holds the\n"
+        "Per-layer thickness in um — the ONLY thickness input: the stack editor holds the\n"
         "geometric truth in every mode. In the simple 'Custom film' / 'Film:' modes this row IS\n"
         "the 3-layer template's film thickness (editing it stays in the mode); under a named\n"
         "preset the editor shows the preset's real layers, and editing one switches to the\n"
@@ -234,7 +234,7 @@ TOOLTIPS = {
         "Layer Properties Preset Values: save the entered crystal and optical properties as a\n"
         "preset and re-apply them later. When a preset is saved, its button turns blue.\n"
         "Clear Presets removes all the saved preset information. Presets do not persist across sessions.\n"
-        "(Hidden since F64 -- superseded by the persistent 'My Materials' store below.)"
+        "(Superseded by the persistent 'My Materials' store below.)"
     ),
     "my_materials": (
         "My Materials: save the material currently entered in the crystal panels (point group,\n"
@@ -1445,7 +1445,7 @@ def build_main_window():
                     if d is not None:
                         return [[complex(v) for v in row] for row in d]
                 try:
-                    from .layer_stack import material_for_label as build_casestudy_material  # F64 seam
+                    from .layer_stack import material_for_label as build_casestudy_material
                     mat = build_casestudy_material(resolve_case_label(spec.get("material")),
                                                    wavelength_um=wavelength.value())
                     return [[complex(v) for v in row] for row in mat.d_voigt()]
@@ -2186,7 +2186,7 @@ def build_main_window():
         def _active_case_material():
             """The Material whose tensors should fill the matrices, or None for custom/default."""
             try:
-                from .layer_stack import material_for_label as build_casestudy_material  # F64 seam
+                from .layer_stack import material_for_label as build_casestudy_material
                 if which == "si" and si_case.currentText() != "Custom (use fields)":
                     return build_casestudy_material(resolve_case_label(si_case.currentText()),
                                                     wavelength_um=wavelength.value())
@@ -2807,7 +2807,7 @@ def build_main_window():
                     _apply_layer_medium_hints()
                     return
                 try:
-                    from .layer_stack import material_for_label as build_casestudy_material  # F64 seam
+                    from .layer_stack import material_for_label as build_casestudy_material
                     mat = build_casestudy_material(resolve_case_label(name),
                                                    wavelength_um=wavelength.value())
                 except Exception:
@@ -3937,7 +3937,7 @@ def build_main_window():
                     # a DIRTY case (panels edited under it) computes from the panels —
                     # the case label stays selected; re-selecting the case resets.
                     if si_case.currentText() != "Custom (use fields)" and not _si_dirty["on"]:
-                        from .layer_stack import material_for_label as build_casestudy_material  # F64 seam
+                        from .layer_stack import material_for_label as build_casestudy_material
 
                         # display label -> registry key (case-study fidelity audit)
                         material = build_casestudy_material(

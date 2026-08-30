@@ -228,7 +228,7 @@
         "LIVE-WOLFRAM: maker_fringes_comparison_summary_ml2.json (5-layer aniso 4/4)",
         "LIVE-WOLFRAM: maker_fringes_comparison_summary_ml3.json (two-active-layer 4/4)",
         "LIVE-WOLFRAM: maker_fringes_comparison_summary_ml5.json (6-layer 4/4)",
-        "tests/test_maker_fringes_multilayer_ml1/ml2/ml3/ml5_reference_comparison.py"
+        "tests/test_maker_fringes_multilayer_reference_comparison.py"
       ],
       "next_action": "Plot facade (maker_figure_data via run_maker_fringes) now defaults to the SHAARP.ml unit normalization (mu=1, eps0=1), so the plotted listMFpara/listMFperp match live Mathematica MFList to ~1e-15 on non-singular cases; the phase-matching-like case remains a documented diagnostic. Remaining GUI work is the interactive plot widget, not the physics."
     },

@@ -67,10 +67,11 @@ carries fine fringes at 20–30° that are absent for ♯SHAARP(JK).
 ```
 
 **♯SHAARP.ml 2024, Fig. 4(b,d)** — 123.6 µm Z-cut quartz at 800 nm, uncoated vs 13.9 nm backside
-Au: the FMR fine-fringe amplification with the Au mirror is replicated. (One documented deviation:
-the paper panel's central bump near $\theta_i = 0$ stems from the authors' journal-SI experimental
-parameters; the released notebook's own preset Au — validated live to 3.6×10⁻⁹ — produces a much
-smaller central feature.)
+Au: the FMR fine-fringe amplification with the Au mirror is replicated, including the central
+feature near $\theta_i = 0$, which the FMR model reproduces to correlation 0.9993. (An earlier
+edition of this page attributed that central bump to the authors' journal-SI parameters. That
+diagnosis came from comparing against the wrong reference curve and is retracted — see R5 in
+[residual_risks.md](residual_risks.md).)
 
 ```{figure} _static/replication/ml2024_fig4_zcut_quartz_au.png
 :width: 100%

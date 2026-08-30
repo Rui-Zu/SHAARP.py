@@ -141,7 +141,6 @@
       ],
       "evidence": [
         "benchmarks/compare_mathematica_reference.py",
-        "benchmarks/mathematica_reference/README.md",
         "benchmarks/mathematica_reference/compute_pnl_reference_v1.json",
         "benchmarks/mathematica_reference/solve_inhom_reference_v1.json",
         "benchmarks/mathematica_reference/solve_snell_reference_v1.json",

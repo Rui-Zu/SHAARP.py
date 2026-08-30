@@ -408,7 +408,7 @@
       "exists": true,
       "validation_level": "diagnostic_only_not_point_group_tensor_validation",
       "tests": [
-        "tests/test_coverage_report.py"
+        "tests/test_mathematica_reference_manifest.py"
       ],
       "notes": "Live Wolfram 14.3 probe showing SHAARP.ml material extension does not rewrite dC from point group; GUI point-group tensor patterns still need a separate source-branch validation."
     }

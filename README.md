@@ -35,8 +35,11 @@ crystals and multilayers. It brings both published Mathematica packages together
   (Full / Jerphagnon–Kurtz / Herman–Hayden assumptions) (*npj Comput. Mater.* **10**, 64 (2024)) ·
   original Mathematica package: [github.com/bzw133/SHAARP.ml](https://github.com/bzw133/SHAARP.ml)
 
-Every solver is validated **value-by-value against the original live Mathematica packages**
-(typical agreement 10⁻¹³–10⁻¹⁷); the full automated test suite gates every claim. Beyond the
+Every solver stage is validated **value-by-value against the original live Mathematica
+packages** at the exported reference points — typically 10⁻¹³–10⁻¹⁷, with the largest
+documented deviation 3.6×10⁻⁹ — and the automated test suite gates every claim. What that
+does and does not cover is set out in
+[docs/residual_risks.md](docs/residual_risks.md). Beyond the
 originals, it adds closed-form symbolic SHG expressions and **d-tensor extraction** from
 polarimetry scans.
 
@@ -95,11 +98,11 @@ file for your computer (open the newest release and look under *Assets*):
 | Your computer | Download | Then |
 |---|---|---|
 | Windows (64-bit) | `SHAARP_py_v…_win64.zip` | unzip, double-click `SHAARP_py\SHAARP_py.exe` |
-| macOS (Apple Silicon) | `SHAARP_py_v…_macos.zip` | unzip, open `SHAARP_py.app` (see the note below) |
+| macOS (Apple Silicon) | `SHAARP_py_v…_macos.zip` | unzip, open `SHAARP_py/SHAARP_py.app` (see the note below) |
 
-On any other system, run it from Python instead — see **[Use it from Python](#use-it-from-python)** below.
-If the Releases page is empty, the first packaged build has not been published yet; the same
-approach works in the meantime.
+On any other system — or if the Releases page is empty, meaning no packaged build has been
+published yet — run it from Python instead: see **[Use it from Python](#use-it-from-python)**
+below.
 
 **Step 2 — first launch.**
 
@@ -131,58 +134,52 @@ workflow. Every number the app shows comes from the same validated solvers descr
 
 ## Use it from Python
 
-For scripting, batch runs, and fitting your own measurements. **This section assumes you have never
-used Python** — if you have, skip to step 3.
+For scripting, batch runs, and fitting your own measurements.
 
-**Step 1 — install Python** (skip if you already have it). Download it from
-[python.org/downloads](https://www.python.org/downloads/) — version 3.10 or newer. On Windows, tick
-**"Add python.exe to PATH"** on the first screen of the installer; that one checkbox prevents most
-beginner problems. To confirm it worked, open a terminal (step 3) and type `python --version`.
-
-**Step 2 — download this repository.** On the GitHub page: green **Code** button → **Download ZIP**
-→ unzip it somewhere you can find, e.g. your Desktop. (If you use git: `git clone <repository URL>`.)
-
-**Step 3 — open a terminal inside that folder.**
-
-- **Windows** — open the unzipped folder in File Explorer, click the address bar, type `cmd`, press
-  Enter.
-- **macOS** — right-click the folder → **New Terminal at Folder**. (If you don't see it: System
-  Settings → Keyboard → Keyboard Shortcuts → Services → enable it.)
-
-**Step 4 — install SHAARP.py.** Copy this one line into the terminal and press Enter:
+**Install it with one command.** You do not need to download or clone anything:
 
 ```bash
-pip install ".[desktop,symbolic]"
+pip install "shaarp-py[desktop,symbolic] @ git+https://github.com/Rui-Zu/SHAARP.py"
 ```
 
-That installs SHAARP.py with everything: the solvers, the closed-form symbolic tools, and the
-desktop GUI. It takes a minute or two. (If your system says `pip` is not found, use
-`python -m pip install ".[desktop,symbolic]"` instead.)
-
-> SHAARP.py is **not on PyPI** — `pip install shaarp-py` will not work. Install from this
-> repository, as above: the `.` is the folder you just cloned into.
+That pulls in the solvers, the closed-form symbolic tools, and the desktop GUI, and takes a minute
+or two. You now have `import shaarp` available anywhere, plus a `shaarp-gui` command that launches
+the same desktop app.
 
 <details>
-<summary>Smaller installs, if you don't want everything</summary>
+<summary>If you are new to Python, or that command did not work</summary>
 
-Each line installs the library plus the optional parts named in brackets — pick **one**. The core
-requirements (NumPy, SciPy, matplotlib) always come along.
+**No Python yet?** Install it from [python.org/downloads](https://www.python.org/downloads/) —
+version 3.10 or newer. On Windows, tick **"Add python.exe to PATH"** on the installer's first
+screen; that one checkbox prevents most beginner problems. Then open a terminal (Windows: press
+Start, type `cmd`; macOS: open Terminal) and check with `python --version`.
+
+**`pip` not found?** Use `python -m pip install ...` instead — same line otherwise.
+
+**Smaller installs.** Pick one; NumPy, SciPy and matplotlib always come along. Replace the
+bracketed part of the command above with:
+
+| Instead of `[desktop,symbolic]` | You get |
+|---|---|
+| *(nothing)* | solvers only — polarimetry, Maker fringes, Fresnel |
+| `[symbolic]` | + closed-form symbolic expressions and d-extraction (SymPy) |
+| `[interactive]` | + the Jupyter-widget session (ipywidgets) |
+
+**Want to read or edit the source?** Clone the repository and install it in place:
 
 ```bash
-pip install . # solvers only — polarimetry, Maker fringes, Fresnel
-pip install ".[symbolic]" # + closed-form symbolic expressions & d-extraction (SymPy)
-pip install ".[interactive]" # + the Jupyter-widget session (ipywidgets)
-pip install ".[desktop,symbolic]" # everything (recommended)
+git clone https://github.com/Rui-Zu/SHAARP.py
+cd SHAARP.py
+pip install -e ".[desktop,symbolic]"
 ```
 
-Developers who intend to edit the source can add `-e` (`pip install -e ".[desktop,symbolic]"`) so
-edits take effect without reinstalling.
+The repository also carries the benchmark data, the notebooks, and the test suite, none of which
+are needed to use the library.
 
 </details>
 
-**Step 5 — your first calculation.** You now have `import shaarp` available anywhere, plus the
-command **`shaarp-gui`**, which launches the same desktop app. Save the following as `first_shg.py`
-and run it with `python first_shg.py`:
+**Your first calculation.** Save the following as `first_shg.py` and run it with
+`python first_shg.py`:
 
 ```python
 import matplotlib.pyplot as plt
@@ -269,6 +266,7 @@ Regenerate with `python build_paper_notebooks.py`.
 ## Documentation
 
 ```bash
+pip install -r docs/requirements.txt
 python -m sphinx -b html docs docs/_build/html
 ```
 

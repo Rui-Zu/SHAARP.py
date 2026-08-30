@@ -239,7 +239,7 @@ def build_audit() -> dict:
                 "LIVE-WOLFRAM: maker_fringes_comparison_summary_ml2.json (5-layer aniso 4/4)",
                 "LIVE-WOLFRAM: maker_fringes_comparison_summary_ml3.json (two-active-layer 4/4)",
                 "LIVE-WOLFRAM: maker_fringes_comparison_summary_ml5.json (6-layer 4/4)",
-                "tests/test_maker_fringes_multilayer_ml1/ml2/ml3/ml5_reference_comparison.py",
+                "tests/test_maker_fringes_multilayer_reference_comparison.py",
             ],
         ),
         _capability(

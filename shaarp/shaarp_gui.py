@@ -112,8 +112,9 @@ _FMR_SUBMODE_ALIASES = {
 def _quartz_au_docs_system():
     # Fig 4: Z-cut quartz (121.2 um) + 13.9 nm backside Au at 800 nm — the docs' canonical Maker
     # example, VALIDATED vs live SHAARP.ml to 3.6e-9 (tests/test_quartz_au_docs_reference.py);
-    # lazy import keeps shaarp's module load light.
-    from benchmarks.quartz_au_docs_case import build_quartz_au_system
+    # lazy import keeps shaarp's module load light. The case study lives inside the package, so
+    # this preset works from a pip install with no checkout.
+    from shaarp.quartz_au_docs_case import build_quartz_au_system
 
     return build_quartz_au_system()
 

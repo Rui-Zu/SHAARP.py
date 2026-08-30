@@ -36,7 +36,7 @@ constants transcribed verbatim from the notebook. The *Cases in DOI* group — t
 in the ♯SHAARP.si paper — is **all at 800 nm** (the header says so); the other groups follow the
 original panel:
 
-> **Cases in DOI (all 800 nm):** GaAs (111), LiNbO₃ (11-2̄0) MTI X-cut, KTP (100), TaAs (112)
+> **Cases in DOI (all 800 nm):** GaAs (111), LiNbO₃ (112̄0) MTI X-cut, KTP (100), TaAs (112)
 > **Complex SHG Coefficients:** GaAs (111) @1064 nm
 > **Deep UV NLO:** LiB₃O₅ (LBO), KBBF · **Polar Metals:** LiOsO₃
 

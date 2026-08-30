@@ -17,7 +17,7 @@
   },
   "intermediate_values_needed_to_reproduce": {
     "export_script": "benchmarks/mathematica_reference/export_orientation_reference.wl",
-    "diagnostics_log": "benchmarks/mathematica_reference/orientation_reference_diagnostics.txt",
+    "diagnostics_log": "(diagnostics log not published)",
     "successful_reference": "benchmarks/mathematica_reference/orientation_reference_v1.json",
     "failing_cases_removed_from_current_reference": [
       {

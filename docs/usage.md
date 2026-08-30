@@ -23,8 +23,17 @@ documented here. There are two layers:
 
 They are kept for quick sketches and backwards compatibility. **The validated solvers — the ones
 benchmarked against the ♯SHAARP papers and the Mathematica originals, and the ones the GUI's
-Update button calls — are the `run_*` facades.** Use those for anything you intend to publish or
-compare against a reference — they are the `run_*` entries listed just above.
+Update button calls — are the `run_*` facades listed above.**
+
+One catch worth knowing: for single-interface work, `run_si_numeric` also defaults to the reduced
+model. Ask for the validated one explicitly:
+
+```python
+run_si_numeric(sample, {"workflow": "shaarp_si_compat", "polarimetry": polarimetry})
+```
+
+With `workflow="shaarp_si_compat"` no reduced-model warning is emitted; with the default, both of
+the warnings above are. Use it for anything you intend to publish or compare against a reference.
 ```
 
 ## Single-interface reflected SHG

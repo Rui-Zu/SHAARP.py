@@ -1,6 +1,6 @@
 """Build the installation-free SHAARP.py GUI bundle — the ONE cross-platform build definition.
 
-Used by all three build paths so they can never drift:
+Used by both build paths so they can never drift:
   * GitHub Actions release workflow (all platforms): python scripts/build_gui_bundle.py
   * build_desktop_exe.bat convenience build: ... --no-package
 
@@ -98,7 +98,7 @@ def build_app(*, skip_hygiene: bool = False, skip_smoke: bool = False) -> Path:
 
     cmd = [sys.executable, "-m", "PyInstaller", "--noconfirm", "--windowed", "--name", "SHAARP_py",
            "--paths", ".",
-           "--hidden-import", "benchmarks.quartz_au_docs_case",
+           "--hidden-import", "shaarp.quartz_au_docs_case",
            "--hidden-import", "shaarp.desktop_app", "--hidden-import", "shaarp.casestudy_materials",
            "--collect-submodules", "shaarp", "--collect-data", "shaarp",
            "--add-data", f"build/bundle_benchmarks{os.pathsep}benchmarks",
@@ -176,10 +176,22 @@ def platform_token() -> str:
     return sys.platform
 
 
+def archive_path(out_dir: Path, version: str, token: str | None = None) -> Path:
+    """Where the release archive for ``version`` goes.
+
+    NOT ``Path.with_suffix``: a stem like ``SHAARP_py_v1.0.0_macos`` looks suffixed to pathlib,
+    which reads ``.0_macos`` as the extension and replaces it -- yielding ``SHAARP_py_v1.0.zip``,
+    with the patch digit and the platform token gone, and 1.0.1 colliding with 1.0.0.
+    """
+    stem = f"SHAARP_py_v{version}_{token or platform_token()}"
+    return out_dir / (stem + ".zip")
+
+
 def package(app: Path, version: str) -> Path:
     out_dir = ROOT / "dist" / "release"
     out_dir.mkdir(parents=True, exist_ok=True)
-    base = out_dir / f"SHAARP_py_v{version}_{platform_token()}"
+    archive_name = archive_path(out_dir, version)
+    base = archive_name.with_name(archive_name.stem)
     if IS_MAC:
         # stage a single SHAARP_py folder holding the .app + identity files, then ditto it
         # (shutil zip breaks .app symlinks/exec bits; ditto preserves both)
@@ -189,10 +201,7 @@ def package(app: Path, version: str) -> Path:
         subprocess.run(["ditto", str(app), str(staging / app.name)], check=True)
         shutil.copyfile(ROOT / "RELEASE_README.txt", staging / "README.txt")
         shutil.copyfile(ROOT / "LICENSE", staging / "LICENSE.txt")
-        # NOT base.with_suffix(): the version makes the stem look suffixed, so pathlib would
-        # read ".0_macos" as the extension and replace it -- v1.0.0_macos -> v1.0.zip, losing
-        # both the patch digit and the platform token.
-        archive = base.parent / (base.name + ".zip")
+        archive = archive_name
         archive.unlink(missing_ok=True)
         subprocess.run(["ditto", "-c", "-k", "--keepParent", str(staging), str(archive)], check=True)
     else:

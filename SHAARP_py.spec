@@ -3,7 +3,7 @@ from PyInstaller.utils.hooks import collect_data_files
 from PyInstaller.utils.hooks import collect_submodules
 
 datas = [('build/bundle_benchmarks', 'benchmarks')]
-hiddenimports = ['benchmarks.quartz_au_docs_case', 'shaarp.desktop_app', 'shaarp.casestudy_materials']
+hiddenimports = ['shaarp.quartz_au_docs_case', 'shaarp.desktop_app', 'shaarp.casestudy_materials']
 datas += collect_data_files('shaarp')
 hiddenimports += collect_submodules('shaarp')
 
