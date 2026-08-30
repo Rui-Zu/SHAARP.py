@@ -95,11 +95,9 @@ file for your computer (open the newest release and look under *Assets*):
 | Your computer | Download | Then |
 |---|---|---|
 | Windows (64-bit) | `SHAARP_py_v…_win64.zip` | unzip, double-click `SHAARP_py\SHAARP_py.exe` |
-| macOS — Apple Silicon (M1/M2/M3/M4) | `SHAARP_py_v…_macos_arm64.zip` | unzip, open `SHAARP_py.app` (see the note below) |
-| macOS — Intel | `SHAARP_py_v…_macos_x86_64.zip` | unzip, open `SHAARP_py.app` (see the note below) |
-| Linux | *no prebuilt bundle* | install from source — see **[Use it from Python](#use-it-from-python)** below |
+| macOS (Apple Silicon) | `SHAARP_py_v…_macos.zip` | unzip, open `SHAARP_py.app` (see the note below) |
 
-Not sure which Mac you have? Apple menu → **About This Mac**: an "Apple M…" chip = Apple Silicon.
+On any other system, run it from Python instead — see **[Use it from Python](#use-it-from-python)** below.
 
 **Step 2 — first launch.**
 

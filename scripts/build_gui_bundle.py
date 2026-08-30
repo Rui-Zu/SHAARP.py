@@ -9,22 +9,20 @@ Used by all three build paths so they can never drift:
 
 Pipeline: stage the git-shippable benchmarks tree (scripts/stage_bundle_data.py — .gitignore is the
 single source of truth) -> per-OS icon (.ico on Windows; .icns generated from the 1085 px
-shaarp_icon.png via sips+iconutil on macOS; none on Linux) -> the exact PyInstaller invocation the
+shaarp_icon.png via sips+iconutil on macOS) -> the exact PyInstaller invocation the
 Windows gate validated (only the --add-data separator and icon differ per OS) -> locate the built
 app -> copy RELEASE_README.txt/LICENSE next to it -> bundle-hygiene check (scripts/bundle_hygiene.py)
 -> run the FROZEN app --self-check + --gui-smoke headless -> package into dist/release/ as
-SHAARP_py_v{version}_{platform}.{zip|tar.gz}.
+SHAARP_py_v{version}_{platform}.zip.
 
-Packaging notes: macOS MUST use `ditto -c -k --keepParent` (shutil's zip breaks .app symlinks and
-executable bits); Linux uses a gztar (preserves +x so users just run ./SHAARP_py/SHAARP_py);
-the archive root is always a single `SHAARP_py` folder. When GITHUB_REF_NAME is a v-tag the version
+Packaging notes: macOS MUST use `ditto -c -k --keepParent` (shutil's zip breaks .app symlinks
+and executable bits); the archive root is always a single `SHAARP_py` folder. When GITHUB_REF_NAME is a v-tag the version
 in pyproject.toml must match it (catches tagging v1.0.1 while pyproject still says 1.0.0).
 """
 from __future__ import annotations
 
 import argparse
 import os
-import platform
 import shutil
 import subprocess
 import sys
@@ -43,7 +41,7 @@ IS_MAC = sys.platform == "darwin"
 SMOKE_ENV = {**os.environ, "PYTHONIOENCODING": "utf-8", "MPLBACKEND": "Agg",
              "QT_QPA_PLATFORM": "offscreen"}
 if IS_WIN:
-    # Windows-offscreen font-database workaround only; macOS (CoreText) and Linux (fontconfig)
+    # Windows-offscreen font-database workaround only; macOS (CoreText)
     # resolve system fonts natively under the offscreen platform.
     SMOKE_ENV["QT_QPA_FONTDIR"] = "C:/Windows/Fonts"
 
@@ -117,7 +115,6 @@ def build_app(*, skip_hygiene: bool = False, skip_smoke: bool = False) -> Path:
         cmd[7:7] = ["--icon", "shaarp/assets/shaarp_icon.ico"]
     elif IS_MAC:
         cmd[7:7] = ["--icon", str(_make_icns())]
-    # Linux: PyInstaller has no --icon concept for ELF; omitted.
     print("$", " ".join(cmd), flush=True)
     subprocess.run(cmd, cwd=ROOT, check=True)
 
@@ -129,7 +126,7 @@ def build_app(*, skip_hygiene: bool = False, skip_smoke: bool = False) -> Path:
         raise SystemExit(f"frozen executable missing: {exe}")
 
     # release identity: README + LICENSE travel next to the app (inside the onedir folder on
-    # Windows/Linux; alongside the .app in the archive staging folder on macOS — handled there)
+    # Windows; alongside the .app in the archive staging folder on macOS — handled there)
     if not IS_MAC:
         shutil.copyfile(ROOT / "RELEASE_README.txt", app / "README.txt")
         shutil.copyfile(ROOT / "LICENSE", app / "LICENSE.txt")
@@ -161,7 +158,7 @@ def frozen_executable(app: Path) -> Path:
 
 
 def data_root(app: Path) -> Path:
-    """Directory holding the bundled ``benchmarks/`` + ``shaarp/`` data. Windows/Linux onedir:
+    """Directory holding the bundled ``benchmarks/`` + ``shaarp/`` data. Windows onedir:
     ``_internal``. macOS .app: PyInstaller >= 6 places the payload under Contents/Frameworks with
     symlinks from Contents/Resources — pick whichever actually holds the sentinel, resolved."""
     if not IS_MAC:
@@ -174,12 +171,12 @@ def data_root(app: Path) -> Path:
 
 
 def platform_token() -> str:
-    mach = platform.machine().lower()
+    """Suffix identifying a release archive -- one bundle per operating system."""
     if IS_WIN:
         return "win64"
     if IS_MAC:
-        return "macos_arm64" if mach in ("arm64", "aarch64") else "macos_x86_64"
-    return f"linux_{'x86_64' if mach in ('x86_64', 'amd64') else mach}"
+        return "macos"
+    return sys.platform
 
 
 def package(app: Path, version: str) -> Path:
@@ -198,10 +195,8 @@ def package(app: Path, version: str) -> Path:
         archive = base.with_suffix(".zip")
         archive.unlink(missing_ok=True)
         subprocess.run(["ditto", "-c", "-k", "--keepParent", str(staging), str(archive)], check=True)
-    elif IS_WIN:
-        archive = Path(shutil.make_archive(str(base), "zip", root_dir=app.parent, base_dir=app.name))
     else:
-        archive = Path(shutil.make_archive(str(base), "gztar", root_dir=app.parent, base_dir=app.name))
+        archive = Path(shutil.make_archive(str(base), "zip", root_dir=app.parent, base_dir=app.name))
     print(f"packaged {archive} ({archive.stat().st_size / 1e6:.0f} MB)", flush=True)
     return archive
 

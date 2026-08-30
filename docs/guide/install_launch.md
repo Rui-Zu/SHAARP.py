@@ -9,11 +9,7 @@ and run. The bundle contains the interpreter, all dependencies, and the validati
 | System | Download | Run |
 |---|---|---|
 | Windows (64-bit) | `SHAARP_py_v…_win64.zip` | double-click `SHAARP_py\SHAARP_py.exe` |
-| macOS — Apple Silicon | `SHAARP_py_v…_macos_arm64.zip` | open `SHAARP_py.app` |
-| macOS — Intel | `SHAARP_py_v…_macos_x86_64.zip` | open `SHAARP_py.app` |
-
-(Not sure which Mac you have? Apple menu → **About This Mac** — an "Apple M…" chip means Apple
-Silicon.)
+| macOS (Apple Silicon) | `SHAARP_py_v…_macos.zip` | open `SHAARP_py.app` |
 
 **macOS first launch** — the app is not Apple-signed, so macOS blocks the first open. One-time fix:
 

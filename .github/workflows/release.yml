@@ -1,8 +1,7 @@
 # Release bundles — builds the installation-free SHAARP.py desktop app natively on each platform
-# and attaches all three archives to this repo's GitHub Release:
+# and attaches both archives to this repo's GitHub Release:
 # SHAARP_py_v{ver}_win64.zip (windows-latest)
-# SHAARP_py_v{ver}_macos_arm64.zip (macos-latest — Apple Silicon)
-# SHAARP_py_v{ver}_macos_x86_64.zip (macos-15-intel — GitHub retires Intel macOS Aug 2027)
+# SHAARP_py_v{ver}_macos.zip  (macos-latest — Apple Silicon)
 #
 # TWO WAYS TO RELEASE (a simpler way instead of clicking to ensure proper tag"):
 # 1. ONE BUTTON (recommended, no local git tagging): repo -> Actions -> "Release bundles" ->
@@ -88,7 +87,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, macos-latest, macos-15-intel]
+        os: [windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     env:
       PYTHONIOENCODING: utf-8

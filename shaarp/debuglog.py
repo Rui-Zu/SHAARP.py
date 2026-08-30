@@ -23,7 +23,7 @@ _LOGGER: logging.Logger | None = None
 
 
 def log_path() -> str:
-    # tempfile.gettempdir() resolves TEMP/TMP on Windows and TMPDIR//tmp on macOS/Linux — the
+    # tempfile.gettempdir() resolves TEMP/TMP on Windows and TMPDIR or /tmp on POSIX systems — the
     # previous explicit TEMP/TMP env lookup silently dropped the log into the CWD on POSIX
     # (unwritable "/" inside a macOS .app bundle).
     return os.path.join(tempfile.gettempdir(), "shaarp_gui.log")

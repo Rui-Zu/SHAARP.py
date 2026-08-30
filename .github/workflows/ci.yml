@@ -1,6 +1,5 @@
 # Cross-platform health check — runs on every push/PR so macOS breakage surfaces
-# immediately, not at release time. ~3-5 min per OS. (Linux is not a supported target:
-# no Linux bundle is built or shipped — decision.) The deep gate (full 207-module suite +
+# immediately, not at release time. ~3-5 min per OS. The deep gate (the full test suite +
 # 312-cell GUI matrix sweep) remains the maintainer's local Windows release ritual;
 # this smoke set is additive. Release bundles are built by release.yml on v* tags.
 name: CI

@@ -23,7 +23,7 @@ _SCRATCH_WL = re.compile(r"^(analyze_|audit_|convert_|debug_|diagnose_|dump_|ext
 
 def check_bundle(data_root: Path, repo_root: Path) -> tuple[bool, str]:
     """Scan the frozen app's data root (the dir holding ``benchmarks/`` + ``shaarp/`` data —
-    ``_internal`` on Windows/Linux onedir, ``Contents/Frameworks`` inside a macOS .app).
+    ``_internal`` in a Windows onedir build, ``Contents/Frameworks`` inside a macOS .app).
     Returns (ok, detail). Roots are resolved first (macOS .app uses directory symlinks)."""
     sys.path.insert(0, str(repo_root / "scripts"))
     from stage_bundle_data import git_shippable_benchmarks  # noqa: E402
