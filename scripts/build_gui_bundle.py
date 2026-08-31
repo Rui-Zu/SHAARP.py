@@ -19,6 +19,7 @@ in pyproject.toml must match it (catches tagging v1.0.1 while pyproject still sa
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import os
 import shutil
 import subprocess
@@ -41,6 +42,11 @@ if IS_WIN:
     # Windows-offscreen font-database workaround only; macOS (CoreText)
     # resolve system fonts natively under the offscreen platform.
     SMOKE_ENV["QT_QPA_FONTDIR"] = "C:/Windows/Fonts"
+
+# Ceiling for ONE frozen smoke invocation. The smoke takes a couple of minutes on a cold runner, so
+# this is not a performance budget -- it is the guard that turns a hang into a diagnosis. Raise via
+# SHAARP_SMOKE_TIMEOUT for a genuinely slow machine.
+SMOKE_TIMEOUT = int(os.environ.get("SHAARP_SMOKE_TIMEOUT", "600"))
 
 
 def _rmtree_retry(path: Path, tries: int = 5) -> None:
@@ -88,6 +94,31 @@ def _make_icns() -> Path:
     return icns
 
 
+def scipy_compat_collect_args() -> list[str]:
+    """Tell PyInstaller where THIS scipy vendors ``array_api_compat`` -- the location moved.
+
+    scipy <= 1.17 keeps it at ``scipy._lib.array_api_compat``; scipy >= 1.18 at
+    ``scipy._external.array_api_compat``. PyInstaller 6.x's bundled scipy hook still names the old
+    path, so against a newer scipy its hidden import resolves to nothing (the build only prints
+    "Hidden import ... not found"), the real location is never collected, and the FROZEN app raises
+    ModuleNotFoundError for ``...array_api_compat.numpy.fft`` the first time it touches scipy.
+
+    Nothing run from source can see this, and the build itself exits 0 -- it surfaced only in the
+    release job's frozen --self-check, on runners whose unpinned scipy had moved ahead of the
+    development environment. Detecting the path that actually exists lets the bundle follow scipy
+    across the rename instead of being pinned to one version's internal layout.
+    """
+    args: list[str] = []
+    for pkg in ("scipy._external.array_api_compat", "scipy._lib.array_api_compat"):
+        try:
+            found = importlib.util.find_spec(pkg) is not None
+        except (ImportError, AttributeError, ValueError):
+            found = False  # parent package absent, or not a package
+        if found:
+            args += ["--collect-submodules", pkg]
+    return args
+
+
 def build_app(*, skip_hygiene: bool = False, skip_smoke: bool = False) -> Path:
     """Stage + PyInstaller + identity files (+ hygiene + frozen smoke unless skipped).
     Returns the built app path (dist/SHAARP_py or dist/SHAARP_py.app)."""
@@ -101,6 +132,7 @@ def build_app(*, skip_hygiene: bool = False, skip_smoke: bool = False) -> Path:
            "--hidden-import", "shaarp.quartz_au_docs_case",
            "--hidden-import", "shaarp.desktop_app", "--hidden-import", "shaarp.casestudy_materials",
            "--collect-submodules", "shaarp", "--collect-data", "shaarp",
+           *scipy_compat_collect_args(),
            "--add-data", f"build/bundle_benchmarks{os.pathsep}benchmarks",
            "--exclude-module", "torch", "--exclude-module", "torchvision",
            "--exclude-module", "notebook", "--exclude-module", "jupyterlab",
@@ -138,7 +170,23 @@ def build_app(*, skip_hygiene: bool = False, skip_smoke: bool = False) -> Path:
         # success while driving half the matrix (14 -> 7) because only "errors = 0" was checked.
         for flag, needles in (("--self-check", ("benchmarks bundled = True",)),
                               ("--gui-smoke", ("errors = 0", "drove 14 "))):
-            r = subprocess.run([str(exe), flag], env=SMOKE_ENV, text=True, capture_output=True)
+            try:
+                r = subprocess.run([str(exe), flag], env=SMOKE_ENV, text=True,
+                                   capture_output=True, timeout=SMOKE_TIMEOUT)
+            except subprocess.TimeoutExpired as exc:
+                # A --windowed build has no console, so on Windows an unhandled exception opens a
+                # modal "Fatal error" MESSAGE BOX and waits for OK. Headless, nobody clicks it: the
+                # same import failure that macOS reported in seconds hung a release job for 3h43m,
+                # to GitHub's 6-hour ceiling. Bound it, and print whatever the app managed to say.
+                partial = ((exc.stdout or "") + (exc.stderr or "")).strip()
+                print(f"{flag}: TIMED OUT after {SMOKE_TIMEOUT}s", flush=True)
+                for line in partial.splitlines()[-15:]:
+                    print(f"  | {line}", flush=True)
+                raise SystemExit(
+                    f"frozen {flag} HUNG (>{SMOKE_TIMEOUT}s). A windowed build blocks on a modal "
+                    f"error dialog, so this usually means the app raised at startup -- most often a "
+                    f"module PyInstaller did not collect. Run the app locally to see the dialog, or "
+                    f"raise SHAARP_SMOKE_TIMEOUT if the machine is merely slow.")
             out = r.stdout + r.stderr
             tail = out.strip().splitlines()[-1:] or [""]
             print(f"{flag}: rc={r.returncode} | {tail[0]}", flush=True)
@@ -206,6 +254,11 @@ def package(app: Path, version: str) -> Path:
         subprocess.run(["ditto", "-c", "-k", "--keepParent", str(staging), str(archive)], check=True)
     else:
         archive = Path(shutil.make_archive(str(base), "zip", root_dir=app.parent, base_dir=app.name))
+        # make_archive APPENDS ".zip" to the stem, so it must land back on archive_path()'s answer.
+        # The fence covers archive_path itself, not this round-trip: a future change there could
+        # rename the Windows asset out from under the README download table with nothing going red.
+        if archive != archive_name:
+            raise SystemExit(f"archive name drift: got {archive.name}, expected {archive_name.name}")
     print(f"packaged {archive} ({archive.stat().st_size / 1e6:.0f} MB)", flush=True)
     return archive
 

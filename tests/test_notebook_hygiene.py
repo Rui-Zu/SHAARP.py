@@ -153,5 +153,54 @@ class NotebookHygieneTests(unittest.TestCase):
                         "a banned path inside metadata is not detected")
 
 
+class NotebookCopyParityTests(unittest.TestCase):
+    """The two shipped copies of a notebook must teach the same thing.
+
+    Every tutorial ships twice: ``notebooks/`` for someone reading the repository, and
+    ``docs/tutorials/`` for the Sphinx site (``docs/conf.py`` renders .ipynb through myst-nb with
+    execution off, so the docs copy is what a visitor actually reads). Two builders keep their own
+    pairs in step, but ``SHAARP_py_step_by_step.ipynb`` is hand-maintained -- and it drifted: the
+    repo copy got the "nothing needs installing" rewrite while the published copy still told
+    readers to run ``%pip install -e ".."``, a relative path that resolves from one directory only.
+
+    Nothing caught it because ``tests/test_interactive.py`` asserts against ``notebooks/`` alone,
+    leaving the published copy unexamined. This fence compares SOURCE cells only: outputs and
+    execution counts legitimately differ between a re-executed copy and its sibling, and comparing
+    those would go red on every regeneration -- a fence that cries wolf gets switched off.
+    """
+
+    def _pairs(self):
+        for repo_copy in sorted((ROOT / "notebooks").glob("*.ipynb")):
+            docs_copy = ROOT / "docs" / "tutorials" / repo_copy.name
+            if docs_copy.exists():
+                yield repo_copy, docs_copy
+
+    @staticmethod
+    def _sources(path: Path):
+        nb = json.loads(path.read_text(encoding="utf-8"))
+        return [(c.get("cell_type"), "".join(c.get("source", []))) for c in nb.get("cells", [])]
+
+    def test_both_shipped_copies_carry_the_same_instructions(self):
+        for repo_copy, docs_copy in self._pairs():
+            with self.subTest(notebook=repo_copy.name):
+                repo_cells, docs_cells = self._sources(repo_copy), self._sources(docs_copy)
+                self.assertEqual(
+                    len(repo_cells), len(docs_cells),
+                    f"{repo_copy.name}: notebooks/ has {len(repo_cells)} cells, "
+                    f"docs/tutorials/ has {len(docs_cells)} -- copy one over the other")
+                for i, (repo_cell, docs_cell) in enumerate(zip(repo_cells, docs_cells)):
+                    self.assertEqual(
+                        repo_cell, docs_cell,
+                        f"{repo_copy.name} cell {i} differs between notebooks/ and "
+                        f"docs/tutorials/. The docs copy is the one rendered on the site, so a "
+                        f"stale cell there is what visitors read.")
+
+    def test_the_pairing_is_not_vacuous(self):
+        """Without this, an empty docs/tutorials/ would make the fence above pass trivially."""
+        pairs = list(self._pairs())
+        self.assertGreaterEqual(len(pairs), 5, f"expected >=5 paired notebooks, found {len(pairs)}")
+        self.assertIn("SHAARP_py_step_by_step.ipynb", {p.name for p, _ in pairs})
+
+
 if __name__ == "__main__":
     unittest.main()

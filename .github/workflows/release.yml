@@ -94,6 +94,10 @@ jobs:
       matrix:
         os: [windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
+    # Backstop under the builder's own per-smoke timeout: if anything else in the job wedges,
+    # it fails here rather than holding a runner to GitHub's 6-hour default -- a hung windowed
+    # smoke once did exactly that. A healthy build finishes well inside this.
+    timeout-minutes: 60
     env:
       PYTHONIOENCODING: utf-8
       MPLBACKEND: Agg
