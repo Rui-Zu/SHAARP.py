@@ -419,6 +419,44 @@ def _load_logo_pixmap(QtGui):
     return _load_asset_pixmap(QtGui, "shaarp_ml_logo.png")
 
 
+def _layer_specs_equal(old: dict, new: dict) -> bool:
+    """True only when two layer specs are CERTAINLY identical.
+
+    Used to decide whether writing the edit fields back into the stack was a real user edit.
+    Clicking Update settles the selected row first, and that write-back used to mark a named
+    preset "edited (re-select to reset)" even when nothing had been touched -- which also routed
+    the compute down the modified-working-copy branch instead of the pristine factory one.
+
+    Deliberately conservative: any value we cannot compare confidently (a numpy tensor inside a
+    custom row, a nested dict, an exotic type) reports "different", which preserves the previous
+    always-dirty behaviour. A false "changed" costs a cosmetic marker; a false "unchanged" would
+    silently drop a real edit.
+    """
+    if old is new:
+        return True
+    if set(old) != set(new):
+        return False
+    for key in old:
+        a, b = old[key], new[key]
+        if key == "material":
+            # The stack holds the REGISTRY KEY ("Quartz z-cut (800 nm)") while the picker displays
+            # the palette label ("Quartz z-cut · 800 nm"). Comparing those raw strings made every
+            # settle look like a material change -- the actual reason untouched presets went dirty.
+            from .casestudy_materials import resolve_case_label
+            if resolve_case_label(a) != resolve_case_label(b):
+                return False
+            continue
+        if isinstance(a, (str, bool, int, float)) and isinstance(b, (str, bool, int, float)):
+            if type(a) is bool or type(b) is bool:
+                if bool(a) != bool(b):
+                    return False
+            elif a != b:
+                return False
+            continue
+        return False  # anything richer: do not guess
+    return True
+
+
 def _hline(QtWidgets):
     line = QtWidgets.QFrame()
     line.setFrameShape(QtWidgets.QFrame.HLine)
@@ -878,6 +916,12 @@ def build_main_window():
     progress.setValue(0)
     progress.setFormat("Ready")  # idle state; becomes "Computing…" then "100% Completed" per Update
     progress.setMaximumWidth(220)
+    # ...and never narrower than its own longest label. With only a maximum set, the bar could be
+    # squeezed until "100% Completed" rendered as "00% Completed" -- which is what both shipped
+    # documentation screenshots caught it doing. Measured from the widget's own font so it holds
+    # under another theme or DPI, and capped at the 220 maximum so it can never widen the window.
+    progress.setMinimumWidth(
+        min(220, progress.fontMetrics().horizontalAdvance("100% Completed") + 26))
     progress.setToolTip("Computation progress. Shows '100% Completed' after each Update (top, "
                         "input-panel, and output-panel Update buttons all recompute).")
     h_lay.addWidget(progress, 0)
@@ -1617,6 +1661,9 @@ def build_main_window():
                 if layer_mat.currentText() == ISOTROPIC_LAYER_CHOICE:
                     # the grids (Dielectric Tensors panel) own the values now — carry them over
                     spec["iso_n"] = list(old.get("iso_n") or [1.45, 1.46])
+                # settled_unchanged: the fields still hold exactly what is already in the stack,
+                # so this write-back is not a user edit and must not dirty the preset.
+                settled_unchanged = _layer_specs_equal(old, spec)
                 stack_state["stack"][i] = spec
                 sel = system_preset.currentText()
                 if sel == "N-layer stack (editor)":
@@ -1628,8 +1675,9 @@ def build_main_window():
                     # already reads stack_film_thickness_um — live, no divergence
                     _simple_template["um"] = float(layer_thick.value())
                     return
-                # any other edit diverges the working copy from the factory path
-                _set_ml_dirty(True)
+                # any other REAL edit diverges the working copy from the factory path
+                if not settled_unchanged:
+                    _set_ml_dirty(True)
 
             def _on_count_change(n):
                 # no mode switch — a count change modifies the working copy in place

@@ -250,7 +250,7 @@ def _material_from_iso(n_w: float, n_2w: float, name: str = "isotropic medium"):
     from .config import CrystalOrientation, CrystalStructure, Material
 
     return Material(
-        name=name, structure=CrystalStructure(point_group="1"),
+        name=name, structure=CrystalStructure(point_group="∞∞m"),
         orientation=CrystalOrientation(),
         epsilon_omega=(np.eye(3) * float(n_w) ** 2).astype(complex),
         epsilon_2omega=(np.eye(3) * float(n_2w) ** 2).astype(complex),

@@ -38,7 +38,7 @@ jobs:
           cache: pip
 
       - name: Install package
-        run: pip install -e ".[desktop,symbolic]"
+        run: pip install -e ".[desktop]"
 
       - name: Point offscreen Qt at the system fonts (Windows only)
         if: runner.os == 'Windows'

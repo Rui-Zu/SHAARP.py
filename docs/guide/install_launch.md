@@ -5,13 +5,24 @@
 Download the bundle for your system from this repository's **Releases** page (the app and the
 library live in one repo; each bundle is built by CI directly from the tagged source), extract it,
 and run. The bundle contains the interpreter, all dependencies, and the validation benchmark data.
-If that page is empty, no packaged build has been published yet — use Option 2 below in the
-meantime.
 
 | System | Download | Run |
 |---|---|---|
-| Windows (64-bit) | `SHAARP_py_v…_win64.zip` | double-click `SHAARP_py\SHAARP_py.exe` |
-| macOS (Apple Silicon) | `SHAARP_py_v…_macos.zip` | open `SHAARP_py/SHAARP_py.app` |
+| Windows (64-bit) | `SHAARP_py_v…_win64.zip` | extract, then double-click `SHAARP_py\SHAARP_py.exe` |
+| macOS, Apple Silicon (M-series) | `SHAARP_py_v…_macos_arm64.zip` | extract, then open `SHAARP_py/SHAARP_py.app` |
+
+On an **Intel Mac**, Linux, or any other system there is no packaged build — use Option 2 below.
+The macOS bundle is Apple Silicon only and an Intel Mac refuses it with *"not supported on this
+Mac"*.
+
+**Windows first launch** — extract the zip before running anything: the app needs the `_internal`
+folder next to the `.exe`, so double-clicking straight out of the zip fails, usually with no
+message at all. Then:
+
+- Windows may show a blue **"Windows protected your PC"** box, because the app is not code-signed
+  → **More info → Run anyway**.
+- The first launch takes 10–30 seconds while the system scans the bundle, with no window on
+  screen. Later launches are quick.
 
 **macOS first launch** — the app is not Apple-signed, so macOS blocks the first open. One-time fix:
 
@@ -33,7 +44,7 @@ beginner problems. Check it worked by typing `python --version` in a terminal.
 **2. Install SHAARP.py** — one command, from any directory. Nothing to download or unzip:
 
 ```bash
-pip install "shaarp-py[desktop,symbolic] @ git+https://github.com/Rui-Zu/SHAARP.py"
+pip install "shaarp-py[desktop,interactive] @ git+https://github.com/Rui-Zu/SHAARP.py"
 ```
 
 If your system says `pip` is not found, write `python -m pip install …` instead.
@@ -41,15 +52,15 @@ If your system says `pip` is not found, write `python -m pip install …` instea
 You now have `import shaarp` from anywhere, plus two commands: **`shaarp-gui`** (launches the app)
 and `shaarp` (a small CLI).
 
-**Choosing less than everything.** The base requirements — NumPy, SciPy, matplotlib — always come
-along. Replace the bracketed extras in the command above with:
+**Choosing less than everything.** The base requirements — NumPy, SciPy, matplotlib and SymPy —
+always come along. Replace the bracketed extras in the command above with:
 
 | Extras | Adds |
 |---|---|
-| *(omit the brackets entirely)* | nothing — solvers only |
-| `[symbolic]` | closed-form symbolic expressions and d-extraction (SymPy) |
+| *(omit the brackets entirely)* | nothing — the full solver library, including the closed-form symbolic tools |
 | `[interactive]` | the Jupyter-widget session (ipywidgets) |
-| `[desktop,symbolic]` | everything, including the desktop GUI — recommended |
+| `[desktop]` | the desktop GUI and the `shaarp-gui` command (Qt) |
+| `[desktop,interactive]` | everything — recommended |
 
 **Working on the source** — clone it and install in place, so edits take effect without
 reinstalling:
@@ -57,7 +68,7 @@ reinstalling:
 ```bash
 git clone https://github.com/Rui-Zu/SHAARP.py
 cd SHAARP.py
-pip install -e ".[desktop,symbolic]"
+pip install -e ".[desktop,interactive]"
 ```
 
 **Running without installing** — from the repository root, with the dependencies present:

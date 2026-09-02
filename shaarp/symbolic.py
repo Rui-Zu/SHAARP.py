@@ -12,7 +12,7 @@ def _sympy():
     except ImportError as exc:
         raise ImportError(
             "Symbolic SHAARP helpers require SymPy. Install with "
-            "`python -m pip install -e .[symbolic]` or `python -m pip install sympy`."
+            "`python -m pip install sympy`."
         ) from exc
     return sp
 
@@ -346,6 +346,7 @@ def fresnel_quadratic_eigenmodes_symbolic(principal_eps: Any, s: Any, *, simplif
     crystal (``e_x = e_y`` -> ordinary root ``u = 1/e_x`` makes two denominators 0).
     The clean D-formula is only valid for NON-degenerate (biaxial) media. So the
     field direction is computed degeneracy-aware:
+
       * 0 zero-denominators (biaxial generic): the D-formula.
       * 2 zero-denominators (uniaxial ordinary mode): the field lies in the
         (isotropic) degenerate plane, perpendicular to k -> ``E ~ s x optic_axis``

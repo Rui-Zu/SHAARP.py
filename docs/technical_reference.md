@@ -183,7 +183,7 @@ gated test suite, and presents one master agreement table. Attribution kept stra
 
 The notebook-first interactive entry point is `notebooks/SHAARP_py_interactive_session.ipynb`.
 It uses `shaarp.make_interactive_session()` and requires the optional interactive dependencies
-(`pip install ".[interactive]"`).
+(`pip install "shaarp-py[interactive] @ git+https://github.com/Rui-Zu/SHAARP.py"`).
 
 For the faithful two-in-one replica of the original SHAARP.si + SHAARP.ml GUIs
 (tab navigation, constrained d-tensor entry, Miller orientation, assumptions,

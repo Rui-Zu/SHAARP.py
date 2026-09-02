@@ -18,6 +18,7 @@ one broke whenever a comment was reflowed. A fence with its own copy of the logi
 """
 from __future__ import annotations
 
+import platform
 import sys
 import unittest
 from pathlib import Path
@@ -32,7 +33,7 @@ OUT = Path("dist") / "release"
 
 class ReleaseArchiveNameTests(unittest.TestCase):
     VERSIONS = ("1.0.0", "1.0.1", "1.2.3", "1.10.0", "10.20.30")
-    TOKENS = ("win64", "macos")
+    TOKENS = ("win64", "macos_arm64")
 
     def test_the_name_keeps_the_full_version_and_the_platform(self):
         for version in self.VERSIONS:
@@ -65,12 +66,20 @@ class ReleaseArchiveNameTests(unittest.TestCase):
         self.assertEqual(archive_path(OUT, "1.0.0").name,
                          f"SHAARP_py_v1.0.0_{platform_token()}.zip")
 
-    def test_one_bundle_per_operating_system(self):
-        """Windows and macOS are the built targets; the tokens carry no CPU architecture."""
-        for token in self.TOKENS:
-            name = archive_path(OUT, "1.0.0", token).name
-            self.assertNotIn("arm64", name)
-            self.assertNotIn("x86_64", name)
+    def test_the_macos_token_names_its_cpu_architecture(self):
+        """The macOS bundle is not universal2, so the asset name must say which Mac it runs on.
+
+        An arm64 app on an Intel Mac fails with "not supported on this Mac" -- not the Gatekeeper
+        dialog that every page of the documentation prepares the reader for, so none of the advice
+        applies. While the asset was named plain "macos", the only statement of the architecture
+        was a parenthesis in the README table, which a visitor arriving via the download badge
+        never sees.
+        """
+        token = platform_token()
+        if not token.startswith("macos"):
+            self.skipTest("the architecture suffix is a macOS concern")
+        self.assertRegex(token, r"^macos_\w+$")
+        self.assertIn(platform.machine(), archive_path(OUT, "1.0.0").name)
 
 
 if __name__ == "__main__":

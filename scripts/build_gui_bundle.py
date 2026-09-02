@@ -21,6 +21,7 @@ from __future__ import annotations
 import argparse
 import importlib.util
 import os
+import platform
 import shutil
 import subprocess
 import sys
@@ -216,11 +217,19 @@ def data_root(app: Path) -> Path:
 
 
 def platform_token() -> str:
-    """Suffix identifying a release archive -- one bundle per operating system."""
+    """Suffix identifying a release archive.
+
+    macOS carries its CPU architecture because the bundle is NOT universal2. An arm64 build on an
+    Intel Mac fails with "not supported on this Mac" -- which looks nothing like the Gatekeeper
+    prompt the documentation prepares people for, so the reader has no idea what went wrong. The
+    asset was previously called just "macos", which told an Intel user nothing until they had
+    downloaded 80 MB. Deriving the architecture rather than hardcoding it means the name cannot
+    lie about a bundle built on some other machine.
+    """
     if IS_WIN:
         return "win64"
     if IS_MAC:
-        return "macos"
+        return f"macos_{platform.machine()}"  # arm64 on Apple Silicon, x86_64 on Intel
     return sys.platform
 
 

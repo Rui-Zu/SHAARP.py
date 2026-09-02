@@ -1,5 +1,39 @@
 # FAQ & troubleshooting
 
+## Getting the app to open
+
+**The app does not open at all on Windows — no window, no error.**
+The zip was probably not extracted. Windows lets you double-click an `.exe` from inside a zip, but
+it unpacks only that one file, and the app needs the `_internal` folder beside it. Right-click the
+`.zip` → **Extract All…**, then run `SHAARP_py\SHAARP_py.exe` from the extracted folder. If a
+window still does not appear, give it 10–30 seconds on the first launch — the system scans the
+bundle before it starts.
+
+**Windows says "Windows protected your PC".**
+The app is not code-signed. Click **More info → Run anyway**. This is expected and appears once.
+
+**macOS says the app "is not supported on this Mac".**
+That is an Intel Mac. The packaged macOS build is Apple Silicon (M-series) only, and it is not a
+universal binary. Run SHAARP.py from Python instead — see {doc}`install_launch`, Option 2.
+
+**macOS says the app cannot be opened because it is from an unidentified developer.**
+Different problem, easy fix: the app is not Apple-signed. See the macOS first-launch steps in
+{doc}`install_launch`.
+
+## Physics and results
+
+**Why does the Quartz + Au Maker-fringe curve look jagged rather than like smooth fringes?**
+Because it is under-sampled, and honestly so. That heterostructure's SHG-active layer is a 121.2 µm
+z-cut quartz plate, whose Maker fringes in incidence angle are extremely dense: sweeping 0–45° at
+the default 0.5° step (91 points) captures roughly 34 turning points, so the plotted polyline
+aliases the true oscillation. Refining the step keeps finding more structure — 0.1° resolves ~103
+turning points, 0.05° ~115, and the count has still not converged — while the sweep cost rises from
+about 6 s to about a minute. The envelope and the peak are stable throughout (the maximum moves
+only ~1%, 14.53 → 14.70), so the default is accurate about *where* the signal is and coarse about
+the fringe fine structure. Reduce the angle step in **Maker Fringes** if you need the individual
+fringes, and expect the run to take proportionally longer.
+
+
 **Why does my chosen material show "SHG ≈ 0 (symmetry-forbidden)"?**
 Because its point group is centrosymmetric or isotropic (e.g. Air and Au ∞∞m, Al₂O₃ 6/mmm, Pt m3m,
 "Blank linear" m3m). These groups sit in the *— Centrosymmetric (SHG-inactive) —* section of the

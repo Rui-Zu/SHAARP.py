@@ -1,3 +1,12 @@
+"""Smallest possible multilayer-SHG call, using the REDUCED convenience model.
+
+``multilayer_shg`` is the one-line convenience API: it is a coherent source-sum model, not the
+full SHAARP.ml forward/backward anisotropic multilayer solver, and says so in a RuntimeWarning at
+runtime. That warning is expected here -- this file shows the shortest path to a layer stack.
+
+For validated Maker fringes and transmitted SHG use ``run_maker_fringes`` /
+``compute_ml_gui_result``, as in ``maker_fringes_dense.py``. See docs/usage.md.
+"""
 import numpy as np
 import matplotlib.pyplot as plt
 

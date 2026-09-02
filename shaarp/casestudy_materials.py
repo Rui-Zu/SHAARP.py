@@ -267,7 +267,7 @@ def build_casestudy_ml_system(display_name: str, *, thickness_um: float = 1.0,
 
     def _iso(name, nw, n2w):
         return Material(
-            name=name, structure=CrystalStructure(point_group="1"), orientation=CrystalOrientation(),
+            name=name, structure=CrystalStructure(point_group="∞∞m"), orientation=CrystalOrientation(),
             epsilon_omega=(np.eye(3) * nw**2).astype(complex),
             epsilon_2omega=(np.eye(3) * n2w**2).astype(complex),
             d_voigt_pm_v=np.zeros((3, 6), dtype=complex),

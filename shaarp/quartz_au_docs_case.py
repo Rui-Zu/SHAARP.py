@@ -66,7 +66,7 @@ def _quartz_material() -> Material:
 
 def _gold_material() -> Material:
     return Material(
-        name="Au coating (docs)", structure=CrystalStructure(point_group="1"),
+        name="Au coating (docs)", structure=CrystalStructure(point_group="∞∞m"),
         orientation=CrystalOrientation(),
         epsilon_omega=(np.eye(3) * AU_N_OMEGA**2).astype(complex),
         epsilon_2omega=(np.eye(3) * AU_N_2OMEGA**2).astype(complex),

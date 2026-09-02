@@ -49,6 +49,73 @@ def _schematic_angle_texts(page):
 
 
 @unittest.skipUnless(HAVE_QT, "PySide6 not available")
+class PlainUpdateIsNotAnEdit(unittest.TestCase):
+    """Running a named preset must not mark it edited -- and the flag routes the COMPUTE.
+
+    Update settles the selected layer row before dispatching. That write-back rebuilds the spec
+    from the widgets, and the stack stores a material REGISTRY KEY ("Quartz z-cut (800 nm)") while
+    the picker displays the palette LABEL ("Quartz z-cut - 800 nm"). Comparing those two spellings
+    made every settle look like a material change, so a fresh preset went dirty the moment anyone
+    pressed Update: the group read "edited (re-select to reset)" when nothing had been touched, and
+    `on_run` then took the modified-working-copy branch instead of the pristine factory one. (The
+    two branches agree to ~1e-12, so this was never wrong numbers -- but it told the user their
+    untouched preset had been modified, on the ML tab the documentation tells them to open first.)
+
+    Both directions are pinned here: a plain Update stays clean, a real edit still dirties.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        from shaarp.desktop_app import build_main_window
+
+        cls.app = QtWidgets.QApplication.instance() or QtWidgets.QApplication([])
+        cls.win = build_main_window()
+
+    def _ml_case_group_title(self):
+        # BOTH tabs own a "Case Study and Examples" group; the ML one is last. Reading the first
+        # returns the SI tab's, which stays clean either way and hides the defect entirely.
+        titles = [g.title() for g in self.win.findChildren(QtWidgets.QGroupBox)
+                  if g.title().startswith("Case Study and Examples")]
+        self.assertTrue(titles, "no Case Study group found")
+        return titles[-1]
+
+    def _run_ml_update(self):
+        btn = [b for b in self.win.findChildren(QtWidgets.QPushButton)
+               if b.text() == "Update / Run"][-1]
+        btn.click()
+        for _ in range(120):
+            self.app.processEvents()
+
+    def test_a_plain_update_does_not_mark_an_untouched_preset_edited(self):
+        tabs = self.win.findChild(QtWidgets.QTabWidget)
+        tabs.setCurrentIndex(1)
+        for _ in range(15):
+            self.app.processEvents()
+        self.assertNotIn("edited", self._ml_case_group_title(), "dirty before anything happened")
+        self._run_ml_update()
+        self.assertNotIn(
+            "edited", self._ml_case_group_title(),
+            "a plain Update marked an untouched preset as edited -- the settle is being counted "
+            "as a user edit again (check _layer_specs_equal and the material label/key spellings)")
+
+    def test_a_real_edit_still_marks_the_preset_edited(self):
+        """The guard above must not be bought by suppressing genuine edits."""
+        tabs = self.win.findChild(QtWidgets.QTabWidget)
+        tabs.setCurrentIndex(1)
+        for _ in range(15):
+            self.app.processEvents()
+        self._run_ml_update()
+        spins = [s for s in self.win.findChildren(QtWidgets.QDoubleSpinBox)
+                 if "thickness" in (s.toolTip() or "").lower()]
+        self.assertTrue(spins, "no layer-thickness spin found")
+        spins[0].setValue(spins[0].value() + 5.0)
+        for _ in range(40):
+            self.app.processEvents()
+        self.assertIn("edited", self._ml_case_group_title(),
+                      "a real thickness edit no longer marks the preset edited")
+
+
+@unittest.skipUnless(HAVE_QT, "PySide6 not available")
 class UpdateContractAndStaleBanner(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

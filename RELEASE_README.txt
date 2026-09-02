@@ -12,8 +12,17 @@ The original Mathematica packages this port reproduces:
 
 RUNNING (no installation needed -- everything is bundled in this folder)
 -------
-Windows: double-click SHAARP_py.exe
-macOS: open SHAARP_py.app. The app is not Apple-signed, so the FIRST launch is blocked:
+Windows: EXTRACT this zip first (right-click the .zip -> "Extract All..."), then open the
+         extracted SHAARP_py folder and double-click SHAARP_py.exe. Double-clicking the .exe
+         from inside the zip will NOT work: the app needs the _internal folder beside it.
+          - Windows may show a blue "Windows protected your PC" box, because the app is not
+            code-signed: click "More info" -> "Run anyway".
+          - The first launch takes 10-30 seconds while Windows scans the bundle. Later
+            launches are quick.
+macOS: this build is for Apple Silicon (M-series) Macs. On an Intel Mac it will not open at
+       all -- run SHAARP.py from Python instead, see the repository README.
+       Extract the zip, then open SHAARP_py.app. The app is not Apple-signed, so the FIRST
+       launch is blocked:
           - macOS 15 (Sequoia) or newer: try to open it once, then go to System Settings ->
             Privacy & Security and click "Open Anyway".
           - macOS 14 or older: right-click (Control-click) the app -> Open -> Open.
@@ -25,7 +34,8 @@ YOUR FIRST CALCULATION (about one minute)
 1. The app opens on the #SHAARP.si tab. Leave every setting as it is.
 2. Under "Case Study and Examples", pick "GaAs (111)" -- one of the four worked cases of the 2022
    paper, listed under "Cases in DOI" (all at 800 nm).
-3. Click "Update / Run". The reflected SHG polarimetry I_p(phi) / I_s(phi) polar plots appear next
+3. Click "Update / Run" at the foot of the input panel -- the "Update" button in the toolbar
+   does the same thing. The reflected SHG polarimetry I_p(phi) / I_s(phi) polar plots appear next
    to a schematic of the sample.
 4. Click the #SHAARP.ml tab, keep the preset "Quartz + Au (Fig 4, 800 nm)", set Functionality to
    "Maker Fringes", and click "Update / Run" -- the transmitted SHG fringes of the 2024 paper's

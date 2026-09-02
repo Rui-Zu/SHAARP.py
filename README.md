@@ -97,17 +97,22 @@ file for your computer (open the newest release and look under *Assets*):
 
 | Your computer | Download | Then |
 |---|---|---|
-| Windows (64-bit) | `SHAARP_py_v…_win64.zip` | unzip, double-click `SHAARP_py\SHAARP_py.exe` |
-| macOS (Apple Silicon) | `SHAARP_py_v…_macos.zip` | unzip, open `SHAARP_py/SHAARP_py.app` (see the note below) |
+| Windows (64-bit) | `SHAARP_py_v…_win64.zip` (≈115 MB) | **extract the zip**, then double-click `SHAARP_py\SHAARP_py.exe` |
+| macOS, Apple Silicon (M-series) | `SHAARP_py_v…_macos_arm64.zip` (≈80 MB) | **extract the zip**, then open `SHAARP_py/SHAARP_py.app` (see the note below) |
 
-On any other system — or if the Releases page is empty, meaning no packaged build has been
-published yet — run it from Python instead: see **[Use it from Python](#use-it-from-python)**
-below.
+Extracting first matters on Windows: the app needs the `_internal` folder next to the `.exe`, so
+double-clicking straight out of the zip fails silently.
+
+**On an Intel Mac, or Linux, or any other system**, there is no packaged build — run it from
+Python instead: see **[Use it from Python](#use-it-from-python)** below. (The macOS bundle is
+Apple Silicon only; on an Intel Mac it reports *"not supported on this Mac"*.)
 
 **Step 2 — first launch.**
 
 - **Windows** may show a blue "Windows protected your PC" box because the app is not
   code-signed → **More info → Run anyway**.
+- **The first launch takes 10–30 seconds** while the operating system scans the bundle, with no
+  window on screen. Later launches are quick. Give it a moment before double-clicking again.
 - **macOS** blocks unsigned apps on the first open. One-time fix: on macOS 15 and newer, try to
   open it once, then go to **System Settings → Privacy & Security** and click **"Open Anyway"**;
   on macOS 14 and older, **right-click (Control-click) the app → Open → Open**. Terminal
@@ -118,8 +123,9 @@ below.
 1. The app opens on the **♯SHAARP.si** tab. Leave everything as it is.
 2. In **Case Study and Examples**, pick **GaAs (111)** — one of the four worked cases of the 2022
    paper, listed under *Cases in DOI* (all at 800 nm).
-3. Click **Update / Run**. The reflected SHG polarimetry *I*ₚ(φ) / *I*ₛ(φ) polar plots appear next
-   to a schematic of the sample.
+3. Click **Update / Run** at the foot of the input panel — the toolbar **Update** button, the one
+   visible in the screenshot above, does exactly the same thing. The reflected SHG polarimetry
+   *I*ₚ(φ) / *I*ₛ(φ) polar plots appear next to a schematic of the sample.
 4. Now click the **♯SHAARP.ml** tab, keep the preset **Quartz + Au (Fig 4, 800 nm)**, set
    *Functionality* to **Maker Fringes**, and click **Update / Run** — the transmitted SHG fringes
    of the 2024 paper's Fig-4 heterostructure appear.
@@ -139,12 +145,17 @@ For scripting, batch runs, and fitting your own measurements.
 **Install it with one command.** You do not need to download or clone anything:
 
 ```bash
-pip install "shaarp-py[desktop,symbolic] @ git+https://github.com/Rui-Zu/SHAARP.py"
+pip install "shaarp-py[desktop,interactive] @ git+https://github.com/Rui-Zu/SHAARP.py"
 ```
 
-That pulls in the solvers, the closed-form symbolic tools, and the desktop GUI, and takes a minute
-or two. You now have `import shaarp` available anywhere, plus a `shaarp-gui` command that launches
-the same desktop app.
+That pulls in the solvers, the closed-form symbolic tools, the desktop GUI and the Jupyter-widget
+session, and takes a minute or two. You now have `import shaarp` available anywhere, plus a
+`shaarp-gui` command that launches the same desktop app.
+
+Two things worth knowing before you paste it: SHAARP.py is **not on PyPI**, so a plain
+`pip install shaarp-py` will not find it — use the whole line above. And because that line installs
+straight from GitHub, pip needs **git** on your PATH ([git-scm.com/downloads](https://git-scm.com/downloads),
+then reopen the terminal).
 
 <details>
 <summary>If you are new to Python, or that command did not work</summary>
@@ -156,21 +167,21 @@ Start, type `cmd`; macOS: open Terminal) and check with `python --version`.
 
 **`pip` not found?** Use `python -m pip install ...` instead — same line otherwise.
 
-**Smaller installs.** Pick one; NumPy, SciPy and matplotlib always come along. Replace the
+**Smaller installs.** Pick one; NumPy, SciPy, matplotlib and SymPy always come along. Replace the
 bracketed part of the command above with:
 
-| Instead of `[desktop,symbolic]` | You get |
+| Instead of `[desktop,interactive]` | You get |
 |---|---|
-| *(nothing)* | solvers only — polarimetry, Maker fringes, Fresnel |
-| `[symbolic]` | + closed-form symbolic expressions and d-extraction (SymPy) |
+| *(nothing)* | the full solver library — polarimetry, Maker fringes, Fresnel, and the closed-form symbolic tools |
 | `[interactive]` | + the Jupyter-widget session (ipywidgets) |
+| `[desktop]` | + the desktop GUI and the `shaarp-gui` command (Qt) |
 
 **Want to read or edit the source?** Clone the repository and install it in place:
 
 ```bash
 git clone https://github.com/Rui-Zu/SHAARP.py
 cd SHAARP.py
-pip install -e ".[desktop,symbolic]"
+pip install -e ".[desktop,interactive]"
 ```
 
 The repository also carries the benchmark data, the notebooks, and the test suite, none of which
@@ -205,17 +216,27 @@ one-to-one, so anything you can click you can script. Underneath them sit the `r
 `run_si_numeric`, `run_ml_numeric`, `run_maker_fringes`, `run_fresnel_sweep`, `run_sample_rotation`,
 `run_si_full_analytical`, `run_ml_partial_analytical` — which give you the solver stages directly
 and are what [`docs/usage.md`](docs/usage.md) and the API reference document. Start with whichever
-matches how you think; they compute the same physics.
+matches how you think.
+
+One catch worth knowing before you publish a number: for single-interface work `run_si_numeric`
+defaults to a *reduced* model and says so at runtime, in a `RuntimeWarning`. Ask for the validated
+solver explicitly with `run_si_numeric(sample, {"workflow": "shaarp_si_compat", ...})`. The
+`compute_si_gui_result` / `compute_ml_gui_result` paths shown above always use the validated
+solver, which is why the example on this page uses one.
 
 ### Where to go next
 
+The library itself needs nothing but the `pip install` above. The notebooks, the examples and the
+benchmark data live in the repository, so `git clone https://github.com/Rui-Zu/SHAARP.py` if you
+want to run the rows marked ⧉.
+
 | I want to… | Go to |
 |---|---|
-| Learn the Python API step by step | [`notebooks/SHAARP_py_step_by_step.ipynb`](notebooks/SHAARP_py_step_by_step.ipynb) |
-| See worked, plotted examples | [`examples/`](examples/) — six runnable scripts (polarimetry, Maker fringes, d-extraction) |
-| Reproduce the two papers | [the two notebooks below](#reproduce-the-papers) |
+| Learn the Python API step by step ⧉ | [`notebooks/SHAARP_py_step_by_step.ipynb`](notebooks/SHAARP_py_step_by_step.ipynb) |
+| See worked, plotted examples ⧉ | [`examples/`](examples/) — six runnable scripts (polarimetry, Maker fringes, d-extraction) |
+| Reproduce the two papers ⧉ | [the two notebooks below](#reproduce-the-papers) |
 | Learn the layered API (`run_*` facades) | [`docs/usage.md`](docs/usage.md) |
-| Drive the app from a notebook | [`notebooks/SHAARP_py_interactive_session.ipynb`](notebooks/SHAARP_py_interactive_session.ipynb) |
+| Drive the app from a notebook ⧉ | [`notebooks/SHAARP_py_interactive_session.ipynb`](notebooks/SHAARP_py_interactive_session.ipynb) |
 | Read the conventions / FAQ | [`docs/conventions.md`](docs/conventions.md) · [`docs/guide/faq.md`](docs/guide/faq.md) |
 | Check what is validated, and how | [`docs/validation.md`](docs/validation.md) · honest gaps: [`docs/residual_risks.md`](docs/residual_risks.md) |
 | Read the full solver-stage reference | [`docs/technical_reference.md`](docs/technical_reference.md) |
@@ -227,10 +248,12 @@ matches how you think; they compute the same physics.
 | Path | Deliverable |
 |---|---|
 | `shaarp/` | The package: numeric + symbolic SHG solvers, polarimetry, Maker fringes, Fresnel, rotational-anisotropy scans, d-extraction, case-study materials with Mathematica-exported dispersion, and the desktop GUI source |
-| `notebooks/` | Paper reproductions, step-by-step tutorial, interactive session, benchmark dashboard |
+| `notebooks/` | Paper reproductions, step-by-step tutorial, interactive session, benchmark dashboard — the source of truth; `docs/tutorials/` holds the same five notebooks for the docs site |
 | `examples/` | Small runnable scripts with figures |
 | `benchmarks/` | Frozen live-Mathematica reference exports + the comparison tooling (no Mathematica needed to run tests) |
 | `docs/` | Full Sphinx site: GUI guide, API reference, tutorials, conventions, validation evidence |
+
+Installing the package also puts two commands on your PATH: **`shaarp-gui`** launches the desktop app, and `shaarp` is a small CLI for one-off runs (`shaarp --mode si --theta 45 --points 181 --save out.csv`; `shaarp --help` lists the options).
 | `tests/` | The gated validation suite |
 
 ## How it works
@@ -264,6 +287,10 @@ panels, with every parameter provenance-cited from the original case studies:
 Regenerate with `python build_paper_notebooks.py`.
 
 ## Documentation
+
+The pages linked above are readable directly on GitHub. A few of them — the API reference in
+particular — are Sphinx sources, so cross-references render as literal `{doc}` / `{py:func}` text
+until they are built. To read the full set as a site:
 
 ```bash
 pip install -r docs/requirements.txt

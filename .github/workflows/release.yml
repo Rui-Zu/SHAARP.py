@@ -1,7 +1,7 @@
 # Release bundles — builds the installation-free SHAARP.py desktop app natively on each platform
 # and attaches both archives to this repo's GitHub Release:
 # SHAARP_py_v{ver}_win64.zip (windows-latest)
-# SHAARP_py_v{ver}_macos.zip  (macos-latest — Apple Silicon)
+# SHAARP_py_v{ver}_macos_arm64.zip (macos-latest — Apple Silicon; NOT universal2)
 #
 # TWO WAYS TO RELEASE (a simpler way instead of clicking to ensure proper tag"):
 # 1. ONE BUTTON (recommended, no local git tagging): repo -> Actions -> "Release bundles" ->
@@ -80,10 +80,32 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           TAG="${{ steps.resolve.outputs.tag }}"
+          VER="${TAG#v}"
+          # The README's download badge links straight here, so for many visitors this page IS the
+          # instructions -- they never see Steps 1-3. --generate-notes produced a bare commit-log
+          # link, next to a "Source code (zip)" row that a non-programmer picks by mistake.
+          cat > /tmp/relnotes.md <<NOTES
+          **Windows** — download \`SHAARP_py_v${VER}_win64.zip\`, **extract the zip**, then open the
+          extracted folder and double-click \`SHAARP_py\SHAARP_py.exe\`. Running it from inside the
+          zip will not work. Windows will warn that the app is not code-signed → **More info → Run
+          anyway**. The first launch takes 10-30 seconds.
+
+          **macOS (Apple Silicon only)** — download \`SHAARP_py_v${VER}_macos_arm64.zip\`, extract it,
+          then open \`SHAARP_py/SHAARP_py.app\`. macOS blocks unsigned apps on first open: try once,
+          then **System Settings → Privacy & Security → Open Anyway** (macOS 14 and older:
+          Control-click the app → Open → Open).
+
+          **Intel Mac, Linux, anything else** — there is no packaged build; run it from Python:
+          <https://github.com/Rui-Zu/SHAARP.py#use-it-from-python>
+
+          Ignore *Source code (zip/tar.gz)* below unless you actually want the source.
+
+          Then: open the app, pick **GaAs (111)** under *Case Study and Examples*, click **Update / Run**.
+          NOTES
           if gh release view "$TAG" >/dev/null 2>&1; then
             echo "::notice::Release $TAG already exists - assets will be re-uploaded."
           else
-            gh release create "$TAG" --verify-tag --generate-notes \
+            gh release create "$TAG" --verify-tag --notes-file /tmp/relnotes.md \
               --title "SHAARP.py $TAG"
           fi
 
@@ -118,7 +140,7 @@ jobs:
 
       - name: Install the library + pinned build tools
         run: |
-          pip install -e ".[desktop,symbolic]"
+          pip install -e ".[desktop]"
           pip install "pyinstaller==6.20.0" "pyside6==6.11.1"
 
       - name: Point offscreen Qt at the system fonts (Windows only)

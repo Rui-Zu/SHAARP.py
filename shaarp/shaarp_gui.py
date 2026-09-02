@@ -934,7 +934,7 @@ def build_custom_ml_system(
         surface_hkl=surface_hkl, in_plane_uvw=in_plane_uvw, z_axes=z_axes,
     )
     substrate = Material(
-        name="custom substrate", structure=CrystalStructure(point_group="1"), orientation=CrystalOrientation(),
+        name="custom substrate", structure=CrystalStructure(point_group="∞∞m"), orientation=CrystalOrientation(),
         epsilon_omega=(np.eye(3) * substrate_n_omega**2).astype(complex),
         epsilon_2omega=(np.eye(3) * substrate_n_2omega**2).astype(complex),
         d_voigt_pm_v=np.zeros((3, 6), dtype=complex),
@@ -945,7 +945,7 @@ def build_custom_ml_system(
         ambient = presets.air()
     else:
         ambient = Material(
-            name="ambient", structure=CrystalStructure(point_group="1"), orientation=CrystalOrientation(),
+            name="ambient", structure=CrystalStructure(point_group="∞∞m"), orientation=CrystalOrientation(),
             epsilon_omega=(np.eye(3) * ambient_n_omega**2).astype(complex),
             epsilon_2omega=(np.eye(3) * ambient_n_2omega**2).astype(complex),
             d_voigt_pm_v=np.zeros((3, 6), dtype=complex),

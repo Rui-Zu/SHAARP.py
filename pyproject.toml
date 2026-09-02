@@ -19,11 +19,16 @@ requires-python = ">=3.10"
 dependencies = [
   "numpy>=1.23",
   "matplotlib>=3.7",
-  "scipy>=1.9"
+  "scipy>=1.9",
+  # Required, not optional: shaarp/__init__.py imports the symbolic solvers eagerly, so a bare
+  # `import shaarp` needs sympy. Declaring it only as the `symbolic` extra made every install
+  # without that extra unimportable.
+  "sympy>=1.12"
 ]
 
 [project.optional-dependencies]
-symbolic = ["sympy>=1.12"]
+# Kept as an empty alias so install commands that already carry [symbolic] keep resolving.
+symbolic = []
 interactive = ["ipywidgets>=8", "ipython>=8"]
 desktop = ["PySide6>=6.5"]
 dev = ["pytest>=7"]

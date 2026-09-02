@@ -9,7 +9,7 @@ from .tensors import impose_point_group
 def air() -> Material:
     return Material(
         name="Air",
-        structure=CrystalStructure(point_group="1"),
+        structure=CrystalStructure(point_group="∞∞m"),
         orientation=CrystalOrientation(),
         epsilon_omega=np.eye(3),
         epsilon_2omega=np.eye(3),
