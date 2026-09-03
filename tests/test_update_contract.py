@@ -770,7 +770,7 @@ class LayerMediumPanelContract(unittest.TestCase):
 
     def test_air_row_displays_identity_tensors(self):
         """(F-i) the author's screenshot class: selecting an AIR half-space must SHOW air — eps = I,
-        point group 1, d = 0 — and the structure/orientation/d groups must carry the
+        point group ∞∞m, d = 0 — and the structure/orientation/d groups must carry the
         'not used: isotropic medium' hint. Red pre-the mirror's registry lookup for
         'air' raises and returns early, so the panels keep the PREVIOUS row's tensors."""
         from PySide6 import QtWidgets as _qw
@@ -792,8 +792,9 @@ class LayerMediumPanelContract(unittest.TestCase):
                                                f"got {ew[r][c].text()!r}")
             pg = next(c for c in page.findChildren(_qw.QComboBox)
                       if c.findText("-43m") >= 0 and c.findText("1") >= 0)
-            self.assertEqual(pg.currentText(), "1",
-                             "point group must show 1 for an isotropic medium")
+            self.assertEqual(pg.currentText(), "∞∞m",
+                             "an isotropic medium is the Curie group, not triclinic 1 -- setup.nb "
+                             "declares Air and the Au coating as this group with a zero d tensor")
             for r in range(3):
                 for c in range(6):
                     self.assertAlmostEqual(complex(dd[r][c].text() or "0").real, 0.0,

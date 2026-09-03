@@ -2,14 +2,17 @@
 
 ## Option 1 — the packaged app (Windows, macOS — no Python needed)
 
-Download the bundle for your system from this repository's **Releases** page (the app and the
-library live in one repo; each bundle is built by CI directly from the tagged source), extract it,
-and run. The bundle contains the interpreter, all dependencies, and the validation benchmark data.
+**→ [Download the latest release](https://github.com/Rui-Zu/SHAARP.py/releases/latest)**
 
-| System | Download | Run |
+Pick the file for your system, extract it, and run it. There is nothing else to install: the
+bundle already contains the Python interpreter, every dependency, and the validation benchmark
+data. (The app and the library live in one repository; each bundle is built by CI directly from
+the tagged source.)
+
+| System | File to download | How to run it |
 |---|---|---|
-| Windows (64-bit) | `SHAARP_py_v…_win64.zip` | extract, then double-click `SHAARP_py\SHAARP_py.exe` |
-| macOS, Apple Silicon (M-series) | `SHAARP_py_v…_macos_arm64.zip` | extract, then open `SHAARP_py/SHAARP_py.app` |
+| Windows (64-bit) | `SHAARP_py_v1.0.0_win64.zip` (120 MB) | extract, then double-click `SHAARP_py\SHAARP_py.exe` |
+| macOS, Apple Silicon (M-series) | `SHAARP_py_v1.0.0_macos.zip` (83 MB) | extract, then open `SHAARP_py/SHAARP_py.app` |
 
 On an **Intel Mac**, Linux, or any other system there is no packaged build — use Option 2 below.
 The macOS bundle is Apple Silicon only and an Intel Mac refuses it with *"not supported on this
@@ -99,4 +102,4 @@ launching.
 Inside the app, use **Help → User Guide** for a condensed workflow summary and **Help → About /
 References** for citation information. Hover any control for a tooltip describing it.
 
-Next: {doc}`interface`.
+Next: {doc}`first_run` — a three-click calculation to confirm the install works.

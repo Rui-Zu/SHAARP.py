@@ -109,9 +109,19 @@ class SymbolsMatchTheEditedLayer(unittest.TestCase):
 
     def test_known_d_binds_to_the_layer_it_was_typed_for(self):
         """A number typed into the grid describes the SELECTED layer. Pre-F61 the substitution
-        sprayed the value over every layer's symbols."""
+        sprayed the value over every layer's symbols.
+
+        Row 3 of the Fig-4 stack is the Au coating, whose point group is the Curie group oooom
+        (setup.nb declares the Au 800 nm material with an explicitly zero d tensor). A centrosymmetric
+        medium HAS no independent d component, so it can carry no symbol -- it cannot play the
+        "other layer" here. Give row 3 quartz's material so it has symbols to preserve; the
+        contract under test is that declaring d11m2 known leaves ANOTHER layer's symbols alone.
+        """
         sys_ = _flagged(_flagged(self.base, 1, analytic_d=True), 2,
                         analytic_d=True, shg_active=True)
+        rows = list(sys_.layers)
+        rows[2] = dataclasses.replace(rows[2], material=rows[1].material)
+        sys_ = dataclasses.replace(sys_, layers=rows)
         r = self._run(sys_, analytical_d_known={"d11m2": 2.5})
         syms = _symbols(r)
         self.assertNotIn("d11m2", syms, "the declared-known component must be substituted")

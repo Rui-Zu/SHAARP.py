@@ -183,36 +183,14 @@ def replicate_ml_fig3() -> None:
 # --------------------------------------------------------------------------------------
 
 def replicate_ml_fig4() -> None:
-    s_bare = build_casestudy_ml_system("Quartz z-cut (800 nm)", thickness_um=123.6,
-                                       wavelength_um=0.8,
-                                       substrate_n_omega=1.0, substrate_n_2omega=1.0)
-    au = build_casestudy_material("Au coating (800 nm)", wavelength_um=0.8)
-    from dataclasses import replace
-    layers = list(s_bare.layers)
-    au_layer = Layer(name="Au coating", material=au, thickness_um=0.0139, shg_active=False)
-    s_au = replace(s_bare, layers=layers[:-1] + [au_layer, layers[-1]])
-
-    fig, axes = plt.subplots(1, 2, figsize=(12.6, 4.0))
-    for ax, system, ttl in ((axes[0], s_bare, "(b) uncoated Z-cut quartz, 123.6 $\\mu$m, 800 nm"),
-                            (axes[1], s_au, "(d) + 13.9 nm backside Au coating")):
-        th_f, i_f = _maker(system, ASSUMPTION_FMR, th_max=45.0)
-        th_h, i_h = _maker(system, ASSUMPTION_HH, th_max=45.0)
-        th_j, i_j = _maker(system, ASSUMPTION_JK, th_max=45.0)
-        mx = float(np.max(i_f))
-        ax.plot(th_j, i_j / mx, color="#7cb342", lw=0.8, alpha=0.8, label="JK")
-        ax.plot(th_h, i_h / mx, color="#3465c0", lw=0.8, alpha=0.8, label="HH")
-        ax.plot(th_f, i_f / mx, color="#e0532f", lw=0.9, label="FMR")
-        ax.set_xlabel(r"Incident Angle, $\theta_i$ ($^\circ$)")
-        ax.set_ylabel(r"$I_{pp}^{2\omega}$ (a.u.)")
-        ax.set_title(ttl, fontsize=10)
-        ax.legend(fontsize=8)
-        # report the FMR-vs-single-pass departure (the paper's central claim: small when
-        # uncoated, large with the Au mirror behind the slab)
-        n = min(len(i_f), len(i_h))
-        dev = float(np.max(np.abs(i_f[:n] - i_h[:n])) / mx)
-        print(f"ML Fig4 {ttl[:4]}: max |FMR - HH| / max(FMR) = {dev:.3f}")
-    fig.suptitle("SHAARP.py GUI-path replication -- SHAARP.ml 2024 Fig. 4(b,d)", y=1.03)
-    fig.tight_layout()
+    """ML 2024 Fig. 4(b,d) -- delegates to the notebook's panel builder so the docs replication image and the
+    Reproduce_SHAARP_ml_paper notebook draw the SAME figure: the author's own published display recipe
+    (benchmarks.paper_figures.FIG4_PUBLISHED -- common-{min,max} Rescale, FMR x1.07 / HH x1.5 / averaged x0.93
+    on panel (d), experiment own-Rescale) at the published thicknesses (123.6 um bare; 121.18 um + 13.9 nm Au).
+    Every curve is SHAARP.py (panel (d)'s HH in the author's HH-model geometry, his model overlaid dashed)."""
+    from benchmarks.paper_figures import ml_fig4_figure
+    fig, stats = ml_fig4_figure(step=0.05)
+    print("ML Fig4 stats:", {k: round(float(v), 4) for k, v in stats.items()})
     fig.savefig(OUT / "ml2024_fig4_zcut_quartz_au.png", dpi=130, bbox_inches="tight")
     plt.close(fig)
 

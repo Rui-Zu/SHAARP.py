@@ -243,11 +243,17 @@ def ml_fig4_system(*, au: bool):
     return replace(s_bare, layers=layers[:-1] + [au_layer, layers[-1]])
 
 
-def ml_fig4d_system(*, h_quartz_um: float = 121.0, au_um: float = 0.0139,
+def ml_fig4d_system(*, h_quartz_um: float = 121.18, au_um: float = 0.0139,
                     wavelength_um: float = 0.8):
-    """The PUBLISHED Fig-4(d) system: Z-cut quartz (121 um spot) + 13.9 nm backside Au.
+    """The PUBLISHED Fig-4(d) system: Z-cut quartz (121.18 um spot) + 13.9 nm backside Au.
 
-    Provenance: h1 = 121 um is the Au-coated SPOT thickness, from the figure archive itself
+    Provenance: h0 = 121.18 um is the value the PUBLISHED panel was drawn with -- the generating
+    notebook ``Jingyang_Data_GaAs_xLNO/SLAB/800nm/Maker fringes 100 um quartz/Maker fringes 100 um
+    quartz.nb`` cell 23 substitutes ``hMRP1 = 121.18`` into the closed-form models (verified by a pixel
+    overlay of that cell's curves on the published panel, 2026-09-02; the earlier 121.0 came from the
+    fig3/ archive's ``dataRui100AuFiner121um.mx`` and is a 0.18 um -- more than one 2ω-fringe period in
+    h -- off, which moves the θ=0 fringe phase: FMR(0)/FMR(max) is 0.20 at 121.18 vs 0.41 at 121.0).
+    Historical note on the earlier value: h1 = 121 um is the Au-coated SPOT thickness, from the figure archive itself
     (NAMING NOTE: the archive folder 'fig3/' and its notebooks' internal 'Fig. 3d' labels predate
     the final figure numbering — they hold the material of PUBLISHED Figures 3 AND 4; always cite
     the published label. Sources: fig3/dataRui100AuFiner121um.mx and the generating cell
@@ -270,7 +276,7 @@ def ml_fig4d_system(*, h_quartz_um: float = 121.0, au_um: float = 0.0139,
     return replace(s, layers=layers[:-1] + [au_layer, layers[-1]])
 
 
-def ml_fig4d_bare_system(*, h_quartz_um: float = 121.0, wavelength_um: float = 0.8):
+def ml_fig4d_bare_system(*, h_quartz_um: float = 121.18, wavelength_um: float = 0.8):
     """Fig 4(d)'s quartz slab WITHOUT the backside Au (air / quartz / air) — the single-slab HH/JK
     BASELINE that the full-MR Au curve departs from.
 
@@ -282,6 +288,27 @@ def ml_fig4d_bare_system(*, h_quartz_um: float = 121.0, wavelength_um: float = 0
     return build_casestudy_ml_system(
         "Quartz z-cut (800 nm)", thickness_um=h_quartz_um, wavelength_um=wavelength_um,
         substrate_n_omega=1.0, substrate_n_2omega=1.0)
+
+
+def ml_fig4d_hh_author_geometry_system(*, h_quartz_um: float = 121.18, wavelength_um: float = 0.8):
+    """The geometry the author's PUBLISHED Fig-4(d) HH model was built with: Z-cut quartz on a SEMI-INFINITE
+    Au half-space (air / quartz / Au substrate), NOT the 4-medium air/quartz/13.9 nm Au/air stack of the FMR
+    model.
+
+    Provenance (decoded from the model files themselves, 2026-09-02): the HH model
+    ``QuartzAu_800nm_HHNMRP1S0p01.mx`` and the bare model ``Quartz_800nm_HHNMRP1S0p01.mx`` share the SAME
+    three-wave numerator (coefficients -937.416 / +936.416 / 1 at 38 deg) and differ only in the exit-interface
+    prefactor and the 2w Fabry-Perot constant: |r1 r2| = 1/|12.156-13.147i| = 0.0559 for the Au model vs
+    1/48.616 = 0.0206 bare. My Fresnel product for quartz->air x quartz->BULK Au at 400 nm is 0.0560 (a 13.9 nm
+    Au film + air gives 0.035; a >=100 nm film gives the same 0.056): the HH curve saw an OPTICALLY THICK Au mirror
+    at 2w -- no thin-film interference, no Au-thickness dependence -- which the half-space models exactly.
+    (The author's SLAB generator ``...Four Medium_MRControls.nb`` has the M4 == "Null" 3-medium branch for
+    exactly this; the FMR model was exported from the 4-medium branch.) Au indices = the author's ``Au[]``
+    preset (n_w = 3.476546+2.921077i, n_2w = 2.251755+1.59665i; == the registry 'Au coating (800 nm)' to
+    0.5%)."""
+    return build_casestudy_ml_system(
+        "Quartz z-cut (800 nm)", thickness_um=h_quartz_um, wavelength_um=wavelength_um,
+        substrate_n_omega=3.476546 + 2.921077j, substrate_n_2omega=2.251755 + 1.59665j)
 
 
 def ml_fig6_system():

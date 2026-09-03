@@ -135,11 +135,13 @@ class MLPaperCaseTests(unittest.TestCase):
                         "transmitted SHG should be ~0 through the opaque 200 nm Pt electrode")
 
     def test_fig4d_published_central_bump_and_mirror_amplification(self):
-        """Published Fig 4(d) EXACT inputs (recovered from the figure archive: h1 = 121 um,
-        Au = 13.9 nm — see ml_fig4d_system's provenance): the
-        plain-FMR curve shows the published ~0.35 central bump at normal incidence, absent in HH
-        (the backward SHG reflected by the Au mirror), and the FMR fringes depart from HH far more
-        strongly than in the uncoated panel."""
+        """Published Fig 4(d) EXACT inputs (h0 = 121.18 um -- the generating cell's ``hMRP1``, Au = 13.9 nm;
+        see ml_fig4d_system's provenance): the plain-FMR curve at normal incidence sits at the published
+        fraction of its own peak. The author's closed-form FMR model gives FMR(0)/FMR(max) = 3.000/14.881 =
+        0.2016 at this thickness (my solver 0.212); the ~0.35 bump seen in the published panel is the
+        EXPERIMENT / the theta+h+lambda-averaged curve, not the raw FMR (the raw FMR shows the 0.22 centre
+        dip with 0.30 side peaks at +-3 deg). NOTE the value is a fringe-phase quantity: at the earlier
+        121.0 um it read 0.41 -- one reason the thickness must be the published 121.18."""
         from benchmarks.paper_cases import ASSUMPTION_FMR, ml_fig4d_system, ml_maker
         s = ml_fig4d_system()
         # two windows, both FRINGE-RESOLVED (0.05 deg; the ~0.4-0.5 deg fringes alias at >=0.2):
@@ -147,16 +149,83 @@ class MLPaperCaseTests(unittest.TestCase):
         _, i_0 = ml_maker(s, ASSUMPTION_FMR, th_min=0.0, th_max=2.0, step=0.05)
         _, i_w = ml_maker(s, ASSUMPTION_FMR, th_min=30.0, th_max=45.0, step=0.05)
         bump = float(i_0[0] / np.max(i_w))
-        self.assertGreater(bump, 0.28, f"(d) central bump lost (got {bump:.3f}, published ~0.35-0.4)")
-        self.assertLess(bump, 0.48, f"(d) central bump too large (got {bump:.3f}, published ~0.35-0.4)")
-        # NOTE: HH also shows the central bump at these inputs (it travels through the
-        # HOMOGENEOUS-2w multiple reflections, which HH retains) -- as in the published green curve.
+        self.assertGreater(bump, 0.16, f"(d) centre value lost (got {bump:.3f}, published model 0.2016)")
+        self.assertLess(bump, 0.26, f"(d) centre value too large (got {bump:.3f}, published model 0.2016)")
+
+    def test_fig4_published_display_recipe_numbers(self):
+        """The panel-(d) display recipe (FIG4_PUBLISHED: common-{min,max} Rescale, FMR x1.07, HH x1.5)
+        reproduces the published panel's landmark values from the author's own model exports at 121.18 um:
+        HH x1.5 peak 0.786, HH x1.5 at theta=0 0.342, FMR x1.07 at theta=0 0.216 (pixel-verified against
+        the published figure crop). Pure bookkeeping on the bundled references -- no solver."""
+        from benchmarks.paper_figures import FIG4_PUBLISHED, _fig4d_fmr_reference, _fig4d_hh_reference, _rescale
+        rec = FIG4_PUBLISHED["d"]
+        self.assertEqual(rec["h_um"], 121.18)
+        th_h, i_h = _fig4d_hh_reference()
+        th_f, i_f = _fig4d_fmr_reference()
+        lo = min(float(np.min(i_h)), float(np.min(i_f))); hi = max(float(np.max(i_h)), float(np.max(i_f)))
+        y_h = rec["hh_scale"] * _rescale(i_h, lo, hi); y_f = rec["fmr_scale"] * _rescale(i_f, lo, hi)
+        self.assertAlmostEqual(float(np.max(y_h)), 0.786, delta=0.005)
+        self.assertAlmostEqual(float(y_h[0]), 0.342, delta=0.005)
+        self.assertAlmostEqual(float(y_f[0]), 0.216, delta=0.005)
+        self.assertAlmostEqual(float(np.max(y_f)), 1.07, delta=1e-9)
+        # grids: HH 0.01 deg (5001 pts to 50 deg), FMR 0.02 deg
+        self.assertAlmostEqual(float(np.median(np.diff(th_h))), 0.01, places=6)
+        self.assertAlmostEqual(float(np.median(np.diff(th_f))), 0.02, places=6)
+
+    def test_fig4d_rendered_centre_values_track_the_published_panel(self):
+        """The RENDERED panel-(d) recipe (my FMR through the actual figure rescale on my-FMR u his-HH) at the
+        fringe-phase-sensitive theta = 0 point: FMR x1.07 centre. Published pixel value 0.216 (his model 0.2157);
+        my solver renders 0.228 (my FMR(0) sits 5.4% above his closed-form model there while the shape corr is
+        0.9994). Fenced honestly at the measured residual so a regression (or a fix) is visible -- added after an
+        independent adversarial review pass flagged that the recipe fence alone was self-referential."""
+        from benchmarks.paper_cases import ASSUMPTION_FMR, ml_fig4d_system, ml_maker
+        from benchmarks.paper_figures import FIG4_PUBLISHED, _fig4d_hh_reference, _rescale
+        rec = FIG4_PUBLISHED["d"]
+        _, i_0 = ml_maker(ml_fig4d_system(), ASSUMPTION_FMR, th_min=0.0, th_max=1.0, step=0.05)
+        _, i_w = ml_maker(ml_fig4d_system(), ASSUMPTION_FMR, th_min=30.0, th_max=45.0, step=0.05)
+        _, i_hh = _fig4d_hh_reference()
+        lo = min(0.0, float(np.min(i_hh))); hi = max(float(np.max(i_w)), float(np.max(i_hh)))
+        centre = rec["fmr_scale"] * float(_rescale(i_0[0], lo, hi))
+        self.assertTrue(0.20 < centre < 0.24, f"rendered FMR x1.07 centre {centre:.4f} (published 0.216, expected ~0.228)")
+
+    def test_fig4d_shaarp_py_HH_in_author_geometry_matches_his_HH_model(self):
+        """Panel (d) HH is now SHAARP.py's own HH computed the way the author's published HH model was built:
+        quartz on an Au HALF-SPACE (the model's 2w Fabry-Perot constant |r1 r2| = 0.0559 = quartz->air x
+        quartz->bulk-Au, no Au-thickness dependence) with his beam-frame projection of the transmitted field
+        (IT2wPout = |(Inverse[RNum].E_t)[[1]]|^2). Fence on the fringe-resolved 30-45 deg window at 0.05 deg
+        (his 0.01-deg model interpolated onto my grid): shape corr >= 0.995, peak ratio within 0.97-1.02
+        (measured 0.998 / 0.992). Near normal incidence the port sits ~4.6% above ALL of his SLAB closed forms
+        (bare and Au, FMR and HH alike) -- a shared systematic, not an HH ingredient, so it is not fenced here."""
+        from benchmarks.paper_figures import ml_fig4d_hh_author_geometry, _fig4d_hh_reference
+        th, i = ml_fig4d_hh_author_geometry(th_min=30.0, th_max=45.0, step=0.05)
+        hr, ir = _fig4d_hh_reference()
+        his = np.interp(th, hr, ir)
+        corr = float(np.corrcoef(i, his)[0, 1]); mag = float(np.max(i) / np.max(his))
+        self.assertGreater(corr, 0.995, f"SHAARP.py HH (author geometry) vs his HH model corr {corr:.4f}")
+        self.assertTrue(0.97 < mag < 1.02, f"peak ratio my/his {mag:.4f} (expected ~0.992)")
+
+    def test_fig4b_my_bare_slab_curves_match_his_models(self):
+        """Panel (b): my FMR / HH / JK for the bare 123.6 um Z-quartz slab reproduce the author's three
+        published bare-slab models (fig4b_*_reference.csv, h0 = 123.6) -- shape corr >= 0.998 and peak
+        magnitude within 5% -- on a fringe-resolved window (30-45 deg, 0.05 deg; his denser curves are
+        interpolated onto my grid, never the reverse)."""
+        from benchmarks.paper_cases import ASSUMPTION_FMR, ASSUMPTION_HH, ASSUMPTION_JK, ml_fig4_system, ml_maker
+        from benchmarks.paper_figures import _fig4b_reference
+        s = ml_fig4_system(au=False)
+        for kind, asm in (("fmr", ASSUMPTION_FMR), ("hh", ASSUMPTION_HH), ("jk", ASSUMPTION_JK)):
+            th, i = ml_maker(s, asm, th_min=30.0, th_max=45.0, step=0.05)
+            his_th, his_i = _fig4b_reference(kind)
+            his = np.interp(th, his_th, his_i)
+            corr = float(np.corrcoef(i, his)[0, 1]); mag = float(np.max(i) / np.max(his))
+            self.assertGreater(corr, 0.998, f"(b) {kind.upper()} vs the author's model corr {corr:.4f}")
+            self.assertTrue(0.95 < mag < 1.05, f"(b) {kind.upper()} peak ratio my/his {mag:.4f}")
 
     def test_fig4d_my_FMR_matches_his_closed_form_FMR(self):
         """Fig 4(d) method-equivalence fence (option B). My numeric FMR reproduces the author's OWN
         published closed-form FMR model for the Quartz+backside-Au panel (QuartzAuSimuMRP1S0p02.mx,
-        h0 = 121 um, phi = 0; embedded as benchmarks/fig4d_fmr_reference.csv) to corr >= 0.998 on the
-        shared angular window (measured 0.9993). This FMR curve is the PHYSICS RESULT; the panel-(d) HH
+        h0 = 121.18 um, phi = 0; embedded as benchmarks/fig4d_fmr_reference.csv) to corr >= 0.998 on the
+        shared angular window (measured 0.9994 at the published 121.18 um; peak ratio 0.998 on the 0.05 deg grid,
+        1.0001 on a 0.02 deg grid -- the fine-fringe peak is sampling-sensitive). This FMR curve is the PHYSICS RESULT; the panel-(d) HH
         curve is embedded from the author's HH .mx (fig4d_hh_reference.csv) because my numeric single-pass-omega
         HH diverges for the strong 13.9 nm Au reflector -- HH is the paper's deliberately-failing
         illustrative curve, so the physics claim rides on THIS fence, not on HH.
@@ -173,7 +242,7 @@ class MLPaperCaseTests(unittest.TestCase):
                                  his_on_mine / (np.max(his_on_mine) or 1.0))[0, 1])
         self.assertGreater(corr, 0.998,
                            f"my FMR vs the author's closed-form FMR corr {corr:.4f} < 0.998 (Fig 4d equivalence)")
-        # magnitudes agree too (raw a.u. peaks): my ~14.65 vs his 14.699
+        # magnitudes agree too (raw a.u. peaks): my 14.852 (0.05 deg grid; 14.883 at 0.02 deg) vs his 14.881 at 121.18 um
         mag = float(np.max(i_f) / np.max(his_i))
         self.assertTrue(0.95 < mag < 1.05, f"FMR peak magnitude ratio {mag:.4f} off (my/his)")
 
@@ -185,7 +254,7 @@ class MLPaperCaseTests(unittest.TestCase):
         _th_h, i_h = _fig4d_hh_reference()
         _th_f, i_f = _fig4d_fmr_reference()
         ratio = float(np.max(i_h) / np.max(i_f))
-        self.assertTrue(0.3 < ratio < 0.75, f"HH/FMR peak ratio {ratio:.3f} off (expected ~0.52)")
+        self.assertTrue(0.3 < ratio < 0.75, f"HH/FMR peak ratio {ratio:.3f} off (expected 0.524 at 121.18 um)")
         self.assertLess(1.5 * ratio, 1.0, "HH x1.5 must stay below the FMR peak on the normalized axis")
 
     def test_fig3_hh_and_jk_envelopes_are_close(self):

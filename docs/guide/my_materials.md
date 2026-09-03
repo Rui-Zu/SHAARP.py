@@ -21,7 +21,9 @@ summarizes these rules.
 ## Where it lives
 
 Your materials are written to `~/.shaarp/user_materials.json` — one small JSON file in the
-per-user SHAARP folder, separate from the program. It is a user store only: the built-in case
+per-user SHAARP folder, separate from the program. `~` means your home folder: on Windows
+`C:\Users\<your name>\.shaarp\`, on macOS `/Users/<your name>/.shaarp/`. Living outside the app
+folder, it survives updating or re-downloading SHAARP.py. It is a user store only: the built-in case
 studies and palette films are never modified, and a name that matches a built-in case is refused
 (`'GaAs (111)' is a built-in material or a reserved name; choose another`).
 

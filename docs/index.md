@@ -25,6 +25,7 @@ Computational Materials* equations (see {doc}`references`).
 
 guide/overview
 guide/install_launch
+guide/first_run
 guide/interface
 guide/si_tab
 guide/ml_tab
@@ -60,24 +61,34 @@ residual_risks
 references
 ```
 
-## Two ways to use SHAARP.py
+## Start here
 
-::::{grid} 1 1 2 2
+Pick the row that describes you — each is a complete path through these docs.
+
+::::{grid} 1 1 3 3
 :gutter: 3
 
-:::{grid-item-card} 🖥️ Desktop GUI
-The point-and-click app: choose a crystal or case-study material, set the geometry and polarimetry,
-and read off polar plots, Maker fringes, Fresnel curves, and copyable closed-form expressions.
+:::{grid-item-card} 🖥️ I want to run it, not code it
+**No Python needed.** Download the app, press one button, read the polar plots. Choose a
+case-study crystal or type in your own, and export the curves and closed-form expressions.
 
-Start with {doc}`guide/overview` → {doc}`guide/install_launch`.
+**[Download](https://github.com/Rui-Zu/SHAARP.py/releases/latest)** → {doc}`guide/first_run` →
+{doc}`guide/si_tab`
 :::
 
-:::{grid-item-card} 🐍 Python API
-Call the validated solvers directly: build a {py:class}`~shaarp.Material` /
-{py:class}`~shaarp.MultilayerSystem`, run a `run_*` facade, and read the
-{py:class}`~shaarp.SHAARPResult`.
+:::{grid-item-card} 🐍 I want to script it
+Call the same validated solvers the GUI calls, from your own Python: build a
+{py:class}`~shaarp.Material` or {py:class}`~shaarp.MultilayerSystem`, run it, plot it, fit your own
+measured data.
 
-Start with {doc}`usage` → {doc}`api/index`.
+{doc}`usage` → {doc}`examples/index` → {doc}`api/index`
+:::
+
+:::{grid-item-card} 🔬 I want to check the physics
+Governing equations, sign and Voigt conventions, what was compared against what and to what
+tolerance, and the known limitations — stated, not implied.
+
+{doc}`conventions` → {doc}`technical_reference` → {doc}`validation` → {doc}`residual_risks`
 :::
 ::::
 

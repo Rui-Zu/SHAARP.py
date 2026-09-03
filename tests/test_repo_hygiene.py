@@ -176,6 +176,14 @@ class RepoHygieneTests(unittest.TestCase):
                             offenders.append(f"{rel}: {label} ({m.group(0)!r})")
                     for m in _DRIVE.finditer(body):
                         value = m.group(1).strip().rstrip(",)]}")
+                        # Documentation has to SHOW the shape of a path the reader must recognise:
+                        # "on Windows C:\Users\<your name>\.shaarp\\". The angle bracket is
+                        # excluded from a path component, so the match stops dead at it -- a bare
+                        # drive stub immediately followed by a placeholder is prose, not a leak.
+                        # Narrow on purpose: C:\Users\<name> is exempt, C:\Users\<real login>
+                        # is not, because the username patterns above still fire on it.
+                        if body[m.end():m.end() + 1] == "<":
+                            continue
                         if not value.startswith(ALLOWED_ABSOLUTE):
                             offenders.append(f"{rel}: absolute path ({value[:70]!r})")
                     if process and check_process:
@@ -266,6 +274,25 @@ class RepoHygieneTests(unittest.TestCase):
             fired = any(p.search(sample) for p, _ in PATH_PATTERNS) or any(
                 not m.group(1).startswith(ALLOWED_ABSOLUTE) for m in _DRIVE.finditer(sample))
             self.assertTrue(fired, f"no path pattern fires on {sample!r}")
+
+        # The placeholder exemption must stay NARROW. Documentation has to show the shape of a
+        # path -- "on Windows C:\Users\<your name>\.shaarp\" -- and a drive stub followed straight
+        # by an angle bracket is prose. The same stub followed by a REAL login is a leak, so
+        # widening this to "anything under Users" would silently retire the fence.
+        def _abs_offenders(body):
+            return [m.group(1) for m in _DRIVE.finditer(body)
+                    if body[m.end():m.end() + 1] != "<"
+                    and not m.group(1).startswith(ALLOWED_ABSOLUTE)]
+
+        for placeholder in ("on Windows C:\\Users\\<your name>\\.shaarp\\ ",
+                            "on macOS /Users/<your name>/.shaarp/"):
+            self.assertEqual(_abs_offenders(placeholder), [],
+                             f"a documented placeholder path must not read as a leak: "
+                             f"{placeholder!r}")
+        for real in ("C:\\Users\\" + "51" "093" + "\\AppData\\Local",
+                     "see C:\\Users\\rzu\\Desktop\\out.csv"):
+            self.assertTrue(_abs_offenders(real),
+                            f"a real user path must still be flagged: {real!r}")
 
         allowed = "C:/Program Files/Wolfram Research/Wolfram/14.3/WolframKernel.exe"
         self.assertFalse([m for m in _DRIVE.finditer(allowed)

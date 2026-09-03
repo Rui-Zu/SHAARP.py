@@ -64,21 +64,32 @@ selected:
 > **— Centrosymmetric (SHG-inactive) —** -1, 2/m, mmm, 4/m, 4/mmm, -3, -3m, 6/m, 6/mmm, m3, m3m,
 > 432, ∞/m, ∞/mm, ∞∞, ∞∞m
 
-Whether a crystal is an SHG source is decided by this choice alone — there is no separate
-"SHG active" switch. Selecting a group in the first section constrains which $d_{ij}$ are
-independent; the rest follow by symmetry (e.g. 3m: $d_{16}=-d_{22}$, $d_{24}=d_{15}$; -43m: only
-$d_{14}=d_{25}=d_{36}$). Selecting a group in the second section sets $d \equiv 0$: the *SHG
-Tensor dᵢⱼ* group collapses and its title gains the suffix **"— not used: SHG-inactive point group
-(d ≡ 0)"**; choosing an active group again restores the pattern. 432 sits in the inactive section
-because its $d$ vanishes under Kleinman symmetry, as in the original.
+**Whether a crystal is an SHG source is decided by this choice alone** — there is no separate "SHG
+active" switch.
 
-**Lattice constants.** $a, b, c$ (Å) and $\alpha, \beta, \gamma$ (deg). The point group's crystal
-system locks the dependent cells (greyed out and coerced to the rule): triclinic — all free;
-monoclinic — $\alpha=\gamma=90°$; orthorhombic — all angles $90°$; tetragonal — $b=a$, angles
-$90°$; trigonal / hexagonal (and the Curie groups ∞, ∞m, ∞2, ∞/m, ∞/mm) — $b=a$,
-$\alpha=\beta=90°$, $\gamma=120°$; cubic (and ∞∞, ∞∞m) — $a=b=c$, angles $90°$. Editing $a$ under a
-locked system propagates to the locked lengths. Every palette material's cell already satisfies
-its rule, so presets load unchanged.
+- **Pick a group from the first section** and it constrains which $d_{ij}$ are independent; the
+  rest follow by symmetry. For 3m that is $d_{16}=-d_{22}$, $d_{24}=d_{15}$; for -43m only
+  $d_{14}=d_{25}=d_{36}$.
+- **Pick one from the second section** and $d \equiv 0$: the *SHG Tensor dᵢⱼ* group collapses, its
+  title gaining the suffix **"— not used: SHG-inactive point group (d ≡ 0)"**. Choosing an active
+  group again restores the pattern.
+- **432 sits in the inactive section** because its $d$ vanishes under Kleinman symmetry — as in the
+  original package.
+
+**Lattice constants.** $a, b, c$ in Å, $\alpha, \beta, \gamma$ in degrees. The point group's
+crystal system locks the dependent cells — they grey out and are coerced to the rule:
+
+| Crystal system | Locked to |
+|---|---|
+| Triclinic | nothing — all six free |
+| Monoclinic | $\alpha=\gamma=90°$ |
+| Orthorhombic | all angles $90°$ |
+| Tetragonal | $b=a$; all angles $90°$ |
+| Trigonal / hexagonal, and the Curie groups ∞, ∞m, ∞2, ∞/m, ∞/mm | $b=a$; $\alpha=\beta=90°$, $\gamma=120°$ |
+| Cubic, and ∞∞, ∞∞m | $a=b=c$; all angles $90°$ |
+
+Editing $a$ under a locked system propagates to the locked lengths. Every palette material's cell
+already satisfies its rule, so presets load unchanged.
 
 **Crystal orientation.** Three modes:
 

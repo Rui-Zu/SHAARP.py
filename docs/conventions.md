@@ -28,6 +28,33 @@ self-describing.
 - **Analyzer angle $\psi$** selects the detected polarization (rotating analyzer returns the parallel
   $I_p$ and perpendicular $I_s$ channels).
 
+## Units, and degrees vs radians
+
+Both units appear, at different layers of the API. The rule is simple: **input classes and the GUI
+use degrees; the low-level solvers use radians.**
+
+| Quantity | Unit | Where |
+|---|---|---|
+| Incidence / polarization / analyzer angle | **degrees** | GUI fields, {py:class}`~shaarp.Polarimetry`, `run_maker_fringes` angle grids |
+| The same angles | **radians** | `solve_*` solvers (`incident_theta_rad`), `extract_si_d_voigt` (`geometries`, `phi_values`), symbolic `phi` |
+| Wavelength $\lambda$ | **µm** | `MultilayerSystem(wavelength_um=…)`, GUI wavelength field |
+| Layer thickness $h$ | **µm** | `Layer(thickness_um=…)`; `None` marks a half-space |
+| Dielectric tensor $\varepsilon$ | dimensionless relative permittivity, complex | everywhere ($\varepsilon = n^2$ for an isotropic medium) |
+| Lattice constants | Å (lengths), degrees (angles) | GUI *Crystal Structure* group |
+| SHG coefficients $d_{ij}$ | pm/V | GUI *SHG Tensor* group, `d_voigt` |
+| Intensities | arbitrary units | all outputs — relative shape is meaningful, absolute scale is not |
+
+```{warning}
+**$\mu$ and $\varepsilon_0$ are a convention, not a constant of nature, in this code.** The
+low-level solvers default to SI values (`mu=MU0`, `eps0=EPS0`), while every Mathematica validation
+and every shipped benchmark runs in **natural units, `mu=1, eps0=1`**. Two consequences:
+
+- When comparing a symbolic result to a numeric one, pass **identical** `mu, eps0` to both —
+  otherwise `MU0*EPS0 = 1/c²` rescales the inhomogeneous field per polarization row.
+- Some stiff configurations (thick slabs with a metal coating, for instance) are numerically
+  unstable at SI constants and stable at `mu=1, eps0=1`. Reproduce benchmarks in natural units.
+```
+
 ## The SHG $d$ tensor (Voigt notation)
 
 The second-order nonlinear response is the $3\times6$ Voigt matrix $d_{i\mu}$ ($i=1..3$, $\mu=1..6$),

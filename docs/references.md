@@ -68,7 +68,10 @@ carries fine fringes at 20–30° that are absent for ♯SHAARP(JK).
 
 **♯SHAARP.ml 2024, Fig. 4(b,d)** — 123.6 µm Z-cut quartz at 800 nm, uncoated vs 13.9 nm backside
 Au: the FMR fine-fringe amplification with the Au mirror is replicated, including the central
-feature near $\theta_i = 0$, which the FMR model reproduces to correlation 0.9993. (An earlier
+feature near $\theta_i = 0$, which the FMR model reproduces to correlation 0.9994 at the published spot
+thickness (121.18 µm); both panels use the author's own published display recipe, and the Au
+panel's HH is SHAARP.py's HH computed in the geometry the author's HH model used (quartz on an Au
+half-space, beam-frame projection), matching that model to correlation 0.998. (An earlier
 edition of this page attributed that central bump to the authors' journal-SI parameters. That
 diagnosis came from comparing against the wrong reference curve and is retracted — see R5 in
 [residual_risks.md](residual_risks.md).)

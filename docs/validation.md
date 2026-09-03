@@ -10,8 +10,8 @@ Mathematica kernel — not against a Python re-derivation.
 > **Bottom line:** SHAARP.py reproduces the original Mathematica SHAARP package to
 > machine precision (typical max error 10⁻¹³ – 10⁻¹⁷) across solver stages,
 > geometries, the Full / JK / HH assumption modes, single-interface reflected SHG,
-> crystal orientation, and the symbolic engine. The full automated suite (216
-> modules / 1,263 tests) passes, including an offscreen pass over every selectable
+> crystal orientation, and the symbolic engine. The full automated suite (217
+> modules / 1,275 tests) passes, including an offscreen pass over every selectable
 > case × functionality on both GUI tabs.
 
 ## Additions since the evidence table below
@@ -30,7 +30,7 @@ Mathematica kernel — not against a Python re-derivation.
   + dispersion-contract warning); suite logs warning-free.
 - **Merged SHAARP.si + .ml GUI** (`shaarp.make_shaarp_gui()`) with all controls on
   the validated backends; 49 GUI tests including continuity gates.
-- Suite total: **216 modules, 1,263 tests, 0 failures**, measured by running every module in its
+- Suite total: **217 modules, 1,275 tests, 0 failures**, measured by running every module in its
   own subprocess from a clean checkout copied outside the development tree — so this is the figure
   a user reproduces after cloning, not one that holds only on the author's machine.
   Earlier editions of this file quoted **1,250 / 1,257 / 1,258** tests. Those were UNDERCOUNTS

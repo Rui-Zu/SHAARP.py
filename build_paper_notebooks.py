@@ -183,33 +183,51 @@ _show_panel('ml_fig3', 'SHAARP.ml 2024 Fig. 3')""")
     md("""## Figure 4 — Z-cut quartz, 800 nm: the effect of full multiple reflections
 
 Uncoated (left, **123.6 µm**) the three assumptions agree in envelope, and the author's experimental
-scan (black dots, the paper's exact `Rescale` normalization) rides it through both humps.
-Add a **backside Au mirror** (right) and **FMR departs strongly** — the paper's central point.
-The right panel uses the *published inputs recovered from the figure archive*: quartz
-**h₁ = 121 µm** (a different spot of the same sample than (b)'s 123.6 µm) and **13.9 nm Au**.
+scan (black dots) rides it through both humps. Add a **backside Au mirror** (right) and **FMR departs
+strongly** — the paper's central point.
 
-**What SHAARP.py computes here, and what is embedded from Dr. Zu.** The **FMR** (red), the
-**FMR+θⁱ+h+λω** average (teal), and the **JK** baseline are all computed by SHAARP.py. The red FMR is
-the physics result: it reproduces the author's *own* published closed-form FMR model for this Quartz+Au
-panel (`QuartzAuSimuMRP1S0p02.mx`) to **shape correlation 0.9993** (peak magnitude 14.65 vs 14.70) —
-printed below and fenced in `tests/test_paper_cases.py`. It carries the published **~0.4 central
-bump** at θ=0 (`d_central_bump`) and the ±38–40° experimental peaks. The thick teal curve is the
-paper's fourth model — FMR averaged over the SI-documented spreads (3° beam divergence, 50 nm
-thickness binning, ±5 nm bandwidth) — which is what the experiment follows once the fine fringes are
-smeared out; it hugs the black scan through the central dip and up to both peaks.
+**Drawn exactly the way the published panels were drawn.** Both panels use the display recipe
+transcribed from the author's generating notebook (`Maker fringes 100 um quartz.nb`, cells 14 and 23;
+`benchmarks.paper_figures.FIG4_PUBLISHED`), which was verified by overlaying that recipe's curves on
+the published figure at pixel level: model curves are `Rescale`d on a **common** per-panel {min, max}
+(FMR ∪ HH ∪ JK on the left, FMR ∪ HH on the right) and then multiplied by the published display
+factors — right panel **FMR ×1.07, HH ×1.5, averaged ×0.93** (the "× 1.5" the paper prints beside
+the green curve); the experiment is `Rescale`d to [0, 1] on its own (×0.91 and a +0.1° stage offset
+on the left panel). The right panel is computed at the **published spot thickness h₀ = 121.18 µm**
+(the cell's `hMRP1`; a 0.18 µm change is more than one 2ω-fringe period in thickness and moves the
+θ = 0 fringe phase, which is why the earlier 121.0 µm rendering looked wrong at the centre) with
+**13.9 nm Au**.
 
-The **green HH ×1.5** curve is **the author's own published HH model** (`QuartzAu_800nm_HHNMRP1S0p01.mx`),
-embedded directly rather than recomputed. For the strong 13.9 nm Au *reflector*, SHAARP.py's numeric
-single-pass-ω HH diverges from his closed-form HH — decoded from his `.mx`, his HH = FMR with the ω
-Fabry-Pérot factor removed, a decomposition the interface-by-interface single-pass does not reproduce
-at r_ω ≈ 0.60 (it matches his HH to 1e-13 only on low-reflectance *dielectric* stacks). HH is the
-paper's **deliberately-failing** illustrative curve: it under-captures the total transmitted SHG (that
-FMR ⊋ HH is the whole point of the panel), so the physics claim rides on the FMR agreement above, not
-on HH. Even after the paper's ×1.5 display boost the green stays below the red FMR peak.""")
+**What SHAARP.py computes here, and what is embedded from Dr. Zu.** Left panel: JK / HH / FMR are all
+SHAARP.py, fenced against the author's three bare-slab models (`fig4b_*_reference.csv`, corr ≥ 0.998).
+Right panel: the **FMR** (red) and the **FMR+θⁱ+h+λω** curve (teal — the author's method: a plain
+mean over 0.80 µm of equivalent thickness for the h and λ spreads, then a 3° moving average for the
+beam divergence, then its own Rescale ×0.93) are SHAARP.py. The red FMR is the physics result: at the
+published thickness it reproduces the author's *own* closed-form FMR model (`QuartzAuSimuMRP1S0p02.mx`)
+to **shape correlation 0.9994 with peak magnitude ratio 1.0001** — printed below and fenced in
+`tests/test_paper_cases.py`. The raw FMR shows the published 0.22 centre dip with 0.30 side peaks;
+the ~0.35 centre bump belongs to the experiment and the averaged curve, which hugs the black scan
+through the dip and up to both peaks.
+
+The **green HH ×1.5** curve is now **SHAARP.py's own HH**, computed the way the author's published HH
+model was built — decoded from the model files: a *three*-medium closed form (quartz on a semi-infinite Au
+half-space; its 2ω Fabry-Pérot constant |r₁r₂| = 0.0559 equals quartz→air × quartz→*bulk*-Au, with no Au
+thickness dependence, whereas the FMR model carries the 13.9 nm thin-film factors) whose reported
+"p-out" intensity is the beam-frame x′ component of the transmitted field inside the Au. In that geometry
+and convention SHAARP.py's HH matches the author's model (dashed dark green, `QuartzAu_800nm_HHNMRP1S0p01.mx`)
+to **shape correlation 0.998 and peak ratio 0.992** on the fringe-resolved 30–45° window (fenced). The
+earlier "my HH diverges" finding was geometry plus output convention, not a single-pass-ω defect. What
+remains is a ~5 % offset near normal incidence that the port shows against *all* of the author's SLAB
+closed forms alike (FMR and HH, bare and Au) — a property of those older closed forms; the port is
+validated to ~1e-15 against the .ml numeric solver on this quartz+Au Maker case. HH is still the paper's
+**deliberately-failing** illustrative curve (FMR ⊋ HH is the point of the panel).""")
     code("""fig, dev = ml_fig4_figure(step=0.05)
 _embed_fig(fig)
-print(f"SHAARP.py FMR vs the author's closed-form FMR model = {dev['d_FMR_vs_his_FMR_corr']:.4f} "
-      f"(shape corr; his HH .mx is embedded as the HH curve)")
+print(f"SHAARP.py FMR vs the author's closed-form FMR model at 121.18 um = {dev['d_FMR_vs_his_FMR_corr']:.4f} "
+      f"(shape corr; peak ratio {dev['d_FMR_peak_ratio']:.4f}); SHAARP.py HH (author geometry) vs his HH model = "
+      f"{dev['d_HH_vs_his_HH_corr']:.4f} (peak ratio {dev['d_HH_peak_ratio']:.4f})")
+print(f"panel (b) vs the author's bare-slab models: FMR {dev['b_FMR_vs_his_corr']:.4f}  "
+      f"HH {dev['b_HH_vs_his_corr']:.4f}  JK {dev['b_JK_vs_his_corr']:.4f}")
 print('stats:', {k: round(v, 3) for k, v in dev.items()})
 _show_panel('ml_fig4', 'SHAARP.ml 2024 Fig. 4')""")
 
@@ -240,7 +258,7 @@ _show_panel('ml_fig5', 'SHAARP.ml 2024 Fig. 5')""")
 A 159 nm ZnO film on a 200 nm Pt electrode on Al₂O₃. Pt is opaque at 1550 nm, so this is a
 **reflected**-SHG measurement (transmitted ≈ 0). SHAARP.py's multilayer solver handles the
 metal interlayer and reproduces the *Iₚ* dumbbell / *Iₛ* 4-lobe reflected pattern.""")
-    code("""rows = [('ZnO // Pt // Al₂O₃', ml_fig6_system(), (45.))]
+    code("""rows = [('ZnO // Pt // Al₂O₃', ml_fig6_system(), (45.,))]
 fig = ml_polarimetry_figure(rows, channel='reflected', n_phi=73,
                             title='Fig 6 — reflected SHG polarimetry, ZnO//Pt//Al₂O₃ @ 1550 nm')
 _embed_fig(fig)

@@ -59,26 +59,35 @@ This path is validated against the exported 36-case SHAARP.si reflected `ER2w`
 stage reference when the SHAARP-compatible branch policy is selected. It is
 still marked as stage validation, not a full notebook-execution claim.
 
-Analytical facades are present as explicit scoped workflows:
-`run_si_full_analytical(..., {"workflow": "isotropic_symbolic_scaffold"})` and
-`run_ml_partial_analytical(..., {"workflow": "pnl_symbolic_scaffold"})` return
-SymPy analytical results. Both facades also accept `{"workflow": "polarimetry"}`,
-which returns the **d-extraction polarimetry** (reflected SHG as a closed form in the
-input polarization φ with d_ijk as the symbolic coefficient): the SI facade returns the
-full-analytical `E_s/E_p^2ω(φ, …)` plus the analyzed intensity `I(φ, ψ)`, and the ML
-facade the partial-analytical film polarimetry in (φ, d, h). These workflows wrap the
-validated `solve_si_shg_full_analytical_symbolic` / `solve_single_film_shg_symbolic_polarimetry`
-(test asserts the facade output is byte-identical to the solver); the scaffold workflows
-remain the defaults. For the **isotropic** class (e.g. GaAs), the SI
-full-analytical chain is now FORM-VALIDATED at every stage against the
-**published** SHAARP supplementary (npj Comput. Mater. s41524-022-00930-4,
-Suppl. Note 5, eq 9-32 for GaAs(111)): the omega-boundary fundamental fields
-(eq 29-32), the nonlinear polarization P_NL (eq 20-28, all nine ee/oo/eo
-components), the inhomogeneous `solveInhom` coefficients C_Li (eq 11-19), and the
-final 2omega-boundary signal E_p/E_s^2w (eq 9-10) — verified in BOTH the real and
-the COMPLEX (absorbing) domain, with the physically-correct decaying branch (see
-`tests/test_published_gaas111_pnl_supplementary.py` and
-`tests/test_published_gaas111_stages_supplementary.py`).
+**Analytical facades** are explicit scoped workflows, selected by the `workflow` option. Both
+`run_si_full_analytical` and `run_ml_partial_analytical` return SymPy analytical results:
+
+| Facade + workflow | Returns |
+|---|---|
+| `run_si_full_analytical(..., {"workflow": "isotropic_symbolic_scaffold"})` | SymPy analytical result (this facade's **default**) |
+| `run_ml_partial_analytical(..., {"workflow": "pnl_symbolic_scaffold"})` | SymPy analytical result (this facade's **default**) |
+| `run_si_full_analytical(..., {"workflow": "polarimetry"})` | full-analytical `E_s/E_p^2ω(φ, …)` plus the analyzed intensity `I(φ, ψ)` |
+| `run_ml_partial_analytical(..., {"workflow": "polarimetry"})` | partial-analytical film polarimetry in (φ, d, h) |
+
+The two `polarimetry` workflows are the **d-extraction polarimetry**: reflected SHG as a closed
+form in the input polarization φ, with `d_ijk` as the symbolic coefficient. They wrap the validated
+`solve_si_shg_full_analytical_symbolic` / `solve_single_film_shg_symbolic_polarimetry`, and a test
+asserts the facade output is byte-identical to the solver's.
+
+**Form validation against the published supplementary.** For the **isotropic** class (e.g. GaAs),
+every stage of the SI full-analytical chain is FORM-VALIDATED against the **published** SHAARP
+supplementary — npj Comput. Mater. s41524-022-00930-4, Suppl. Note 5 (GaAs(111), eq 9-32):
+
+| Stage | Published equations |
+|---|---|
+| ω-boundary fundamental fields | eq 29-32 |
+| Nonlinear polarization `P_NL` (all nine ee/oo/eo components) | eq 20-28 |
+| Inhomogeneous `solveInhom` coefficients `C_Li` | eq 11-19 |
+| Final 2ω-boundary signal `E_p/E_s^2ω` | eq 9-10 |
+
+Verified in **both** the real and the complex (absorbing) domain, with the physically-correct
+decaying branch — see `tests/test_published_gaas111_pnl_supplementary.py` and
+`tests/test_published_gaas111_stages_supplementary.py`.
 
 **Closed-form SHG across crystal classes and the SHG coefficient d_ijk.** Beyond the
 isotropic published case, the SI full-analytical reflected SHG is now assembled in closed

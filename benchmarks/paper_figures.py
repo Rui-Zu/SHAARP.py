@@ -20,7 +20,8 @@ if str(ROOT) not in sys.path:
 
 from benchmarks.paper_cases import (
     ASSUMPTION_FMR, ASSUMPTION_HH, ASSUMPTION_JK, FIG5_CRYSTALS, ML_CASES, MOS2_CASES, SI_CASES,
-    ml_fig4_system, ml_fig4d_system, ml_fig4d_bare_system, ml_fig6_system, ml_fig7_case, ml_maker,
+    ml_fig4_system, ml_fig4d_system, ml_fig4d_bare_system, ml_fig4d_hh_author_geometry_system,
+    ml_fig6_system, ml_fig7_case, ml_maker,
     ml_mos2_kappa_twist_sweep, ml_mos2_system, ml_polar, ml_ra_reflected_polar,
     ml_single_crystal_system,
 )
@@ -136,27 +137,37 @@ def _fig3_reference_curves():
             np.array(d["old_hhjk_0_90deg"], float))
 
 
-def _fig4d_hh_reference():
-    """the author's published closed-form HH model for Fig 4(d) (QuartzAu_800nm_HHNMRP1S0p01.mx, h0 = 121 µm,
-    φ = 0), bundled as ``fig4d_hh_reference.csv`` and used AS the HH curve on panel (d).
-
-    Why embedded (option B): my numeric single-pass-ω HH diverges from the published HH for
-    the strong-reflector 13.9 nm Au. Decoded from the author's ``.mx`` denominators, HH = FMR with the ω
-    Fabry-Pérot factor removed (single-pass ω) + full 2ω FP; my interface-by-interface single-pass does
-    not reproduce that ω-FP removal at r_ω ≈ 0.60 (it matches the author's HH to 1e-13 only on low-reflectance
-    dielectric stacks). HH is the paper's DELIBERATELY-FAILING illustrative curve (Fig 4d, shown ×1.5) —
-    '♯SHAARP(HH) fails to capture the total transmitted SHG intensity' (npj CM 10, 64 (2024), p. 19). My
-    FMR — the physics-result curve — reproduces the author's FMR model to corr 0.9993 (fenced)."""
-    d = np.loadtxt(ROOT / "benchmarks" / "fig4d_hh_reference.csv", delimiter=",")
+def _fig4_reference(name: str):
+    """(theta_deg, I) of one of the author's published closed-form model exports bundled under
+    ``benchmarks/`` (``fig4d_hh_reference.csv`` etc.; header comments carry the provenance)."""
+    d = np.loadtxt(ROOT / "benchmarks" / f"{name}.csv", delimiter=",")
     return d[:, 0], d[:, 1]
+
+
+def _fig4d_hh_reference():
+    """the author's published closed-form HH model for Fig 4(d) (QuartzAu_800nm_HHNMRP1S0p01.mx at the PUBLISHED
+    h0 = 121.18 um, 0.01 deg), bundled as ``fig4d_hh_reference.csv`` — overlaid DASHED on panel (d) as the reference
+    that SHAARP.py's own HH (:func:`ml_fig4d_hh_author_geometry`) is fenced against (corr 0.998, peak ratio 0.992).
+
+    Decoded from the file itself (2026-09-02): a THREE-medium closed form — quartz on an optically thick Au backing
+    (its 2ω Fabry-Pérot constant c = 12.156 − 13.147i at 38° gives |r₁r₂| = 1/|c| = 0.0559 = quartz→air × quartz→bulk-Au;
+    a 13.9 nm film would give 0.035, a ≥100 nm film the same 0.056 — so the constant excludes the thin film but cannot
+    separate bulk from a thick film) — reported as the beam-frame x′ component of the transmitted field inside the Au.
+    HH is the paper's DELIBERATELY-FAILING illustrative curve (Fig 4d, shown ×1.5)."""
+    return _fig4_reference("fig4d_hh_reference")
 
 
 def _fig4d_fmr_reference():
-    """the author's published closed-form FMR model for Fig 4(d) (QuartzAuSimuMRP1S0p02.mx, h0 = 121 µm, φ = 0),
-    bundled as ``fig4d_fmr_reference.csv`` — the agreement target my numeric FMR is fenced against
-    (corr 0.9993, magnitude 0.992 on the dense 0.02° grid)."""
-    d = np.loadtxt(ROOT / "benchmarks" / "fig4d_fmr_reference.csv", delimiter=",")
-    return d[:, 0], d[:, 1]
+    """the author's published closed-form FMR model for Fig 4(d) (QuartzAuSimuMRP1S0p02.mx at the PUBLISHED
+    h0 = 121.18 um, φ = 0, 0.02 deg), bundled as ``fig4d_fmr_reference.csv`` — the agreement target my
+    numeric FMR is fenced against (corr 0.9994; peak magnitude ratio 0.998 on the figure's 0.05° grid, 1.0001 on a 0.02° grid — the fine-fringe peak is sampling-sensitive)."""
+    return _fig4_reference("fig4d_fmr_reference")
+
+
+def _fig4b_reference(kind: str):
+    """the author's published bare-slab models for Fig 4(b) at h0 = 123.6 um: ``kind`` in {'fmr', 'hh', 'jk'}
+    (QuartzSimuMRP1S0p02 / Quartz_800nm_HHNMRP1S0p01 / Quartz_800nm_JKNMRP1S0p01 .mx)."""
+    return _fig4_reference(f"fig4b_{kind}_reference")
 
 
 def ml_fig3_figure(*, step: float = 0.25, th_max: float = 65.0):
@@ -219,209 +230,344 @@ def ml_fig3_figure(*, step: float = 0.25, th_max: float = 65.0):
     return fig, stats
 
 
+# The PUBLISHED Fig-4 display recipe, transcribed from the generating notebook
+# ``Jingyang_Data_GaAs_xLNO/SLAB/800nm/Maker fringes 100 um quartz/Maker fringes 100 um quartz.nb``
+# (panel (b) = cell 14, panel (d) = cell 23 -- the cells whose PlotRange/legend/×-factors match the
+# published panels; verified by a pixel overlay of the recipe on the published figure crop, 2026-09-02):
+#   * model curves are ``Rescale``d on a COMMON {min, max} taken over all model curves of the panel
+#     (FMR ∪ HH ∪ JK in (b); FMR ∪ HH in (d)), then multiplied by a per-curve display factor;
+#   * the experiment is ``Rescale``d to [0, 1] on its own (min → 0, max → 1) with θ = stage/2 (+ offset);
+#   * the (d) "FMR+θⁱ+h+λω" curve = plain mean over 62 thicknesses spanning 0.80 um about h0 (the h and
+#     λ spreads merged as an equivalent-thickness broadening), then a 150-point MovingAverage on the
+#     0.02° grid (= 3° beam divergence), then its OWN Rescale × 0.93.
+FIG4_PUBLISHED = {
+    "b": dict(h_um=123.6, fmr_scale=1.0, hh_scale=1.0, jk_scale=1.0,
+              expt_theta_offset_deg=0.1, expt_scale=0.91, inset=(30.0, 40.0, 0.7, 1.0)),
+    "d": dict(h_um=121.18, fmr_scale=1.07, hh_scale=1.5, averaged_scale=0.93,
+              expt_theta_offset_deg=0.0, expt_scale=1.0, inset=(30.0, 45.0, 0.2, 1.2),
+              h_span_um=0.80, n_h_published=62, theta_window_deg=3.0),
+}
+
 _FIG4_DAT = {
-    # published Fig-4 experimental Maker scans (raw data, fig3 archive folder):
-    # 4 columns [stage_deg, I_PinPout, monitor, NaN]; the stage reading is TWICE the physical
-    # incidence angle (T70 = +-70 deg at 0.1-deg physical step -> -140..140 at 0.2 in the file).
-    False: "Quartz_800nm_100um_MF_T70_Step1_F0p25_PinPout.dat",     # (b) uncoated
+    # published Fig-4 experimental Maker scans (raw data, the generating notebook's own folder; identical
+    # copies sit under Manuscript/fig3/): 4 columns [stage_deg, I_PinPout, monitor, NaN]; the stage
+    # reading is TWICE the physical incidence angle (T70 = +-70 deg physical at 0.1-deg physical step).
+    False: "Quartz_100um_MF_T70_Step1_F0p25_PinPout.dat",             # (b) uncoated
     True:  "Quartz_100um_5nmAuBack_MF_T70_Step0p1_F0p25_PinPout.dat",  # (d) + backside Au
 }
+_FIG4_DAT_DIRS = (
+    ROOT.parent.parent / "Jingyang_Data_GaAs_xLNO/SLAB/800nm/Maker fringes 100 um quartz",
+    ROOT.parent.parent / "Papers/Manuscript_Linear/EM Code/SHAARP_SLAB/Manuscript/fig3",
+)
 
 
-# Physical-theta points Rui manually removes from the UNCOATED (b) scan (fig3.nb "Fig 3c",
-# Position/Delete at line 1633); the Au (d) panel has NO outlier removal (verified: no Delete/Position
-# in the Fig-3d section). Applied at |theta| within 0.3 deg of a listed value (both scan signs).
-_FIG4_OUTLIER_THETA = {
-    False: (24.6, 27.0, 28.6, 41.0, 42.4, 42.6, 44.8),   # uncoated (b)
-    True: (),                                            # + backside Au (d): none
-}
-
-
-def _fig4_experiment(au: bool, *, th_window: float = 50.0):
-    """(theta_deg, I_norm) of the published Fig-4 Maker scan, THE PAPER'S OWN recipe.
-
-    The published-Fig-4 generating cell (archived under fig3/ with the pre-renumbering internal
-    label 'Fig. 3d'): select |stage/2| <= 50 deg, remove the manual outlier points (uncoated panel),
-    then ``Rescale`` the raw counts (min -> 0, max -> 1). No baseline subtraction, no monitor
-    division -- the earlier median-baseline version wrongly subtracted the (d) panel's central bump."""
-    p = (ROOT.parent.parent / "Papers/Manuscript_Linear/EM Code/SHAARP_SLAB/Manuscript/fig3"
-         / _FIG4_DAT[au])
-    if not p.exists():
-        return None
+def _fig4_experiment(au: bool, *, th_window: float = 45.0):
+    """(theta_deg, I) of the published Fig-4 Maker scan, THE PAPER'S OWN recipe (cells 14 / 23):
+    select |stage/2| <= 45 deg, θ = stage/2 + offset (+0.1° in (b), 0 in (d)), then ``Rescale`` the raw
+    counts (min -> 0, max -> 1) × the panel's DataScale (0.91 in (b), 1 in (d)). No baseline subtraction, no
+    monitor division, no outlier removal (the earlier fig3.nb draft removed 7 points from (b); the published
+    cell does not)."""
+    name = _FIG4_DAT[au]
+    p = next((d / name for d in _FIG4_DAT_DIRS if (d / name).exists()), None)
+    if p is None:
+        # the (b) scan also exists under fig3/ with an '800nm_' infix
+        alt = _FIG4_DAT_DIRS[1] / "Quartz_800nm_100um_MF_T70_Step1_F0p25_PinPout.dat"
+        if au or not alt.exists():
+            return None
+        p = alt
+    rec = FIG4_PUBLISHED["d" if au else "b"]
     raw = np.loadtxt(p, usecols=(0, 1))
     th = raw[:, 0] / 2.0                       # stage reading -> physical incidence angle
     m = np.abs(th) <= th_window
-    th, counts = th[m], raw[m, 1]
-    drops = _FIG4_OUTLIER_THETA.get(au, ())   # the author's manual bad-point removal (Rescale AFTER)
-    if drops:
-        keep = np.ones(th.shape, dtype=bool)
-        for d in drops:
-            keep &= np.abs(np.abs(th) - d) > 0.3
-        th, counts = th[keep], counts[keep]
+    th, counts = th[m] + rec["expt_theta_offset_deg"], raw[m, 1]
     lo, hi = float(np.min(counts)), float(np.max(counts))
-    return th, (counts - lo) / ((hi - lo) or 1.0)
+    return th, rec["expt_scale"] * (counts - lo) / ((hi - lo) or 1.0)
 
 
-def ml_fig4_averaged_fmr(*, step: float = 0.15, th_max: float = 45.0, h_center: float = 121.0,
-                         span_um: float = 0.80, n_h: int = 13, theta_window_deg: float = 3.0):
-    """The paper's '♯SHAARP (FMR+θⁱ+h+λω)' curve for panel (d), reproducing the author's EXACT method from
-    ``Maker fringes 100 um quartz.nb`` section "Binning Study θ+h+λ" (line 86834+):
+def _rescale(y, lo: float, hi: float):
+    """Mathematica ``Rescale[y, {lo, hi}]``: lo -> 0, hi -> 1."""
+    return (np.asarray(y, float) - lo) / ((hi - lo) or 1.0)
 
-    The wavelength (λω) spread is folded into an EQUIVALENT-THICKNESS broadening — the Maker-fringe
-    phase goes as h/λ, so a Δλ/λ shift is equivalent to a Δh/h shift (the `Abs[N[795/800]-1]*123 ≈
-    0.77 µm` justification). So h and λ MERGE into ONE Gaussian thickness-average of span
-    ``0.80 µm = 0.05 (h) + 0.75 (λ-equivalent)`` about the panel thickness (the 62 samples; N=21 here
-    captures the Gaussian core tractably), then the θ (beam-divergence) spread is a ~3° boxcar
-    (MovingAverage) — his `θAve = 150` on the 0.02° grid = 3°. NOT a ±5 nm λ re-simulation (that was
-    a prior port invention).
+
+def ml_fig4_averaged_fmr(*, step: float = 0.15, th_max: float = 45.0, h_center: float = 121.18,
+                         span_um: float = 0.80, n_h: int = 21, theta_window_deg: float = 3.0):
+    """The paper's '♯SHAARP (FMR+θⁱ+h+λω)' curve for panel (d) — the author's EXACT method from
+    ``Maker fringes 100 um quartz.nb`` cell 23 (``MFhAve[..., "Ave"]`` + ``MovingAverage``):
+
+    * h and λ spreads are ONE equivalent-thickness broadening (the Maker phase goes as h/λ, so a Δλ/λ
+      shift ≡ a Δh/h shift — his ``Abs[795/800 - 1]*123 ≈ 0.77 um`` justification): a PLAIN MEAN of the
+      FMR curve over ``n_h`` thicknesses spanning ``span_um = 0.05 (h) + 0.75 (λ-equivalent)`` about
+      ``h_center`` (his 11 + 51 = 62 samples; the mean is insensitive to the count once the ~0.14 um
+      fringe period is sampled — 21 vs 62 samples differ by < 0.003 after the own-Rescale);
+    * then the θ (beam-divergence) spread: a 3° MovingAverage (his ``θAve = 150`` points on the 0.02°
+      grid), in Mathematica's 'valid' sense — the returned θ are the window CENTRES (1.5°..th_max-1.5°),
+      which is why the published teal curve is drawn flat across |θ| < 1.5° (the mirror join).
+
+    Returns the RAW averaged intensity (the figure applies the own-Rescale × 0.93).
     """
     hs = np.linspace(h_center - span_um / 2.0, h_center + span_um / 2.0, n_h)
-    idx = np.arange(n_h) - (n_h - 1) / 2.0            # discrete Gaussian weights over the samples,
-    sigma_idx = float(np.std(np.arange(n_h))) or 1.0   # matching MFhAve's PDF[NormalDistribution]
-    wt = np.exp(-0.5 * (idx / sigma_idx) ** 2)
-    wt /= wt.sum()
     acc = None
     th = None
-    for h, w in zip(hs, wt):
+    for h in hs:
         s = ml_fig4d_system(h_quartz_um=float(h))
         th, i = ml_maker(s, ASSUMPTION_FMR, th_max=th_max, step=step)
-        acc = w * i if acc is None else acc + w * i
-    i_hl = acc                                          # h+λ Gaussian thickness-average
-    # θ beam divergence: 3° boxcar MovingAverage (θAve), edge-corrected
-    win = max(1, int(round(theta_window_deg / step)))
+        acc = i.copy() if acc is None else acc + i
+    i_hl = acc / n_h                                    # plain thickness mean (h + λ-equivalent)
+    win = max(1, int(round(theta_window_deg / step)))    # 3° boxcar = his MovingAverage[..., 150] at 0.02°
     kern = np.ones(win) / win
-    i_sm = np.convolve(i_hl, kern, mode="same")
-    norm = np.convolve(np.ones_like(i_hl), kern, mode="same")
-    return th, i_sm / norm
+    return np.convolve(th, kern, mode="valid"), np.convolve(i_hl, kern, mode="valid")
 
 
-def ml_fig4_figure(*, step: float = 0.05, th_max: float = 45.0, averaged: bool = True):
-    """Fig 4: Z-cut quartz Maker fringes, uncoated (b, 123.6 µm) vs backside-Au (d), in the
-    PAPER'S OWN format: ±45° span, model curves + the published EXPERIMENTAL scans (black dots,
-    the paper's exact 100·Rescale normalization), and the 30–40° fine-fringe inset.
+def ml_fig4d_hh_author_geometry(*, th_min: float = 0.0, th_max: float = 45.0, step: float = 0.05,
+                                h_quartz_um: float = 121.18):
+    """SHAARP.py's HH (mrassumption 2) computed the way the author's PUBLISHED Fig-4(d) HH model was: the quartz
+    slab on a semi-infinite Au half-space — optically thick Au, no thin-film interference (:func:`ml_fig4d_hh_author_geometry_system`) — and the author's OUTPUT
+    convention for the transmitted 2w field inside the absorbing Au -- his generator reports
+    ``IT2wPout = |(Inverse[RNum].E_t)[[1]]|^2``, the component of the transmitted field along the incident-beam
+    frame's x' = (cos theta, 0, -sin theta). Into AIR that projection is the full p amplitude (which is why the
+    4-medium FMR model needed no such factor); into Au, whose refracted wave is not parallel to the beam, it
+    is a cos(theta)-like factor (0.79 at 38 deg). Returns (theta_deg, I).
 
-    Panel (d) uses the PUBLISHED generating-cell substitutions (h1 = 121 µm — a different spot of
-    the sample than (b)'s 123.6 µm — and 13.9 nm backside Au; see :func:`ml_fig4d_system`), which give
-    the published ~0.35 central bump and the ±38–40° experiment peaks, plus the paper's fourth
-    curve — FMR averaged over the SI-documented θ/h/λ spreads (func:`ml_fig4_averaged_fmr`).
+    Agreement with the author's HH model (fig4d_hh_reference.csv, his 0.01-deg grid, 30-45 deg): shape corr
+    0.998, peak ratio 0.992; near normal incidence the same ~+4.6% offset the port shows against ALL of his
+    SLAB closed forms (bare and Au, FMR and HH) remains -- a port-vs-closed-form systematic in the low-signal
+    near-normal region, not an HH ingredient. This replaces the earlier 'my numeric HH diverges' finding: the
+    divergence was geometry (4-medium thin film vs the model's Au half-space) plus output convention."""
+    from shaarp.multilayer_shg_boundary import (solve_multilayer_maker_fringes_sweep,
+                                                _transmitted_waves_for_maker_policy)
+    grid = np.round(np.arange(th_min, th_max + 1e-9, step), 6)
+    r = solve_multilayer_maker_fringes_sweep(ml_fig4d_hh_author_geometry_system(h_quartz_um=h_quartz_um),
+                                             theta_deg=grid, mrassumption=2)
+    th = np.asarray(r.theta_deg, float)
+    out = np.empty_like(th)
+    for k, (res, t) in enumerate(zip(r.results, th)):
+        waves = _transmitted_waves_for_maker_policy(res.shg, "shaarp_ml_selected")
+        e = np.sum([np.asarray(w.electric, complex) for w in waves], axis=0) if waves else np.zeros(3, complex)
+        c, sn = np.cos(np.radians(t)), np.sin(np.radians(t))
+        out[k] = float(abs(e[0] * c - e[2] * sn) ** 2)     # the author's beam-frame x' projection
+    return th, out
 
-    The FMR and JK curves and the θ/h/λ averaging are all my numeric solver; my FMR reproduces the author's
-    closed-form FMR model (fig4d_fmr_reference.csv) to corr 0.9993 — reported as the panel-(d)
-    ``d_FMR_vs_his_FMR_corr`` stat. The HH curve on panel (d) is the author's OWN published HH model
-    (fig4d_hh_reference.csv, ×1.5), embedded because my numeric single-pass-ω HH diverges from his
-    closed-form HH for the strong 13.9 nm Au reflector (option B, — see
-    :func:`_fig4d_hh_reference`). HH is the paper's deliberately-failing illustrative curve.
 
-    The 0.05° step is REQUIRED: the FMR fine fringes have ~0.4–0.5° period, so a 0.3° step sits
-    under Nyquist and renders jagged sawteeth instead of smooth oscillations (caught by Rui,
-     — same aliasing class as the Fig-3 zoom).
+# ColorData[97, "ColorList"] entries the published Fig-4 cells use (sampled from the published panels):
+_FIG4_COL = {"jk": "#e09c24", "hh": "#8eb031", "fmr": "#eb6235", "avg": "#47b66d", "ref": "#2e5e1f"}
+
+
+def _fig4_schematic(ax, au: bool):
+    """Panels (a)/(c): the beam schematic (λω = 800 nm, θⁱ, Z-cut quartz [+ Au coating], ω and 2ω exits)."""
+    from matplotlib.patches import Rectangle, FancyArrowPatch, Arc
+    ax.set_xlim(0, 11); ax.set_ylim(0, 10.2); ax.set_aspect("equal"); ax.axis("off")
+    ax.add_patch(Rectangle((1.0, 4.6), 7.6, 1.6, facecolor="#c9c9c9", edgecolor="none"))
+    ax.text(4.8, 5.4, "Z-cut quartz", ha="center", va="center", fontsize=15)
+    bottom = 4.6
+    if au:
+        ax.add_patch(Rectangle((1.0, 3.85), 7.6, 0.75, facecolor="#fae08c", edgecolor="none"))
+        ax.text(4.8, 4.22, "Au coating", ha="center", va="center", fontsize=15)
+        bottom = 3.85
+    ax.add_patch(FancyArrowPatch((4.9, 6.3), (4.9, 8.7), arrowstyle="-|>", mutation_scale=18, lw=2.2,
+                                 color="black", linestyle=(0, (2.5, 2.5))))
+    ax.add_patch(FancyArrowPatch((1.9, 8.6), (4.7, 6.35), arrowstyle="-|>", mutation_scale=26, lw=3.2, color="#e60000"))
+    ax.text(1.35, 7.7, "ω", fontsize=17, style="italic")
+    ax.add_patch(Arc((4.9, 6.3), 2.6, 2.6, theta1=90, theta2=142, lw=1.6, color="black"))
+    ax.add_patch(FancyArrowPatch((3.95, 7.45), (3.7, 7.1), arrowstyle="-|>", mutation_scale=12, lw=1.4, color="black"))
+    ax.text(3.3, 8.05, r"$\theta^{i}$", fontsize=17)
+    ax.text(2.6, 9.55, r"$\lambda^{\omega} = 800\ nm$", fontsize=17, style="italic")
+    ax.add_patch(FancyArrowPatch((5.05, bottom - 0.1), (7.3, 1.9), arrowstyle="-|>", mutation_scale=26, lw=3.2, color="#e60000"))
+    ax.text(4.55, 2.2, "ω", fontsize=17, style="italic")
+    ax.add_patch(FancyArrowPatch((6.35, bottom - 0.1), (8.6, 1.9), arrowstyle="-|>", mutation_scale=26, lw=3.2, color="#1010e0"))
+    ax.text(8.5, 3.0, "2ω", fontsize=17, style="italic")
+
+
+def _fig4_style_axes(ax, *, ylim, panel: str):
+    """The published frame: thick black box, inward major+minor ticks on all four sides, serif labels."""
+    from matplotlib.ticker import MultipleLocator
+    for sp in ax.spines.values():
+        sp.set_linewidth(1.8)
+    ax.tick_params(which="both", direction="in", top=True, right=True, labelsize=14, width=1.4)
+    ax.tick_params(which="major", length=7); ax.tick_params(which="minor", length=3.5)
+    ax.xaxis.set_major_locator(MultipleLocator(20)); ax.xaxis.set_minor_locator(MultipleLocator(10))
+    ax.yaxis.set_major_locator(MultipleLocator(0.2)); ax.yaxis.set_minor_locator(MultipleLocator(0.05))
+    ax.set_xlim(-45, 45); ax.set_ylim(*ylim)
+    ax.set_xlabel(r"$\theta^{i}\,(°)$", fontsize=19, labelpad=2)
+    ax.set_ylabel("SHG Intensity (a.u.)", fontsize=19, labelpad=4)
+    ax.text(-0.16, 1.0, panel, transform=ax.transAxes, fontsize=24, fontweight="bold", va="top", ha="left")
+
+
+def ml_fig4_figure(*, step: float = 0.05, th_max: float = 45.0, averaged: bool = True, n_h: int = 21):
+    """Fig 4: Z-cut quartz Maker fringes, uncoated (b, 123.6 µm) vs backside-Au (d, 121.18 µm + 13.9 nm Au),
+    in the PAPER'S OWN display recipe (:data:`FIG4_PUBLISHED`, transcribed from the generating notebook
+    and pixel-verified against the published panels) AND the paper's own layout/styling: the 2×2 figure
+    with the (a)/(c) beam schematics, the thick-framed Mathematica plots with inward ticks, serif fonts,
+    legends outside to the right, the ColorData[97] palette, the fine-fringe insets (30–40° in (b),
+    30–45° in (d)) with their dotted region boxes, and the green "× 1.5" mark. Curves: model curves
+    Rescaled on a common per-panel {min, max} with the published ×-factors (FMR ×1.07, HH ×1.5, averaged
+    ×0.93 on panel (d)); experimental scans Rescaled to [0, 1] (×0.91, +0.1° in (b)).
+
+    Panel (b): my solver's JK / HH / FMR for the bare 123.6 µm slab, fenced against the author's three
+    bare-slab models (``fig4b_*_reference.csv``; stats ``b_*_vs_his_corr``).
+
+    Panel (d): FMR = my numeric solver at the PUBLISHED 121.18 µm (it reproduces the author's closed-form FMR
+    model at that thickness to corr 0.9994, peak ratio 0.998 — stat ``d_FMR_vs_his_FMR_corr``; the residual is
+    visible only at the fringe-phase-sensitive θ = 0 point: my FMR ×1.07 centre reads 0.228 vs the published 0.216); the
+    averaged curve = my solver through the author's θ+h+λ method (:func:`ml_fig4_averaged_fmr`); the HH
+    curve = SHAARP.py's own HH computed in the geometry and output convention the author's published HH model
+    was built with (:func:`ml_fig4d_hh_author_geometry`: quartz on an optically thick Au backing, beam-frame
+    projection of the transmitted field), with the author's model overlaid dashed — corr 0.998 / peak ratio
+    0.992 on 30–45° (stats ``d_HH_vs_his_HH_corr`` / ``d_HH_peak_ratio``). HH is the paper's deliberately-failing
+    illustrative curve.
+
+    The 0.05° step is REQUIRED for the FMR curves: the fine fringes have ~0.4–0.5° period, so a 0.3° step
+    sits under Nyquist and renders jagged sawteeth instead of smooth oscillations (same aliasing class as
+    the Fig-3 zoom).
     """
-    fig, axes = plt.subplots(1, 2, figsize=(13.2, 4.6))
+    from matplotlib.patches import Rectangle
+    from matplotlib.lines import Line2D
     stats = {}
+    C = _FIG4_COL
 
     def mirror(th_c, y):
         return np.concatenate([-th_c[::-1], th_c]), np.concatenate([y[::-1], y])
 
-    for ax, au, ttl in ((axes[0], False, "(b) uncoated Z-cut quartz, 123.6 µm"),
-                        (axes[1], True, "(d) + backside Au (121 µm spot)")):
-        s = ml_fig4d_system() if au else ml_fig4_system(au=False)
-        th_f, i_f = ml_maker(s, ASSUMPTION_FMR, th_max=th_max, step=step)
-        mx = float(np.max(i_f)) or 1.0
-        if au:
-            # Panel (d) HH = the author's OWN published HH model (QuartzAu_800nm_HHNMRP1S0p01.mx), embedded as
-            # fig4d_hh_reference.csv (option B). My numeric single-pass-ω HH diverges from his
-            # closed-form HH for the strong 13.9 nm Au reflector — decoded from his .mx denominators, his HH
-            # = FMR with the ω Fabry-Pérot factor removed, which the interface-by-interface single-pass does
-            # not reproduce at r_ω≈0.60 (it matches his HH to 1e-13 only on low-reflectance dielectric
-            # stacks). HH is the paper's DELIBERATELY-FAILING illustrative curve; my FMR — the physics
-            # result — reproduces his FMR model to corr 0.9993 (fenced by the stat below). His HH is
-            # normalized to his FMR-reference peak so it shares the FMR-peak axis with my FMR (i_f/mx).
-            th_h, i_hh_ref = _fig4d_hh_reference()
-            fmr_th, fmr_ref = _fig4d_fmr_reference()
-            fmr_ref_peak = float(np.max(fmr_ref)) or 1.0
-            i_h = i_hh_ref / fmr_ref_peak            # his HH as a fraction of his FMR peak
-            sel = th_h <= th_max                     # clip his 0–50° grid to the ±th_max panel window
-            th_h, i_h = th_h[sel], i_h[sel]
-            hh_scale = 1.5                           # paper's HHScale display factor
-            curves = [(th_h, hh_scale * i_h, "#7cb342", "♯SHAARP.ml (HH) ×1.5", 1.2),
-                      (th_f, i_f / mx, "#e0532f", "♯SHAARP.py (FMR)", 0.8)]
-        else:
-            # Panel (b): the same uncoated slab; HH/JK are my solver's single-slab baselines.
-            s_hh = s
-            th_h, i_h = ml_maker(s_hh, ASSUMPTION_HH, th_max=th_max, step=step)
-            i_h = i_h / mx
-            hh_scale = 1.0
-            curves = [(th_h, i_h, "#7cb342", "♯SHAARP.py (HH)", 1.2),
-                      (th_f, i_f / mx, "#e0532f", "♯SHAARP.py (FMR)", 0.8)]
-        if not au:  # JK is shown only on panel (b); the published (d) panel omits it
-            th_j, i_j = ml_maker(s, ASSUMPTION_JK, th_max=th_max, step=step)
-            curves.insert(0, (th_j, i_j / mx, "#e8a33d", "♯SHAARP.py (JK)", 1.4))
+    def corr_on_my_grid(th_mine, i_mine, th_his, i_his):
+        # sample both on MY grid, interpolating only the DENSER reference (never the coarse curve onto
+        # the fine grid -- that reads a spurious ~0.988 on fringe structure)
+        his = np.interp(th_mine, th_his, i_his)
+        return float(np.corrcoef(i_mine, his)[0, 1]), his
+
+    # ---- compute both panels (curves = (theta, y, color, label, lw, ls)) ----
+    panels = {}
+    for au in (False, True):
+        rec = FIG4_PUBLISHED["d" if au else "b"]
+        x0, x1, y0, y1 = rec["inset"]
+        inset = []
         i_av = None
-        if au and averaged:
-            th_a, i_av = ml_fig4_averaged_fmr(step=0.15, th_max=th_max)
-            i_av = i_av / mx
-            curves.append((th_a, i_av, "#2aa198", "♯SHAARP.py (FMR+θⁱ+h+λω)", 2.2))
-        for th_c, y, color, lab, lw in curves:
-            xm, ym = mirror(th_c, y)
-            ax.plot(xm, ym, color=color, lw=lw, label=lab)
-        # Rescale the experiment over the PLOTTED angular window (±th_max), not the raw ±50° of the
-        # fig3.nb `Select[... <= 50 &]` cell: that ±50° window's minimum is the θ≈50° grazing tail
-        # (OFF the ±45° plot), so within the panel the center dip floated ~0.066 above the JK/HH curves
-        # (expt vs shaarp needs improving"). Rescaling over the plotted range makes the
-        # center dip the minimum, so the expt hugs the curves through the dip — matching the published panel.
+        if not au:
+            s = ml_fig4_system(au=False)                              # 123.6 um bare slab
+            th_f, i_f = ml_maker(s, ASSUMPTION_FMR, th_max=th_max, step=step)
+            th_h, i_h = ml_maker(s, ASSUMPTION_HH, th_max=th_max, step=step)
+            th_j, i_j = ml_maker(s, ASSUMPTION_JK, th_max=th_max, step=step)
+            lo = min(float(np.min(i_f)), float(np.min(i_h)), float(np.min(i_j)))
+            hi = max(float(np.max(i_f)), float(np.max(i_h)), float(np.max(i_j)))
+            y_f, y_h, y_j = (rec["fmr_scale"] * _rescale(i_f, lo, hi), rec["hh_scale"] * _rescale(i_h, lo, hi),
+                             rec["jk_scale"] * _rescale(i_j, lo, hi))
+            curves = [(th_f, y_f, C["fmr"], "♯SHAARP.py (FMR)", 1.2, "-"),
+                      (th_h, y_h, C["hh"], "♯SHAARP.py (HH)", 1.6, "-"),
+                      (th_j, y_j, C["jk"], "♯SHAARP.py (JK)", 4.5, "-")]
+            for kind, th_m, i_m in (("fmr", th_f, i_f), ("hh", th_h, i_h), ("jk", th_j, i_j)):
+                c, his = corr_on_my_grid(th_m, i_m, *_fig4b_reference(kind))
+                stats[f"b_{kind.upper()}_vs_his_corr"] = c
+                stats[f"b_{kind.upper()}_peak_ratio"] = float(np.max(i_m) / (np.max(his) or 1.0))
+            # inset: re-sweep HH/JK at 0.02° inside the window (smooth, not aliased); FMR (0.05°) is already smooth
+            th_hi, i_hi = ml_maker(s, ASSUMPTION_HH, th_min=x0, th_max=x1, step=0.02)
+            th_ji, i_ji = ml_maker(s, ASSUMPTION_JK, th_min=x0, th_max=x1, step=0.02)
+            w = (th_f >= x0) & (th_f <= x1)
+            inset = [(th_f[w], y_f[w], C["fmr"], 1.2, "-"),
+                     (th_hi, rec["hh_scale"] * _rescale(i_hi, lo, hi), C["hh"], 1.6, "-"),
+                     (th_ji, rec["jk_scale"] * _rescale(i_ji, lo, hi), C["jk"], 4.5, "-")]
+            rect = (27.5, 0.74, 15.0, 0.29)
+            ylim = (-0.03, 1.05)
+        else:
+            s = ml_fig4d_system(h_quartz_um=rec["h_um"])              # 121.18 um + 13.9 nm Au
+            th_f, i_f = ml_maker(s, ASSUMPTION_FMR, th_max=th_max, step=step)
+            # HH = SHAARP.py in the author's HH geometry + output convention (quartz on an Au half-space,
+            # beam-frame projection); the author's own HH model is overlaid dashed as the reference.
+            th_h, i_h = ml_fig4d_hh_author_geometry(th_max=th_max, step=step, h_quartz_um=rec["h_um"])
+            th_hr, i_hh_ref = _fig4d_hh_reference()
+            sel = th_hr <= th_max
+            th_hr, i_hh_ref = th_hr[sel], i_hh_ref[sel]
+            lo = min(float(np.min(i_f)), float(np.min(i_h)))          # common {min, max} over FMR ∪ HH
+            hi = max(float(np.max(i_f)), float(np.max(i_h)))
+            y_f = rec["fmr_scale"] * _rescale(i_f, lo, hi)
+            y_h = rec["hh_scale"] * _rescale(i_h, lo, hi)
+            y_hr = rec["hh_scale"] * _rescale(i_hh_ref, lo, hi)
+            curves = [(th_hr, y_hr, C["ref"], "♯SHAARP.ml (HH), author's model", 0.6, "--"),
+                      (th_h, y_h, C["hh"], "♯SHAARP.py (HH)", 1.0, "-"),
+                      (th_f, y_f, C["fmr"], "♯SHAARP.py (FMR)", 1.2, "-")]
+            wh = th_h >= 30.0                                          # fringe-resolved peak window
+            his_on = np.interp(th_h[wh], th_hr, i_hh_ref)
+            stats["d_HH_vs_his_HH_corr"] = float(np.corrcoef(i_h[wh], his_on)[0, 1])
+            stats["d_HH_peak_ratio"] = float(np.max(i_h[wh]) / (np.max(his_on) or 1.0))
+            fmr_th, fmr_ref = _fig4d_fmr_reference()
+            c, his = corr_on_my_grid(th_f, i_f, fmr_th, fmr_ref)
+            stats["d_FMR_vs_his_FMR_corr"] = c
+            stats["d_FMR_peak_ratio"] = float(np.max(i_f) / (np.max(his) or 1.0))
+            stats["d_central_bump"] = float(i_f[0] / (np.max(i_f) or 1.0))   # his model: 0.2016
+            stats["d_HH_x1p5_peak"] = float(np.max(y_h))                     # published 0.786 (his model 0.786)
+            stats["d_HHref_x1p5_peak"] = float(np.max(y_hr))
+            stats["d_FMR_x1p07_centre"] = float(y_f[0])                       # published 0.216
+            if averaged:
+                th_a, i_raw = ml_fig4_averaged_fmr(step=0.15, th_max=th_max, h_center=rec["h_um"],
+                                                   span_um=rec["h_span_um"], n_h=n_h,
+                                                   theta_window_deg=rec["theta_window_deg"])
+                i_av = rec["averaged_scale"] * _rescale(i_raw, float(np.min(i_raw)), float(np.max(i_raw)))
+                curves.append((th_a, i_av, C["avg"], r"♯SHAARP.py (FMR+$\theta^{i}$+$h$+$\lambda^{\omega}$)", 8.0, "-"))
+            # inset: re-sweep my HH at 0.02 deg in the window (fringe period ~0.29 deg); his model is 0.01 deg
+            th_hi, i_hi = ml_fig4d_hh_author_geometry(th_min=x0, th_max=x1, step=0.02, h_quartz_um=rec["h_um"])
+            wr = (th_hr >= x0) & (th_hr <= x1)
+            w = (th_f >= x0) & (th_f <= x1)
+            inset = [(th_hr[wr], y_hr[wr], C["ref"], 0.5, "--"),
+                     (th_hi, rec["hh_scale"] * _rescale(i_hi, lo, hi), C["hh"], 1.0, "-"),
+                     (th_f[w], y_f[w], C["fmr"], 1.2, "-")]
+            if i_av is not None:
+                wa = (th_a >= x0) & (th_a <= x1)
+                inset.append((th_a[wa], i_av[wa], C["avg"], 7.0, "-"))
+            rect = (29.5, 0.53, 15.0, 0.59)
+            ylim = (-0.03, 1.13)
         expt = _fig4_experiment(au, th_window=th_max)
         if expt is not None:
             th_e, i_e = expt
-            m = np.abs(th_e) <= th_max
-            # the paper Rescales the experiment to [0, 1]; put its max on the curve it follows
-            # (the averaged curve in (d); the smooth JK/HH envelope in (b)). Panel (d) without the
-            # averaged curve falls back to the FMR peak (=1.0) — JK is not computed on (d) anymore.
-            if i_av is not None:
-                target = float(np.max(i_av))
-            elif not au:
-                target = float(np.max(i_j)) / mx
-            else:
-                target = 1.0
-            sc = target / (float(np.max(i_e[m])) or 1.0)
-            ax.plot(th_e[m], i_e[m] * sc, "k.", ms=1.6, label="Expt. (the author's scan)")
             stats[f"expt_overlaid_{'d' if au else 'b'}"] = 1.0
             if i_av is not None:
-                ii = np.interp(np.abs(th_e[m]), th_a, i_av)
-                stats["expt_vs_averaged_corr"] = float(np.corrcoef(i_e[m] * sc, ii)[0, 1])
-        ax.set_xlabel(r"Incident angle $\theta_i$ (°)"); ax.set_ylabel(r"$I_{pp}^{2\omega}$ (norm.)")
-        ax.set_title(ttl, fontsize=10); ax.legend(fontsize=6.5, loc="upper left")
-        axi = ax.inset_axes([0.36, 0.62, 0.30, 0.33])
-        # inset fine fringes over 30–40°. Panel (b): re-sweep HH/JK at 0.02° (smooth, not aliased).
-        # Panel (d): slice the author's embedded HH reference (already 0.02°). FMR (0.05°, ~0.4–0.5° period) is
-        # already smooth so slice the main array.
-        wm = (th_f >= 30.0) & (th_f <= 40.0)
-        if au:  # published (d) omits JK; HH = the embedded reference sliced to the window
-            im = (th_h >= 30.0) & (th_h <= 40.0)
-            axi.plot(th_h[im], hh_scale * i_h[im], color="#7cb342", lw=1.0)
-        else:
-            th_hi, i_hi = ml_maker(s_hh, ASSUMPTION_HH, th_min=30.0, th_max=40.0, step=0.02)
-            th_ji, i_ji = ml_maker(s, ASSUMPTION_JK, th_min=30.0, th_max=40.0, step=0.02)
-            axi.plot(th_ji, i_ji / mx, color="#e8a33d", lw=1.2)
-            axi.plot(th_hi, hh_scale * i_hi / mx, color="#7cb342", lw=1.0)
-        axi.plot(th_f[wm], (i_f / mx)[wm], color="#e0532f", lw=0.7)
-        if expt is not None:
-            me = (th_e >= 30.0) & (th_e <= 40.0)
-            axi.plot(th_e[me], i_e[me] * sc, "k.", ms=1.5)
-        axi.set_xlim(30, 40); axi.tick_params(labelsize=6)
-        if au:
-            # method-equivalence stat: my numeric FMR vs the author's closed-form FMR model (fig4d_fmr_reference).
-            # Sample both on MY grid, interpolating only his DENSER reference (his-fine → my-grid) so no
-            # coarse-interp artifact deflates the corr — the reverse (my-coarse → his-fine linear interp)
-            # reads ~0.988, an artifact; the true agreement on matched grids is corr 0.9993.
-            his_on_mine = np.interp(th_f, fmr_th, fmr_ref)
-            stats["d_FMR_vs_his_FMR_corr"] = float(
-                np.corrcoef(i_f / mx, his_on_mine / (np.max(his_on_mine) or 1.0))[0, 1])
-            stats["d_central_bump"] = float(i_f[0] / mx)
-        else:
-            n = min(len(i_f), len(i_h)); stats[ttl[:3]] = float(np.max(np.abs((i_f / mx)[:n] - i_h[:n])))
-    fig.suptitle("SHAARP.py reproduction — SHAARP.ml 2024 Fig. 4 (FMR departs with the Au mirror)",
-                 y=1.02, fontsize=10)
-    fig.tight_layout()
+                ii = np.interp(np.abs(th_e), th_a, i_av)
+                stats["expt_vs_averaged_corr"] = float(np.corrcoef(i_e, ii)[0, 1])
+        panels[au] = dict(curves=curves, inset=inset, expt=expt, rect=rect, ylim=ylim, window=(x0, x1, y0, y1))
+
+    # ---- draw, in the published layout and style ----
+    rc = {"font.family": ["Times New Roman", "STIXGeneral", "DejaVu Sans"], "mathtext.fontset": "stix",
+          "font.size": 14, "axes.unicode_minus": False}
+    with plt.rc_context(rc):
+        fig = plt.figure(figsize=(15.0, 9.4))
+        gs = fig.add_gridspec(2, 2, width_ratios=[0.95, 2.5], left=0.01, right=0.745, top=0.97, bottom=0.075,
+                              hspace=0.42, wspace=0.26)
+        for row, au in ((0, False), (1, True)):
+            axs = fig.add_subplot(gs[row, 0]); ax = fig.add_subplot(gs[row, 1])
+            P = panels[au]
+            _fig4_schematic(axs, au)
+            axs.text(-0.02, 1.0, "c" if au else "a", transform=axs.transAxes, fontsize=24, fontweight="bold", va="top")
+            _fig4_style_axes(ax, ylim=P["ylim"], panel="d" if au else "b")
+            handles = []
+            if P["expt"] is not None:
+                th_e, i_e = P["expt"]
+                ax.plot(th_e, i_e, "o", color="black", ms=3.6, mew=0, zorder=5)
+                handles.append(Line2D([], [], marker="o", color="black", ls="none", ms=9, label="Expt."))
+            for th_c, y, color, lab, lw, ls in P["curves"]:
+                xm, ym = mirror(th_c, y)
+                ax.plot(xm, ym, color=color, lw=lw, ls=ls, zorder=3 if ls == "-" else 4)
+                handles.append(Line2D([], [], color=color, lw=max(lw, 3.5) if lw > 2 else max(lw, 2.4), ls=ls, label=lab))
+            if au:
+                ax.text(11.5, 0.30, "× 1.5", color=C["hh"], fontsize=22)
+            rx, ry, rw, rh = P["rect"]
+            ax.add_patch(Rectangle((rx, ry), rw, rh, fill=False, lw=3.2, edgecolor="black", ls=(0, (1.0, 1.0)), zorder=6))
+            # the published legend order: Expt., JK, HH, FMR in (b); Expt., HH, FMR, FMR+θⁱ+h+λω in (d)
+            rank = {"Expt.": 0, "♯SHAARP.py (JK)": 1, "♯SHAARP.py (HH)": 2, "♯SHAARP.py (FMR)": 3}
+            handles.sort(key=lambda h: rank.get(h.get_label(), 5 if "author" in h.get_label() else 4))
+            ax.legend(handles=handles, loc="center left", bbox_to_anchor=(1.02, 0.55), frameon=False, fontsize=14,
+                      handlelength=2.4, handletextpad=1.0, labelspacing=0.9)
+            # fine-fringe inset (published position: upper centre, thick frame, inward ticks)
+            x0, x1, y0, y1 = P["window"]
+            axi = ax.inset_axes([0.28, 0.42, 0.44, 0.53])
+            for th_c, y, color, lw, ls in P["inset"]:
+                axi.plot(th_c, y, color=color, lw=lw, ls=ls)
+            if P["expt"] is not None:
+                th_e, i_e = P["expt"]
+                me = (th_e >= x0) & (th_e <= x1)
+                axi.plot(th_e[me], i_e[me], "o", color="black", ms=3.0, mew=0, zorder=5)
+            for sp in axi.spines.values():
+                sp.set_linewidth(1.8)
+            axi.tick_params(which="both", direction="in", top=True, right=True, labelsize=11, width=1.2, length=4)
+            axi.set_xlim(x0, x1); axi.set_ylim(y0, y1)
+            axi.set_xticks(np.arange(x0, x1 + 0.1, 2.0))
+            axi.set_yticks(np.arange(y0, y1 + 1e-9, 0.1 if not au else 0.2))
+            axi.set_facecolor("white")
     return fig, stats
 
 

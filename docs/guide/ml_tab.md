@@ -34,62 +34,91 @@ Rotational anisotropy (the 0–360° sample-azimuth polar scan) is not a separat
 SHG Simulation exactly as the original's `samplerotationcontrol`, and available under
 Partial Analytical Expressions too.
 
-The functionality combo is the single control for each plot — there are no separate "generate
-plot" checkboxes (the former *Generate Fresnel Coefficients Plot* / *Generate Maker Fringes Plot*
-boxes duplicated the *Fresnel Coefficients* / *Maker Fringes* modes and were removed). Pressing
-**Update / Run** in one of those two modes computes that $\theta$-sweep, fills the matching
-*Maker Fringes* / *Fresnel Coefficients* output tab, and switches the output panel to it;
-**Export data** then writes that mode's curves (the $\theta$ grid with the fringe intensities, or
-$R_p, R_s, T_p, T_s$). The expensive sweeps therefore run only in their own modes, and the
-*Maker Fringes Scan Range* / *Fresnel Coefficients Scan Range* groups are read only by their
-own mode (see below).
+**The functionality combo is the single control for each plot.** There are no separate "generate
+plot" checkboxes — the former *Generate Fresnel Coefficients Plot* / *Generate Maker Fringes Plot*
+boxes duplicated the corresponding modes and were removed. So, in the two $\theta$-sweep modes:
 
-Two per-layer checkboxes decide what stays a symbol, and each sits with the input it governs:
-**analytical h (this layer's thickness stays symbolic)** in the *Layer Selection (N-layer stack)*
-group, under the thickness row, and **analytical dᵢⱼ (this layer's SHG tensor stays symbolic)** in
-the *SHG Tensor dᵢⱼ (full 3×6 Voigt, pm/V)* group, below the grid. Both apply to the layer
-currently selected in **Edit layer**, and any subset of layers may be symbolic while the rest are
-substituted. Neither box appears while a semi-infinite row (the first or the last layer) is
-selected: their thickness is not a variable, and the solver never treats a half-space as an SHG
-source. Whether an interior layer is an SHG source is decided by its **Point group** (see
-*System / layer setup* below), not by a switch: for a layer whose group is in the
-*Centrosymmetric (SHG-inactive)* section the **analytical dᵢⱼ** box is unchecked and disabled,
-and the layer's analytical-$d$ flag and known values are cleared.
+- **Update / Run** computes that sweep, fills the matching *Maker Fringes* / *Fresnel
+  Coefficients* output tab, and switches the output panel to it.
+- **Export data** then writes that mode's curves — the $\theta$ grid with the fringe intensities,
+  or $R_p, R_s, T_p, T_s$.
+- Each *Scan Range* group is read only by its own mode, so the expensive sweeps never run behind
+  your back (see below).
 
-A symbol is named after the row you are editing: with air / quartz / Au / air, flagging the quartz
-row gives $h_2$ and $d_{11}m2$, $d_{14}m2$. While a flag is set the panel shows those symbols
-instead of numbers — the thickness field displays `h2`, and the $d$ grid displays the point group's
-symmetry-allowed components by name (for Z-cut quartz on row 2: `d11m2, -d11m2, 0, d14m2, 0, 0` on
-the first row, `-d14m2, -d11m2` in the last two cells of the second, all else `0`), with a hard `0`
-wherever symmetry forbids one. The flag belongs to the layer, not to the display: re-selecting the
-row, changing its material, or reloading the stack brings the symbolic grid back, and only clearing
-the box restores the numbers. The symbolic grid is a *Partial Analytical Expressions* display,
-though: under any numeric functionality (SHG Simulation, Maker Fringes, …) the flags are
-inert, the computation uses the stored numbers, and the grid shows those numbers even with the box
-still ticked — switching the functionality combo re-mirrors the grid either way.
+### Choosing what stays symbolic
 
-Only part of a tensor needs to be unknown. To declare a component **known**, type a **number** over
-its symbol while the layer is flagged: the value is stored on that layer and the grid shows it
-again every time the row is displayed, with the dependent entries following by symmetry (typing
-`0.3` over `d11m2` on the quartz row gives `0.3, -0.3, 0, d14m2, 0, 0` on the first row and `-0.3`
-in the last cell of the second; `d14m2` stays a symbol). A typed `0` counts as known-zero. To make
-a component unknown again, clear the cell or type its symbol name back. Typing a number declares a
-known component only while the grid is symbolic (*Partial Analytical Expressions*); in a numeric
-functionality a $d$ edit is an ordinary tensor edit and converts a palette row to *Custom (fields)*
-as usual. Declaring a known value is
-not an edit of the material's tensor — the row keeps its palette material and does not become
-*Custom (fields)* — and the value survives switching to another row and back. Update reads the
-flags and the known values stored on the stack, not the grid on screen: a flagged layer stays
-symbolic in the closed form whichever row is selected when you press it, and every flagged layer's
-known values are substituted and listed in the `# symbols:` header as `known d = d11m2=0.3+0j`.
-Editing anything else in a flagged row — its dielectric tensors, for instance — still converts it
-to *Custom (fields)*; the converted layer keeps its analytical flags and known values, and its
-snapshot carries the material's real numeric $d$ rather than the symbolic grid.
+Two per-layer checkboxes decide what the closed form keeps as a symbol. Each sits with the input it
+governs, and both apply to the layer currently selected in **Edit layer**:
 
-Ticking either box switches the functionality combo to *Partial Analytical Expressions* for you;
-the `# symbols:` header line of the expression declares exactly which symbols survived and what
-was substituted (e.g. `thickness = h2 = 121.2 um (substituted)` when analytical h is off for that
-layer).
+| Checkbox | Where it is | What stays symbolic |
+|---|---|---|
+| **analytical h** | *Layer Selection (N-layer stack)*, under the thickness row | that layer's thickness |
+| **analytical dᵢⱼ** | *SHG Tensor dᵢⱼ (full 3×6 Voigt, pm/V)*, below the grid | that layer's SHG tensor |
+
+Any subset of layers may be symbolic while the rest are substituted. Ticking either box switches
+the functionality combo to *Partial Analytical Expressions* for you.
+
+**When a box is missing or greyed out** — that is deliberate, in two cases:
+
+- **A semi-infinite row is selected** (the first or the last layer): neither box appears. A
+  half-space has no thickness variable, and the solver never treats one as an SHG source.
+- **The layer's point group is centrosymmetric**: the **analytical dᵢⱼ** box is unchecked and
+  disabled, and that layer's analytical-$d$ flag and known values are cleared. SHG activity follows
+  the **Point group** alone (see *System / layer setup* below) — there is no separate switch.
+
+### How the symbols are named
+
+A symbol is named after the row you are editing. With a stack of air / quartz / Au / air, flagging
+the quartz row (row 2) gives $h_2$, $d_{11}m2$, $d_{14}m2$.
+
+While a flag is set, the panel shows those symbols in place of numbers:
+
+- the thickness field displays `h2`;
+- the $d$ grid displays the point group's symmetry-allowed components by name, with a hard `0`
+  wherever symmetry forbids one. For Z-cut quartz on row 2 that is `d11m2, -d11m2, 0, d14m2, 0, 0`
+  across the first row, `-d14m2, -d11m2` in the last two cells of the second, and `0` everywhere
+  else.
+
+The flag belongs to the **layer**, not to the display. Re-selecting the row, changing its material,
+or reloading the stack all bring the symbolic grid back; only clearing the box restores the numbers.
+
+```{note}
+The symbolic grid is a *Partial Analytical Expressions* display. Under any numeric functionality
+(SHG Simulation, Maker Fringes, …) the flags are inert: the computation uses the stored numbers,
+and the grid shows those numbers even with the box still ticked. Switching the functionality combo
+re-mirrors the grid either way.
+```
+
+### Declaring part of a tensor known
+
+Only part of a tensor needs to be unknown — useful when you know some coefficients and want to fit
+the rest.
+
+1. **Flag the layer** with **analytical dᵢⱼ**, so its grid is symbolic.
+2. **Type a number over a symbol.** It is stored on that layer, and the dependent entries follow by
+   symmetry. Typing `0.3` over `d11m2` on the quartz row gives `0.3, -0.3, 0, d14m2, 0, 0` on the
+   first row and `-0.3` in the last cell of the second — `d14m2` stays a symbol. A typed `0` counts
+   as known-zero.
+3. **To make it unknown again**, clear the cell or type its symbol name back.
+
+Three things worth knowing about this:
+
+- **It only works while the grid is symbolic.** Under a numeric functionality, a $d$ edit is an
+  ordinary tensor edit and converts a palette row to *Custom (fields)* as usual.
+- **It is not an edit of the material.** The row keeps its palette material, does not become
+  *Custom (fields)*, and the value survives switching to another row and back.
+- **Editing anything else in a flagged row still converts it** to *Custom (fields)* — its
+  dielectric tensors, for instance. The converted layer keeps its analytical flags and known
+  values, and its snapshot carries the material's real numeric $d$ rather than the symbolic grid.
+
+### What Update actually reads
+
+**Update reads the flags and known values stored on the stack, not the grid on screen.** A flagged
+layer stays symbolic in the closed form whichever row happens to be selected when you press it.
+
+The expression's `# symbols:` header then declares exactly what survived and what was substituted —
+`known d = d11m2=0.3+0j` for a declared value, or
+`thickness = h2 = 121.2 um (substituted)` when analytical h is off for that layer.
 
 ```{tip}
 The analytical mode runs a computer-algebra solve; the progress bar announces that the **first** run
@@ -116,21 +145,35 @@ stack labels also show the material's point group and surface $(hkl)$. The **sub
 isotropic — enter scalar $n_\omega, n_{2\omega}$.
 
 **SHG activity is decided by the point group.** As in the original ♯SHAARP.ml, there is no
-per-layer "SHG active" checkbox. A layer is an SHG source if and only if it is an interior layer,
-not air / isotropic, and its **Point group** (Crystal Structure group) is in the
-*— Noncentrosymmetric (SHG-active) —* section of the dropdown; the
-*— Centrosymmetric (SHG-inactive) —* section (-1, 2/m, mmm, 4/m, 4/mmm, -3, -3m, 6/m, 6/mmm, m3,
-m3m, 432, ∞/m, ∞/mm, ∞∞, ∞∞m) makes it a linear layer with $d \equiv 0$. The palette materials
-show their real group there — the palette *Air* and *Au coating* are ∞∞m, *Pt (111)* and *Blank
-linear* are m3m, *Al2O3 (0001)* is 6/mmm. Choosing an inactive group collapses the *SHG Tensor dᵢⱼ
-(full 3×6 Voigt, pm/V)* group with the title suffix **"— not used: SHG-inactive point group
-(d ≡ 0)"**, unchecks and disables the **analytical dᵢⱼ** box, and clears that layer's
-analytical-$d$ flag and known values; choosing an active group restores the pattern and the box.
-The generic ambient rows (*air*, *isotropic n (set below)*) keep their own
-"— not used: isotropic medium" hint instead. The point group's crystal system also locks the dependent
-lattice cells (e.g. hexagonal/trigonal $b=a$, $\gamma=120°$; cubic $a=b=c$) exactly as on the SI
-tab. Session files saved before this change that still carry a `shg_active` key load normally;
-the key is ignored.
+per-layer "SHG active" checkbox. A layer radiates SHG if and only if all three hold:
+
+1. it is an **interior** layer (not the first or last half-space),
+2. it is not air / isotropic, and
+3. its **Point group** (Crystal Structure group) is in the *— Noncentrosymmetric (SHG-active) —*
+   section of the dropdown.
+
+Anything in the *— Centrosymmetric (SHG-inactive) —* section (-1, 2/m, mmm, 4/m, 4/mmm, -3, -3m,
+6/m, 6/mmm, m3, m3m, 432, ∞/m, ∞/mm, ∞∞, ∞∞m) is a linear layer with $d \equiv 0$. The palette
+materials show their real group: *Air* and *Au coating* are ∞∞m, *Pt (111)* and *Blank linear* are
+m3m, *Al₂O₃ (0001)* is 6/mmm.
+
+Selecting an inactive group changes three things at once:
+
+- the *SHG Tensor dᵢⱼ (full 3×6 Voigt, pm/V)* group collapses, its title gaining the suffix
+  **"— not used: SHG-inactive point group (d ≡ 0)"**;
+- the **analytical dᵢⱼ** box is unchecked and disabled;
+- that layer's analytical-$d$ flag and known values are cleared.
+
+Choosing an active group again restores the symmetry pattern and the box. The generic ambient rows
+(*air*, *isotropic n (set below)*) show their own "— not used: isotropic medium" hint instead.
+
+The point group's crystal system also locks the dependent lattice cells (hexagonal/trigonal
+$b=a$, $\gamma=120°$; cubic $a=b=c$), exactly as on the SI tab.
+
+```{note}
+Session files saved before SHG activity moved to the point group still carry a `shg_active` key.
+They load normally; the key is ignored.
+```
 
 **Crystal-axes view.** The orientation input group draws the selected layer's **crystal-physics
 axes ($Z_i$) against the lab axes ($L_i$)** — a quick visual check of the entered orientation, live

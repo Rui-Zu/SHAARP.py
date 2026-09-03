@@ -168,6 +168,34 @@ def _run_si_numeric_shaarp_si_compat(case: Material, options: dict[str, Any]) ->
     theta = np.asarray(polarimetry.theta_deg, dtype=float)
     if theta.shape != ():
         raise ValueError("workflow='shaarp_si_compat' currently expects scalar Polarimetry.theta_deg.")
+    # This workflow consumes ONLY theta_deg. The input polarization comes from the separate
+    # `incident_polarization` ('s'/'p') option, because the V1.04-faithful stack underneath
+    # (solve_shaarp_si_reflected_shg) has no arbitrary-Jones input. Silently dropping a caller's
+    # phi/psi produced the worst possible failure: looping phi returned a FLAT curve with no error
+    # (LiNbO3 (11-20), theta=45 deg: phi = 0/37/90 deg all give 4.576055e-02), while s vs p differ
+    # by ~500x. Say so loudly instead. For a real phi curve use the validated closed form
+    # run_si_full_analytical(case, {"workflow": "polarimetry"}).
+    _ignored = [
+        name
+        for name, value in (("phi_deg", polarimetry.phi_deg),
+                            ("psi_deg", polarimetry.psi_deg),
+                            ("ellipticity_deg", polarimetry.ellipticity_deg))
+        if np.asarray(value, dtype=float).size != 1
+        or float(np.asarray(value, dtype=float).reshape(-1)[0]) != 0.0
+    ]
+    if _ignored:
+        import warnings
+
+        warnings.warn(
+            "workflow='shaarp_si_compat' ignores Polarimetry."
+            + "/Polarimetry.".join(_ignored)
+            + " -- it reads only theta_deg, and takes the input polarization from the separate "
+            "incident_polarization='s'|'p' option. Sweeping phi here returns the same number at "
+            "every phi. For a polarimetry curve in phi use the validated closed form "
+            "run_si_full_analytical(case, {'workflow': 'polarimetry'}).",
+            RuntimeWarning,
+            stacklevel=3,
+        )
     # FRAME BRIDGE (closes the "compat rotated-material m_y violation").
     # Two conventions meet here, and the old code crossed them for any non-symmetric orientation:
     # * Material.orientation.rotation_matrix() is the PORT convention — ROWS = crystal Z axes in

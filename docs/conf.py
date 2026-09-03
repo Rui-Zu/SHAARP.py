@@ -79,6 +79,8 @@ html_theme_options = {
 }
 html_static_path = ["_static"]
 html_title = "SHAARP.py documentation"
-_logo = os.path.join(os.path.dirname(__file__), "_static", "shaarp_ml_logo.png")
+# The site covers BOTH packages, so it carries the package-neutral SHAARP.py mark -- not the
+# .ml logo, which advertised the multilayer half as if it were the whole project.
+_logo = os.path.join(os.path.dirname(__file__), "_static", "shaarp_py_logo.png")
 if os.path.exists(_logo):
-    html_logo = "_static/shaarp_ml_logo.png"
+    html_logo = "_static/shaarp_py_logo.png"

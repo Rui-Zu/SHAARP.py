@@ -3,6 +3,28 @@
 The public surface of the `shaarp` package, grouped by role. Everything below is importable directly
 from `shaarp` (e.g. `from shaarp import run_si_numeric`).
 
+## How the layers fit together
+
+A call enters at the top and falls through:
+
+| Layer | Module | What it does |
+|---|---|---|
+| **Facade** | `shaarp.api` | `run_si_numeric`, `run_ml_numeric`, `run_maker_fringes`, `run_fresnel_sweep`, the two `*_analytical` entry points. Assembles inputs, picks a workflow, wraps the answer in a `SHAARPResult`. This is what the GUI's **Update** calls. |
+| **Numeric solvers** | `shaarp.shg`, `shaarp.multilayer_shg_boundary` | The boundary-value problem itself: nonlinear source terms, homogeneous/inhomogeneous field split, continuity across each interface. |
+| **Anisotropic optics** | `shaarp.anisotropic` | Eigenmodes, Snell's law in anisotropic media, ordinary/extraordinary identification, complex-branch tracking — the layer the solvers stand on. |
+| **Symbolic** | `shaarp.symbolic`, `shaarp.multilayer_shg_symbolic` | The same physics carried through SymPy instead of NumPy, giving closed forms in $\varphi$, $d_{ij}$ and $h$. |
+| **Inputs / outputs** | `shaarp.config`, `shaarp.api` | `Material`, `Layer`, `MultilayerSystem`, `Polarimetry` going in; `SHAARPResult` and the typed per-solver results coming back. |
+
+Each level is usable on its own: the facades are the supported surface, but the solvers underneath
+take plain tensors and radians if you would rather drive them directly (as
+`examples/d_extraction_demo.py` does).
+
+```{note}
+`shaarp.__all__` exports ~158 names, most of them solver internals reached through the facades. The
+pages below document the surface intended for direct use; treat anything not listed here as
+internal and subject to change.
+```
+
 ```{toctree}
 :maxdepth: 2
 

@@ -18,6 +18,7 @@
 
 [![Release](https://img.shields.io/github/v/release/Rui-Zu/SHAARP.py?color=%2350C878&include_prereleases&label=download)](https://github.com/Rui-Zu/SHAARP.py/releases)
 [![CI](https://github.com/Rui-Zu/SHAARP.py/actions/workflows/ci.yml/badge.svg)](https://github.com/Rui-Zu/SHAARP.py/actions/workflows/ci.yml)
+[![Docs](https://img.shields.io/readthedocs/shaarp-py?label=docs)](https://shaarp-py.readthedocs.io/en/latest/)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/github/license/Rui-Zu/SHAARP.py)](LICENSE)
 [![Visitors](https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2FRui-Zu%2FSHAARP.py&countColor=%23263759&style=flat)](https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2FRui-Zu%2FSHAARP.py&countColor=%23263759&style=flat)
@@ -39,7 +40,7 @@ Every solver stage is validated **value-by-value against the original live Mathe
 packages** at the exported reference points — typically 10⁻¹³–10⁻¹⁷, with the largest
 documented deviation 3.6×10⁻⁹ — and the automated test suite gates every claim. What that
 does and does not cover is set out in
-[docs/residual_risks.md](docs/residual_risks.md). Beyond the
+[docs/residual_risks.md](https://shaarp-py.readthedocs.io/en/latest/residual_risks.html). Beyond the
 originals, it adds closed-form symbolic SHG expressions and **d-tensor extraction** from
 polarimetry scans.
 
@@ -97,8 +98,8 @@ file for your computer (open the newest release and look under *Assets*):
 
 | Your computer | Download | Then |
 |---|---|---|
-| Windows (64-bit) | `SHAARP_py_v…_win64.zip` (≈115 MB) | **extract the zip**, then double-click `SHAARP_py\SHAARP_py.exe` |
-| macOS, Apple Silicon (M-series) | `SHAARP_py_v…_macos_arm64.zip` (≈80 MB) | **extract the zip**, then open `SHAARP_py/SHAARP_py.app` (see the note below) |
+| Windows (64-bit) | `SHAARP_py_v1.0.0_win64.zip` (120 MB) | **extract the zip**, then double-click `SHAARP_py\SHAARP_py.exe` |
+| macOS, Apple Silicon (M-series) | `SHAARP_py_v1.0.0_macos.zip` (83 MB) | **extract the zip**, then open `SHAARP_py/SHAARP_py.app` (see the note below) |
 
 Extracting first matters on Windows: the app needs the `_internal` folder next to the `.exe`, so
 double-clicking straight out of the zip fails silently.
@@ -215,7 +216,7 @@ These are the very same compute paths the app's *Update* button runs — headles
 one-to-one, so anything you can click you can script. Underneath them sit the `run_*` facades —
 `run_si_numeric`, `run_ml_numeric`, `run_maker_fringes`, `run_fresnel_sweep`, `run_sample_rotation`,
 `run_si_full_analytical`, `run_ml_partial_analytical` — which give you the solver stages directly
-and are what [`docs/usage.md`](docs/usage.md) and the API reference document. Start with whichever
+and are what [`docs/usage.md`](https://shaarp-py.readthedocs.io/en/latest/usage.html) and the API reference document. Start with whichever
 matches how you think.
 
 One catch worth knowing before you publish a number: for single-interface work `run_si_numeric`
@@ -235,11 +236,11 @@ want to run the rows marked ⧉.
 | Learn the Python API step by step ⧉ | [`notebooks/SHAARP_py_step_by_step.ipynb`](notebooks/SHAARP_py_step_by_step.ipynb) |
 | See worked, plotted examples ⧉ | [`examples/`](examples/) — six runnable scripts (polarimetry, Maker fringes, d-extraction) |
 | Reproduce the two papers ⧉ | [the two notebooks below](#reproduce-the-papers) |
-| Learn the layered API (`run_*` facades) | [`docs/usage.md`](docs/usage.md) |
+| Learn the layered API (`run_*` facades) | [`docs/usage.md`](https://shaarp-py.readthedocs.io/en/latest/usage.html) |
 | Drive the app from a notebook ⧉ | [`notebooks/SHAARP_py_interactive_session.ipynb`](notebooks/SHAARP_py_interactive_session.ipynb) |
-| Read the conventions / FAQ | [`docs/conventions.md`](docs/conventions.md) · [`docs/guide/faq.md`](docs/guide/faq.md) |
-| Check what is validated, and how | [`docs/validation.md`](docs/validation.md) · honest gaps: [`docs/residual_risks.md`](docs/residual_risks.md) |
-| Read the full solver-stage reference | [`docs/technical_reference.md`](docs/technical_reference.md) |
+| Read the conventions / FAQ | [`docs/conventions.md`](https://shaarp-py.readthedocs.io/en/latest/conventions.html) · [`docs/guide/faq.md`](https://shaarp-py.readthedocs.io/en/latest/guide/faq.html) |
+| Check what is validated, and how | [`docs/validation.md`](https://shaarp-py.readthedocs.io/en/latest/validation.html) · honest gaps: [`docs/residual_risks.md`](https://shaarp-py.readthedocs.io/en/latest/residual_risks.html) |
+| Read the full solver-stage reference | [`docs/technical_reference.md`](https://shaarp-py.readthedocs.io/en/latest/technical_reference.html) |
 
 ---
 
@@ -264,7 +265,7 @@ source polarization **P**²ω = ε₀ **d** : **E**ω**E**ω → the driven (inh
 2ω boundary conditions across every interface → observables (polarimetry *I(φ)*, Maker fringes
 *I(θᵢ)*, azimuth scans). Multilayers chain per-interface blocks with exact phase propagation under
 the three multiple-reflection assumptions (FMR / JK / HH). The complete solver-stage reference
-lives in [`docs/technical_reference.md`](docs/technical_reference.md).
+lives in [`docs/technical_reference.md`](https://shaarp-py.readthedocs.io/en/latest/technical_reference.html).
 
 ## Reproduce the papers
 
@@ -288,9 +289,11 @@ Regenerate with `python build_paper_notebooks.py`.
 
 ## Documentation
 
-The pages linked above are readable directly on GitHub. A few of them — the API reference in
-particular — are Sphinx sources, so cross-references render as literal `{doc}` / `{py:func}` text
-until they are built. To read the full set as a site:
+**[shaarp-py.readthedocs.io](https://shaarp-py.readthedocs.io/en/latest/)** — the full documentation
+site: GUI guide, API reference with every signature, tutorials, conventions and the validation
+evidence, all searchable.
+
+To build the same site locally instead:
 
 ```bash
 pip install -r docs/requirements.txt
