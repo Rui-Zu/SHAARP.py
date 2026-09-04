@@ -9,9 +9,8 @@ benchmarks/dextraction_noise_benchmark.py established (seeded Monte-Carlo):
     is an initial guess, not a quantitative estimate.
 
 This fence pins all three facts on the baseline design. If a future estimator improvement
-makes the intensity method robust, this test FAILS ON PURPOSE -- update the benchmark, the
-docs/residual_risks.md R8 row, and these bounds together (the characterization is versioned evidence,
-not a loose doc).
+makes the intensity method robust, this test FAILS ON PURPOSE -- update the benchmark and these
+bounds together (the characterization is versioned evidence, not a loose doc).
 """
 
 from __future__ import annotations

@@ -251,7 +251,6 @@
     "point_group_tensor_source_reference_pattern_count": 16,
     "live_symbolic_point_group_d_probe_present": true,
     "live_symbolic_point_group_d_probe_status": "diagnostic_only_ml_material_extension_does_not_apply_gui_point_group_patterns",
-    "validation_plan_present": true,
     "status": "partial_reference_values_plus_live_gui_and_symbolic_validation_artifacts"
   }
 }

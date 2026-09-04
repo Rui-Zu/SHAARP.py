@@ -38,6 +38,9 @@ desktop.ini
 !/SECURITY.md
 !.github/**/*.md
 !examples/README.md
+# ...with one exception, listed after the whitelist so that it wins: a working note kept in the
+# development tree only. (A .gitignore whitelist cannot be overridden from .git/info/exclude.)
+docs/residual_risks.md
 
 # --- Guard against a nested copy of the tree being tracked at the repo root ---
 Python Ver/

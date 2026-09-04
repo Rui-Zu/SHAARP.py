@@ -267,7 +267,7 @@ def build_report() -> dict:
                 / "wolfram_live_symbolic_point_group_d_probe_v1.json"
             ).exists(),
             "live_symbolic_point_group_d_probe_status": symbolic_point_group_d_probe["status"],
-                "status": "partial_reference_values_plus_live_gui_and_symbolic_validation_artifacts",
+            "status": "partial_reference_values_plus_live_gui_and_symbolic_validation_artifacts",
         },
     }
 

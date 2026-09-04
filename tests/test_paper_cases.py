@@ -204,6 +204,48 @@ class MLPaperCaseTests(unittest.TestCase):
         self.assertGreater(corr, 0.995, f"SHAARP.py HH (author geometry) vs his HH model corr {corr:.4f}")
         self.assertTrue(0.97 < mag < 1.02, f"peak ratio my/his {mag:.4f} (expected ~0.992)")
 
+    def test_fig4b_port_matches_live_shaarp_ml_engine_near_normal(self):
+        """S45 closure (2026-09-02): the port vs the LIVE SHAARP.ml engine (Github checkout setup.nb, exported
+        through the same chunk pipeline as verify_quartz_au_docs_vs_mathematica.py) on the bare 123.6 um Z-cut
+        quartz slab at 800 nm, p-in/p-out transmitted, 27 angles 0..10 deg (0.5 deg) + 15/20/25/30/34.68/38:
+        max |port - ml| / max(ml) = 4.7e-11. The SLAB closed form QuartzSimuMRP1S0p02 (fig4b_fmr_reference.csv)
+        is 0.77x the engine at 0 deg and 0.5x at 6 deg, converging only beyond 30 deg -- so the ~5% near-normal
+        offset the port shows against the author's closed forms is a property of that older derivation, not of
+        the port. Reference: benchmarks/mathematica_reference/bare_quartz_z_800nm_reference.json."""
+        import json
+        from benchmarks.paper_cases import ml_fig4_system
+        from shaarp.multilayer_shg_boundary import solve_multilayer_maker_fringes_sweep
+        from pathlib import Path as _P
+        root = _P(__file__).resolve().parents[1]
+        ref = json.loads((root / "benchmarks" / "mathematica_reference" / "bare_quartz_z_800nm_reference.json")
+                         .read_text(encoding="utf-8"))
+
+        def find_key(o, key):
+            if isinstance(o, dict):
+                if key in o:
+                    return o[key]
+                for v in o.values():
+                    f = find_key(v, key)
+                    if f is not None:
+                        return f
+            if isinstance(o, list):
+                for x in o:
+                    f = find_key(x, key)
+                    if f is not None:
+                        return f
+            return None
+
+        def cval(x):
+            return complex(x["real"], x["imag"]) if isinstance(x, dict) else complex(x)
+
+        mf = find_key(ref, "MFList")
+        th = [float(cval(r[0]).real) for r in mf]
+        ml = np.array([abs(cval(r[1])) for r in mf])
+        sw = solve_multilayer_maker_fringes_sweep(ml_fig4_system(au=False), theta_deg=th, mrassumption=0, mu=1.0, eps0=1.0)
+        py = np.abs(np.asarray(sw.parallel_intensity))
+        self.assertEqual(len(th), 27)
+        self.assertLess(float(np.max(np.abs(py - ml)) / np.max(ml)), 1e-8)
+
     def test_fig4b_my_bare_slab_curves_match_his_models(self):
         """Panel (b): my FMR / HH / JK for the bare 123.6 um Z-quartz slab reproduce the author's three
         published bare-slab models (fig4b_*_reference.csv, h0 = 123.6) -- shape corr >= 0.998 and peak

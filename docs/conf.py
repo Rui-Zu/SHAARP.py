@@ -39,7 +39,10 @@ myst_heading_anchors = 3
 nb_execution_mode = "off"
 
 templates_path = ["_templates"]
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+# residual_risks.md is a working note kept in the development tree and excluded from the package
+# (see .gitignore). It is absent from a clone, so this entry only matters when building from the
+# development tree -- without it Sphinx finds the file and warns that no toctree includes it.
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "residual_risks.md"]
 
 # -- Autodoc / autosummary ----------------------------------------------------------------------
 autosummary_generate = True

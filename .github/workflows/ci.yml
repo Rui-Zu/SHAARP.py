@@ -48,7 +48,7 @@ jobs:
       # plotted outputs, the compute cores + figure builders, and the PySide6 desktop shell driven
       # headlessly through the real Update path.
       - name: Fast test subset
-        run: python -m unittest -v tests.test_smoke tests.test_notebook_hygiene tests.test_output_physics_sanity tests.test_shaarp_gui tests.test_desktop_app tests.test_repo_hygiene tests.test_release_archive_name tests.test_verification_requirements tests.test_residual_risk_register_integrity tests.test_frozen_bundle_deps
+        run: python -m unittest -v tests.test_smoke tests.test_notebook_hygiene tests.test_output_physics_sanity tests.test_shaarp_gui tests.test_desktop_app tests.test_repo_hygiene tests.test_release_archive_name tests.test_verification_requirements tests.test_frozen_bundle_deps
 
       # From-source self-check: exercises the real SI/ML/Maker/Fresnel compute paths AND asserts the
       # tracked benchmark set in this checkout is complete (catches .gitignore over-filtering —

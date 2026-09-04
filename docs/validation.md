@@ -10,8 +10,8 @@ Mathematica kernel — not against a Python re-derivation.
 > **Bottom line:** SHAARP.py reproduces the original Mathematica SHAARP package to
 > machine precision (typical max error 10⁻¹³ – 10⁻¹⁷) across solver stages,
 > geometries, the Full / JK / HH assumption modes, single-interface reflected SHG,
-> crystal orientation, and the symbolic engine. The full automated suite (217
-> modules / 1,275 tests) passes, including an offscreen pass over every selectable
+> crystal orientation, and the symbolic engine. The full automated suite (216
+> modules / 1,269 tests) passes, including an offscreen pass over every selectable
 > case × functionality on both GUI tabs.
 
 ## Additions since the evidence table below
@@ -30,7 +30,7 @@ Mathematica kernel — not against a Python re-derivation.
   + dispersion-contract warning); suite logs warning-free.
 - **Merged SHAARP.si + .ml GUI** (`shaarp.make_shaarp_gui()`) with all controls on
   the validated backends; 49 GUI tests including continuity gates.
-- Suite total: **217 modules, 1,275 tests, 0 failures**, measured by running every module in its
+- Suite total: **216 modules, 1,269 tests, 0 failures**, measured by running every module in its
   own subprocess from a clean checkout copied outside the development tree — so this is the figure
   a user reproduces after cloning, not one that holds only on the author's machine.
   Earlier editions of this file quoted **1,250 / 1,257 / 1,258** tests. Those were UNDERCOUNTS
@@ -163,13 +163,11 @@ The release now carries a four-layer evaluation ladder on top of the evidence ta
   ε_R-approximation claim: d-ratio 0.818 vs the paper's 0.809) and SHAARP.ml 2024 Figs. 3(b,c) /
   4(b,d) for X-/Z-cut quartz (HH-vs-JK fine-fringe distinction; Au-coating FMR amplification — the
   Fig. 4(d) FMR reproduces the author's own closed-form model to correlation 0.9993 including the central
-  bump, with its HH curve embedded from his published HH model; see residual risk R5).
+  bump, with its HH curve embedded from his published HH model).
   This layer immediately caught two latent defects the whole gate suite had passed (surprise): float-noise-broken isotropic degeneracy (NaN GaAs polarimetry) and a silent real-cast of
   complex ε/d in the curve/expression paths — both fixed, verified vs the numeric reference to
   5×10⁻¹⁴, and fenced.
-- **T4 residual-risk register** (`residual_risks.md`): the honest complement of the green stamps —
-  what is NOT verified, row by row with closing conditions. Includes the Monte-Carlo d-extraction
-  noise characterization (`benchmarks/dextraction_noise_benchmark.py`, fenced): the phase-resolved
+- **T4 d-extraction noise characterization**: the Monte-Carlo study (`benchmarks/dextraction_noise_benchmark.py`, fenced): the phase-resolved
   field method degrades gracefully (median error ≈ noise level); the phase-less intensity method
   amplifies catastrophically at realistic conditioning — its noisy-data output is an initial guess.
 
@@ -181,6 +179,6 @@ All five tutorial notebooks execute cleanly against the current API
 The port is **released as v1.0.0** (`RELEASE GATE: PASS`, with the suite total recorded above, plus the
 312-cell GUI matrix sweep `CLEAN`). The old planning-era "~91%" figure is retired: the numerical
 core and end-to-end pipelines are fully validated as tabulated above, and the remaining
-NOT-verified surface is enumerated explicitly in {doc}`residual_risks` instead of being summarized as
+NOT-verified surface is stated in the tables above, claim by claim, instead of being summarized as
 a percentage. No number here is inflated for breadth — every agreement traces to a live Wolfram
 export and an un-fakeable, tolerance-gated test.

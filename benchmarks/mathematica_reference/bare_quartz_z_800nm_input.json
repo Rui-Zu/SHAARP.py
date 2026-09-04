@@ -1,0 +1,882 @@
+{
+  "benchmark_version": 1,
+  "source": "S45 bare quartz 123.6um 800nm",
+  "status": "python_input_manifest",
+  "case_count": 1,
+  "total_angle_count": 27,
+  "chunk": {
+    "case_id": "s45_bare_quartz_maker",
+    "start": 0,
+    "count": 27,
+    "stop": 27
+  },
+  "cases": [
+    {
+      "id": "s45_bare_quartz_maker",
+      "theta_deg": [
+        0.0,
+        0.5,
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0,
+        5.5,
+        6.0,
+        6.5,
+        7.0,
+        7.5,
+        8.0,
+        8.5,
+        9.0,
+        9.5,
+        10.0,
+        15.0,
+        20.0,
+        25.0,
+        30.0,
+        34.68,
+        38.0
+      ],
+      "phi_deg": 0.0,
+      "psi_deg": 0.0,
+      "ellipticity_deg": 0.0,
+      "sample_azimuth_deg": 0.0,
+      "wavelength_um": 0.8,
+      "omega0": 7.853981633974483,
+      "mrassumption": 0,
+      "winhAssumption": 0,
+      "polarimetry_check": {
+        "theta_deg_system_scalar": 0.0,
+        "phi_deg_system_scalar": 0.0,
+        "psi_deg_system_scalar": 0.0,
+        "ellipticity_deg_system_scalar": 0.0
+      },
+      "layers": [
+        {
+          "index": 0,
+          "name": "air in",
+          "material_name": "Air",
+          "shg_active": false,
+          "nonlinear_flag": 0,
+          "thickness_um": null,
+          "point_group": "\u221e\u221em",
+          "latcon": [
+            1.0,
+            1.0,
+            1.0,
+            90.0,
+            90.0,
+            90.0
+          ],
+          "orientation_rows": [
+            [
+              {
+                "real": 1.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ],
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 1.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ],
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 1.0,
+                "imag": 0.0
+              }
+            ]
+          ],
+          "qc": [
+            [
+              {
+                "real": 1.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ],
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 1.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ],
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 1.0,
+                "imag": 0.0
+              }
+            ]
+          ],
+          "epsilon_omega_crystal": [
+            [
+              {
+                "real": 1.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ],
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 1.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ],
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 1.0,
+                "imag": 0.0
+              }
+            ]
+          ],
+          "epsilon_2omega_crystal": [
+            [
+              {
+                "real": 1.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ],
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 1.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ],
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 1.0,
+                "imag": 0.0
+              }
+            ]
+          ],
+          "d_voigt_crystal": [
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ],
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ],
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ]
+          ]
+        },
+        {
+          "index": 1,
+          "name": "Z-cut Quartz",
+          "material_name": "Z-cut Quartz",
+          "shg_active": true,
+          "nonlinear_flag": 1,
+          "thickness_um": 123.6,
+          "point_group": "32",
+          "latcon": [
+            4.913,
+            4.913,
+            5.405,
+            90.0,
+            90.0,
+            120.0
+          ],
+          "orientation_rows": [
+            [
+              {
+                "real": 1.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ],
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 1.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ],
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 1.0,
+                "imag": 0.0
+              }
+            ]
+          ],
+          "qc": [
+            [
+              {
+                "real": 1.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ],
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 1.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ],
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 1.0,
+                "imag": 0.0
+              }
+            ]
+          ],
+          "epsilon_omega_crystal": [
+            [
+              {
+                "real": 2.366632930554207,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ],
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 2.366632930554207,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ],
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 2.39416052268409,
+                "imag": 0.0
+              }
+            ]
+          ],
+          "epsilon_2omega_crystal": [
+            [
+              {
+                "real": 2.426481652965845,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ],
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 2.426481652965845,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ],
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 2.456369669799988,
+                "imag": 0.0
+              }
+            ]
+          ],
+          "d_voigt_crystal": [
+            [
+              {
+                "real": 0.3,
+                "imag": 0.0
+              },
+              {
+                "real": -0.3,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ],
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": -0.3,
+                "imag": 0.0
+              }
+            ],
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ]
+          ]
+        },
+        {
+          "index": 2,
+          "name": "substrate",
+          "material_name": "substrate",
+          "shg_active": false,
+          "nonlinear_flag": 0,
+          "thickness_um": null,
+          "point_group": "\u221e\u221em",
+          "latcon": [
+            1.0,
+            1.0,
+            1.0,
+            90.0,
+            90.0,
+            90.0
+          ],
+          "orientation_rows": [
+            [
+              {
+                "real": 1.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ],
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 1.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ],
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 1.0,
+                "imag": 0.0
+              }
+            ]
+          ],
+          "qc": [
+            [
+              {
+                "real": 1.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ],
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 1.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ],
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 1.0,
+                "imag": 0.0
+              }
+            ]
+          ],
+          "epsilon_omega_crystal": [
+            [
+              {
+                "real": 1.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ],
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 1.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ],
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 1.0,
+                "imag": 0.0
+              }
+            ]
+          ],
+          "epsilon_2omega_crystal": [
+            [
+              {
+                "real": 1.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ],
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 1.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ],
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 1.0,
+                "imag": 0.0
+              }
+            ]
+          ],
+          "d_voigt_crystal": [
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ],
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ],
+            [
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              },
+              {
+                "real": 0.0,
+                "imag": 0.0
+              }
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

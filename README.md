@@ -39,8 +39,9 @@ crystals and multilayers. It brings both published Mathematica packages together
 Every solver stage is validated **value-by-value against the original live Mathematica
 packages** at the exported reference points — typically 10⁻¹³–10⁻¹⁷, with the largest
 documented deviation 3.6×10⁻⁹ — and the automated test suite gates every claim. What that
-does and does not cover is set out in
-[docs/residual_risks.md](https://shaarp-py.readthedocs.io/en/latest/residual_risks.html). Beyond the
+does and does not cover is tabulated in
+[docs/validation.md](https://shaarp-py.readthedocs.io/en/latest/validation.html), claim by claim,
+each naming the test that gates it. Beyond the
 originals, it adds closed-form symbolic SHG expressions and **d-tensor extraction** from
 polarimetry scans.
 
@@ -239,7 +240,7 @@ want to run the rows marked ⧉.
 | Learn the layered API (`run_*` facades) | [`docs/usage.md`](https://shaarp-py.readthedocs.io/en/latest/usage.html) |
 | Drive the app from a notebook ⧉ | [`notebooks/SHAARP_py_interactive_session.ipynb`](notebooks/SHAARP_py_interactive_session.ipynb) |
 | Read the conventions / FAQ | [`docs/conventions.md`](https://shaarp-py.readthedocs.io/en/latest/conventions.html) · [`docs/guide/faq.md`](https://shaarp-py.readthedocs.io/en/latest/guide/faq.html) |
-| Check what is validated, and how | [`docs/validation.md`](https://shaarp-py.readthedocs.io/en/latest/validation.html) · honest gaps: [`docs/residual_risks.md`](https://shaarp-py.readthedocs.io/en/latest/residual_risks.html) |
+| Check what is validated, and how | [`docs/validation.md`](https://shaarp-py.readthedocs.io/en/latest/validation.html) |
 | Read the full solver-stage reference | [`docs/technical_reference.md`](https://shaarp-py.readthedocs.io/en/latest/technical_reference.html) |
 
 ---

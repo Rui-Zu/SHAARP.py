@@ -23,7 +23,6 @@ The full validation evidence (per-stage comparisons, benchmark artifacts, and th
 in the repository:
 
 - {doc}`validation` — the validation evidence table and methodology.
-- {doc}`residual_risks` — what the release deliberately does NOT verify.
 - `benchmarks/` — the Mathematica reference data and comparison reports.
 - `notebooks/SHAARP_py_MASTER_BENCHMARK.ipynb` — the dense monitoring notebook
   (see {doc}`tutorials/index`).
@@ -73,8 +72,7 @@ thickness (121.18 µm); both panels use the author's own published display recip
 panel's HH is SHAARP.py's HH computed in the geometry the author's HH model used (quartz on an Au
 half-space, beam-frame projection), matching that model to correlation 0.998. (An earlier
 edition of this page attributed that central bump to the authors' journal-SI parameters. That
-diagnosis came from comparing against the wrong reference curve and is retracted — see R5 in
-[residual_risks.md](residual_risks.md).)
+diagnosis came from comparing against the wrong reference curve and is retracted.)
 
 ```{figure} _static/replication/ml2024_fig4_zcut_quartz_au.png
 :width: 100%

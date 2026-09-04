@@ -75,8 +75,8 @@ class SymbolicThicknessBudget:
     omega solve, after the batched 2 omega solve). A single sympy ``LUdecomposition`` is
     ATOMIC -- it cannot be interrupted in-process -- so the real protection is the
     pre-flight cap, and a stack that passes pre-flight is committed to at least one
-    decomposition. (Same class as the in-process hang limit recorded in
-    docs/residual_risks.md R13; a true hang is caught by driving the case in its own subprocess.)"""
+    decomposition. (A true hang is caught by driving the case in its
+    own subprocess.)"""
 
     max_symbolic_layers: int = 3
     max_total_layers: int = 8  # the original's maxmaterialnumber - 2

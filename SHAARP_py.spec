@@ -6,6 +6,7 @@ datas = [('build/bundle_benchmarks', 'benchmarks')]
 hiddenimports = ['shaarp.quartz_au_docs_case', 'shaarp.desktop_app', 'shaarp.casestudy_materials']
 datas += collect_data_files('shaarp')
 hiddenimports += collect_submodules('shaarp')
+hiddenimports += collect_submodules('scipy._lib.array_api_compat')
 
 
 a = Analysis(

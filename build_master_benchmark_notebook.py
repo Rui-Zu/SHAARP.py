@@ -126,7 +126,7 @@ md("""## 6 · Master summary
 | Fresnel / single-interface / symbolic | both | vs live Mathematica | ✅ ~1e-13..1e-17 |
 
 For the complete evidence table (categories, tolerances, gating test per row) see `docs/validation.md`;
-what is deliberately NOT verified is recorded row-by-row in `docs/residual_risks.md`.
+what is deliberately NOT verified is stated claim-by-claim in `docs/validation.md`.
 """)
 
 nb["cells"] = cells

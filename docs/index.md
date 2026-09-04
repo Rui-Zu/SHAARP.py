@@ -57,7 +57,6 @@ examples/index
 :caption: Project
 
 validation
-residual_risks
 references
 ```
 
@@ -88,7 +87,7 @@ measured data.
 Governing equations, sign and Voigt conventions, what was compared against what and to what
 tolerance, and the known limitations — stated, not implied.
 
-{doc}`conventions` → {doc}`technical_reference` → {doc}`validation` → {doc}`residual_risks`
+{doc}`conventions` → {doc}`technical_reference` → {doc}`validation`
 :::
 ::::
 
