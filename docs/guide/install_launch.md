@@ -11,8 +11,8 @@ the tagged source.)
 
 | System | File to download | How to run it |
 |---|---|---|
-| Windows (64-bit) | `SHAARP_py_v1.0.0_win64.zip` (120 MB) | extract, then double-click `SHAARP_py\SHAARP_py.exe` |
-| macOS, Apple Silicon (M-series) | `SHAARP_py_v1.0.0_macos.zip` (83 MB) | extract, then open `SHAARP_py/SHAARP_py.app` |
+| Windows (64-bit) | `SHAARP_py_v…_win64.zip` (≈120 MB) | extract, then double-click `SHAARP_py\SHAARP_py.exe` |
+| macOS, Apple Silicon (M-series) | `SHAARP_py_v…_macos_arm64.zip` (≈83 MB) | extract, then open `SHAARP_py/SHAARP_py.app` |
 
 On an **Intel Mac**, Linux, or any other system there is no packaged build — use Option 2 below.
 The macOS bundle is Apple Silicon only and an Intel Mac refuses it with *"not supported on this

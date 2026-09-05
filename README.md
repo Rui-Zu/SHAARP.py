@@ -99,8 +99,8 @@ file for your computer (open the newest release and look under *Assets*):
 
 | Your computer | Download | Then |
 |---|---|---|
-| Windows (64-bit) | `SHAARP_py_v1.0.0_win64.zip` (120 MB) | **extract the zip**, then double-click `SHAARP_py\SHAARP_py.exe` |
-| macOS, Apple Silicon (M-series) | `SHAARP_py_v1.0.0_macos.zip` (83 MB) | **extract the zip**, then open `SHAARP_py/SHAARP_py.app` (see the note below) |
+| Windows (64-bit) | `SHAARP_py_v…_win64.zip` (≈120 MB) | **extract the zip**, then double-click `SHAARP_py\SHAARP_py.exe` |
+| macOS, Apple Silicon (M-series) | `SHAARP_py_v…_macos_arm64.zip` (≈83 MB) | **extract the zip**, then open `SHAARP_py/SHAARP_py.app` (see the note below) |
 
 Extracting first matters on Windows: the app needs the `_internal` folder next to the `.exe`, so
 double-clicking straight out of the zip fails silently.
@@ -222,7 +222,9 @@ matches how you think.
 
 One catch worth knowing before you publish a number: for single-interface work `run_si_numeric`
 defaults to a *reduced* model and says so at runtime, in a `RuntimeWarning`. Ask for the validated
-solver explicitly with `run_si_numeric(sample, {"workflow": "shaarp_si_compat", ...})`. The
+solver explicitly with `run_si_numeric(sample, {"workflow": "shaarp_si_compat", ...})`, which
+reads only `theta_deg` — for a curve in the azimuth φ use
+`run_si_full_analytical(case, {"workflow": "polarimetry"})` instead. The
 `compute_si_gui_result` / `compute_ml_gui_result` paths shown above always use the validated
 solver, which is why the example on this page uses one.
 
@@ -254,9 +256,11 @@ want to run the rows marked ⧉.
 | `examples/` | Small runnable scripts with figures |
 | `benchmarks/` | Frozen live-Mathematica reference exports + the comparison tooling (no Mathematica needed to run tests) |
 | `docs/` | Full Sphinx site: GUI guide, API reference, tutorials, conventions, validation evidence |
-
-Installing the package also puts two commands on your PATH: **`shaarp-gui`** launches the desktop app, and `shaarp` is a small CLI for one-off runs (`shaarp --mode si --theta 45 --points 181 --save out.csv`; `shaarp --help` lists the options).
 | `tests/` | The gated validation suite |
+
+Installing the package also puts two commands on your PATH: **`shaarp-gui`** launches the desktop
+app, and `shaarp` is a small CLI for one-off runs (`shaarp --mode si --theta 45 --points 181 --save
+out.csv`; `shaarp --help` lists the options).
 
 ## How it works
 
