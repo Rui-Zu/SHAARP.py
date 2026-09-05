@@ -27,6 +27,8 @@ macOS: this build is for Apple Silicon (M-series) Macs. On an Intel Mac it will 
             Privacy & Security and click "Open Anyway".
           - macOS 14 or older: right-click (Control-click) the app -> Open -> Open.
           - Terminal alternative: xattr -dr com.apple.quarantine SHAARP_py.app
+          - The first launch takes 10-30 seconds while macOS scans the bundle; later launches
+            are quick. Give it a moment before clicking again.
 Inside the app: Help -> User Guide for the workflow, and hover any control for a tooltip.
 
 YOUR FIRST CALCULATION (about one minute)
