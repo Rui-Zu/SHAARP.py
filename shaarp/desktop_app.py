@@ -55,8 +55,8 @@ TOOLTIPS = {
     "functionality_si": (
         "Choose what to calculate for the single interface.\n"
         "SHG Simulation: polarimetry settings to simulate the reflected SHG intensities.\n"
-        "Partial/Full Analytical: derives the reflected SHG as a closed-form expression with the\n"
-        "input polarization phi and the SHG tensor components d_ij as symbolic variables."
+        "Partial / Full Analytical Expressions: derive the reflected SHG as a closed-form expression\n"
+        "with the input polarization phi and the SHG tensor components d_ij as symbolic variables."
     ),
     "functionality_ml": (
         "Choose what to calculate for the multilayer.\n"
@@ -4171,12 +4171,19 @@ def build_main_window():
                              else float(stack_film_thickness_um(stack_state["stack"])))
                     _sr = (page._sample_rotation_state() if sample_mode is not None
                            else {"on": False})
+                    assum = assumption_combo.currentText()
+                    is_fmr = ML_ASSUMPTIONS.get(assum, 0) == 0
+                    a_label = f"{assum} — {fmr_submode.currentText()}" if is_fmr else assum
                     if _sr["on"] and canon == "SHG Simulation":
                         # the original computes the azimuth sweep INSIDE SHG Simulation
                         # (`If[Functionality == "SHG Simulation", If[samplerotationcontrol, ...]]`),
                         # passing its fixed phi/psi into every point. the polarizer and
                         # analyzer may each ALSO rotate with the common scan angle.
-                        from .shaarp_gui import ml_sample_rotation_result
+                        # The Assumptions panel reaches the sweep as well (the original's
+                        # SampleRotate branches on `assumption`); it was silently pinned to
+                        # FMR/forward-only before, while the caption showed the panel value.
+                        from .shaarp_gui import (ml_sample_rotation_assumption_options,
+                                                 ml_sample_rotation_result)
                         with stage("compute"):
                             result = ml_sample_rotation_result(
                                 sketch_sys, theta_deg=theta_spin.value(),
@@ -4186,7 +4193,9 @@ def build_main_window():
                                 step_deg=_sr["step_deg"], ccw=_sr["ccw"],
                                 rotate_polarizer=_sr.get("rotate_polarizer", False),
                                 rotate_analyzer=_sr.get("rotate_analyzer", False),
-                                analyzer_offset_deg=_sr.get("analyzer_offset_deg", 0.0))
+                                analyzer_offset_deg=_sr.get("analyzer_offset_deg", 0.0),
+                                **ml_sample_rotation_assumption_options(
+                                    assum, fmr_submode.currentText()))
                     else:
                         # F70 the GUI walkthrough: the Fresnel spins need the same friendly min<max guard
                         # as the Maker ones (the grid builder's raw error names no field).
@@ -4233,9 +4242,6 @@ def build_main_window():
                         raise ValueError(
                             f"scan range: θ min ({th_min.value():g}°) must be smaller than θ max "
                             f"({th_max.value():g}°). Fix the 'scan: min / max / step (deg)' fields.")
-                    assum = assumption_combo.currentText()
-                    is_fmr = ML_ASSUMPTIONS.get(assum, 0) == 0
-                    a_label = f"{assum} — {fmr_submode.currentText()}" if is_fmr else assum
                     if getattr(result, "kind", "") == "sample_rotation":
                         # polar RA figure (2ω SHG vs SAMPLE azimuth), angular axis in the
                         # user's CW/CCW sense. The curve rides along for the equal-results fence.
@@ -4250,7 +4256,9 @@ def build_main_window():
                                        else f"φ={_sr_stage.get('fixed_phi_deg', 0.0):g}°, ")
                                     + ("ψ co-rotating, " if _sr_stage.get("rotate_analyzer")
                                        else f"ψ={_sr_stage.get('analyzer_psi_deg', 0.0):g}°, ")
-                                    + f"θⁱ={_sr_stage.get('theta_deg', 0.0):g}°"))
+                                    + f"θⁱ={_sr_stage.get('theta_deg', 0.0):g}°"
+                                    # name the assumption the sweep USED (like the Maker subtitle)
+                                    + f"\n{a_label}"))
                         _replace_canvas_figure(plot_canvas, _rafig)
                         output_tabs.setCurrentWidget(plot_tab)
                         state["last_ra_result"] = result

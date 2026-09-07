@@ -4,6 +4,19 @@ The entry points the desktop GUI calls, plus the high-level convenience function
 $d$-tensor extraction. Each returns either a plottable result object or a
 {py:class}`~shaarp.SHAARPResult`.
 
+## What the app's Update button runs
+
+The two functions behind the desktop app's **Update** button. They take the same arguments the
+GUI controls take (functionality name, preset or case-study name, angles) and return the same
+{py:class}`~shaarp.SHAARPResult`, so anything you can click you can script.
+
+```{eval-rst}
+.. currentmodule:: shaarp
+
+.. autofunction:: compute_si_gui_result
+.. autofunction:: compute_ml_gui_result
+```
+
 ## GUI-mirroring facades
 
 ```{eval-rst}

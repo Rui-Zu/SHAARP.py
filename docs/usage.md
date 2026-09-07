@@ -1,7 +1,9 @@
 # Usage (Python API)
 
-Everything the desktop app computes is available as a Python call — the GUI's **Update** button
-runs these same solvers.
+Everything the desktop app computes is available as a Python call. `compute_si_gui_result` and
+`compute_ml_gui_result` run exactly what the app's **Update** button runs, with the same arguments
+the GUI controls take; the `run_*` functions below are the solver stages underneath them, for when
+you want to build the inputs yourself.
 
 ```{admonition} Before you start
 :class: note
@@ -24,6 +26,9 @@ including the packaged app for people who do not want Python at all, are in
 * - I want…
   - Call
   - Notes
+* - exactly what the app's Update button computes
+  - `compute_si_gui_result(functionality, ...)`, `compute_ml_gui_result(functionality, ...)`
+  - same arguments as the GUI controls, e.g. `system_preset="Quartz + Au (Fig 4, 800 nm)"`; see {doc}`api/facade`
 * - a polarimetry curve $I(\varphi)$
   - `run_si_full_analytical(case, {"workflow": "polarimetry"})`
   - validated closed form; symbolic in $\varphi$ and $d_{ij}$

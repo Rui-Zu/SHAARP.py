@@ -22,13 +22,13 @@ and, within each tab, the same overall layout:
      and (on ML) the multiple-reflection assumption.
   2. **Plot tabs** — *Polar Plots*, plus *Maker Fringes* / *Fresnel Coefficients* (ML), and *Guide*.
   3. **Analytical Expression** — the copyable closed-form output.
-- **Bottom:** **Copy** (closed form → clipboard) and **Export** (numeric data + closed form → JSON),
-  and a **Time-Used** readout.
+- **Bottom:** **Copy** (puts the closed form on the clipboard), **Export** (writes the numeric data
+  and the closed form to a JSON file), and a **Time-Used** readout.
 
 ## The Functionality dropdown
 
 Each tab's **Functionality** dropdown selects what **Update** computes (and which output tab is
-shown). It lists **compute modes only** — help is on the **Help → User Guide** menu and the startup
+shown). It lists **compute modes only** — help is under **Help**, **User Guide** and on the startup
 *Guide* tab, the optical schematic is a persistent banner, and the crystal-axes view lives in the
 orientation input group. The per-tab lists are detailed in {doc}`si_tab` and {doc}`ml_tab`.
 

@@ -27,8 +27,8 @@ python examples/<name>.py
   - polar plots from the analytical expression
   - ~6 s
 * - `maker_mathematica_overlay.py`
-  - **Visual proof of the Mathematica agreement:** SHAARP.py Maker intensities overlaid on live
-    ♯SHAARP.ml points at 0.1° sampling, with a residual panel (~1e-15).
+  - SHAARP.py Maker intensities overlaid on the reference points from the original ♯SHAARP.ml
+    package at 0.1° sampling, with a residual panel.
   - overlay + residual figure
   - ~8 s
 * - `maker_fringes_dense.py`

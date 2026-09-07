@@ -25,9 +25,9 @@ def md(t): cells.append(nbf.v4.new_markdown_cell(t))
 def code(t): cells.append(nbf.v4.new_code_cell(t))
 
 md("""# SHAARP.py — Master Benchmark Notebook
-**Single dashboard to monitor all benchmark activity.** Every agreement number traces to a
-live-Mathematica comparison artifact or a tolerance-gated test; figures are sampled at the
-angular rigor of the SHAARP papers.
+**Every benchmark in one place.** Every agreement number traces to a comparison against the
+reference output of the original packages or to a tolerance-gated test; figures are sampled at the
+angular resolution of the SHAARP papers.
 
 Attribution (kept straight):
 - **♯SHAARP.si** — Zu et al., *npj Comput. Mater.* **8**, 246 (2022): single-interface **reflected** SHG,
@@ -46,7 +46,7 @@ ROOT = Path.cwd()
 def show_md(t): display(Markdown(t))
 print('repo root =', ROOT.name)""")
 
-md("## 1 · Gated test suite (the un-fakeable guard)")
+md("## 1 · Gated test suite")
 code("""tests = sorted(glob.glob('tests/test_*.py'))
 n_funcs = sum(len(re.findall(r'def test_', Path(t).read_text(encoding='utf-8'))) for t in tests)
 show_md(f'**{len(tests)} test files**, **{n_funcs} `test_` functions**. '
@@ -57,7 +57,7 @@ Transmitted SHG vs incidence angle θᵢ across the three assumption modes (Full
 Panel (a) is the full scan at **0.1° step**; panel (b) a magnified window at **0.02°** that resolves
 the **fine fringes** (2ω multiple-reflection interference) present in HH/Full but absent in JK.""")
 code("""p = Path('fig_maker_dense.png')
-display(Image(str(p))) if p.exists() else show_md('_fig_maker_dense.png missing — run `python examples/maker_fringes_dense.py`_')
+display(Image(str(p))) if p.exists() else show_md('_fig_maker_dense.png missing — regenerate it with `python build_master_benchmark_notebook.py` from the repository root_')
 # live-Mathematica Maker agreement (current canonical grid)
 def load(f):
     try: return json.load(open(f, encoding='utf-8'))
@@ -78,7 +78,7 @@ md("""## 3 · SHG polarimetry (♯SHAARP.si full + ♯SHAARP.ml partial)
 Reflected SHG as a closed form in input polarization φ (the d-extraction expression). GaAs(111):
 the `Iₚ(φ)/Iₛ(φ)` lobes and the C3v 3-fold sample-azimuth signature, from the full-analytical closed form.""")
 code("""p = Path('fig_polarimetry_gaas.png')
-display(Image(str(p))) if p.exists() else show_md('_fig_polarimetry_gaas.png missing — run `python examples/gaas111_shg_polarimetry.py`_')
+display(Image(str(p))) if p.exists() else show_md('_fig_polarimetry_gaas.png missing — regenerate it with `python build_master_benchmark_notebook.py` from the repository root_')
 show_md('**Validation:** the SI full-analytical polarimetry matches the **published GaAs(111)** closed '
         'form (npj 2022 eq 9–32 composed) to the 5-decimal floor and the numeric solver to ~1e-12 '
         '(`tests/test_si_shg_polarimetry_symbolic.py`); ML partial matches the numeric Jones workflow '
@@ -88,7 +88,7 @@ md("""## 4 · d-extraction (the closed form fulfilling its purpose)
 Simulate a polarimetry scan of a known crystal, then recover its d-tensor by fitting the closed form.
 Spans **{reflected, transmitted/Maker} × {SI, ML}**, field and intensity measurement models.""")
 code("""p = Path('fig_d_extraction.png')
-display(Image(str(p))) if p.exists() else show_md('_fig_d_extraction.png missing — run `python examples/d_extraction_demo.py`_')
+display(Image(str(p))) if p.exists() else show_md('_fig_d_extraction.png missing — regenerate it with `python build_master_benchmark_notebook.py` from the repository root_')
 show_md('**Validation:** known 6-component tensors recovered to ~1e-9 (field) / up to overall sign (intensity); '
         'single-geometry rank-deficiency and identifiability reported honestly '
         '(`tests/test_polarimetry_d_extraction_api.py`, `tests/test_si_polarimetry_d_extraction.py`). '
@@ -125,8 +125,8 @@ md("""## 6 · Master summary
 | d-extraction (field + intensity) | refl + transmitted, SI + ML | recover known d | ✅ ~1e-9 |
 | Fresnel / single-interface / symbolic | both | vs live Mathematica | ✅ ~1e-13..1e-17 |
 
-For the complete evidence table (categories, tolerances, gating test per row) see `docs/validation.md`;
-what is deliberately NOT verified is stated claim-by-claim in `docs/validation.md`.
+For the complete evidence table (categories, tolerances, gating test per row) and what is
+deliberately not verified, see `docs/validation.md`.
 """)
 
 nb["cells"] = cells

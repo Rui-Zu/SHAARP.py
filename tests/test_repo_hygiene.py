@@ -315,5 +315,48 @@ class RepoHygieneTests(unittest.TestCase):
         self.assertLess(time.time() - start, 30.0, "hygiene scan has become too slow")
 
 
+class ReleaseDownloadLinksMatchTheVersion(unittest.TestCase):
+    """Every one-click download link in the docs must point at the version being shipped.
+
+    The README's download table links straight at release assets --
+    ``.../releases/download/v1.0.0/SHAARP_py_v1.0.0_win64.zip`` -- because "go to Releases and
+    look under Assets" was where non-programmers stalled. The price is that the version is now
+    written into the docs in two places per link (the tag and the filename), and a version bump
+    that forgets them ships links that 404. A hardcoded asset name has drifted once already
+    (``_macos.zip`` for an asset actually called ``_macos_arm64.zip``), so this is not theoretical.
+    """
+
+    LINK = re.compile(r"releases/download/v(\d+\.\d+\.\d+)/([A-Za-z0-9_.\-]+)")
+    DOCS = ("README.md", "docs/guide/install_launch.md", "docs/index.md")
+
+    def test_every_download_link_carries_the_pyproject_version(self):
+        try:
+            import tomllib
+        except ImportError:  # pragma: no cover - Python 3.10
+            self.skipTest("tomllib requires Python >= 3.11")
+        version = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8")
+                                )["project"]["version"]
+        seen, bad = 0, []
+        for rel in self.DOCS:
+            path = ROOT / rel
+            if not path.exists():
+                continue
+            for tag_version, asset in self.LINK.findall(path.read_text(encoding="utf-8")):
+                seen += 1
+                if tag_version != version:
+                    bad.append(f"{rel}: link tag v{tag_version} != pyproject {version} ({asset})")
+                elif version not in asset:
+                    bad.append(f"{rel}: asset name {asset!r} does not carry v{version}")
+        self.assertGreater(seen, 0, "no download links found -- the README table lost its links?")
+        self.assertEqual(bad, [], "download links out of step with the version:\n  " + "\n  ".join(bad))
+
+    def test_the_link_pattern_matches_a_real_link(self):
+        """Falsifiability: the regex must actually see the form the README uses."""
+        m = self.LINK.search(
+            "(https://github.com/Rui-Zu/SHAARP.py/releases/download/v1.0.0/SHAARP_py_v1.0.0_win64.zip)")
+        self.assertIsNotNone(m)
+        self.assertEqual(m.groups(), ("1.0.0", "SHAARP_py_v1.0.0_win64.zip"))
+
+
 if __name__ == "__main__":
     unittest.main()

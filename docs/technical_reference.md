@@ -1,7 +1,7 @@
 # Technical reference
 
-The full solver-stage, facade, and benchmark reference. This is the deep documentation moved out
-of the repository README so the landing page stays short; nothing here is required
+The full solver-stage, facade and benchmark reference: how each stage of the calculation is
+organised, which reference it is checked against, and at what tolerance. Nothing here is required
 for everyday use — start with {doc}`usage` and the {doc}`api/index` instead.
 
 ## Public facade
@@ -34,7 +34,7 @@ Mathematica reference values against a `SHAARPResult`. Reference keys can be
 plain numeric names such as `intensity`, or dotted intermediate and metadata
 values such as `numeric.boundary_residual_norm`,
 `stages.normal_incidence_2omega_branch_policy`, `validation.status`, and
-`conventions.field_convention`. This is intended for value-by-value benchmark
+`conventions.field_convention`. This is intended for element-by-element benchmark
 files that check intermediate values and policy labels, not only final plots.
 
 `run_si_numeric` keeps the legacy reduced model as its default. To use the
@@ -99,7 +99,7 @@ symbolic `d_voigt_lab` directly (the chain is fully symbolic and computePNL is l
 giving the SHG as a closed form in `d_ijk` (and angles) — see `tests/test_si_shg_symbolic_d.py`.
 The ML **partial-analytical** counterpart is closed-form in **both** the film thickness `h`
 and `d_ijk` (`shaarp.multilayer_shg_symbolic.solve_single_film_shg_symbolic_thickness_and_d`,
-the Maker fringe), validated to ~1e-18. Honest boundary: the **general rotated** (non
+the Maker fringe), validated to ~1e-18. Its limit: the **general rotated** (non
 principal-aligned) biaxial closed form is a full Booker quartic in `k_z` (impractical as a
 radical); the numeric path covers all orientations. When comparing any symbolic SHG to the
 numeric solver, pass **identical `mu, eps0`** to both (`MU0*EPS0 = 1/c^2` rescales the
@@ -155,7 +155,7 @@ sign), and the recovered `D` being exactly rank-1 is itself a data-consistency c
 This is packaged as a reusable feature: `shaarp.polarimetry_extraction.extract_si_d_voigt(...,
 method="field"|"intensity")` takes the measurement geometries, the φ samples, and a
 `measure(theta, azimuth, phi) -> (E_s, E_p)` forward output, and returns a `DExtractionResult`
-with the recovered `d_voigt` plus an honest report (`rank`, `identifiable`, `condition_number`,
+with the recovered `d_voigt` plus a diagnostic report (`rank`, `identifiable`, `condition_number`,
 `residual`, `sign_ambiguous`) — see `tests/test_polarimetry_d_extraction_api.py`. It also accepts
 `observable="transmitted"` (the **Maker-fringe** geometry): `measure` then returns the total
 transmitted SHG field 3-vector, giving 3 observables per scan point, so the tensor is often
@@ -194,7 +194,7 @@ The notebook-first interactive entry point is `notebooks/SHAARP_py_interactive_s
 It uses `shaarp.make_interactive_session()` and requires the optional interactive dependencies
 (`pip install "shaarp-py[interactive] @ git+https://github.com/Rui-Zu/SHAARP.py"`).
 
-For the faithful two-in-one replica of the original SHAARP.si + SHAARP.ml GUIs
+For the merged SHAARP.si + SHAARP.ml GUI
 (tab navigation, constrained d-tensor entry, Miller orientation, assumptions,
 presets, copyable closed-form expressions, 2D/3D schematics), use:
 
@@ -263,7 +263,7 @@ Mathematica-verified staged building blocks include:
 - `shaarp.symbolic.solve_single_interface_shg_known_waves_symbolic`
 - `shaarp.symbolic.solve_isotropic_single_interface_shg_symbolic`
 
-This ports the numerical core of Mathematica `solveSnell`: solve `L E = eta epsilon E`, identify `eta = 1/n^2`, and solve Snell's law separately for fast and slow modes. The current Python path covers transmitted and reflected/backward roots for real/lossless and complex absorbing anisotropic dielectric tensors. `identify_uniaxial_modes` adds a guarded ordinary/extraordinary classifier for uniaxial media so nonlinear SHAARP source labels do not silently assume `fast == extraordinary` and `slow == ordinary`. For biaxial or otherwise non-uniaxial sweeps, `track_mode_branches` keeps two eigenmode branches continuous by electric-field overlap and marks ambiguous assignments, without forcing ordinary/extraordinary labels. This is verified by equation residuals, Python regression fingerprints, and exported Mathematica `solveSnell` reference values (20 cases; `test_mathematica_solve_snell_reference.py`).
+This implements the numerical core of the original `solveSnell`: solve `L E = eta epsilon E`, identify `eta = 1/n^2`, and solve Snell's law separately for fast and slow modes. The current Python path covers transmitted and reflected/backward roots for real/lossless and complex absorbing anisotropic dielectric tensors. `identify_uniaxial_modes` adds a guarded ordinary/extraordinary classifier for uniaxial media so nonlinear SHAARP source labels do not silently assume `fast == extraordinary` and `slow == ordinary`. For biaxial or otherwise non-uniaxial sweeps, `track_mode_branches` keeps two eigenmode branches continuous by electric-field overlap and marks ambiguous assignments, without forcing ordinary/extraordinary labels. This is verified by equation residuals, Python regression fingerprints, and exported Mathematica `solveSnell` reference values (20 cases; `test_mathematica_solve_snell_reference.py`).
 
 `CrystalOrientation.from_miller_surface(structure, (h, k, l))` builds a real orientation from a general Miller plane by using the reciprocal lattice vectors from `CrystalStructure`. `CrystalOrientation.from_cubic_miller_surface((h, k, l))` is the narrower cubic/orthonormal-axis convenience path. The benchmark suite includes both an all-nonzero cubic `[1, 2, 3]` orientation and a non-cubic reciprocal-lattice `[1, 2, 3]` case whose normal is not the naive Cartesian triple. Complex spatial rotation matrices are intentionally rejected; absorption/complex response belongs in the dielectric and nonlinear tensors, not in the real-space orientation matrix.
 
@@ -272,11 +272,11 @@ This ports the numerical core of Mathematica `solveSnell`: solve `L E = eta epsi
 rotation about lab `L3`. This is intentionally separate from
 `Polarimetry.phi_deg`, which remains the incident polarizer angle.
 
-`solve_fresnel_boundary` ports the tangential `E`/`H` continuity structure of Mathematica `solveFresnel` for four unknown reflected/transmitted wave amplitudes. It is verified against closed-form isotropic Fresnel coefficients for s and p polarization.
+`solve_fresnel_boundary` follows the tangential `E`/`H` continuity structure of the original `solveFresnel` for four unknown reflected/transmitted wave amplitudes. It is verified against closed-form isotropic Fresnel coefficients for s and p polarization.
 
 `solve_boundary_continuity` is the lower-level interface solver used by `solve_fresnel_boundary`. It supports known waves on both sides of an interface, which is needed for SHG boundary stages with known inhomogeneous source fields. It is verified by residual tests that include a known bottom-side source wave.
 
-`solve_multilayer_boundary` ports the numeric boundary-condition structure of Mathematica `solveFresnelN`: top interface, internal interfaces with `exp(I k_z thickness)` propagation, and bottom interface. It solves the linear amplitude system for reflected, internal forward/backward, and substrate waves. It also accepts known layer/substrate waves — the hook for inhomogeneous nonlinear source fields in the SHAARP.ml workflow, which is validated end-to-end against live Mathematica (see {doc}`validation`).
+`solve_multilayer_boundary` follows the numeric boundary-condition structure of the original `solveFresnelN`: top interface, internal interfaces with `exp(I k_z thickness)` propagation, and bottom interface. It solves the linear amplitude system for reflected, internal forward/backward, and substrate waves. It also accepts known layer/substrate waves — the hook for inhomogeneous nonlinear source fields in the SHAARP.ml workflow, which is validated end-to-end against the SHAARP.ml reference output (see {doc}`validation`).
 
 `solve_multilayer_shg_boundary` wraps the multilayer boundary kernel for the
 2omega nonlinear stage once inhomogeneous layer source waves are known. It
@@ -291,8 +291,8 @@ multilayer boundary problem, builds the ten layer source terms, solves their
 inhomogeneous fields, and runs the 2omega boundary solve. The higher-level
 `solve_multilayer_shg_from_tensors` additionally generates the omega and 2omega
 bases from supplied lab-frame tensors for an isotropic top medium. The
-multilayer SHG workflow is validated value-by-value against live Mathematica
-SHAARP.ml Maker fringes (single film through nine layers, plus point-group
+multilayer SHG workflow is validated element by element against the SHAARP.ml
+reference Maker fringes (single film through nine layers, plus point-group
 classes) to ~10⁻¹³–10⁻¹⁴ (see {doc}`validation`).
 
 The lower-level `solve_multilayer_shg_from_fundamental` path accepts supplied
@@ -314,7 +314,7 @@ plus fundamental and SH boundary residual norms.
 The Jones/polarimetry variants support arbitrary complex incident amplitudes in
 explicit `(s, p)` order. `solve_multilayer_shg_from_system_polarimetry` follows
 the Python convention `s = sin(phi) exp(i ellipticity)`, `p = cos(phi)`, and is
-validated value-by-value against live Mathematica SHAARP.ml `SampleRotate` to
+validated element by element against the SHAARP.ml `SampleRotate` reference to
 ~2×10⁻¹⁴ across 20 polarimetry settings, under the SHAARP.ml-matching
 forward-only inhomogeneous-source policy (see `test_polarimetry_reference_comparison.py`).
 Note: the convenience sweep wrapper `solve_multilayer_shg_polarimetry_sweep`
@@ -341,9 +341,9 @@ norms.
 
 `solve_linear_interface_sweep` wraps the linear interface solver for angle sweeps and attaches continuity-tracked transmitted branch waves — for biaxial/non-uniaxial sweeps where per-angle fast/slow sorting can swap identities.
 
-`compute_pnl_voigt` ports Mathematica `computePNL`, including the mixed-mode factor used for `eo` source polarization. `single_interface_sources` generates the `ee`, `oo`, and `eo` source wavevectors/polarizations.
+`compute_pnl_voigt` implements the original `computePNL`, including the mixed-mode factor used for `eo` source polarization. `single_interface_sources` generates the `ee`, `oo`, and `eo` source wavevectors/polarizations.
 
-`solve_inhomogeneous_field` ports the coefficient-level linear equation from Mathematica `solveInhom`:
+`solve_inhomogeneous_field` implements the coefficient-level linear equation of the original `solveInhom`:
 
 ```text
 Curl[Curl[E_inh]] = omega^2 mu0 eps0 (epsilon. E_inh + PNL)
@@ -351,9 +351,9 @@ Curl[Curl[E_inh]] = omega^2 mu0 eps0 (epsilon. E_inh + PNL)
 
 for one nonlinear source phase. `solve_single_interface_inhomogeneous_fields` applies this to the `ee`, `oo`, and `eo` sources. Each returned inhomogeneous field includes `operator_condition`, `ill_conditioned`, and `solution_method` diagnostics so near phase-matched singular systems are visible instead of being treated as ordinary residual-pass cases. The default `solution_policy="solve"` preserves the direct-solve behavior used for SHAARP compatibility checks; exact singular operators fall back to an explicit minimum-norm least-squares diagnostic. For phase-matched studies where a deterministic truncated-SVD convention is preferred, use `solution_policy="minimum_norm_if_ill_conditioned"` or `solution_policy="minimum_norm"`. These policies make the arbitrary near-null component explicit; they are not a substitute for any finite-thickness or resonant phase-matching treatment Mathematica may use.
 
-`solve_single_interface_shg` ports the numeric structure of Mathematica `f1NL` for one interface: solve the linear omega boundary problem, construct homogeneous reflected/transmitted 2omega waves, solve the three inhomogeneous 2omega source fields, then enforce the 2omega tangential E/H boundary condition with the inhomogeneous waves included on the transmitted side. For detectably uniaxial omega tensors, it classifies the fundamental modes and builds `ee`, `oo`, and `eo` from extraordinary/ordinary identity rather than from fast/slow sort order.
+`solve_single_interface_shg` follows the numeric structure of the original `f1NL` for one interface: solve the linear omega boundary problem, construct homogeneous reflected/transmitted 2omega waves, solve the three inhomogeneous 2omega source fields, then enforce the 2omega tangential E/H boundary condition with the inhomogeneous waves included on the transmitted side. For detectably uniaxial omega tensors, it classifies the fundamental modes and builds `ee`, `oo`, and `eo` from extraordinary/ordinary identity rather than from fast/slow sort order.
 
-`shaarp.symbolic` provides the analytical-expression building blocks. It ports
+`shaarp.symbolic` provides the analytical-expression building blocks. It implements
 the SHAARP.si partial-analytical `doldExp` point-group SHG tensor patterns, the
 `dnewExp` crystal-to-lab Voigt rotation loop, and the symbolic
 `computePNL`/`P2e`, `P2o`, `Peo` nonlinear source expressions (optional SymPy
@@ -407,7 +407,7 @@ boundary coefficients, not only final intensities. The benchmark families
 sweep incidence angles, orientations, s/p polarization, complex anisotropic
 (including non-diagonal) tensors, and all ten forward/backward nonlinear layer
 source terms; each case stores full numeric arrays under `outputs` so
-Mathematica exports are compared value-by-value
+Mathematica exports are compared element by element
 (`benchmarks/compare_mathematica_reference.py`).
 
 Current verification policy:
@@ -428,6 +428,20 @@ Current verification policy:
 
 Command-line Wolfram evaluation is only needed to REGENERATE reference data; every shipped test
 runs against the frozen JSON exports in `benchmarks/` and needs no Mathematica installation.
+
+## Verifying a packaged build
+
+The frozen executable exposes two self-check flags, used by the release gate:
+
+```bash
+SHAARP_py.exe --self-check
+SHAARP_py.exe --gui-smoke
+```
+
+`--self-check` runs the real SI / ML / Maker / Fresnel compute paths and asserts the benchmark data
+is bundled; `--gui-smoke` drives every tab × functionality × angle (including θ = 0) headlessly. A
+headless GUI smoke run from source is also possible by setting `QT_QPA_PLATFORM=offscreen` before
+launching.
 
 ## Legacy reduced CLI demos
 

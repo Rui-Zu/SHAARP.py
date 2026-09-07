@@ -81,7 +81,8 @@ html_theme_options = {
     "style_external_links": True,
 }
 html_static_path = ["_static"]
-html_title = "SHAARP.py documentation"
+html_title = "SHAARP.py: second-harmonic generation in crystals and multilayers"
+html_short_title = "SHAARP.py"
 # The site covers BOTH packages, so it carries the package-neutral SHAARP.py mark -- not the
 # .ml logo, which advertised the multilayer half as if it were the whole project.
 _logo = os.path.join(os.path.dirname(__file__), "_static", "shaarp_py_logo.png")

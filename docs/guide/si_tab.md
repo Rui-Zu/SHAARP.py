@@ -7,7 +7,7 @@ right.
 ## Functionality
 
 The **Functionality** dropdown lists **compute modes only** — each one runs physics and produces a
-result (the help page is on the **Help → User Guide** menu and the startup *Guide* tab; the optical
+result (the help page is under **Help**, **User Guide** and on the startup *Guide* tab; the optical
 schematic is a persistent banner; the crystal-axes view sits in the orientation input group):
 
 ```{list-table}
@@ -17,9 +17,9 @@ schematic is a persistent banner; the crystal-axes view sits in the orientation 
   - What it does
 * - **SHG Simulation**
   - Validated numeric reflected-SHG polarimetry (the `shaarp_si_compat` workflow). Produces the polar plots.
-* - **Partial Analytical Expression**
+* - **Partial Analytical Expressions**
   - Closed-form reflected-SHG polarimetry, symbolic in the input polarization $\varphi$ and the $d_{ij}$ components (numeric angle/indices, taken from the selected material — complex $\varepsilon$ included for absorbing crystals).
-* - **Full Analytical Expression**
+* - **Full Analytical Expressions**
   - Closed-form symbolic in $\varphi$, $d_{ij}$, angle, **and** indices. Fully-symbolic forms exist for isotropic/uniaxial crystals in the identity or pure-$R_z$ orientations; other orientations fall back to the substituted (Partial-style) form **with a declared note** in the output.
 ```
 
@@ -31,10 +31,9 @@ is cached, so repeats are instant.
 
 ## Material setup
 
-**Case-study material.** The dropdown is the original ♯SHAARP.si palette, with each case's
-constants transcribed verbatim from the notebook. The *Cases in DOI* group — the four cases worked
-in the ♯SHAARP.si paper — is **all at 800 nm** (the header says so); the other groups follow the
-original panel:
+**Case-study material.** The dropdown lists the published ♯SHAARP.si case studies, each with its
+constants as published. The *Cases in DOI* group — the four cases worked in the ♯SHAARP.si paper —
+is **all at 800 nm** (the header says so); the other groups are:
 
 > **Cases in DOI (all 800 nm):** GaAs (111), LiNbO₃ (112̄0) MTI X-cut, KTP (100), TaAs (112)
 > **Complex SHG Coefficients:** GaAs (111) @1064 nm
@@ -50,13 +49,12 @@ editor. See {doc}`my_materials`.
 
 ```{note}
 The ♯SHAARP.ml palette materials (Air, quartz, ZnO, MoS₂, …) live on the **SHAARP.ml tab** as film
-choices, matching the original packages' separation. Centrosymmetric / isotropic materials there
+choices. Centrosymmetric / isotropic materials there
 are SHG-forbidden by symmetry; the app shows **"SHG ≈ 0 (symmetry-forbidden)"** rather than a
 spurious signal.
 ```
 
-**Point group.** The dropdown reproduces the original package's two popups
-(SHAARP.ml.nb:5191 / :5630) as two header-separated sections; the headers themselves cannot be
+**Point group.** The dropdown has two header-separated sections; the headers themselves cannot be
 selected:
 
 > **— Noncentrosymmetric (SHG-active) —** 1, 2, m, mm2, 222, 3, 32, 3m, 4, 6, -4, 4mm, 6mm, 422,
@@ -73,8 +71,7 @@ active" switch.
 - **Pick one from the second section** and $d \equiv 0$: the *SHG Tensor dᵢⱼ* group collapses, its
   title gaining the suffix **"— not used: SHG-inactive point group (d ≡ 0)"**. Choosing an active
   group again restores the pattern.
-- **432 sits in the inactive section** because its $d$ vanishes under Kleinman symmetry — as in the
-  original package.
+- **432 sits in the inactive section** because its $d$ vanishes under Kleinman symmetry.
 
 **Lattice constants.** $a, b, c$ in Å, $\alpha, \beta, \gamma$ in degrees. The point group's
 crystal system locks the dependent cells — they grey out and are coerced to the rule:
@@ -134,6 +131,6 @@ tabulated range — no silent extrapolation.
 - **2D & 3D schematics** — the optical setup at the entered $\theta_i$ (see {doc}`interface`).
 - **Polar Plots** — reflected $I_p^{2\omega}(\varphi)$ and $I_s^{2\omega}(\varphi)$, plus the
   effective-refractive-index curve $n(\theta_i)$ and the incident-ellipticity locus.
-- **Analytical Expression** — the closed form (Partial/Full Analytical modes), TYPESET like the original package: real super/subscripts and Greek symbols (n_ω², θᵢ, d₁₄, φ). The **Copy** button and the `.txt` export deliver the machine-readable SymPy text (paste-able into Python/Mathematica), not the typeset view.
+- **Analytical Expression** — the closed form from the two analytical modes, typeset with real super/subscripts and Greek symbols (n_ω², θᵢ, d₁₄, φ). The **Copy** button and the `.txt` export deliver the machine-readable SymPy text (paste-able into Python or Mathematica), not the typeset view.
 
 See {doc}`outputs_export` for Copy/Export. Next: {doc}`ml_tab`.

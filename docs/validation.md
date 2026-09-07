@@ -1,59 +1,35 @@
-# SHAARP.py — Validation against the Mathematica SHAARP package
+# How SHAARP.py is tested
 
-This document is the canonical record of how the Python re-implementation
-(**SHAARP.py**) is validated against the original Wolfram / Mathematica
-**SHAARP** package (`SHAARP.si` single-interface, `SHAARP.ml` multilayer). Every
-agreement claim here is backed by an automated, tolerance-gated test that
-compares Python output **value-by-value** against output exported from a live
-Mathematica kernel — not against a Python re-derivation.
+This page is the evidence behind the one-line statement elsewhere in these docs that "the solvers
+are checked against the published equations and the reference output of the original packages".
+It says what is compared against what, at which tolerance, and which test guards each comparison.
 
-> **Bottom line:** SHAARP.py reproduces the original Mathematica SHAARP package to
-> machine precision (typical max error 10⁻¹³ – 10⁻¹⁷) across solver stages,
-> geometries, the Full / JK / HH assumption modes, single-interface reflected SHG,
-> crystal orientation, and the symbolic engine. The full automated suite (216
-> modules / 1,269 tests) passes, including an offscreen pass over every selectable
-> case × functionality on both GUI tabs.
+Three kinds of reference are used:
 
-## Additions since the evidence table below
+- the equations published with the two ♯SHAARP papers and their supplementary notes,
+- numerical output exported from the original Mathematica packages (`SHAARP.si` for the single
+  interface, `SHAARP.ml` for multilayers) at fixed reference points, and
+- the papers' own figures, reproduced through the same compute path the desktop app uses.
 
-- **SHAARP.ml docs quartz+Au Maker case** (Z-cut quartz 121.2 um + Au 13.9 nm,
-  lambda 0.8 um, p-in/p-out, 20-30 deg at 0.1 deg): live-Mathematica MFList
-  reproduced to max abs err 3.6e-9 (rel 5.2e-10), zero spurious nulls. Gated by
-  `tests/test_quartz_au_docs_reference.py`; case in `benchmarks/quartz_au_docs_case.py`.
-- **Degenerate-eigenmode slot fixes** (6 instances found via the everything-must-
-  be-continuous lens): Maker per-channel slot swap (verified vs live SHAARP.ml,
-  3.4e-11 in the swap window), GUI Fresnel tp/ts, SI compat omega+2omega branch
-  collision for isotropic crystals — the isotropic fix verified against classical
-  Fresnel (exact) and the published-GaAs(111)-validated closed form (scale 1.0,
-  agreement ~1.5e-7; s-incidence selection-rule zero pinned as exact physics).
-- **Natural-units convention enforced** for the multilayer path (mu=eps0=1 defaults
-  + dispersion-contract warning); suite logs warning-free.
-- **Merged SHAARP.si + .ml GUI** (`shaarp.make_shaarp_gui()`) with all controls on
-  the validated backends; 49 GUI tests including continuity gates.
-- Suite total: **216 modules, 1,269 tests, 0 failures**, measured by running every module in its
-  own subprocess from a clean checkout copied outside the development tree — so this is the figure
-  a user reproduces after cloning, not one that holds only on the author's machine.
-  Earlier editions of this file quoted **1,250 / 1,257 / 1,258** tests. Those were UNDERCOUNTS
-  rather than a larger suite: per-module totals were summed with a pattern requiring the plural
-  `"Ran N tests"`, while a module with a single test prints `"Ran 1 test"` and therefore counted as
-  zero. Only the reported number was affected; no module's pass/fail status ever was.
+In short: SHAARP.py agrees with the reference output of the original packages to machine precision
+(typical maximum error 10⁻¹³ – 10⁻¹⁷) across solver stages, geometries, the Full / JK / HH
+assumption modes, single-interface reflected SHG, crystal orientation and the symbolic engine. The
+full automated suite (216 modules / 1,271 tests) passes, including an offscreen pass over every
+selectable case and functionality on both GUI tabs.
 
-## Methodology
+## Method
 
-1. **Live Mathematica export.** The original `SHAARP.ml` / `SHAARP.si` notebooks
-   are executed in Wolfram (`wolframscript`); their reference outputs are
-   persisted byte-faithfully as JSON under `benchmarks/mathematica_reference/`.
-   Each Wolfram exporter is derived from a proven-parsing canonical script by
-   exact surgical string-replacement (verified by unified diff) so it cannot
-   introduce a silent syntax error.
-2. **Value-by-value comparison.** Python output is compared element-wise to those
-   references at **explicit numerical tolerances** (atol 10⁻⁹ – 10⁻¹²).
-3. **Un-fakeable gated tests.** Each comparison is guarded by a test that *errors*
-   (rather than spuriously passing) when a feature or reference is absent.
-4. **Honest diagnostics.** Phase-matching / singular points, where the
-   inhomogeneous solve is intrinsically near-singular, are retained as **labelled
-   diagnostics** and excluded from the agreement count — they reflect shared
-   ill-conditioning, not a port error.
+1. **Reference export.** The original `SHAARP.ml` / `SHAARP.si` notebooks are run in Wolfram
+   (`wolframscript`) and their outputs are stored as JSON under
+   `benchmarks/mathematica_reference/`. Each exporter is derived from one canonical script by exact
+   string replacement, checked by diff, so an exporter cannot introduce a silent syntax error.
+2. **Element-wise comparison.** Python output is compared element by element with those references
+   at explicit numerical tolerances (atol 10⁻⁹ – 10⁻¹²).
+3. **Tests that cannot pass vacuously.** Each comparison is guarded by a test that errors, rather
+   than passing, when a feature or a reference file is absent.
+4. **Singular points are labelled, not hidden.** At phase-matching points the inhomogeneous solve
+   is intrinsically near-singular in both implementations; these points are kept as labelled
+   diagnostics and excluded from the agreement count.
 
 ## Evidence — agreement across the validated surface
 
@@ -74,10 +50,21 @@ Mathematica kernel — not against a Python re-derivation.
 | Multilayer Maker — **non-air incident medium**, n₀ = 1.33/1.34, 9-layer (mlamb) | 2 | 10⁻⁹ | 5.6×10⁻¹⁴ | `test_maker_fringes_multilayer_mlamb_reference_comparison.py` |
 | Symbolic nonlinear polarization Pᴺᴸ (live Wolfram) | 36 | 10⁻⁹ | 2.8×10⁻¹⁷ | `test_*symbolic*pnl*` |
 | Symbolic inhomogeneous wave — `solveInhom` (live Wolfram) | 20 | 10⁻⁹ | 9.8×10⁻¹⁷ | `test_*solve_inhom*` |
+| Quartz + Au Maker case from the docs (Z-cut quartz 121.2 µm + Au 13.9 nm, 0.8 µm, p-in/p-out, 20–30° at 0.1°) | 1 | 10⁻⁸ | 3.6×10⁻⁹ (rel 5.2×10⁻¹⁰, zero spurious nulls) | `test_quartz_au_docs_reference.py` |
+| Degenerate-eigenmode slot handling (Maker per-channel swap window; single-interface ω/2ω branch collision for isotropic crystals) | 6 | 10⁻⁶ | 3.4×10⁻¹¹ (Maker); ~1.5×10⁻⁷ vs. classical Fresnel and the GaAs(111) closed form | `test_maker_fringes_*`, `test_shaarp_si_compat_*` |
 
 All non-singular cases pass at the stated tolerance. Source values:
 `benchmarks/mathematica_reference/*_comparison_summary*.json` and the per-family
 reference JSON files.
+
+Two further properties are enforced by the suite rather than compared against a reference: the
+multilayer path runs in natural units (μ = ε₀ = 1 defaults, with a dispersion-contract warning) and
+the suite logs warning-free; and the merged SHAARP.si + .ml GUI (`shaarp.make_shaarp_gui()`) drives
+only the validated backends, with 49 GUI tests including continuity gates.
+
+Suite total: **216 modules, 1,271 tests, 0 failures**, measured by running every module in its own
+subprocess from a clean checkout copied outside the development tree, so this is the figure you
+reproduce after cloning.
 
 ### Selected like-for-like values (Python vs. Mathematica are identical to all printed digits)
 
@@ -109,14 +96,10 @@ reference JSON files.
   the original package.
 - **The numerical + symbolic core is the validated surface.** Full interactive-GUI
   parity (live widgets, 2D/3D render) is display-bound and not claimed headlessly.
-  (An older edition of this note claimed a closed-form symbolic multilayer thickness
-  `h` was "absent from the source itself". That was retracted for the README once
-  symbolic-h shipped, and is now doubly wrong: the original DOES carry it per layer
-  — `SHAARP.ml.nb:5135-5146` stores a distinct symbol h1, h2, … per interior layer and
-  `setup.nb:11011-11017` consumes the thicknesses as a list — and the port reproduces
-  it for N layers, mixed symbolic/numeric, gated by
-  `tests/test_multilayer_shg_symbolic_nlayer.py`. The SHAARP.si single-interface path
-  genuinely has no thickness to symbolize, being semi-infinite.)
+- **Symbolic film thickness.** The closed-form multilayer expressions carry a distinct symbolic
+  thickness per interior layer, for N layers and mixed symbolic/numeric input, as the original
+  package does; gated by `tests/test_multilayer_shg_symbolic_nlayer.py`. The single-interface path
+  has no thickness to symbolize, being semi-infinite.
 
 ## Reproducing the validation
 
@@ -148,37 +131,38 @@ SHAARP_ML_DIR=/path/to/SHAARP.ml \
 An exporter that needs one of the external packages and cannot find it stops immediately with a
 message naming the variable to set, rather than failing part-way through.
 
-## Additions (v1.0.0 evaluation ladder)
+## Paper figures and further checks
 
-The release now carries a four-layer evaluation ladder on top of the evidence table:
+Beyond the evidence table, four further checks are part of the suite:
 
-- **T1 input-sensitivity matrix** (`tests/test_input_sensitivity_matrix.py`): every output must
-  respond to every input that should matter (or declare its invariance). Includes the metal-film
-  full-range Fresnel fence and the GaAs(111) all-angle finiteness + absolute-agreement fences.
-- **T2 fidelity matrix**: row-by-row feature parity vs the original notebooks/docs — all rows
-  check.
-- **T3 published-figure replication** (`scripts/replicate_paper_figures.py` →
-  `build/paper_replication/`): both papers' validation figures reproduced through the GUI compute
-  path — SHAARP.si 2022 Fig. 4(b–e) for GaAs (111) at 800 nm (including the quantitative
-  ε_R-approximation claim: d-ratio 0.818 vs the paper's 0.809) and SHAARP.ml 2024 Figs. 3(b,c) /
-  4(b,d) for X-/Z-cut quartz (HH-vs-JK fine-fringe distinction; Au-coating FMR amplification — the
-  Fig. 4(d) FMR reproduces the author's own closed-form model to correlation 0.9993 including the central
-  bump, with its HH curve embedded from his published HH model).
-  This layer immediately caught two latent defects the whole gate suite had passed (surprise): float-noise-broken isotropic degeneracy (NaN GaAs polarimetry) and a silent real-cast of
-  complex ε/d in the curve/expression paths — both fixed, verified vs the numeric reference to
-  5×10⁻¹⁴, and fenced.
-- **T4 d-extraction noise characterization**: the Monte-Carlo study (`benchmarks/dextraction_noise_benchmark.py`, fenced): the phase-resolved
-  field method degrades gracefully (median error ≈ noise level); the phase-less intensity method
-  amplifies catastrophically at realistic conditioning — its noisy-data output is an initial guess.
+- **Input sensitivity** (`tests/test_input_sensitivity_matrix.py`): every output must respond to
+  every input that should matter, or declare its invariance. This includes the metal-film
+  full-range Fresnel check and the GaAs(111) all-angle finiteness and absolute-agreement checks.
+- **Control-by-control comparison with the original GUIs**: every control of the two original
+  notebooks has a counterpart or a documented, deliberate difference.
+- **Published figures** (`scripts/replicate_paper_figures.py`, output under
+  `build/paper_replication/`): both papers' validation figures are reproduced through the app's own
+  compute path. SHAARP.si 2022 Fig. 4(b–e), GaAs (111) at 800 nm, including the paper's
+  quantitative claim about the real-ε approximation (d-ratio 0.818 against the paper's 0.809), and
+  SHAARP.ml 2024 Figs. 3(b,c) and 4(b,d) for X- and Z-cut quartz, including the fine-fringe
+  difference between the Herman–Hayden and Jerphagnon–Kurtz treatments and the amplification with an
+  Au coating (the Fig. 4(d) full-multiple-reflection curve matches the authors' closed-form model to
+  correlation 0.9993, central feature included). Adding this check found two defects the rest of
+  the suite had not: a float-noise-broken isotropic degeneracy (NaN GaAs polarimetry) and a silent
+  real-cast of complex ε and d in the curve and expression paths. Both are fixed, verified against
+  the numeric reference to 5×10⁻¹⁴, and now guarded by tests.
+- **d-extraction under noise** (`benchmarks/dextraction_noise_benchmark.py`, a seeded Monte-Carlo
+  study, guarded by a test): the phase-resolved field method degrades gracefully, with median error
+  about equal to the noise level; the phase-less intensity method amplifies noise strongly at
+  realistic conditioning, so its output on noisy data is an initial guess, not an estimate.
 
 All five tutorial notebooks execute cleanly against the current API
 (`jupyter nbconvert --execute`).
 
-## Honesty discipline
+## What is not covered
 
-The port is **released as v1.0.0** (`RELEASE GATE: PASS`, with the suite total recorded above, plus the
-312-cell GUI matrix sweep `CLEAN`). The old planning-era "~91%" figure is retired: the numerical
-core and end-to-end pipelines are fully validated as tabulated above, and the remaining
-NOT-verified surface is stated in the tables above, claim by claim, instead of being summarized as
-a percentage. No number here is inflated for breadth — every agreement traces to a live Wolfram
-export and an un-fakeable, tolerance-gated test.
+v1.0.0 was released with the release gate passing at the suite total recorded above, plus a
+312-cell GUI matrix sweep. Rather than summarising coverage as a percentage, the tables above state
+what is verified and at what tolerance, and the Scope section states what is not: display-bound GUI
+behaviour, the phase-matching singular points that are labelled rather than compared, and the
+convention choices that are documented rather than asserted as agreement.

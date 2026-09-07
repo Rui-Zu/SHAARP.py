@@ -1,38 +1,23 @@
 # Installation & launch
 
-## Option 1 — the packaged app (Windows, macOS — no Python needed)
+## Option 1 — the packaged app (Windows and macOS, no Python needed)
 
-**→ [Download the latest release](https://github.com/Rui-Zu/SHAARP.py/releases/latest)**
+**[Download the latest release](https://github.com/Rui-Zu/SHAARP.py/releases/latest)**
 
-Pick the file for your system, extract it, and run it. There is nothing else to install: the
-bundle already contains the Python interpreter, every dependency, and the validation benchmark
-data. (The app and the library live in one repository; each bundle is built by CI directly from
-the tagged source.)
+Pick the file for your system, extract it, and run it. There is nothing else to install and no
+license to buy: the bundle already contains the Python interpreter, every dependency and the
+reference data.
 
 | System | File to download | How to run it |
 |---|---|---|
-| Windows (64-bit) | `SHAARP_py_v…_win64.zip` (≈120 MB) | extract, then double-click `SHAARP_py\SHAARP_py.exe` |
-| macOS, Apple Silicon (M-series) | `SHAARP_py_v…_macos_arm64.zip` (≈83 MB) | extract, then open `SHAARP_py/SHAARP_py.app` |
+| Windows (64-bit) | `SHAARP_py_v…_win64.zip` (about 120 MB) | extract, then double-click `SHAARP_py\SHAARP_py.exe` |
+| macOS, Apple Silicon (M-series) | `SHAARP_py_v…_macos_arm64.zip` (about 83 MB) | extract, then open `SHAARP_py/SHAARP_py.app` |
 
-On an **Intel Mac**, Linux, or any other system there is no packaged build — use Option 2 below.
-The macOS bundle is Apple Silicon only and an Intel Mac refuses it with *"not supported on this
-Mac"*.
+Extract the zip before running: the app needs the `_internal` folder next to it. The app is not
+code-signed, so Windows and macOS ask you to allow it the first time, and the first launch takes a
+moment with nothing on screen. If it does not open, {doc}`faq` has the fix for each system.
 
-**Windows first launch** — extract the zip before running anything: the app needs the `_internal`
-folder next to the `.exe`, so double-clicking straight out of the zip fails, usually with no
-message at all. Then:
-
-- Windows may show a blue **"Windows protected your PC"** box, because the app is not code-signed
-  → **More info → Run anyway**.
-- The first launch takes 10–30 seconds while the system scans the bundle, with no window on
-  screen. Later launches are quick.
-
-**macOS first launch** — the app is not Apple-signed, so macOS blocks the first open. One-time fix:
-
-- macOS 15 (Sequoia) and newer: try to open the app once, then go to **System Settings → Privacy &
-  Security** and click **"Open Anyway"**.
-- macOS 14 and older: **right-click (Control-click) the app → Open → Open**.
-- Terminal alternative: `xattr -dr com.apple.quarantine SHAARP_py.app`
+On an Intel Mac, on Linux, or on any other system there is no packaged build, so use Option 2 below.
 
 ## Option 2 — from source (for scripting; Python ≥ 3.10)
 
@@ -50,7 +35,9 @@ beginner problems. Check it worked by typing `python --version` in a terminal.
 pip install "shaarp-py[desktop,interactive] @ git+https://github.com/Rui-Zu/SHAARP.py"
 ```
 
-If your system says `pip` is not found, write `python -m pip install …` instead.
+This installs straight from GitHub, so pip needs **git** on your PATH: if it says git is not
+found, install it from [git-scm.com/downloads](https://git-scm.com/downloads) and reopen the
+terminal. If your system says `pip` is not found, write `python -m pip install …` instead.
 
 You now have `import shaarp` from anywhere, plus two commands: **`shaarp-gui`** (launches the app)
 and `shaarp` (a small CLI).
@@ -82,24 +69,9 @@ python run_shaarp_desktop.py
 
 or, equivalently, `python -m shaarp.desktop_app`.
 
-## Verifying the build (developers)
-
-The frozen executable exposes self-check flags used by the release gate:
-
-```bash
-SHAARP_py.exe --self-check
-SHAARP_py.exe --gui-smoke
-```
-
-`--self-check` runs the real SI / ML / Maker / Fresnel compute paths and asserts the benchmark data
-is bundled; `--gui-smoke` drives every tab × functionality × angle (including θ = 0) headlessly.
-
-A headless GUI smoke run from source is also possible by setting `QT_QPA_PLATFORM=offscreen` before
-launching.
-
 ## Built-in help
 
-Inside the app, use **Help → User Guide** for a condensed workflow summary and **Help → About /
-References** for citation information. Hover any control for a tooltip describing it.
+Inside the app, the **Help** menu has a **User Guide** with a condensed workflow summary and an
+**About / References** entry with citation information. Hover any control for a tooltip describing it.
 
 Next: {doc}`first_run` — a three-click calculation to confirm the install works.

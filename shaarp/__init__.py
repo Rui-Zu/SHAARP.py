@@ -1,6 +1,11 @@
-"""Python API for SHAARP.si and SHAARP.ml style calculations."""
+"""SHAARP.py: optical second-harmonic generation in anisotropic crystals and multilayers.
 
-# Version of the SHAARP.py port (the original Mathematica packages are "Version 1.00").
+One package for both SHAARP methods (SHAARP.si single-interface polarimetry, SHAARP.ml
+multilayers and Maker fringes), plus closed-form expressions, d-tensor extraction and the
+desktop GUI.
+"""
+
+# SHAARP.py version (the original Mathematica packages are "Version 1.00").
 __version__ = "1.0.0"
 
 from .config import (

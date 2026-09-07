@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "shaarp-py"
 version = "1.0.0"
-description = "Validated Python replacement for the Mathematica SHAARP.si and SHAARP.ml SHG packages (live-Mathematica value-validated; merged GUI included)"
+description = "Second-harmonic generation in anisotropic crystals and multilayers: the SHAARP.si and SHAARP.ml methods as one free Python package and desktop app"
 readme = "README.md"
 authors = [
   {name = "Rui Zu"},

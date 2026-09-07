@@ -318,7 +318,7 @@ class DesktopAppSmokeTests(unittest.TestCase):
         func = next(c for c in page.findChildren(W.QComboBox)
                     if c.toolTip().startswith("Choose what to calculate"))
         run = next(b for b in page.findChildren(W.QPushButton) if b.text() == "Update / Run")
-        func.setCurrentText("Full Analytical Expression"); run.click(); self.app.processEvents()
+        func.setCurrentText("Full Analytical Expressions"); run.click(); self.app.processEvents()
         steps = [b for b in page.findChildren(W.QGroupBox) if b.isCheckable() and b.title().startswith("Step ")]
         # Step 0 (the layered definition chain, FA-1 Stage 2) + the three published stages
         self.assertEqual(len(steps), 4, "expected 4 derivation-step boxes for Full Analytical")
@@ -348,7 +348,7 @@ class DesktopAppSmokeTests(unittest.TestCase):
             # the label now shows HUMAN wording; the raw workflow tag lives in its tooltip
             return status.toolTip(), expr
 
-        s, expr = drive(0, "Full Analytical Expression")  # faithful display label
+        s, expr = drive(0, "Full Analytical Expressions")  # faithful display label
         self.assertIn("si_full_analytical_polarimetry", s)
         raw = expr.property("raw_text") or ""
         self.assertIn("d14", raw, "machine-readable closed form must populate (Copy/export layer)")
@@ -559,7 +559,7 @@ class DesktopAppSmokeTests(unittest.TestCase):
         si_items = [cs.itemText(i) for i in range(cs.count())]
         self.assertEqual(
             si_items,
-            ["SHG Simulation", "Partial Analytical Expression", "Full Analytical Expression"])
+            ["SHG Simulation", "Partial Analytical Expressions", "Full Analytical Expressions"])
         cm = func_combo(ml)
         ml_items = [cm.itemText(i) for i in range(cm.count())]
         self.assertEqual(
@@ -648,7 +648,7 @@ class DesktopAppSmokeTests(unittest.TestCase):
         func = next(c for c in si.findChildren(W.QComboBox) if c.toolTip().startswith("Choose what to calculate"))
         run = lambda: (next(b for b in si.findChildren(W.QPushButton) if b.text() == "Update / Run").click(),
                        self.app.processEvents())
-        func.setCurrentText("Full Analytical Expression"); run()
+        func.setCurrentText("Full Analytical Expressions"); run()
         self.assertEqual(ot.tabText(ot.currentIndex()), "Analytical Expression")
         func.setCurrentText("SHG Simulation"); run()
         self.assertEqual(ot.tabText(ot.currentIndex()), "Polar Plots")

@@ -522,18 +522,30 @@ def run_sample_rotation(case: MultilayerSystem, azimuth_grid: Any, options: dict
 
     options = dict(options or {})
     include_validation_summary = bool(options.pop("include_validation_summary", False))
+    # `mrassumption` (0=FMR, 1=JK, 2=HH) mirrors the Maker path: the original's SampleRotate
+    # branches on its `assumption` argument (setup.nb, `If[assumption==0/1/2, ... f4NL[...]]`),
+    # so the azimuth sweep must honour the Assumptions panel too. Validated for 0/1/2 against live
+    # SHAARP.ml SampleRotate in tests/test_jkhh_samplerotate_agreement.py. Default 0 = the
+    # pre-existing behaviour byte-for-byte.
+    mrassumption = int(options.pop("mrassumption", 0))
+    inhomogeneous_source_policy = options.pop("inhomogeneous_source_policy", "forward_only")
     raw = solve_multilayer_shg_sample_azimuth_sweep(
         case,
         sample_azimuth_deg=azimuth_grid,
         rotate_top=options.pop("rotate_top", False),
         rotate_substrate=options.pop("rotate_substrate", False),
         condition_threshold=options.pop("condition_threshold", 1e12),
-        inhomogeneous_source_policy=options.pop("inhomogeneous_source_policy", "forward_only"),
+        inhomogeneous_source_policy=inhomogeneous_source_policy,
         inhomogeneous_solution_policy=options.pop("inhomogeneous_solution_policy", "solve"),
+        mrassumption=mrassumption,
     )
     if options:
         raise ValueError(f"Unsupported run_sample_rotation options: {sorted(options)}")
-    stages = {"results": raw.results}
+    stages = {
+        "results": raw.results,
+        "mrassumption": mrassumption,
+        "inhomogeneous_source_policy": inhomogeneous_source_policy,
+    }
     if include_validation_summary:
         stages["validation_artifacts"] = _load_sample_rotation_validation_artifacts()
     return SHAARPResult(
@@ -569,7 +581,7 @@ def run_sample_rotation(case: MultilayerSystem, azimuth_grid: Any, options: dict
 def run_si_full_analytical(case: Any, options: dict[str, Any] | None = None) -> SHAARPResult:
     """Closed-form (symbolic) single-interface reflected SHG -- the SHAARP.si analytical path.
 
-    The facade behind the desktop GUI's SHAARP.si *Partial / Full Analytical Expression*. With
+    The facade behind the desktop GUI's SHAARP.si *Partial / Full Analytical Expressions*. With
     ``options={"workflow": "polarimetry"}`` it returns the validated full-analytical reflected-SHG
     **polarimetry** closed form (symbolic in the input polarization ``phi`` and the ``d_ij`` tensor),
     whose expression strings are rendered by :func:`~shaarp.analytical_expression_text`.

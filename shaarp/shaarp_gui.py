@@ -51,8 +51,13 @@ ML_FUNCTIONALITIES = ("SHG Simulation", "Maker Fringes", "Fresnel Coefficients",
 # gone -- rotational anisotropy is SHG Simulation with the sample turning and the polarizer/analyzer
 # held fixed, so it is a TOGGLE in Polarimetry Settings, exactly as the original .ml GUI has it
 # (samplerotationcontrol, "Rotate Sample"/"Fix Sample", forcing RotatePolarizer=RotateAnalyzer=False).
+# Both original notebooks spell the analytical modes in the PLURAL ("Partial Analytical
+# Expressions" / "Full Analytical Expressions" in SHAARP_V1.03's Functionality popup, "Partial
+# Analytical Expressions" in SHAARP.ml's); the SI tab used the singular until 2026-09-05, which
+# left the two tabs disagreeing with each other and with the originals. The singular spellings stay
+# accepted below so saved sessions and scripts written against them keep resolving.
 SI_FUNCTIONALITY_DISPLAY = (
-    "SHG Simulation", "Partial Analytical Expression", "Full Analytical Expression",
+    "SHG Simulation", "Partial Analytical Expressions", "Full Analytical Expressions",
 )
 ML_FUNCTIONALITY_DISPLAY = (
     "SHG Simulation", "Maker Fringes", "Fresnel Coefficients", "Partial Analytical Expressions",
@@ -61,8 +66,10 @@ FUNCTIONALITY_CANON = {
     "SHG Simulation": "SHG Simulation",
     "Maker Fringes": "Maker Fringes",
     "Fresnel Coefficients": "Fresnel Coefficients",
-    "Partial Analytical Expression": "Partial Analytical",
     "Partial Analytical Expressions": "Partial Analytical",
+    "Full Analytical Expressions": "Full Analytical",
+    # pre-2026-09-05 singular display labels, accepted verbatim
+    "Partial Analytical Expression": "Partial Analytical",
     "Full Analytical Expression": "Full Analytical",
     # legacy canonical labels accepted verbatim too
     "Partial Analytical": "Partial Analytical",
@@ -1019,12 +1026,16 @@ def compute_ml_gui_result(
         if sample_rotation:
             # the rotate/fix x 3 sweep lives inside SHG Simulation (mirrors the original's
             # `If[Functionality == "SHG Simulation", If[samplerotationcontrol, ...]]`).
+            # the Assumptions panel (FMR/JK/HH + FMR sub-mode) reaches the azimuth sweep too --
+            # it was silently pinned to FMR/forward-only before (same class of drop the T1
+            # input-sensitivity gate caught on the 4-polar branch below).
             return ml_sample_rotation_result(
                 sys_, theta_deg=float(theta_deg), fixed_phi_deg=_phi_v, analyzer_psi_deg=_psi_v,
                 ellipticity_deg=_ell_v, step_deg=float(sample_rotation_step_deg),
                 ccw=bool(sample_rotation_ccw), rotate_polarizer=bool(sample_rotate_polarizer),
                 rotate_analyzer=bool(sample_rotate_analyzer),
-                analyzer_offset_deg=float(sample_analyzer_offset_deg))
+                analyzer_offset_deg=float(sample_analyzer_offset_deg),
+                **ml_sample_rotation_assumption_options(assumption, fmr_submode))
         pol = replace(sys_.polarimetry, theta_deg=_desingularize_theta_deg(float(theta_deg)))
         # Apply the Assumptions panel to the POLAR PLOTS too (original .ml docs: assumptions apply
         # to "the polar plots, Fresnel coefficients and/or Maker fringes"). Found by the T1
@@ -1262,7 +1273,8 @@ def compute_ml_gui_result(
                 step_deg=sample_rotation_step_deg, ccw=sample_rotation_ccw,
                 rotate_polarizer=bool(sample_rotate_polarizer),
                 rotate_analyzer=bool(sample_rotate_analyzer),
-                analyzer_offset_deg=float(sample_analyzer_offset_deg))
+                analyzer_offset_deg=float(sample_analyzer_offset_deg),
+                **ml_sample_rotation_assumption_options(assumption, fmr_submode))
             _res.stages["analytic_azimuth_fallback_reason"] = _reason
             return _res
         import math as _math
@@ -2050,8 +2062,16 @@ def ml_sample_rotation_result(system, *, theta_deg: float, fixed_phi_deg: float 
                               analyzer_psi_deg: float = 0.0, ellipticity_deg: float = 0.0,
                               step_deg: float = 10.0, ccw: bool = True,
                               rotate_polarizer: bool = False, rotate_analyzer: bool = False,
-                              analyzer_offset_deg: float = 0.0):
+                              analyzer_offset_deg: float = 0.0,
+                              mrassumption: int = 0,
+                              inhomogeneous_source_policy: str = "forward_only"):
     """Sample-rotation sweep with independent rotate/fix per element (generalized).
+
+    ``mrassumption`` (0=FMR, 1=JK, 2=HH) and ``inhomogeneous_source_policy`` (the FMR sub-mode)
+    carry the Assumptions panel into the sweep, exactly as the original's ``SampleRotate`` does
+    (it branches on its ``assumption`` argument; JK/HH there force forward-only source waves, FMR
+    leaves the panel's backward/standing-wave flags in force). Before this they were silently
+    pinned to FMR/forward-only whatever the panel said. Defaults = the old behaviour.
 
     Rui: polarizer, analyzer, and sample each carry their own rotate/fix choice, ANY
     combination legal, every rotating element following ONE common scan angle t (the user grid)
@@ -2080,7 +2100,10 @@ def ml_sample_rotation_result(system, *, theta_deg: float, fixed_phi_deg: float 
                   psi_deg=psi_val,
                   ellipticity_deg=float(ellipticity_deg))
     ra_sys = replace(system, polarimetry=pol)
-    res = run_sample_rotation(ra_sys, solver)
+    res = run_sample_rotation(ra_sys, solver, {
+        "mrassumption": int(mrassumption),
+        "inhomogeneous_source_policy": str(inhomogeneous_source_policy),
+    })
     res.numeric["sample_azimuth_deg_user"] = user
     res.stages["sample_rotation"] = {
         "system": ra_sys, "azimuth_deg_user": user, "azimuth_deg_solver": solver,
@@ -2090,8 +2113,24 @@ def ml_sample_rotation_result(system, *, theta_deg: float, fixed_phi_deg: float 
         "ellipticity_deg": float(ellipticity_deg),
         "rotate_polarizer": bool(rotate_polarizer), "rotate_analyzer": bool(rotate_analyzer),
         "analyzer_offset_deg": _offset,
+        "mrassumption": int(mrassumption),
+        "inhomogeneous_source_policy": str(inhomogeneous_source_policy),
     }
     return res
+
+
+def ml_sample_rotation_assumption_options(assumption: str, fmr_submode: str) -> dict:
+    """The Assumptions-panel -> sweep-option mapping for Rotate Sample, in ONE place.
+
+    Mirrors the original's ``SampleRotate``: FMR (0) keeps the panel's FMR sub-mode
+    (backward / standing waves); JK and HH force forward-only source waves (the original sets
+    ``flagBackward = flagStandingWave = False`` in those branches). Accepts the GUI labels or their
+    back-compat aliases."""
+    assumption = _ASSUMPTION_ALIASES.get(assumption, assumption)
+    fmr_submode = _FMR_SUBMODE_ALIASES.get(fmr_submode, fmr_submode)
+    code = ML_ASSUMPTIONS[assumption]
+    policy = FMR_SUBMODES[fmr_submode] if code == 0 else "forward_only"
+    return {"mrassumption": code, "inhomogeneous_source_policy": policy}
 
 
 def build_ra_scan_figure(result, *, title_suffix: str | None = None, azimuth_deg=None):

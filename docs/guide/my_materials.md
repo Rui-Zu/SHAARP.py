@@ -1,7 +1,6 @@
 # My Materials — saving your own materials
 
-Both tabs end with a collapsible **My Materials** group (it sits where the former *Layer Properties
-Preset Values* group used to be). It lets you keep the material you have entered in the crystal
+Both tabs end with a collapsible **My Materials** group. It lets you keep the material you have entered in the crystal
 panels under a name of your own, so it can be selected again later — in another session, on either
 tab — exactly like a palette entry.
 

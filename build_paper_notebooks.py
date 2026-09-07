@@ -43,8 +43,8 @@ interface probed by **reflected-SHG polarimetry**: the *p*- and *s*-polarized SH
 function of the incident polarization angle φ, at several incidence angles θᵢ.
 
 **Where the numbers come from.** Every parameter (crystal orientation, point group, SHG *d*-tensor,
-dielectric ε(ω)/ε(2ω)) is taken from the author's *own* Mathematica ♯SHAARP.si case-study definitions
-(transcribed verbatim into `shaarp/casestudy_dispersion.json`, provenance-audited) and interpolated
+dielectric ε(ω)/ε(2ω)) is taken from the published ♯SHAARP.si case studies
+(stored in `shaarp/casestudy_dispersion.json`) and interpolated
 to the paper's single experimental wavelength (**800 nm**, Ti:Sapphire). The compute call is exactly
 the one the desktop GUI's *Update* button makes. Each section shows the reproduction **beside the
 published panel** so you can compare shapes, symmetry, and the relative *p*/*s* channel scaling.
@@ -107,7 +107,7 @@ print('SHAARP.py paper reproduction — SHAARP.si 2022. repo root =', ROOT.name)
 
 All four SHAARP.si case crystals reproduce their published reflected-SHG polarimetry — matching the
 lobe **shape**, the crystal-class **symmetry**, and the relative *p*/*s* channel **scaling** — from
-parameters sourced entirely from the author's original Mathematica case studies. See the companion
+parameters taken from the published case studies. See the companion
 `Reproduce_SHAARP_ml_paper.ipynb` for the multilayer / Maker-fringe paper.""")
     return cells
 
@@ -128,10 +128,10 @@ heterostructure** (Fig 6), and **two-crystal SHG interference** (Fig 7). The thr
 - **JK** — Jerphagnon & Kurtz (single pass, no multiple reflections),
 - **HH** — Herman & Hayden (multiple reflections kept **only for the homogeneous 2ω waves**).
 
-**Parameter provenance** is identical to the SI notebook: registry values transcribed from the author's
-Mathematica ♯SHAARP.ml case studies, with per-figure geometry (thicknesses, wavelengths) from the
-manuscript. **Fig 3 additionally overlays the raw Herman-1995 analytic HH expression** — a byte-exact
-Python port of the author's own `analyticHH.mx` benchmark — so SHAARP.py's HH mode is checked against an
+**Parameter provenance** is identical to the SI notebook: registry values taken from the published
+♯SHAARP.ml case studies, with per-figure geometry (thicknesses, wavelengths) from the
+manuscript. **Fig 3 additionally overlays the raw Herman-1995 analytic HH expression** — the
+analytic expression from the authors' own `analyticHH.mx` benchmark — so SHAARP.py's HH mode is checked against an
 independent analytic model, not just against SHAARP itself.
 
 > The multilayer polarimetry sweeps solve the full boundary problem per polarization angle, so this
@@ -158,15 +158,15 @@ Transmitted *p→p* SHG vs incidence angle. The **HH** and **JK** envelopes near
 magnified window shows the **fine 2ω fringes** present in HH (multiple reflections of the homogeneous
 2ω wave) but absent in JK. Two independent references are overlaid from the author's own Fig-3 archive:
 
-- the **raw Herman-1995 analytic HH** expression (`benchmarks/herman_hayden_maker.py`, ported
-  byte-exact from `fig3/analyticHH.mx` — matches the Mathematica value to 1e-15), and
+- the **raw Herman-1995 analytic HH** expression (`benchmarks/herman_hayden_maker.py`, the
+  analytic expression from `fig3/analyticHH.mx`), and
 - his **serialized reference curves** (`fig3/dataoldHHJK.mx` evaluated HH on the main panel —
   identified by 0.9996 correlation with the analytic expression — and `fig3/dataHHsimHHFiner1.mx`
   on the magnified fine-fringe window), evaluated at h = 300 µm, φ = 0 and cached in
   `benchmarks/fig3_reference_curves.json`.
 
 In the magnified window **SHAARP.py(HH) overlaps the analytic HH reference *exactly*, fringe for
-fringe** (same-grid correlation = 1.000000; the reference is a constant multiple of the ported
+fringe** (same-grid correlation = 1.000000; the reference is a constant multiple of the
 analytic expression, ratio spread < 1e-9) — the paper's exact-overlap claim, reproduced. The zoom
 is sampled at 0.05° matching the reference: the fine 2ω fringes have ~0.2° period, so any coarser
 sweep sits at the Nyquist edge and *displays* a spurious fringe offset.""")
@@ -217,8 +217,8 @@ thickness dependence, whereas the FMR model carries the 13.9 nm thin-film factor
 and convention SHAARP.py's HH matches the author's model (dashed dark green, `QuartzAu_800nm_HHNMRP1S0p01.mx`)
 to **shape correlation 0.998 and peak ratio 0.992** on the fringe-resolved 30–45° window (fenced). The
 earlier "my HH diverges" finding was geometry plus output convention, not a single-pass-ω defect. What
-remains is a ~5 % offset near normal incidence that the port shows against *all* of the author's SLAB
-closed forms alike (FMR and HH, bare and Au) — a property of those older closed forms; the port is
+remains is a ~5 % offset near normal incidence that SHAARP.py shows against *all* of the author's SLAB
+closed forms alike (FMR and HH, bare and Au) — a property of those older closed forms; SHAARP.py is
 validated to ~1e-15 against the .ml numeric solver on this quartz+Au Maker case. HH is still the paper's
 **deliberately-failing** illustrative curve (FMR ⊋ HH is the point of the panel).""")
     code("""fig, dev = ml_fig4_figure(step=0.05)
@@ -346,7 +346,7 @@ _show_panel('ml_fig8c', 'SHAARP.ml 2024 Fig. 8c')""")
 SHAARP.py reproduces all ♯SHAARP.ml case figures — Maker fringes under all three MR assumptions,
 transmitted single-crystal polarimetry, a reflected metal-backed heterostructure, two-crystal
 interference, and the twist-bilayer coherence (Fig 8c) — and its **HH** mode agrees with the **raw
-Herman-1995 analytic benchmark**. Parameters trace to the author's original Mathematica case studies; the
+Herman-1995 analytic benchmark**. Parameters trace to the published case studies; the
 multilayer physics matches the paper.""")
     return cells
 

@@ -1,18 +1,23 @@
 cff-version: 1.2.0
 title: SHAARP.py
 message: >-
-  If you use this software, please cite the two ♯SHAARP papers below (the
-  original packages this port reproduces).
+  If you use this software, please cite the two ♯SHAARP papers below, which
+  introduced the methods SHAARP.py implements.
 type: software
 version: 1.0.0
 license: GPL-3.0-only
 repository-code: https://github.com/Rui-Zu/SHAARP.py
+url: https://shaarp-py.readthedocs.io
 abstract: >-
-  A validated Python port of the Mathematica ♯SHAARP.si (single-interface
-  reflected second-harmonic generation) and ♯SHAARP.ml (multilayer /
-  Maker-fringe SHG) packages, merged into one scriptable library and one
-  installation-free desktop application. Every solver is validated
-  value-by-value against live Mathematica ♯SHAARP output.
+  SHAARP.py simulates and fits optical second-harmonic generation (SHG) in
+  anisotropic crystals and thin-film multilayers. It is a free, open-source
+  Python package and a standalone desktop app that brings the two published
+  ♯SHAARP methods together: SHAARP.si for reflected SHG polarimetry from a
+  single crystal surface, and SHAARP.ml for multilayers and Maker fringes with
+  complete multiple reflections. On top of the two methods it adds closed-form
+  symbolic SHG expressions, d-tensor extraction from polarimetry scans, an
+  N-layer stack editor and a scriptable API. The solvers are checked against
+  the published equations and the reference output of the original packages.
 keywords:
   - second harmonic generation
   - nonlinear optics

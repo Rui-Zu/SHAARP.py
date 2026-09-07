@@ -85,15 +85,19 @@ jobs:
           # instructions -- they never see Steps 1-3. --generate-notes produced a bare commit-log
           # link, next to a "Source code (zip)" row that a non-programmer picks by mistake.
           cat > /tmp/relnotes.md <<NOTES
-          **Windows** — download \`SHAARP_py_v${VER}_win64.zip\`, **extract the zip**, then open the
-          extracted folder and double-click \`SHAARP_py\SHAARP_py.exe\`. Running it from inside the
-          zip will not work. Windows will warn that the app is not code-signed → **More info → Run
-          anyway**. The first launch takes 10-30 seconds.
+          SHAARP.py simulates and fits optical second-harmonic generation in anisotropic crystals and
+          multilayers. This is the standalone desktop app: nothing else to install, no license needed.
+
+          **Windows** — download \`SHAARP_py_v${VER}_win64.zip\`, extract the zip, then open the
+          extracted folder and double-click \`SHAARP_py\SHAARP_py.exe\` (it will not start from inside
+          the zip).
 
           **macOS (Apple Silicon only)** — download \`SHAARP_py_v${VER}_macos_arm64.zip\`, extract it,
-          then open \`SHAARP_py/SHAARP_py.app\`. macOS blocks unsigned apps on first open: try once,
-          then **System Settings → Privacy & Security → Open Anyway** (macOS 14 and older:
-          Control-click the app → Open → Open).
+          then open \`SHAARP_py/SHAARP_py.app\`.
+
+          The app is not code-signed, so your system asks you to allow it the first time, and the
+          first launch takes a moment. If it does not open, the FAQ has the fix:
+          <https://shaarp-py.readthedocs.io/en/latest/guide/faq.html>
 
           **Intel Mac, Linux, anything else** — there is no packaged build; run it from Python:
           <https://github.com/Rui-Zu/SHAARP.py#use-it-from-python>
@@ -101,6 +105,7 @@ jobs:
           Ignore *Source code (zip/tar.gz)* below unless you actually want the source.
 
           Then: open the app, pick **GaAs (111)** under *Case Study and Examples*, click **Update / Run**.
+          Documentation: <https://shaarp-py.readthedocs.io>
           NOTES
           if gh release view "$TAG" >/dev/null 2>&1; then
             echo "::notice::Release $TAG already exists - refreshing its notes, re-uploading assets."
