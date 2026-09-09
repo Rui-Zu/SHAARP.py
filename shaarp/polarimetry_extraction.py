@@ -105,13 +105,16 @@ def _extract_numeric_basis(eps_w, eps_2w, d_positions, geometries, phi_values, m
         else:
             # A sample azimuth about the surface normal rotates BOTH the d-tensor and the
             # dielectric tensors (eps is invariant only for isotropic / uniaxial-z; for a
-            # biaxial crystal eps_x != eps_y, so eps MUST rotate too). Use the SAME rotation
-            # convention as the d rotation (rotate_rank2_crystal_to_lab == Rz^T. eps. Rz) so a
-            # user whose `measure` rotates the sample by Rz(az) is reproduced exactly.
-            rz = _rz(az)
-            d_rot = np.real(np.asarray(rotate_d_voigt_crystal_to_lab(du, rz), dtype=complex))
-            ew_use = rotate_rank2_crystal_to_lab(ew, rz)
-            e2_use = rotate_rank2_crystal_to_lab(e2, rz)
+            # biaxial crystal eps_x != eps_y, so eps MUST rotate too).
+            # THE TRANSPOSE IS THE POINT: a positive sample azimuth is the physical rotation
+            # `CrystalOrientation.with_lab_azimuth_deg` defines, which composes as A0 @ Rz(a).T,
+            # so the equivalent lab-frame tensor rotation is crystal_to_lab(., Rz(a).T). Passing
+            # Rz(a) is a rotation by -a; this basis used to do that while the symbolic basis of
+            # the same extractor now does not, which would make the two bases disagree.
+            rz_t = _rz(az).T
+            d_rot = np.real(np.asarray(rotate_d_voigt_crystal_to_lab(du, rz_t), dtype=complex))
+            ew_use = rotate_rank2_crystal_to_lab(ew, rz_t)
+            e2_use = rotate_rank2_crystal_to_lab(e2, rz_t)
         r = solve_single_interface_shg(
             ew_use, e2_use, d_rot, incident_index_omega=1.0, incident_index_2omega=1.0,
             incident_theta_rad=theta, incident_jones=(math.sin(phi), math.cos(phi)),
@@ -290,17 +293,19 @@ def _recover_d_from_design(M, e_meas, d_positions, method):
 
 
 def _rotated_d_symbolic(d_mat, azimuth):
-    """Rotate a symbolic Voigt d-tensor about the surface normal z by `azimuth`, in the
-    convention that matches the numeric ``rotate_d_voigt_crystal_to_lab(d, Rz(azimuth))``
-    (so a user whose `measure` rotates the sample by Rz(azimuth) is consistent)."""
+    """Rotate a symbolic Voigt d-tensor about the surface normal by a positive sample `azimuth`,
+    in the one sense the package uses: the physical rotation
+    :meth:`CrystalOrientation.with_lab_azimuth_deg` defines, which is what the multilayer sweep and
+    the sample-rotation benchmarks use. A ``measure`` callback must rotate the sample the same way
+    or the recovered d is wrong; see :func:`extract_ml_film_d_voigt`."""
     from .symbolic import rotate_d_voigt_symbolic
 
     sp = _sympy()
     if not azimuth:
         return d_mat
     c, s = sp.cos(sp.Float(azimuth)), sp.sin(sp.Float(azimuth))
-    rot_zt = sp.Matrix([[c, s, 0], [-s, c, 0], [0, 0, 1]])  # R_z^T (matches crystal_to_lab(R_z))
-    return rotate_d_voigt_symbolic(d_mat, rot_zt, simplify=False)
+    rot_z = sp.Matrix([[c, -s, 0], [s, c, 0], [0, 0, 1]])
+    return rotate_d_voigt_symbolic(d_mat, rot_z, simplify=False)
 
 
 def extract_ml_film_d_voigt(
@@ -319,6 +324,7 @@ def extract_ml_film_d_voigt(
     channels=("s", "p"),
     mu=1.0,
     eps0=1.0,
+    wavelength_um=None,
 ):
     """Recover a single nonlinear FILM's d-tensor from an SHG polarimetry scan, using the ML
     partial-analytical closed form (``solve_single_film_shg_symbolic_polarimetry``) as the
@@ -329,6 +335,15 @@ def extract_ml_film_d_voigt(
        :func:`extract_si_d_voigt`): a mismatch silently rescales/corrupts the recovered ``d``.
        Default is clean units ``mu=eps0=1`` (now consistent with :func:`extract_si_d_voigt`);
        physical SI constants also work if used on BOTH sides. Check ``result.relative_residual``.
+
+    .. important::
+       **``wavelength_um`` obeys the same both-sides contract**, and for the same reason: frequency
+       reaches the model only through the propagation phase ``exp(i k_z h)``, so it must match the
+       units ``thickness`` is expressed in. Pass the wavelength in microns when ``thickness`` is in
+       microns, which is the case for real data. Leaving it ``None`` keeps the reduced-unit model
+       (``omega = 1``), where ``thickness`` is in units of lambda/2pi -- correct only if your
+       ``measure`` callback was built the same way. A mismatch fits a different film and the
+       recovered ``d`` is wrong without any error being raised.
 
     The film and substrate are given by scalar refractive indices at omega / 2omega (the film
     eps is taken ISOTROPIC, so a sample azimuth about the normal rotates only the d-tensor --
@@ -368,16 +383,20 @@ def extract_ml_film_d_voigt(
     eps_2w = [_np.diag([film_index_2omega**2] * 3).astype(complex)]
     eps_2w_sub = _np.diag([substrate_index_2omega**2] * 3).astype(complex)
 
+    # see the wavelength contract in the docstring: this must match the units `thickness` is in
+    _omega = 1.0 if wavelength_um is None else 2 * _np.pi / float(wavelength_um)
+    _omega_2 = 2 * _omega
     rows, e_meas = [], []
     for theta, azimuth in geometries:
         d_rot = _rotated_d_symbolic(d_mat, azimuth)
         common = dict(incident_index=1.0, incident_theta_rad=theta, layer_epsilon_lab=eps_w,
-                      substrate_epsilon_lab=eps_w_sub, omega=1.0)
+                      substrate_epsilon_lab=eps_w_sub, omega=_omega)
         bs = build_multilayer_omega_basis(incident_polarization="s", **common)
         bp = build_multilayer_omega_basis(incident_polarization="p", **common)
         b2 = build_multilayer_2omega_basis(
             top_index_2omega=1.0, tangential_index_omega=1.0, incident_theta_rad=theta,
-            layer_epsilon_2omega_lab=eps_2w, substrate_epsilon_2omega_lab=eps_2w_sub, omega_2=2.0,
+            layer_epsilon_2omega_lab=eps_2w, substrate_epsilon_2omega_lab=eps_2w_sub,
+            omega_2=_omega_2,
         )
         sol = solve_single_film_shg_symbolic_polarimetry(
             omega_basis_s=bs, omega_basis_p=bp, twoomega_basis=b2, d_voigt_symbolic=d_rot,

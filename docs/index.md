@@ -13,8 +13,9 @@ It brings the two published ♯SHAARP methods together:
 
 - **SHAARP.si** — reflected SHG polarimetry from a single crystal surface, for any SHG-active
   point group and orientation.
-- **SHAARP.ml** — SHG from a multilayer stack: Maker fringes, Fresnel curves and polarimetry with
-  complete multiple reflections (Full, Jerphagnon–Kurtz and Herman–Hayden treatments).
+- **SHAARP.ml** — SHG from a multilayer stack: Maker fringes, Fresnel curves and polarimetry, under
+  the multiple-reflection treatment you choose — complete multiple reflections, Jerphagnon–Kurtz
+  (single pass), or Herman–Hayden (the $2\omega$ homogeneous waves only).
 
 On top of the two methods it adds closed-form symbolic SHG expressions, $d$-tensor extraction from
 polarimetry scans, an N-layer stack editor, a palette for your own materials, and a Python API that
@@ -83,6 +84,7 @@ guide/faq
 usage
 api/index
 conventions
+sample_rotation
 technical_reference
 ```
 

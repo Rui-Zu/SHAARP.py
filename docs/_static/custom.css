@@ -1,0 +1,28 @@
+/* SHAARP.py documentation - small corrections on top of the Read the Docs theme. */
+
+/* The theme sets table cells to `white-space: nowrap`, and the wrapper it puts around wide tables
+   clips rather than scrolls in the page's own column. Any table whose cells hold a sentence -- the
+   download table on the installation page, the "what it shows" column on the examples page, the
+   Functionality tables in the tab guides -- therefore lost the right-hand end of every row. Let
+   cells wrap, and keep a horizontal scrollbar as the fallback for a genuinely wide table. */
+.wy-table-responsive {
+  overflow-x: auto;
+}
+
+.wy-table-responsive table td,
+.wy-table-responsive table th,
+.rst-content table.docutils td,
+.rst-content table.docutils th {
+  white-space: normal;
+  vertical-align: top;
+}
+
+/* Long unbroken strings in table cells -- file names, dotted API paths, Windows paths -- would
+   otherwise force the same overflow back again. */
+.rst-content table.docutils td code,
+.rst-content table.docutils th code,
+.wy-table-responsive table td code,
+.wy-table-responsive table th code {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}

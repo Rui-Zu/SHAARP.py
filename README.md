@@ -33,8 +33,9 @@ It brings the two published ♯SHAARP methods together:
 
 - **SHAARP.si** — reflected SHG polarimetry from a single crystal surface, for any SHG-active
   point group and orientation.
-- **SHAARP.ml** — SHG from a multilayer stack: Maker fringes, Fresnel curves and polarimetry with
-  complete multiple reflections (Full, Jerphagnon–Kurtz and Herman–Hayden treatments).
+- **SHAARP.ml** — SHG from a multilayer stack: Maker fringes, Fresnel curves and polarimetry, under
+  the multiple-reflection treatment you choose — complete multiple reflections, Jerphagnon–Kurtz
+  (single pass), or Herman–Hayden (the 2ω homogeneous waves only).
 
 On top of the two methods it adds closed-form symbolic SHG expressions, d-tensor extraction from
 polarimetry scans, an N-layer stack editor, a palette for your own materials, and a Python API that
@@ -76,8 +77,8 @@ Script it, batch it, fit your own data.
 
 ## Run the app (no Python needed)
 
-Pick the file for your computer -- each name below is a direct download (they are also listed on the
-[Releases](https://github.com/Rui-Zu/SHAARP.py/releases) page):
+Pick the file for your computer. Each name below is a direct download; they are also listed on the
+[Releases](https://github.com/Rui-Zu/SHAARP.py/releases) page.
 
 | Your computer | Download | Then |
 |---|---|---|
@@ -101,7 +102,8 @@ Your first calculation takes three clicks:
 1. Under **Case Study and Examples**, pick **GaAs (111)** and press **Update / Run**. The reflected
    SHG polar plots appear next to a schematic of the sample.
 2. Switch to the **SHAARP.ml** tab, set Functionality to **Maker Fringes**, and press
-   **Update / Run** to see the transmitted fringes of the quartz + Au preset.
+   **Update / Run** to see the transmitted fringes of the quartz + Au preset. It sweeps finely
+   enough to resolve them, so give it about half a minute; raise **θ step** for a quicker look.
 3. Hover any control for an explanation. The
    [first-calculation guide](https://shaarp-py.readthedocs.io/en/latest/guide/first_run.html)
    takes it from here.
@@ -175,7 +177,7 @@ Two notebooks reproduce every case figure of both papers beside the published pa
 | Notebook | Paper |
 |---|---|
 | [`notebooks/Reproduce_SHAARP_si_paper.ipynb`](https://github.com/Rui-Zu/SHAARP.py/blob/master/notebooks/Reproduce_SHAARP_si_paper.ipynb) | ♯SHAARP.si (2022): GaAs (111), LiNbO₃ (112̄0), KTP (100), TaAs (112) polarimetry |
-| [`notebooks/Reproduce_SHAARP_ml_paper.ipynb`](https://github.com/Rui-Zu/SHAARP.py/blob/master/notebooks/Reproduce_SHAARP_ml_paper.ipynb) | ♯SHAARP.ml (2024): quartz Maker fringes, quartz + Au, LiNbO₃/KTP and ZnO//Pt//Al₂O₃ polarimetry, LiNbO₃//quartz interference, twisted-bilayer MoS₂ |
+| [`notebooks/Reproduce_SHAARP_ml_paper.ipynb`](https://github.com/Rui-Zu/SHAARP.py/blob/master/notebooks/Reproduce_SHAARP_ml_paper.ipynb) | ♯SHAARP.ml (2024): quartz Maker fringes, quartz + Au, LiNbO₃/KTP and ZnO / Pt / Al₂O₃ polarimetry, LiNbO₃ / quartz interference, twisted-bilayer MoS₂ |
 
 <div align="center">
 

@@ -189,8 +189,25 @@ TOOLTIPS = {
         "The polarizer and analyzer keep their OWN rotate/fix choices -- any combination is\n"
         "legal: an element set to rotate follows the same scan angle, a fixed element holds its\n"
         "fixed angle at every azimuth point. Runs under SHG Simulation and (numerically) under\n"
-        "Partial Analytical Expressions. (The original spells the azimuth phi; this port spells\n"
+        "Partial Analytical Expressions. (The original spells the azimuth phi; SHAARP.py spells\n"
         "it psi_s, since phi is the polarizer and psi the analyzer here.)"
+    ),
+    "sample_azimuth_symbolic": (
+        "Solve with the sample azimuth left as the symbol psi_s, so the answer is ONE\n"
+        "expression covering every angle instead of one solve per angle. Available in the\n"
+        "analytical modes. It needs a crystal whose dielectric tensor is unchanged by a\n"
+        "rotation about the surface normal -- otherwise the propagation problem itself\n"
+        "turns with the sample and no closed form exists, and the result says so instead\n"
+        "of guessing. Substituting a number for psi_s reproduces physically turning the\n"
+        "crystal to that angle."
+    ),
+    "sample_azimuth": (
+        "Turn the SAMPLE about its surface normal to a fixed angle, then compute. This turns the\n"
+        "crystal itself, so its dielectric and nonlinear tensors rotate together -- it is not the\n"
+        "same as turning the polarizer. Available in every mode and on both tabs. In the modes\n"
+        "that scan the azimuth, the scan sets this angle instead. Direction is stated as seen\n"
+        "looking at the sample from the beam side. For Fresnel coefficients the angle changes\n"
+        "nothing unless a layer is optically anisotropic, and the result says which case it is."
     ),
     "fresnel_range": (
         "Fresnel Coefficients scan range: incident angle theta_i is swept from theta min to\n"
@@ -261,10 +278,11 @@ TOOLTIPS = {
 # The original GUIs' default 'User Guide' / welcome page, condensed from the SHAARP.ml docs.
 USER_GUIDE_HTML = """
 <h2>&#9839;SHAARP.py &mdash; User Guide</h2>
-<p>A validated Python port of the Mathematica <b>SHAARP.si</b> (single interface) and
-<b>SHAARP.ml</b> (multilayer) second-harmonic-generation packages, merged into one panel.
-Use the two tabs at the top to switch between the single-interface and multilayer interfaces.</p>
-<p>The original Mathematica packages this port reproduces:
+<p>Simulate and fit optical second-harmonic generation in anisotropic crystals and multilayers.
+This app carries both &#9839;SHAARP methods in one panel: <b>SHAARP.si</b> for reflected
+polarimetry from a single surface, and <b>SHAARP.ml</b> for multilayers and Maker fringes.
+Use the two tabs at the top to switch between them.</p>
+<p>SHAARP.py grew out of two Mathematica packages from the same group:
 <b>&#9839;SHAARP.si</b> &mdash;
 <a href="https://github.com/Rui-Zu/SHAARP">github.com/Rui-Zu/SHAARP</a> &middot;
 <b>&#9839;SHAARP.ml</b> &mdash;
@@ -284,11 +302,11 @@ and the scan range.</li>
 documentation). Use <b>Export data</b> to save the numeric results (and analytical closed forms).</li>
 </ol>
 <p><i>&#966; = 0&deg; is p-polarized; &#966; = 90&deg; is s-polarized. Every computation routes
-through the same backend validated value-by-value against live Mathematica SHAARP.</i></p>
+through the same solvers, which the test suite checks on every commit.</i></p>
 <hr>
 <h3>References &mdash; how to cite</h3>
-<p>If you use SHAARP (or this validated Python port) in any published work, please cite the
-original SHAARP papers:</p>
+<p>If you use SHAARP.py in any published work, please cite the papers that introduced the
+methods:</p>
 <ol>
 <li>Zu, R., Wang, B., He, J. <i>et al.</i> &ldquo;Analytical and numerical modeling of optical second
 harmonic generation in anisotropic crystals using &#9839;SHAARP package.&rdquo;
@@ -302,17 +320,16 @@ package.&rdquo; <i>npj Computational Materials</i> <b>10</b>, 64 (2024). <a href
 <p><b>Acknowledgment:</b> Development of the SHAARP software was supported as part of the Computational
 Materials Sciences Program funded by the U.S. Department of Energy, Office of Science, Basic Energy
 Sciences, under Award No. DE-SC0020145.</p>
-<p style="color:#555"><i>SHAARP.py is an independent, validated Python port; please acknowledge the
-original SHAARP software and cite the references above.</i></p>
+<p style="color:#555"><i>SHAARP.py is free and open-source software; please acknowledge it and cite
+the references above.</i></p>
 """
 
 
-# Branding text faithful to the original GUIs' header (authors/version/acknowledgment), updated
-# to note this is the validated Python port.
+# Branding text faithful to the original GUIs' header (authors/version/acknowledgment).
 BRANDING_HTML = (
     "<b>SHAARP.py</b> &mdash; Second Harmonic Analysis of Anisotropic Rotational Polarimetry"
-    "<br><span style='color:#555'>Validated Python port of &#9839;SHAARP.si + &#9839;SHAARP.ml "
-    "(Zu, Wang, Weber, Saha, Chen &amp; Gopalan). Original Version 1.00 &middot; Port v1.0.0. "
+    "<br><span style='color:#555'>Both &#9839;SHAARP methods, si and ml, in one free app "
+    "(Zu, Wang, Weber, Saha, Chen &amp; Gopalan). Version 1.0.0. "
     "Please properly acknowledge the SHAARP software.</span>"
 )
 
@@ -530,13 +547,13 @@ def _friendly_validation_status(raw: str) -> str:
 
     raw = str(raw)
     if "not_fully_mathematica_validated" in raw or raw.startswith("staged_python"):
-        return ("Validation: validated solver core; this specific configuration is not one of the "
-                "mirrored Mathematica reference cases.")
+        return ("Checked: the solver is covered by the test suite; this particular configuration is "
+                "not one of the reference cases.")
     if "mathematica" in raw and "validated" in raw:
-        return "Validation: matches a live-Mathematica-validated reference workflow."
+        return "Checked: this configuration matches its reference case."
     if "unavailable" in raw:
-        return "Validation: reference metadata not bundled in this build."
-    return f"Validation: {raw.replace('_', ' ')}"
+        return "Checked: reference data is not bundled in this build."
+    return f"Checked: {raw.replace('_', ' ')}"
 
 
 def _friendly_error_message(exc: BaseException) -> str:
@@ -871,6 +888,45 @@ def _delete_library_material(name):
     return False
 
 
+def _fit_input_columns(win, cap: int = 700) -> list[int]:
+    """Open each tab's input column at the width its own controls need.
+
+    The column used to open at a fixed 500 px while the single-interface controls need 579 and the
+    multilayer ones 611, so the panel came up with a permanent horizontal scrollbar and the
+    right-hand spin boxes cut off -- including in every screenshot in the README. What drives the
+    width is one QFormLayout: a form's minimum is the sum of its two column maxima, and in
+    Polarimetry Settings the widest label and the widest field sit in different rows.
+
+    This has to run after the pages are built. Measured earlier, inside the page builder, the hint
+    is still the pre-layout value (~505), which is how the fixed 500 looked adequate. The width is
+    capped so a laptop keeps a usable plot area, and the splitter stays draggable either way.
+
+    Returns the chosen widths, so a test can assert on them.
+    """
+    from PySide6 import QtCore as _QtCore
+    from PySide6 import QtWidgets as _QtWidgets
+
+    widths = []
+    for splitter in win.findChildren(_QtWidgets.QSplitter):
+        if splitter.orientation() != _QtCore.Qt.Horizontal or splitter.count() < 2:
+            continue
+        scroll = splitter.widget(0)
+        if not isinstance(scroll, _QtWidgets.QScrollArea) or scroll.widget() is None:
+            continue
+        host = scroll.widget()
+        host.ensurePolished()
+        if host.layout() is not None:
+            host.layout().activate()
+        needed = (host.minimumSizeHint().width()
+                  + scroll.verticalScrollBar().sizeHint().width()
+                  + 2 * scroll.frameWidth() + 4)
+        width = max(500, min(cap, needed))
+        rest = max(700, sum(splitter.sizes()) - width)
+        splitter.setSizes([width, rest])
+        widths.append(width)
+    return widths
+
+
 def build_main_window():
     """Construct (but do not exec) the main window. Headless-testable with QT_QPA_PLATFORM=offscreen."""
 
@@ -883,7 +939,7 @@ def build_main_window():
     from . import __version__ as _pkg_version
 
     win = QtWidgets.QMainWindow()
-    win.setWindowTitle(f"♯SHAARP.py v{_pkg_version} — SHAARP.si + SHAARP.ml (validated Python port)")
+    win.setWindowTitle(f"♯SHAARP.py v{_pkg_version} — SHAARP.si + SHAARP.ml")
     win.resize(1480, 940)
     win.setStyleSheet(MODERN_QSS)  # modern, Apple-style appearance (restyle only; widget tree unchanged)
 
@@ -1125,10 +1181,11 @@ def build_main_window():
         dlg.setWindowTitle("About SHAARP.py")
         dlg.setTextFormat(QtCore.Qt.RichText)
         dlg.setText(
-            f"<b>SHAARP.py v{_pkg_version}</b> &mdash; a validated Python port of the Mathematica "
-            "&#9839;SHAARP.si + &#9839;SHAARP.ml second-harmonic-generation packages, merged into one "
-            "desktop GUI. The computational core is validated value-by-value against live Mathematica "
-            "SHAARP (agreement typically 1e-9 to 1e-15, case-dependent).<br><br>"
+            f"<b>SHAARP.py v{_pkg_version}</b> &mdash; free, open-source software for optical "
+            "second-harmonic generation in anisotropic crystals and multilayers, carrying both "
+            "&#9839;SHAARP methods, si and ml, in one desktop app. The solvers are checked against "
+            "the published equations and the reference output of the original packages, and the "
+            "test suite runs on every commit.<br><br>"
             "<b>Authors:</b> R. Zu, B. Wang, L. Weber, A. Saha, L.-Q. Chen &amp; V. Gopalan "
             "(The Pennsylvania State University).<br><br>"
             "<b>Please cite:</b><br>"
@@ -3057,7 +3114,13 @@ def build_main_window():
         # hoisted out of the sweep loops, so a fine scan stays responsive).
         th_min = _NumBox(0.0, 0.0, 89.0, decimals=3)
         th_max = _NumBox(45.0, 0.0, 89.9, decimals=3)
-        th_step = _NumBox(0.5, 0.01, 30.0, decimals=3)
+        # 0.1 deg, not 0.5. The shipped default preset (Quartz + Au, Fig 4) has a fringe spacing of
+        # 0.560 deg between 30 and 40 deg, so 0.5 deg gave 1.12 samples per fringe -- below Nyquist.
+        # The default view of the documented example was therefore ALIASED: it read as noise and put
+        # its maxima at the wrong angles. 0.1 deg gives 5.6 samples per fringe. It costs about 26 s
+        # against 5 s for the whole 0-45 deg sweep; the quick-preset buttons on the row still offer
+        # 0.5 for a fast look. Fenced in tests/test_maker_default_resolves_fringes.py.
+        th_step = _NumBox(0.1, 0.01, 30.0, decimals=3)
         # Fresnel scan range controlled SEPARATELY from Maker Fringes,
         # each in its own separately-toggled section; Fresnel default step = 0.1 deg.
         fr_min = _NumBox(0.0, 0.0, 89.0, decimals=3)
@@ -3171,6 +3234,25 @@ def build_main_window():
         # 10/20/30]]`. Turning the sample IS SHG Simulation with the polarizer and analyzer held
         # still, so it belongs here and not in the functionality list (which cut back to 4).
         sample_mode = sample_step = sample_dir = None
+        # A FIXED sample azimuth, on BOTH tabs and live in every mode. The sweep controls below
+        # scan this angle; this box sets it for the modes that scan something else (the incidence
+        # angle, or nothing at all). Turning the sample turns the crystal, so it is meaningful
+        # wherever a crystal is.
+        sample_az = _NumBox(0.0, -360.0, 360.0, decimals=3)
+        _tip(sample_az, "sample_azimuth")
+        page._sample_azimuth_deg = lambda: float(sample_az.value())
+        sample_sym = None
+        if which == "si":
+            # the toggle rides on the SAME row as the value it replaces, so the association is
+            # visual and the panel does not grow a second labelled row for one checkbox
+            sample_sym = QtWidgets.QCheckBox("as symbol")
+            _tip(sample_sym, "sample_azimuth_symbolic")
+            p_lay.addRow("sample azimuth ψₛ (deg)", _spin_row(QtWidgets, sample_az, sample_sym))
+            page._sample_azimuth_symbolic = lambda: bool(
+                sample_sym.isEnabled() and sample_sym.isChecked())
+        else:
+            p_lay.addRow("sample azimuth ψₛ (deg)", sample_az)
+            page._sample_azimuth_symbolic = lambda: False
         if which == "ml":
             sample_mode = QtWidgets.QComboBox()
             sample_mode.addItems(["Rotate Sample", "Fix Sample"])
@@ -3195,6 +3277,13 @@ def build_main_window():
                 "rotate_polarizer": polarizer_mode.currentText().startswith("Rotate"),
                 "rotate_analyzer": analyzer_mode.currentText().startswith("Rotate Analyzer"),
                 "analyzer_offset_deg": float(analyzer_offset.value()),
+                "azimuth_deg": float(sample_az.value()),
+            }
+        else:
+            # the single-interface tab has no sweep: the azimuth is a setting there
+            page._sample_rotation_state = lambda: {
+                "on": False, "azimuth_deg": float(sample_az.value()),
+                "ccw": True, "step_deg": 10.0,
             }
 
         # ONE function owns every polarimetry widget's enabled state, from
@@ -3240,6 +3329,18 @@ def build_main_window():
                 _on = _sr_ok and sample_mode.currentText().startswith("Rotate")
                 for _w in (sample_step, sample_step_btns, sample_dir):
                     _w.setEnabled(_on)
+            # The fixed azimuth is live in EVERY mode -- turning the sample is meaningful wherever
+            # there is a crystal -- except while a sweep is scanning that same angle, when the
+            # scan owns it and a second editable box for one quantity would be a dead control.
+            sample_az.setEnabled(not (sample_mode is not None
+                                      and sample_mode.isEnabled()
+                                      and sample_mode.currentText().startswith("Rotate")))
+            if sample_sym is not None:
+                # the symbol IS the angle, so the fixed box stands down while it is on
+                _sym_ok = "Analytical" in func_txt
+                sample_sym.setEnabled(_sym_ok)
+                if _sym_ok and sample_sym.isChecked():
+                    sample_az.setEnabled(False)
 
         # currentTextChanged (NOT `activated`): must also run on programmatic/session restores,
         # so a restored combination never leaves a control live that the compute path ignores.
@@ -3818,7 +3919,7 @@ def build_main_window():
                              "\\[CurlyPhi], ...) — paste directly into a Mathematica notebook. "
                              "The conversion is numerically verified against a live Wolfram kernel.")
         mcopy_btn.clicked.connect(_copy_mathematica)
-        status_lbl = QtWidgets.QLabel("Validation: (run to populate)")
+        status_lbl = QtWidgets.QLabel("Checked: (run to populate)")
         # The validation status can be a long single token (e.g. "maker_outputs_nonsingular_...
         # _caveat"); wrap it so it does NOT pin the window's minimum width wide after Update (same
         # class of bug as the banner header -> would clip the geometry panel on a laptop).
@@ -3860,7 +3961,7 @@ def build_main_window():
         page_split.addWidget(out_splitter)
         page_split.setStretchFactor(0, 0)
         page_split.setStretchFactor(1, 1)
-        page_split.setSizes([500, 980])
+        page_split.setSizes([500, 980])  # provisional; _fit_input_columns() sets the real width
         # stale-plot banner spanning the top. The orientation triad refreshes live while the
         # schematic + plots only refresh on Update, so mid-edit the screen read as half-live / "links
         # not updating" (grill-2 Q1). Make the boundary explicit: any compute-relevant input change
@@ -4017,10 +4118,20 @@ def build_main_window():
                     if canon is None:  # defensive: no compute mode selected
                         _show_view_only()
                         return
+                    # turn the crystal ONCE, here, so the expression, the plotted curve and the
+                    # orientation view all describe the same rotated sample
+                    from .shaarp_gui import si_material_at_azimuth
+
+                    _sym = bool(page._sample_azimuth_symbolic())
+                    _az = float(page._sample_azimuth_deg())
+                    if not _sym:
+                        material = si_material_at_azimuth(material, _az)
                     with stage("compute"):
                         result = compute_si_gui_result(canon,
                                                        point_group=point_group.currentText(),
-                                                       theta_deg=theta_spin.value(), material=material)
+                                                       theta_deg=theta_spin.value(),
+                                                       material=material,
+                                                       sample_rotation=_sym)
                     analyzer_deg = (analyzer_psi.value()
                                     if analyzer_mode.currentText().startswith("Fix Analyzer") else None)
                     # for a selected case-study material, drive the figure from its OWN tensors;
@@ -4214,6 +4325,7 @@ def build_main_window():
                                                            sample_rotate_polarizer=_sr.get("rotate_polarizer", False),
                                                            sample_rotate_analyzer=_sr.get("rotate_analyzer", False),
                                                            sample_analyzer_offset_deg=_sr.get("analyzer_offset_deg", 0.0),
+                                                           sample_azimuth_deg=_sr.get("azimuth_deg", 0.0),
                                                            fixed_phi_deg=fixed_phi.value(),
                                                            analyzer_psi_deg=analyzer_psi.value(),
                                                            ellipticity_deg=(
@@ -4256,9 +4368,12 @@ def build_main_window():
                                        else f"φ={_sr_stage.get('fixed_phi_deg', 0.0):g}°, ")
                                     + ("ψ co-rotating, " if _sr_stage.get("rotate_analyzer")
                                        else f"ψ={_sr_stage.get('analyzer_psi_deg', 0.0):g}°, ")
-                                    + f"θⁱ={_sr_stage.get('theta_deg', 0.0):g}°"
-                                    # name the assumption the sweep USED (like the Maker subtitle)
-                                    + f"\n{a_label}"))
+                                    # SUBSCRIPT i -- the incident angle, matching psi_s above and
+                                    # the 4-polar figure's \theta_i (a superscript read as a power)
+                                    + f"θᵢ={_sr_stage.get('theta_deg', 0.0):g}°"
+                                    # name the assumption the sweep USED, in the SAME words the
+                                    # polarimetry and Maker figures use (one concept, one wording)
+                                    + f"\nAssumption Used: {a_label}"))
                         _replace_canvas_figure(plot_canvas, _rafig)
                         output_tabs.setCurrentWidget(plot_tab)
                         state["last_ra_result"] = result
@@ -4307,7 +4422,8 @@ def build_main_window():
                             ell3 = ml_beam_ellipses(
                                 sketch_sys, theta_deg=theta_spin.value(),
                                 phi_deg=(fphi if fphi is not None else 0.0),
-                                ellipticity_deg=ellipticity.value())
+                                ellipticity_deg=ellipticity.value(),
+                                mrassumption=ML_ASSUMPTIONS.get(assum, 0))
                         except Exception:
                             ell3 = None  # ellipse tile is auxiliary; never block the polar plots
                         with stage("figure"):
@@ -4600,6 +4716,7 @@ def build_main_window():
     tabs.addTab(ml_page, "SHAARP.ml (multilayer)")
     # the global top Update button recomputes whichever tab is active
     update_all_btn.clicked.connect(lambda: (si_run if tabs.currentIndex() == 0 else ml_run)())
+    _fit_input_columns(win)
     return win
 
 

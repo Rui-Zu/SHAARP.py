@@ -384,6 +384,7 @@ def run_fresnel_sweep(case: MultilayerSystem | Material, angle_grid: Any = None,
     workflow = options.pop("workflow", "interface")
     if workflow == "gui_multilayer":
         transmitted_wave_policy = options.pop("transmitted_wave_policy", "shaarp_ml_selected")
+        mrassumption = int(options.pop("mrassumption", 0))
         if options:
             raise ValueError(f"Unsupported run_fresnel_sweep gui_multilayer options: {sorted(options)}")
         if not isinstance(case, MultilayerSystem):
@@ -393,6 +394,7 @@ def run_fresnel_sweep(case: MultilayerSystem | Material, angle_grid: Any = None,
             angle_grid,
             transmitted_wave_policy=transmitted_wave_policy,
             include_validation_summary=include_validation_summary,
+            mrassumption=mrassumption,
         )
     if workflow != "interface":
         raise ValueError("run_fresnel_sweep workflow must be 'interface' or 'gui_multilayer'.")
@@ -529,6 +531,10 @@ def run_sample_rotation(case: MultilayerSystem, azimuth_grid: Any, options: dict
     # pre-existing behaviour byte-for-byte.
     mrassumption = int(options.pop("mrassumption", 0))
     inhomogeneous_source_policy = options.pop("inhomogeneous_source_policy", "forward_only")
+    # opt-in d-linearity fast path (default OFF here so this library contract stays byte-identical;
+    # the GUI helper turns it on). It falls back to the per-point loop whenever its preconditions
+    # do not hold, so passing True is never a correctness decision.
+    fast_linear_d = bool(options.pop("fast_linear_d", False))
     raw = solve_multilayer_shg_sample_azimuth_sweep(
         case,
         sample_azimuth_deg=azimuth_grid,
@@ -538,6 +544,7 @@ def run_sample_rotation(case: MultilayerSystem, azimuth_grid: Any, options: dict
         inhomogeneous_source_policy=inhomogeneous_source_policy,
         inhomogeneous_solution_policy=options.pop("inhomogeneous_solution_policy", "solve"),
         mrassumption=mrassumption,
+        fast_linear_d=fast_linear_d,
     )
     if options:
         raise ValueError(f"Unsupported run_sample_rotation options: {sorted(options)}")
@@ -545,6 +552,11 @@ def run_sample_rotation(case: MultilayerSystem, azimuth_grid: Any, options: dict
         "results": raw.results,
         "mrassumption": mrassumption,
         "inhomogeneous_source_policy": inhomogeneous_source_policy,
+        "fast_linear_d_requested": fast_linear_d,
+        # whether it actually engaged: the fast path returns one solve per touched d component,
+        # the loop one per azimuth point
+        "fast_linear_d_used": bool(fast_linear_d
+                                   and len(raw.results) < np.asarray(raw.sample_azimuth_deg).size),
     }
     if include_validation_summary:
         stages["validation_artifacts"] = _load_sample_rotation_validation_artifacts()
@@ -992,8 +1004,27 @@ def _run_ml_partial_analytical_polarimetry(case: Any) -> SHAARPResult:
     # Booker quartic) -- the caller must gate on that; see shaarp_gui.azimuth_closed_form_feasible.
     sample_azimuth_symbol = params.pop("sample_azimuth_symbol", None)
     ellipticity_rad = params.pop("ellipticity_rad", 0)
+    # THE WAVELENGTH. Frequency reaches the answer through exactly one quantity -- the propagation
+    # phase exp(i k_z h), i.e. the product omega*h. (H = k x E/(omega mu) is frequency-invariant,
+    # and the inhomogeneous solve scales its matrix and its RHS by the same omega^2, so the
+    # particular solution is invariant too.) So a frequency that does not match the units the
+    # thickness is expressed in silently evaluates a DIFFERENT film: with omega pinned to 1 while
+    # h is substituted in microns, the closed form describes a film of optical thickness
+    # h*lambda/(2 pi) -- a different point on the Maker fringe, which is why the disagreement with
+    # the numeric route was complex and moved with angle, thickness and wavelength.
+    # Same formula as the numeric route's `_system_setup`, so the two share ONE definition.
+    # None keeps the historical reduced-unit behaviour (h in units of lambda/2pi) byte-for-byte.
+    wavelength_um = params.pop("wavelength_um", None)
+    # Which bound waves enter the nonlinear source. The symbolic solve used to pin "all" while the
+    # numeric routes the GUI plots default to forward-only, leaving the two describing different
+    # physics; the facade now defaults to the numeric siblings' value (run_maker_fringes /
+    # run_sample_rotation) and the GUI feeds it the Assumptions panel.
+    inhomogeneous_source_policy = params.pop("inhomogeneous_source_policy", "forward_only")
     if params:
         raise ValueError(f"Unsupported run_ml_partial_analytical case keys: {sorted(params)}")
+
+    omega = 1.0 if wavelength_um is None else 2 * np.pi / float(wavelength_um)
+    omega_2 = 2 * omega
 
     if layer_eps_w is not None:
         epsW = [np.asarray(e, dtype=complex) for e in layer_eps_w]
@@ -1010,9 +1041,9 @@ def _run_ml_partial_analytical_polarimetry(case: Any) -> SHAARPResult:
     if sample_azimuth_symbol is not None:
         # Rz(+a), NOT its transpose: `CrystalOrientation.with_lab_azimuth_deg` (the numeric
         # sample-rotation sweep) composes as rotate_d(d_lab0, Rz(a) @ A0), verified to 1.7e-16
-        # (the transpose is off by O(1)). NOTE the SI closed form
-        # (symbolic.solve_si_shg_full_analytical_symbolic) uses the MIRROR convention -- do not
-        # copy it here; that mismatch is filed for review.
+        # (the transpose is off by O(1)). This is the package's one sense for a positive sample
+        # azimuth -- the single-interface closed form and the d-extraction forward model use it
+        # too. See docs/sample_rotation.md.
         _c, _s = sp.cos(sample_azimuth_symbol), sp.sin(sample_azimuth_symbol)
         _rz = sp.Matrix([[_c, -_s, 0], [_s, _c, 0], [0, 0, 1]])
         d_layers = [rotate_d_voigt_symbolic(d, _rz, simplify=False) for d in d_layers]
@@ -1026,14 +1057,14 @@ def _run_ml_partial_analytical_polarimetry(case: Any) -> SHAARPResult:
                  else np.diag([ns2**2] * 3).astype(complex))
     common = dict(
         incident_index=amb_w_idx, incident_theta_rad=incident_theta_rad,
-        layer_epsilon_lab=epsW, substrate_epsilon_lab=sub_w_mat, omega=1.0,
+        layer_epsilon_lab=epsW, substrate_epsilon_lab=sub_w_mat, omega=omega,
     )
     bs = build_multilayer_omega_basis(incident_polarization="s", **common)
     bp = build_multilayer_omega_basis(incident_polarization="p", **common)
     b2 = build_multilayer_2omega_basis(
         top_index_2omega=amb_2_idx, tangential_index_omega=amb_w_idx,
         incident_theta_rad=incident_theta_rad,
-        layer_epsilon_2omega_lab=eps2, substrate_epsilon_2omega_lab=sub_2_mat, omega_2=2.0,
+        layer_epsilon_2omega_lab=eps2, substrate_epsilon_2omega_lab=sub_2_mat, omega_2=omega_2,
     )
     sol = solve_multilayer_shg_symbolic_polarimetry(
         omega_basis_s=bs, omega_basis_p=bp, twoomega_basis=b2,
@@ -1048,6 +1079,7 @@ def _run_ml_partial_analytical_polarimetry(case: Any) -> SHAARPResult:
         # 120 deg: 1.1e-2; quartz 32: 1.3e0). With the normalization the operator conditions at
         # 9.68 -- the same value the numeric path reports -- and the symmetry holds to 2.7e-15.
         mu=1.0, eps0=1.0,
+        inhomogeneous_source_policy=inhomogeneous_source_policy,
     )
     return SHAARPResult(
         kind="ml_partial_analytical_polarimetry",
@@ -1060,6 +1092,13 @@ def _run_ml_partial_analytical_polarimetry(case: Any) -> SHAARPResult:
             "symbols": {
                 "input_polarization": str(phi_symbol),
                 "thickness": ", ".join(str(e) for e in h_entries),
+                # SAY WHICH UNITS ARE IN FORCE. Silence here is what let a frequency that did not
+                # match the thickness units ship: the expression looked right at every angle.
+                "wavelength": (
+                    f"lambda = {float(wavelength_um):g} um (thickness in um)"
+                    if wavelength_um is not None
+                    else "reduced units (omega = 1; thickness in units of lambda/2pi)"),
+                "source_waves": inhomogeneous_source_policy,
                 **({"sample_azimuth": str(sample_azimuth_symbol)}
                    if sample_azimuth_symbol is not None else {}),
             },
@@ -1240,6 +1279,7 @@ def _run_gui_multilayer_fresnel_sweep(
     *,
     transmitted_wave_policy: str,
     include_validation_summary: bool,
+    mrassumption: int = 0,
 ) -> SHAARPResult:
     if transmitted_wave_policy not in {"shaarp_ml_selected", "physical_sum"}:
         raise ValueError("transmitted_wave_policy must be 'shaarp_ml_selected' or 'physical_sum'.")
@@ -1259,8 +1299,8 @@ def _run_gui_multilayer_fresnel_sweep(
     # p- and s-incidence at the same angle share every anisotropic mode solve;
     # this cache makes the second pass reuse the first's bases (byte-identical, ~2x faster).
     basis_cache: dict = {}
-    rp, tp = _gui_fresnel_pair(case, theta_deg, (0.0j, 1.0 + 0.0j), component="p", transmitted_wave_policy=transmitted_wave_policy, base_setup=base_setup, basis_cache=basis_cache)
-    rs, ts = _gui_fresnel_pair(case, theta_deg, (1.0 + 0.0j, 0.0j), component="s", transmitted_wave_policy=transmitted_wave_policy, base_setup=base_setup, basis_cache=basis_cache)
+    rp, tp = _gui_fresnel_pair(case, theta_deg, (0.0j, 1.0 + 0.0j), component="p", transmitted_wave_policy=transmitted_wave_policy, base_setup=base_setup, basis_cache=basis_cache, mrassumption=mrassumption)
+    rs, ts = _gui_fresnel_pair(case, theta_deg, (1.0 + 0.0j, 0.0j), component="s", transmitted_wave_policy=transmitted_wave_policy, base_setup=base_setup, basis_cache=basis_cache, mrassumption=mrassumption)
 
     stages: dict[str, Any] = {
         "workflow": "gui_multilayer",
@@ -1299,6 +1339,7 @@ def _gui_fresnel_pair(
     transmitted_wave_policy: str,
     base_setup: dict | None = None,
     basis_cache: dict | None = None,
+    mrassumption: int = 0,
 ) -> tuple[np.ndarray, np.ndarray]:
     """Reflected AND transmitted Fresnel POWER curves for ONE incident polarization.
 
@@ -1321,7 +1362,10 @@ def _gui_fresnel_pair(
         setup = dict(base_setup)
         setup["incident_theta_rad"] = float(point_pol.radians()[0])
         try:
-            solution = _solve_gui_fresnel_fundamental(case, incident_jones_sp, setup=setup, basis_cache=basis_cache)
+            solution = _solve_gui_fresnel_fundamental(
+                case, incident_jones_sp, setup=setup, basis_cache=basis_cache,
+                single_pass_omega=mrassumption in (1, 2),
+                single_pass_omega_writeback=mrassumption != 1)
         except np.linalg.LinAlgError:
             # ISOLATED removable singularity of the boundary solve (same class as the Maker-fringe
             # eigen-degeneracies; e.g. the Pt-film metal at exactly 85.0 deg, exposed when the
@@ -1362,9 +1406,11 @@ def _select_fundamental_transmitted_wave(waves):
     return [waves[0]]
 
 
-def _solve_gui_fresnel_fundamental(case: MultilayerSystem, incident_jones_sp: tuple[complex, complex], *, setup: dict | None = None, basis_cache: dict | None = None):
+def _solve_gui_fresnel_fundamental(case: MultilayerSystem, incident_jones_sp: tuple[complex, complex], *, setup: dict | None = None, basis_cache: dict | None = None,
+                                   single_pass_omega: bool = False,
+                                   single_pass_omega_writeback: bool = True):
     from .multilayer_basis import build_multilayer_omega_basis_jones
-    from .multilayer_boundary import solve_multilayer_boundary
+    from .multilayer_boundary import solve_multilayer_boundary, solve_multilayer_boundary_single_pass
     from .multilayer_shg_boundary import _system_setup
 
     # `setup` (optional): precomputed _system_setup with `incident_theta_rad` already
@@ -1389,7 +1435,11 @@ def _solve_gui_fresnel_fundamental(case: MultilayerSystem, incident_jones_sp: tu
     )
     if basis_cache is not None and _key not in basis_cache:
         basis_cache[_key] = basis
-    return solve_multilayer_boundary(
+    # The multiple-reflection assumption governs the FUNDAMENTAL solve, not only the SHG
+    # stage: Jerphagnon-Kurtz and Herman-Hayden take a single pass through the film at
+    # omega. So the reflected and transmitted fundamental beams -- their Fresnel
+    # coefficients and their polarization ellipses -- depend on it too.
+    _common = dict(
         top_known=basis.incident,
         top_unknown_basis=basis.reflected_basis,
         layer_unknown_basis=basis.layer_basis,
@@ -1397,6 +1447,10 @@ def _solve_gui_fresnel_fundamental(case: MultilayerSystem, incident_jones_sp: tu
         thicknesses=setup["thicknesses"],
         mu=1.0,
     )
+    if single_pass_omega:
+        return solve_multilayer_boundary_single_pass(
+            writeback=single_pass_omega_writeback, **_common)
+    return solve_multilayer_boundary(**_common)
 
 
 def _sum_wave_frame_jones_sp(waves) -> tuple[complex, complex]:

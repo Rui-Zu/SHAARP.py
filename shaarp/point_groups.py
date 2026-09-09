@@ -2,8 +2,12 @@
 
 The original ♯SHAARP.ml GUI offers every layer TWO popups (``SHAARP.ml.nb:5191`` and ``:5630``):
 ``Noncentrosymmetric ->`` (23 entries, 20 crystallographic classes + the three SHG-active Curie
-groups) and ``Centrosymmetric ->`` (16 entries: the 11 centrosymmetric classes, 432 -- filed there
-because its Kleinman-symmetric d vanishes -- and the four centrosymmetric/isotropic Curie groups).
+groups) and ``Centrosymmetric ->`` (16 entries: the 11 centrosymmetric classes, 432, and the four
+centrosymmetric/isotropic Curie groups). 432 is NOT centrosymmetric; it is filed under that heading
+because it is SHG-inactive, and it is inactive by its own point-group symmetry rather than by any
+Kleinman assumption -- the cubic axes force d14 = d25 and the four-fold axis forces d14 = -d25, so
+every component vanishes. (Kleinman symmetry is what empties 422 and 622, which the original lists
+as ACTIVE.) The docs name this section "SHG-inactive", which is true of all 16.
 Each entry is ``{label, 3x6 pattern, flag}``; flag 0 groups carry an all-zero d and still run the
 whole pipeline with P_NL = 0. There is NO per-layer "SHG active" switch in the original -- activity
 IS the list the group came from. ♯SHAARP.si (V1.03/V1.04) offers only the 23 active labels.

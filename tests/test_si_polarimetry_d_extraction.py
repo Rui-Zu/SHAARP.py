@@ -55,7 +55,7 @@ def _rz(az):
 def _numeric_field(d_numeric, theta, az, phi_val):
     """'Measured' complex reflected SHG (E_s, E_p) at one (theta, azimuth, phi) from the
     independent numeric arbitrary-Jones solver, for a sample rotated by `az` about z."""
-    d_rot = np.real(np.asarray(rotate_d_voigt_crystal_to_lab(d_numeric, _rz(az)), dtype=complex))
+    d_rot = np.real(np.asarray(rotate_d_voigt_crystal_to_lab(d_numeric, _rz(az).T), dtype=complex))
     r = solve_single_interface_shg(
         np.diag(EPS_W).astype(complex), np.diag(EPS_2W).astype(complex), d_rot,
         incident_index_omega=1.0, incident_index_2omega=1.0, incident_theta_rad=theta,

@@ -186,7 +186,12 @@ class SampleRotationSweep(unittest.TestCase):
         sysm, grid = ml._last_ra_system(), ml._last_ra_grid()
         self.assertIsNotNone(sysm, "system hook empty")
         self.assertIsNotNone(grid, "solver-grid hook empty")
-        fresh = run_sample_rotation(sysm, np.asarray(grid, dtype=float))
+        # like-for-like: the GUI helper runs the d-linearity fast path, so the reference asks for it
+        # too. This fence is about GUI WIRING (does the plotted curve come from the system the GUI
+        # built), not about fast-vs-loop numerics -- that is fenced separately, with its own
+        # measured tolerance, in tests/test_ra_scan_assumptions.py.
+        fresh = run_sample_rotation(sysm, np.asarray(grid, dtype=float),
+                                    {"fast_linear_d": True})
         for key in CHANNELS:
             np.testing.assert_allclose(_chan(res, key), _chan(fresh, key), rtol=1e-9, atol=1e-12,
                                        err_msg=f"GUI {key} != fresh run_sample_rotation")

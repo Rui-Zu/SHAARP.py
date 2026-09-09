@@ -146,7 +146,8 @@ The input polarization is set by the separate `incident_polarization` option (`"
 the choice matters: for LiNbO₃ (11-20) at 45° the two differ by a factor of ~500.
 
 For a curve in $\varphi$ use the closed form in [First plot](#first-plot), or drive
-`solve_single_interface_shg(..., incident_jones=(sin φ, cos φ))` yourself.
+`solve_single_interface_shg(..., incident_jones=(sin φ, cos φ))` yourself. The tuple is ordered
+$(J_s, J_p)$, so with $\varphi = 0$ meaning $p$ the sine comes first.
 ```
 
 ## Case-study materials
@@ -156,13 +157,16 @@ The same palette the GUI offers, with wavelength-interpolated dielectric tensors
 ```python
 from shaarp.casestudy_materials import GUI_ML_CASES, build_casestudy_material
 
-print([label for label, _key in GUI_ML_CASES])          # the names offered in the GUI
+print([key for _label, key in GUI_ML_CASES])   # the names build_casestudy_material accepts
 mat = build_casestudy_material("LiNbO3 z-cut (1550 nm)", wavelength_um=1.55)
 ```
 
-`GUI_ML_CASES` is the curated palette (the original ♯SHAARP case studies at their published
-wavelengths). `CASE_STUDY_ORDER` is the full registry, which additionally holds a few entries kept
-only as numerical fixtures and deliberately not offered in the GUI.
+Each entry of `GUI_ML_CASES` is a pair: the label the dropdown shows, and the registry key you pass
+to `build_casestudy_material`. They are spelled differently, so print the keys, not the labels.
+
+`GUI_ML_CASES` is the SHAARP.ml film palette and `GUI_SI_GROUPS` the SHAARP.si case-study palette,
+both at the published wavelengths. `CASE_STUDY_ORDER` is the full registry behind them, plus one
+entry kept only as a numerical fixture.
 
 (extracting-the-d-tensor)=
 ## Extracting the $d$ tensor
@@ -179,7 +183,7 @@ res = extract_si_d_voigt(
     d_positions=[(0, 0), (1, 1), (2, 2), (0, 3), (1, 4), (2, 0)],   # Voigt (row, col), 0-based
     geometries=[(0.3, 0.0), (0.6, 0.0), (0.9, 0.0)],                # (theta, azimuth), RADIANS
     phi_values=[0.25, 0.8, 1.4, 1.9, 2.5, 2.9],                     # input polarizations, radians
-    measure=my_measurement_function,        # (theta, azimuth, phi) -> field or intensity
+    measure=my_measurement_function,        # transmitted: -> (Ex, Ey, Ez); reflected: -> (Es, Ep)
     method="field",                         # or "intensity" (phase-less)
     observable="transmitted",               # or "reflected"
 )
@@ -187,9 +191,12 @@ print(res.values, res.identifiable, res.rank, res.condition_number, res.residual
 ```
 
 `measure` is your data: a callable returning the measured quantity at each
-$(\theta, \text{azimuth}, \varphi)$. A complete runnable version — it simulates a scan from a known
-tensor and recovers it to ~1e-9 — is `examples/d_extraction_demo.py` in {doc}`examples/index`.
-Start from that file rather than from scratch.
+$(\theta, \text{azimuth}, \varphi)$. Its return type follows `observable`: the total transmitted SHG
+field as $(E_x, E_y, E_z)$ for `"transmitted"`, and the complex pair $(E_s, E_p)$ for `"reflected"`.
+Build it with the same `mu` and `eps0` the extractor uses, both 1 by default; a mismatch rescales the
+recovered $d$ while leaving the residual small. A complete runnable version — it simulates a scan
+from a known tensor and recovers it to ~1e-9 — is `examples/d_extraction_demo.py` in
+{doc}`examples/index`. Start from that file rather than from scratch.
 
 Not every geometry constrains every component. The result reports `identifiable`, `rank` and
 `condition_number`; if the fit is rank-deficient, add incidence angles, sample azimuths, or the

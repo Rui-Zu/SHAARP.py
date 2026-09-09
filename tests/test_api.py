@@ -421,7 +421,11 @@ class PublicAPITests(unittest.TestCase):
         dml[0, 3] = dml[1, 4] = dml[2, 5] = sp.Symbol("d14")
         h = sp.Symbol("h", positive=True)
         ml = run_ml_partial_analytical(
-            {"point_group": "-43m", "d_voigt_symbolic": dml, "phi_symbol": phi, "thickness_symbol": h},
+            # the facade now defaults to forward-only source waves, matching run_maker_fringes
+            # and run_sample_rotation; state it on both sides so this stays an equivalence
+            # fence rather than a silent agreement about a default.
+            {"point_group": "-43m", "d_voigt_symbolic": dml, "phi_symbol": phi,
+             "thickness_symbol": h, "inhomogeneous_source_policy": "all"},
             {"workflow": "polarimetry"},
         )
         self.assertEqual(ml.kind, "ml_partial_analytical_polarimetry")

@@ -16,11 +16,11 @@ schematic is a persistent banner; the crystal-axes view sits in the orientation 
 * - Option
   - What it does
 * - **SHG Simulation**
-  - Validated numeric reflected-SHG polarimetry (the `shaarp_si_compat` workflow). Produces the polar plots.
+  - Numeric reflected-SHG polarimetry. Produces the polar plots.
 * - **Partial Analytical Expressions**
   - Closed-form reflected-SHG polarimetry, symbolic in the input polarization $\varphi$ and the $d_{ij}$ components (numeric angle/indices, taken from the selected material — complex $\varepsilon$ included for absorbing crystals).
 * - **Full Analytical Expressions**
-  - Closed-form symbolic in $\varphi$, $d_{ij}$, angle, **and** indices. Fully-symbolic forms exist for isotropic/uniaxial crystals in the identity or pure-$R_z$ orientations; other orientations fall back to the substituted (Partial-style) form **with a declared note** in the output.
+  - Closed-form symbolic in $\varphi$, $d_{ij}$, angle, **and** indices. Available whenever the crystal's lab-frame $\varepsilon$ is diagonal, meaning it is aligned with its principal axes — isotropic, uniaxial and biaxial alike. A rotated crystal whose lab $\varepsilon$ picks up off-diagonal terms, such as TaAs (112), has no principal-aligned closed form; the output says so and points you to *SHG Simulation*.
 ```
 
 ```{tip}
@@ -59,7 +59,7 @@ selected:
 
 > **— Noncentrosymmetric (SHG-active) —** 1, 2, m, mm2, 222, 3, 32, 3m, 4, 6, -4, 4mm, 6mm, 422,
 > 622, -42m, -6, -6m2, -43m, 23, ∞, ∞m, ∞2
-> **— Centrosymmetric (SHG-inactive) —** -1, 2/m, mmm, 4/m, 4/mmm, -3, -3m, 6/m, 6/mmm, m3, m3m,
+> **— SHG-inactive —** -1, 2/m, mmm, 4/m, 4/mmm, -3, -3m, 6/m, 6/mmm, m3, m3m,
 > 432, ∞/m, ∞/mm, ∞∞, ∞∞m
 
 **Whether a crystal is an SHG source is decided by this choice alone** — there is no separate "SHG
@@ -71,7 +71,11 @@ active" switch.
 - **Pick one from the second section** and $d \equiv 0$: the *SHG Tensor dᵢⱼ* group collapses, its
   title gaining the suffix **"— not used: SHG-inactive point group (d ≡ 0)"**. Choosing an active
   group again restores the pattern.
-- **432 sits in the inactive section** because its $d$ vanishes under Kleinman symmetry.
+- **432 sits in the inactive section although it is noncentrosymmetric.** It is the one
+  noncentrosymmetric class whose $d$ vanishes identically by its own symmetry, with no Kleinman
+  assumption needed: the cubic axes give $d_{14}=d_{25}$ and the four-fold axis gives
+  $d_{14}=-d_{25}$, leaving zero. (The original ♯SHAARP dropdown files it under a heading named for
+  the centrosymmetric classes; the section is renamed here to stay true of every member.)
 
 **Lattice constants.** $a, b, c$ in Å, $\alpha, \beta, \gamma$ in degrees. The point group's
 crystal system locks the dependent cells — they grey out and are coerced to the rule:
@@ -116,7 +120,7 @@ tabulated range — no silent extrapolation.
 
 ## Polarimetry settings
 
-- **Incident angle $\theta_i$** — spin box (0–89°) + slider + quick-angle buttons (0, 15, 30, 45, 60, 75).
+- **Incident angle $\theta_i$** — spin box (0–89.9°) + slider + quick-angle buttons (0, 15, 30, 45, 60, 75).
 - **Incident field / polarization $\varphi$** — the incident Jones vector $E = E_0(\cos\varphi,\ \sin\varphi\,e^{i\Delta\delta},\ 0)$.
   *Rotate Polarizer* sweeps $\varphi$; *Fix Polarizer* holds $\varphi$ and sweeps the analyzer.
 - **Ellipticity $\Delta\delta$** — incident-field phase between components.

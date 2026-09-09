@@ -344,7 +344,7 @@ class DesktopAppSmokeTests(unittest.TestCase):
             self.app.processEvents()
             expr = page.findChild(W.QTextEdit, "expr_box")  # rich-text typeset view
             status = [L for L in page.findChildren(W.QLabel)
-                      if L.text().startswith("Validation:")][0]
+                      if L.text().startswith("Checked:")][0]
             # the label now shows HUMAN wording; the raw workflow tag lives in its tooltip
             return status.toolTip(), expr
 
@@ -406,7 +406,7 @@ class DesktopAppSmokeTests(unittest.TestCase):
                              if b.text() == "Update" and not tabs.isAncestorOf(b))
         header_update.click()
         self.app.processEvents()
-        status = [L for L in ml.findChildren(W.QLabel) if L.text().startswith("Validation:")][0]
+        status = [L for L in ml.findChildren(W.QLabel) if L.text().startswith("Checked:")][0]
         self.assertIn("maker", status.toolTip())
         tused = [L for L in ml.findChildren(W.QLabel) if L.text().startswith("Time Used")][0]
         self.assertNotIn("-- s", tused.text(), "Time Used must populate after a compute")

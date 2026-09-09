@@ -200,6 +200,9 @@ class GaAs111ThreefoldSymmetryTests(unittest.TestCase):
         )
 
     def _d_rotated(self, psi):
+        # No transpose here, deliberately. Every check built on this is SIGN-BLIND -- it
+        # asks whether 120 degrees is a symmetry and 60 is not -- and it never pairs with
+        # the package's sample azimuth, so the sense cannot matter. Do not "harmonise" it.
         return np.real(np.asarray(rotate_d_voigt_crystal_to_lab(self.d_lab0, self._rz(psi)), dtype=complex))
 
     def test_d_tensor_is_120deg_periodic_about_111_normal(self):

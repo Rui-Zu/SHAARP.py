@@ -19,9 +19,10 @@ is a persistent banner; the crystal-axes view is in the orientation input group)
 * - Option
   - What it does
 * - **SHG Simulation**
-  - Validated numeric multilayer SHG polarimetry.
+  - Numeric multilayer SHG polarimetry.
 * - **Maker Fringes**
-  - Transmitted/reflected SHG intensity vs incidence angle $\theta_i$ (a $\theta$-sweep).
+  - Transmitted SHG intensity vs incidence angle $\theta_i$ (a $\theta$-sweep), in the parallel and
+    perpendicular channels.
 * - **Fresnel Coefficients**
   - Linear reflection/transmission power coefficients $R_p, R_s, T_p, T_s$ vs $\theta_i$.
 * - **Partial Analytical Expressions**
@@ -129,8 +130,9 @@ repeat Updates are instant.
 ## System / layer setup
 
 **System presets.** The paper's demonstrated heterostructures at their published wavelengths:
-*"Quartz + Au (Fig 4, 800 nm)"* (the documentation example, validated to ~1e-9 against the
-original), *"ZnO / Pt / Al₂O₃ (Fig 6, 1550 nm)"*, and *"LiNbO₃ / Quartz (Fig 7, 1550 nm)"*.
+`Quartz + Au (Fig 4, 800 nm)` (the documentation example), `ZnO / Pt / Al2O3 (Fig 6, 1550 nm)`, and
+`LiNbO3 / Quartz (Fig 7, 1550 nm)`. Those are the exact strings, spelled with plain digits; pass one
+as `system_preset=` to {py:func}`shaarp.compute_ml_gui_result` to run the same case from Python.
 Below them, the **Single film in air** section lists the original ♯SHAARP.ml palette — each
 material labelled with its provenance wavelength (multi-wavelength materials are grouped under a
 master title, e.g. *Quartz → x-cut · 1064 nm / z-cut · 800 nm*) — plus **"N-layer stack
@@ -141,8 +143,10 @@ layer N = substrate half-space). For the selected layer choose the **material**,
 name** (shown in the selector and the schematic; leave blank for the automatic "role: material"
 label), and the **thickness** (µm; disabled for half-spaces). Each layer can carry its own custom
 crystal (point group, orientation, $\varepsilon$, $d$) via the same controls as {doc}`si_tab`;
-stack labels also show the material's point group and surface $(hkl)$. The **substrate** is
-isotropic — enter scalar $n_\omega, n_{2\omega}$.
+stack labels also show the material's point group and surface $(hkl)$. The **substrate** is the last
+layer and takes the same choices as any other: a case-study crystal, a custom crystal, or the
+isotropic option, where you enter scalar $n_\omega, n_{2\omega}$. In the simple single-film mode
+above, the substrate is always the isotropic one.
 
 **SHG activity is decided by the point group.** As in the original ♯SHAARP.ml, there is no
 per-layer "SHG active" checkbox. A layer radiates SHG if and only if all three hold:
@@ -216,18 +220,27 @@ FMR fine-fringe amplitude grows visibly relative to HH/JK.
 
 ```{note}
 The assumption also applies to **SHG Simulation**, not just the Maker sweep: the same FMR/JK/HH
-policy and FMR sub-mode are passed to the numeric multilayer solve.
+policy and FMR sub-mode are passed to the numeric multilayer solve — including the
+**sample-rotation** sweep below, where every azimuth point is solved under the selected
+assumption and the plot's subtitle names it. Under JK and HH the source waves are forward-only,
+as in the original's own JK/HH branches.
 ```
 
 ## Maker Fringes Scan Range / Fresnel Coefficients Scan Range
 
 Each sweep mode has its **own** scan section, controlled and toggled separately.
 **$\theta_{\min}$, $\theta_{\max}$, $\theta_{\text{step}}$** (deg) set the incidence-angle grid; a finer
-step gives smoother curves at the cost of compute time. The *Maker Fringes Scan Range* defaults to
-0–45° at 0.5°; the *Fresnel Coefficients Scan Range* defaults to the original's full 0–89.9° at a
-finer **0.1°** step (the original fixed the Fresnel range at 0–90° and exposed only the step; the
-separate min/max here is a deliberate extension). Each group clears its "— not used by this
+step gives smoother curves at the cost of compute time. Both scan groups default to a **0.1°**
+step: the *Maker Fringes Scan Range* over 0–45°, the *Fresnel Coefficients Scan Range* over the
+original's full 0–89.9° (the original fixed the Fresnel range at 0–90° and exposed only the step;
+the separate min/max here is a deliberate extension). Each group clears its "— not used by this
 mode" hint only in its own mode.
+
+The Maker default is fine on purpose. A 121.2 µm quartz slab, the default preset, puts its fringes
+about 0.56° apart, so a 0.5° step would land barely one sample on each and the curve would alias
+into something that looks like noise with its maxima in the wrong places. At 0.1° the full 0–45°
+sweep takes roughly half a minute; the quick-preset buttons beside the step let you drop to 0.5°
+for a fast look at the envelope.
 
 ## Polarimetry settings
 
@@ -246,6 +259,26 @@ drawn over the sample azimuth. Self-consistency across the combinations is fence
 `tests/test_polarimetry_combinations.py` (e.g. at normal incidence, rotating the sample by $t$
 equals co-rotating polarizer and analyzer by $t$ with the sample fixed, to ~5e-10).
 
+A rotating sample is a **physical crystal rotation**, not a relabelled polarizer sweep: at each
+$\psi_s$ the layer orientations are turned about the surface normal, $\varepsilon(\omega)$,
+$\varepsilon(2\omega)$ and the $d$ tensor are re-derived in the lab frame, and the multilayer
+boundary-value problem is solved afresh. That is what the original's `SampleRotate` does, and away
+from normal incidence it does **not** reduce to co-rotating the polarizer and analyzer. The
+selected assumption (FMR/JK/HH and the FMR sub-mode) applies to every point;
+`tests/test_ra_scan_assumptions.py` fences that it reaches the sweep.
+
+**Why a fine step is cheap.** Where every rotating layer's $\varepsilon$ is unchanged by a rotation
+about the surface normal, the whole *linear* problem — eigenmodes, $k_z$, Fresnel coefficients,
+propagation phases, the $2\omega$ boundary matrix — does not depend on $\psi_s$ at all, and only
+the nonlinear source turns. Because the SHG fields are exactly linear in every $d$ component, the
+sweep is then a linear combination of **one solve per touched $d$ component** (six for z-cut
+quartz) instead of one solve per azimuth point. The cost is therefore flat in the number of points:
+on the quartz + gold case a $0.5°$ step takes 0.7 s instead of 54 s. It is the same validated
+solver and the same assumption support, agreeing with the per-point loop to $3\times10^{-11}$ of
+peak, and it falls back automatically — to the loop, bit for bit — whenever a rotating layer's
+$\varepsilon$ does turn with the sample (a rotated biaxial) or the polarizer/analyzer vary per
+point.
+
 **Maker Fringes uses this panel too:** the sweep's *input* polarization ($\varphi$,
 $\Delta\delta$) and *detection* polarization (analyzer $\psi$; the perpendicular channel sits at
 $\psi+90°$) are the panel's fixed values — the rotate/fix selectors grey out in that mode. Fresnel
@@ -253,11 +286,11 @@ Coefficients is linear ($R_p, R_s, T_p, T_s$ per angle) and reads no polarimetry
 
 ## Outputs
 
-- **Maker Fringes** — $I(\theta_i)$ with the assumption shown in the subtitle; removable
-  eigenmode-degeneracy singularities are interpolated (the title notes how many).
+- **Maker Fringes** — $I(\theta_i)$ with the assumption shown in the subtitle, plotted straight from
+  the solver.
 - **Fresnel Coefficients** — $R_p, R_s, T_p, T_s$ over the original's full 0–90° range at the
-  panel's step (isolated singular boundary solves for metallic films are interpolated, like the
-  Maker singularities; lossless stacks satisfy $R+T=1$).
+  panel's step. An isolated angle where the boundary solve is singular, which happens for metallic
+  films, is interpolated from its neighbours. Lossless stacks satisfy $R+T=1$.
 - **Polar Plots** — reflected/transmitted $I_p$, $I_s$ panels, plus a **beam-ellipticity tile**
   showing the polarization ellipses of the incident, reflected, and transmitted fundamental beams.
   The co-rotating analyzer mode ($\psi = \varphi +$ offset) is available on this tab too.

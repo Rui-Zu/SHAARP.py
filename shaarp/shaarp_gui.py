@@ -213,12 +213,59 @@ def _epsilon_lab_of(material, *, omega: bool) -> np.ndarray:
                       dtype=complex)
 
 
+
+def si_azimuth_closed_form_feasible(material, tol: float = 1e-9):
+    """(ok, reason) -- may the sample azimuth stay SYMBOLIC for this crystal?
+
+    Same physics as the multilayer gate: a sample rotation turns BOTH the permittivity and the
+    nonlinear tensor, and a closed form can only carry the angle through the nonlinear tensor.
+    Turning the permittivity of a biaxial crystal makes a general rotated biaxial whose
+    propagation constants need the full quartic, and no closed form survives. So the symbolic
+    route is physical exactly when the lab permittivity is unchanged by a rotation about the
+    surface normal, which is a runtime measurement rather than a point-group lookup."""
+    import numpy as _np
+
+    worst = 0.0
+    for omega in (True, False):
+        eps = _epsilon_lab_of(material, omega=omega)
+        scale = max(1.0, float(_np.max(_np.abs(eps))))
+        for ang in (37.0, 113.0):
+            a = _np.deg2rad(ang)
+            c, sn = _np.cos(a), _np.sin(a)
+            rz = _np.array([[c, -sn, 0.0], [sn, c, 0.0], [0.0, 0.0, 1.0]])
+            worst = max(worst, float(_np.max(_np.abs(rz @ eps @ rz.T - eps))) / scale)
+    if worst > tol:
+        return False, ("this crystal's permittivity turns with the sample (residual "
+                       f"{worst:.1e}), so a closed form in the azimuth would need the rotated "
+                       "biaxial quartic. Set the azimuth to a number instead.")
+    return True, f"the permittivity is unchanged by the rotation to {worst:.1e}"
+
+
+def si_material_at_azimuth(material, azimuth_deg: float, ccw: bool = True):
+    """A copy of ``material`` with the crystal turned to a sample azimuth about the surface normal.
+
+    The single-interface side needs nothing else: every quantity the solvers use is derived from
+    the orientation, so turning it turns the permittivity and the nonlinear tensor together, which
+    is what a physical sample rotation does. The sign follows :func:`azimuth_user_to_solver`, the
+    one place that owns it."""
+    from dataclasses import replace as _replace
+
+    if not azimuth_deg or material is None:
+        return material
+    turned = material.orientation.with_lab_azimuth_deg(
+        azimuth_user_to_solver(azimuth_deg, ccw))
+    return _replace(material, orientation=turned)
+
+
 def compute_si_gui_result(
     functionality: str,
     *,
     point_group: str = "-43m",
     theta_deg: float = 45.0,
     material=None,
+    sample_azimuth_deg: float = 0.0,
+    sample_rotation_ccw: bool = True,
+    sample_rotation: bool = False,
 ):
     """Pure (no-widget) compute for the SHAARP.si tab. Returns the SHAARPResult the panel displays.
 
@@ -230,6 +277,17 @@ def compute_si_gui_result(
     if functionality not in SI_FUNCTIONALITIES:
         raise ValueError(f"SHAARP.si functionality must be one of {SI_FUNCTIONALITIES}, got {functionality!r}")
     mat = material if material is not None else default_interactive_material()
+    # A SAMPLE AZIMUTH turns the crystal about the surface normal. Doing it here, on the material,
+    # is all that is needed for every single-interface mode: the numeric workflow and the closed
+    # forms both derive their lab-frame permittivity and nonlinear tensor from this orientation, so
+    # the plotted curve and the displayed expression stay descriptions of the same rotated crystal.
+    if not sample_rotation:
+        mat = si_material_at_azimuth(mat, sample_azimuth_deg, sample_rotation_ccw)
+    if material is not None:
+        # the analytical branches below read `material`, not `mat`, so BOTH names must refer to
+        # the turned crystal or the expression would describe an unrotated sample while the
+        # plotted curve described a rotated one
+        material = mat
     if functionality == "SHG Simulation":
         return run_si_numeric(
             mat,
@@ -386,7 +444,7 @@ def compute_si_gui_result(
         # -- theta and all indices are symbols -- so cache it: the CAS solve costs seconds-to-a-
         # minute (~10 s identity 3m, ~57 s Rz-rotated 3m) and would otherwise be paid again on
         # every Update click / sweep cell.
-        cache_key = (pg_effective, pat_w, pat_2, rot_fingerprint)
+        cache_key = (pg_effective, pat_w, pat_2, rot_fingerprint, bool(sample_rotation))
         cached = _FULL_SYMBOLIC_CACHE.get(cache_key)
         if cached is not None:
             return cached
@@ -430,6 +488,22 @@ def compute_si_gui_result(
     # contract is the opposite: one FLATTENED expression in phi and d_ij, with theta and the
     # indices substituted, that a user can evaluate or fit directly. Layering that one would make
     # the curve expression unevaluatable on its own (caught by the expression-matches-plot gate).
+    if sample_rotation:
+        # THE SAMPLE AZIMUTH AS A SYMBOL, as on the multilayer side: the response is linear
+        # in every nonlinear-tensor component, so a tensor that is trigonometric in the
+        # azimuth costs no extra solves and the answer comes out as one expression in it.
+        _ok, _why = si_azimuth_closed_form_feasible(mat)
+        if _ok:
+            import sympy as _sp
+            _psi_s = _sp.Symbol("psi_s", real=True)
+            # the solver's positive azimuth reads clockwise from the beam side, so a
+            # counter-clockwise sweep is the negated angle -- the one sign rule, shared
+            case["sample_azimuth_symbol"] = (-_psi_s if sample_rotation_ccw else _psi_s)
+            extra_symbols["sample azimuth"] = (
+                f"psi_s (radians, {'CCW' if sample_rotation_ccw else 'CW'} looking at the "
+                f"sample from the beam side); {_why}")
+        else:
+            extra_symbols["sample azimuth"] = _why
     result = run_si_full_analytical(
         case, {"workflow": "polarimetry", "simplify": False, "layered": bool(full_ok)})
     try:  # surface the substitution/symbol provenance in the '# symbols:' head line
@@ -989,6 +1063,7 @@ def compute_ml_gui_result(
     sample_rotate_polarizer: bool = False,
     sample_rotate_analyzer: bool = False,
     sample_analyzer_offset_deg: float = 0.0,
+    sample_azimuth_deg: float = 0.0,
     fixed_phi_deg: float | None = None,
     analyzer_psi_deg: float | None = None,
     ellipticity_deg: float | None = None,
@@ -1056,7 +1131,13 @@ def compute_ml_gui_result(
         # the panel values there; None-defaults keep every pre-F70 headless call byte-identical.
         _mk_pol = replace(sys_.polarimetry, phi_deg=_phi_v, psi_deg=_psi_v,
                           ellipticity_deg=_ell_v)
-        return run_maker_fringes(replace(sys_, polarimetry=_mk_pol), grid, opts)
+        # A FIXED sample azimuth, applied ONCE before the sweep. The Maker sweep hoists its
+        # angle-independent setup out of the per-angle loop, and baking the rotation into the
+        # system beforehand leaves that hoist intact -- which is why a fixed azimuth costs nothing
+        # while a full azimuth-by-angle map would cost an eigen-decomposition per azimuth.
+        _mk_sys = _with_fixed_sample_azimuth(replace(sys_, polarimetry=_mk_pol),
+                                             sample_azimuth_deg, sample_rotation_ccw)
+        return run_maker_fringes(_mk_sys, grid, opts)
     if functionality == "Fresnel Coefficients":
         # the Fresnel scan range is controlled SEPARATELY from the Maker
         # Fringes range (own min/max/step, default step 0.1 deg). The original fixed the range at
@@ -1067,7 +1148,25 @@ def compute_ml_gui_result(
         _fr_hi = 89.9 if fresnel_max_deg is None else min(float(fresnel_max_deg), 89.9)
         _fr_st = float(theta_step_deg) if fresnel_step_deg is None else float(fresnel_step_deg)
         grid = _closed_grid(_fr_lo, _fr_hi, _fr_st)
-        return run_fresnel_sweep(sys_, grid, {"workflow": "gui_multilayer"})
+        # Fresnel coefficients are linear optics, so the azimuth reaches them only through an
+        # anisotropic layer's eigenmodes. For a stack whose permittivity is unchanged by a
+        # rotation about the surface normal the answer is genuinely identical -- that is physics,
+        # not a dead control, so the result says so rather than the app hiding the setting.
+        _fr_sys = _with_fixed_sample_azimuth(sys_, sample_azimuth_deg, sample_rotation_ccw)
+        _fr = run_fresnel_sweep(_fr_sys, grid, {"workflow": "gui_multilayer",
+                                                "mrassumption": ML_ASSUMPTIONS[assumption]})
+        try:
+            _inert, _why = azimuth_closed_form_feasible(sys_)
+            _fr.stages["sample_azimuth_deg"] = float(sample_azimuth_deg)
+            _fr.stages["sample_azimuth_effect"] = (
+                "no effect for this stack: every layer's permittivity is unchanged by a rotation "
+                "about the surface normal, so the linear coefficients do not depend on it"
+                if _inert else
+                "the azimuth changes these coefficients: a layer's permittivity turns with the "
+                "sample, so its eigenmodes do too")
+        except Exception:
+            pass
+        return _fr
     # Partial analytical -> the validated ML film polarimetry closed form.
     pg = sys_.layers[1].material.structure.point_group if len(sys_.layers) > 1 else point_group
     # with N interior layers the closed form is symmetry-forbidden only when EVERY one of
@@ -1259,13 +1358,6 @@ def compute_ml_gui_result(
         # only where the rotation leaves eps alone (see azimuth_closed_form_feasible); otherwise
         # fall back to the numeric sweep and say why, rather than emitting a wrong expression.
         _ok, _reason = azimuth_closed_form_feasible(sys_)
-        if _ok and not ANALYTIC_AZIMUTH_ENABLED:
-            _ok, _reason = False, (
-                "the closed form in the sample azimuth is NOT YET VERIFIED: substituting psi into "
-                "it disagrees by ~32% with re-solving the numerically-rotated sample, which is the "
-                "path validated against Mathematica. Every declared solver input agrees to <=1.9e-13 "
-                "between the two routes, so the cause is not yet identified. Ran the numeric "
-                "azimuth sweep instead (see ANALYTIC_AZIMUTH_ENABLED)")
         if not _ok:
             _res = ml_sample_rotation_result(
                 sys_, theta_deg=theta_deg, fixed_phi_deg=_phi_v,
@@ -1291,6 +1383,26 @@ def compute_ml_gui_result(
             f"psi_s (radians, {'CCW' if sample_rotation_ccw else 'CW'} looking at the sample from "
             f"the beam side); eps invariance {_reason.split('to ')[-1]}")
         ml_extra["input polarization"] = f"phi = {_phi_v:g} deg (substituted)"
+    # THE WAVELENGTH. The thicknesses above are substituted in microns, so the closed form must be
+    # built at the matching frequency or it describes a film of optical thickness h*lambda/(2 pi)
+    # -- a different point on the Maker fringe. This is the one key that makes the expression and
+    # the numeric curve the same physical film.
+    case["wavelength_um"] = float(sys_.wavelength_um)
+    # ...and the same Assumptions panel the numeric routes read, through the one helper that owns
+    # the panel-to-policy mapping. Before this the panel changed nothing here.
+    _assume = ml_sample_rotation_assumption_options(assumption, fmr_submode)
+    case["inhomogeneous_source_policy"] = _assume["inhomogeneous_source_policy"]
+    if _assume["mrassumption"] != 0:
+        # JK and HH are SINGLE-PASS approximations: they drop the multiply-reflected fundamental
+        # (and, for JK, the 2 omega ladder too). The closed form has no such parameter -- it always
+        # carries the full multiple-reflection treatment -- so it CANNOT represent them. Say so
+        # rather than handing back the full-reflection expression under a JK/HH label.
+        ml_extra["assumption"] = (
+            f"{assumption}: the closed form carries full multiple reflections, so this "
+            "single-pass approximation is not represented in the expression. The numeric modes "
+            "(SHG Simulation, Maker Fringes) do apply it.")
+    else:
+        ml_extra["assumption"] = f"{assumption} - {fmr_submode}"
     result = run_ml_partial_analytical(case, {"workflow": "polarimetry"})
     try:
         result.stages.setdefault("symbols", {}).update(ml_extra)
@@ -1965,7 +2077,8 @@ def ml_polarimetry_curve(
 
 
 def ml_beam_ellipses(system, *, theta_deg: float, phi_deg: float = 0.0,
-                     ellipticity_deg: float = 0.0) -> dict[str, tuple[complex, complex]]:
+                     ellipticity_deg: float = 0.0,
+                     mrassumption: int = 0) -> dict[str, tuple[complex, complex]]:
     """Complex (s, p) Jones amplitudes of the INCIDENT, REFLECTED and TRANSMITTED fundamental
     beams for a multilayer at one geometry -- the data behind the original .ml output's
     "ellipticity of the incident, reflected and transmitted beams" figure (fidelity FB6).
@@ -1989,7 +2102,12 @@ def ml_beam_ellipses(system, *, theta_deg: float, phi_deg: float = 0.0,
                                                phi_deg=float(phi_deg)))
     setup = _system_setup(case)
     setup["incident_theta_rad"] = math.radians(_desingularize_theta_deg(float(theta_deg)))
-    sol = _solve_gui_fresnel_fundamental(case, j_in, setup=setup)
+    # These are FUNDAMENTAL beams, and the multiple-reflection assumption governs the
+    # fundamental solve, so the reflected and transmitted ellipses move with it.
+    sol = _solve_gui_fresnel_fundamental(
+        case, j_in, setup=setup,
+        single_pass_omega=mrassumption in (1, 2),
+        single_pass_omega_writeback=mrassumption != 1)
     j_refl = _sum_wave_frame_jones_sp(sol.top_unknown)
     j_trans = _sum_wave_frame_jones_sp(_select_fundamental_transmitted_wave(sol.substrate_unknown))
     return {"incident": (complex(j_in[0]), complex(j_in[1])),
@@ -1997,15 +2115,12 @@ def ml_beam_ellipses(system, *, theta_deg: float, phi_deg: float = 0.0,
             "transmitted": (complex(j_trans[0]), complex(j_trans[1]))}
 
 
-# the closed form in the sample azimuth. It was held OFF through F69-F71 because
-# substituting psi into it disagreed with the validated route by ~32%. That was NOT this code:
-# `_run_ml_partial_analytical_polarimetry` was passing SI mu/eps0 into the symbolic solve, which
-# made the SHG inhomogeneous operator numerically singular (condition 7.7e17) and corrupted the
-# very reference the closed form was being judged against -- see and
-# tests/test_pa_crystal_symmetry.py. With F72's one-line units fix the closed form reproduces the
-# numerically-rotated route to 3.9e-13 across the azimuth, so it is ON.
-# Fenced by tests/test_ml_analytic_sample_rotation.py (Tier-1 substitute-psi, both directions).
-ANALYTIC_AZIMUTH_ENABLED = True
+# The closed form in the sample azimuth is offered whenever the physics allows it, which
+# `azimuth_closed_form_feasible` decides per stack at run time rather than by a point-group lookup.
+# It reproduces the numerically rotated solve when the angle is substituted, and it now also agrees
+# with that solve in ABSOLUTE terms. Fenced by tests/test_ml_analytic_sample_rotation.py (both
+# directions) and tests/test_ml_partial_analytical_absolute_scale.py (magnitude and phase at a
+# physical wavelength, with a negative control).
 
 
 def azimuth_closed_form_feasible(system, tol: float = 1e-9):
@@ -2045,6 +2160,16 @@ def azimuth_closed_form_feasible(system, tol: float = 1e-9):
     return True, f"eps is invariant under the azimuthal rotation to {worst:.1e}"
 
 
+def azimuth_user_to_solver(azimuth_deg: float, ccw: bool = True) -> float:
+    """The user's sample azimuth as the solver's signed angle. ONE place owns this sign.
+
+    The solver's positive azimuth is a right-hand rotation about the surface normal, which points
+    INTO the sample, so it reads clockwise to someone looking at the sample from the beam side.
+    The app labels angles the way an experimentalist stands, so a counter-clockwise reading is the
+    negated angle."""
+    return -float(azimuth_deg) if ccw else float(azimuth_deg)
+
+
 def ml_sample_rotation_grid(step_deg: float, ccw: bool = True):
     """(user grid, solver grid) for a sample-rotation sweep.
 
@@ -2058,13 +2183,28 @@ def ml_sample_rotation_grid(step_deg: float, ccw: bool = True):
     return user, (-user if ccw else user.copy())
 
 
+def _with_fixed_sample_azimuth(system, azimuth_deg: float, ccw: bool = True):
+    """Turn the whole stack to a FIXED sample azimuth, for the modes that scan something else.
+
+    ``rotate_substrate=False`` is passed explicitly and is NOT the helper's default: the
+    rotation sweep pins it False, so taking the default here would make a Maker curve at a given
+    azimuth disagree with the sweep's point at that same azimuth, for no visible reason."""
+    from .config import with_sample_azimuth_deg
+
+    if not azimuth_deg:
+        return system
+    return with_sample_azimuth_deg(system, azimuth_user_to_solver(azimuth_deg, ccw),
+                                   rotate_top=False, rotate_substrate=False)
+
+
 def ml_sample_rotation_result(system, *, theta_deg: float, fixed_phi_deg: float = 0.0,
                               analyzer_psi_deg: float = 0.0, ellipticity_deg: float = 0.0,
                               step_deg: float = 10.0, ccw: bool = True,
                               rotate_polarizer: bool = False, rotate_analyzer: bool = False,
                               analyzer_offset_deg: float = 0.0,
                               mrassumption: int = 0,
-                              inhomogeneous_source_policy: str = "forward_only"):
+                              inhomogeneous_source_policy: str = "forward_only",
+                              fast_linear_d: bool = True):
     """Sample-rotation sweep with independent rotate/fix per element (generalized).
 
     ``mrassumption`` (0=FMR, 1=JK, 2=HH) and ``inhomogeneous_source_policy`` (the FMR sub-mode)
@@ -2072,6 +2212,14 @@ def ml_sample_rotation_result(system, *, theta_deg: float, fixed_phi_deg: float 
     (it branches on its ``assumption`` argument; JK/HH there force forward-only source waves, FMR
     leaves the panel's backward/standing-wave flags in force). Before this they were silently
     pinned to FMR/forward-only whatever the panel said. Defaults = the old behaviour.
+
+    ``fast_linear_d`` (ON here) computes the sweep as a linear combination of one solve per touched
+    d component instead of one per azimuth point -- ~25x faster on the quartz+Au case (181 points:
+    6 solves, 0.5 s, vs 181 solves, 12.4 s), which is what makes a fine step affordable. It is the
+    SAME validated solver, agreeing with the per-point loop to ~3e-11 of peak, and it falls back
+    automatically whenever its preconditions do not hold (a rotating layer whose lab eps is not
+    invariant about the surface normal, or a per-point phi/psi/theta), so it is never a correctness
+    decision. See :func:`shaarp.multilayer_shg_boundary._azimuth_linear_d_basis`.
 
     Rui: polarizer, analyzer, and sample each carry their own rotate/fix choice, ANY
     combination legal, every rotating element following ONE common scan angle t (the user grid)
@@ -2103,6 +2251,7 @@ def ml_sample_rotation_result(system, *, theta_deg: float, fixed_phi_deg: float 
     res = run_sample_rotation(ra_sys, solver, {
         "mrassumption": int(mrassumption),
         "inhomogeneous_source_policy": str(inhomogeneous_source_policy),
+        "fast_linear_d": bool(fast_linear_d),
     })
     res.numeric["sample_azimuth_deg_user"] = user
     res.stages["sample_rotation"] = {
@@ -2115,6 +2264,8 @@ def ml_sample_rotation_result(system, *, theta_deg: float, fixed_phi_deg: float 
         "analyzer_offset_deg": _offset,
         "mrassumption": int(mrassumption),
         "inhomogeneous_source_policy": str(inhomogeneous_source_policy),
+        "fast_linear_d": bool(fast_linear_d),
+        "fast_linear_d_used": bool(res.stages.get("fast_linear_d_used", False)),
     }
     return res
 
@@ -2131,6 +2282,24 @@ def ml_sample_rotation_assumption_options(assumption: str, fmr_submode: str) -> 
     code = ML_ASSUMPTIONS[assumption]
     policy = FMR_SUBMODES[fmr_submode] if code == 0 else "forward_only"
     return {"mrassumption": code, "inhomogeneous_source_policy": policy}
+
+
+
+def _ra_thin_radial_ticks(ax, n_ticks: int = 3) -> None:
+    """Keep a polar tile's radial labels readable: a few ticks, small, off the data.
+
+    Polar axes ignore ``locator_params`` -- their radial locator takes no bin count -- so the tick
+    values are chosen here. The default density printed neighbouring values close enough to run
+    together, and the default label angle laid them across the lobes."""
+    import numpy as _np
+
+    top = float(ax.get_ylim()[1])
+    if top > 0 and _np.isfinite(top):
+        ax.set_yticks([top * k / n_ticks for k in range(1, n_ticks + 1)])
+    ax.set_rlabel_position(202.5)
+    ax.tick_params(axis="y", labelsize=7)
+    for lbl in ax.get_yticklabels():
+        lbl.set_bbox(dict(boxstyle="round,pad=0.12", fc="white", ec="none", alpha=0.65))
 
 
 def build_ra_scan_figure(result, *, title_suffix: str | None = None, azimuth_deg=None):
@@ -2156,10 +2325,21 @@ def build_ra_scan_figure(result, *, title_suffix: str | None = None, azimuth_deg
         (axes[1], r"$I^{T,2\omega}$  transmitted",
          "transmitted_parallel_intensity", "transmitted_perpendicular_intensity"),
     ):
-        ax.plot(az, _r(n[kpar]), color="navy", lw=2, label=r"$\parallel$ (p)")
-        ax.plot(az, _r(n[kper]), color="darkorange", lw=2, label=r"$\perp$ (s)")
+        par, per = _r(n[kpar]), _r(n[kper])
+        ax.plot(az, par, color="navy", lw=2, label=r"$\parallel$ (p)")
+        # The two channels share one radial scale, so a weak perpendicular channel collapses to a
+        # dot at the origin while the legend still advertises it. Draw it magnified instead, with
+        # the factor stated in the legend, so the shape is readable and the size is not misread.
+        pmax, smax = float(np.max(np.abs(par))), float(np.max(np.abs(per)))
+        gain = 1.0
+        if smax > 0.0 and pmax > 0.0 and smax < 0.05 * pmax:
+            gain = float(10.0 ** np.floor(np.log10(0.5 * pmax / smax)))
+        label = r"$\perp$ (s)" if gain == 1.0 else rf"$\perp$ (s) $\times{gain:g}$"
+        ax.plot(az, per * gain, color="darkorange", lw=2,
+                ls="-" if gain == 1.0 else "--", label=label)
         ax.set_title(title, fontsize=9)
         ax.set_theta_zero_location("E")
+        _ra_thin_radial_ticks(ax)
         ax.legend(loc="upper right", bbox_to_anchor=(1.16, 1.12), fontsize=7, frameon=False)
     head = "SHAARP.ml rotational anisotropy — 2ω SHG vs sample azimuth"
     if title_suffix:
@@ -2251,8 +2431,11 @@ def build_ml_polarimetry_figure(curve, *, point_group: str = "", assumption_labe
         ax_e.set_ylim(-1.1, 1.1)
         ax_e.set_xlabel(r"$E_s$ (norm.)", fontsize=9)
         ax_e.set_ylabel(r"$E_p$ (norm.)", fontsize=9)
-        ax_e.set_title("Beam ellipticity (ω): incident / reflected / transmitted\n"
-                       "(linear polarization draws as a straight line)", fontsize=8.5)
+        # Three short lines, not two long ones: this tile is the narrow third column, and the
+        # single-line form ran off the figure's right edge and lost its last character.
+        ax_e.set_title("Beam ellipticity (ω)\n"
+                       "incident / reflected / transmitted\n"
+                       "(linear polarization draws as a line)", fontsize=8.5)
         ax_e.legend(fontsize=8, loc="upper right")
         ax_e.grid(True, alpha=0.3)
     else:
@@ -2263,6 +2446,11 @@ def build_ml_polarimetry_figure(curve, *, point_group: str = "", assumption_labe
         (axes[0, 0], axes[0, 1], axes[1, 0], axes[1, 1]), chan_keys, tile_titles, colors4):
         ax.plot(rad, np.asarray(curve[key], dtype=float), color=color, lw=2)
         ax.set_title(title, fontsize=9)
+        # Radial labels: the default tick density printed values close enough to overlap each
+        # other ("7.5" running into "10.0"), and the default 0-degree position laid them across
+        # the data. Fewer ticks, smaller, moved off the lobes and given a light backing so they
+        # stay readable where a curve passes beneath.
+        _ra_thin_radial_ticks(ax)
     head = mode_head
     if point_group:
         head += f" — point group {point_group}"

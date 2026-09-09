@@ -26,6 +26,11 @@ PHIS = list(np.linspace(0.25, math.pi - 0.25, 6))
 
 
 def _rz(az):
+    # NOTE the transpose. A sample rotation by a positive azimuth is
+    # `CrystalOrientation.with_lab_azimuth_deg`, which composes as A0 @ Rz(a).T, so the
+    # equivalent lab-frame d rotation is crystal_to_lab(d, Rz(a).T). This reference used
+    # Rz(a), the same mirror the code under test used, so it fenced self-consistency
+    # rather than agreement with the package's physical rotation.
     c, s = math.cos(az), math.sin(az)
     return np.array([[c, -s, 0.0], [s, c, 0.0], [0.0, 0.0, 1.0]])
 
@@ -36,7 +41,7 @@ def _measure(theta, azimuth, phi):
     d_num = np.zeros((3, 6))
     for (m, ell), v in zip(POSITIONS, TRUE):
         d_num[m, ell] = v
-    d_rot = np.real(np.asarray(rotate_d_voigt_crystal_to_lab(d_num, _rz(azimuth)), dtype=complex))
+    d_rot = np.real(np.asarray(rotate_d_voigt_crystal_to_lab(d_num, _rz(azimuth).T), dtype=complex))
     r = solve_single_interface_shg(
         np.diag(EPS_W).astype(complex), np.diag(EPS_2W).astype(complex), d_rot,
         incident_index_omega=1.0, incident_index_2omega=1.0, incident_theta_rad=theta,
@@ -52,7 +57,7 @@ def _measure_transmitted(theta, azimuth, phi):
     d_num = np.zeros((3, 6))
     for (m, ell), v in zip(POSITIONS, TRUE):
         d_num[m, ell] = v
-    d_rot = np.real(np.asarray(rotate_d_voigt_crystal_to_lab(d_num, _rz(azimuth)), dtype=complex))
+    d_rot = np.real(np.asarray(rotate_d_voigt_crystal_to_lab(d_num, _rz(azimuth).T), dtype=complex))
     r = solve_single_interface_shg(
         np.diag(EPS_W).astype(complex), np.diag(EPS_2W).astype(complex), d_rot,
         incident_index_omega=1.0, incident_index_2omega=1.0, incident_theta_rad=theta,
@@ -126,7 +131,7 @@ def _ml_measure(theta, azimuth, phi):
     d_num = np.zeros((3, 6))
     for (m, ell), v in zip(POSITIONS, TRUE):
         d_num[m, ell] = v
-    d_rot = np.real(np.asarray(rotate_d_voigt_crystal_to_lab(d_num, _rz(azimuth)), dtype=complex))
+    d_rot = np.real(np.asarray(rotate_d_voigt_crystal_to_lab(d_num, _rz(azimuth).T), dtype=complex))
     r = solve_multilayer_shg_from_tensors_jones(
         incident_index_omega=1.0, top_index_2omega=1.0, incident_theta_rad=theta,
         incident_jones_sp=(math.sin(phi), math.cos(phi)),

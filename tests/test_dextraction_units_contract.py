@@ -45,7 +45,7 @@ def _measure(mu, eps0):
         d = np.zeros((3, 6))
         for (m, ell), v in zip(POSITIONS, TRUE):
             d[m, ell] = v
-        d_rot = np.real(np.asarray(rotate_d_voigt_crystal_to_lab(d, _rz(az)), dtype=complex))
+        d_rot = np.real(np.asarray(rotate_d_voigt_crystal_to_lab(d, _rz(az).T), dtype=complex))
         r = solve_single_interface_shg(
             np.diag(EPS_W).astype(complex), np.diag(EPS_2W).astype(complex), d_rot,
             incident_index_omega=1.0, incident_index_2omega=1.0, incident_theta_rad=theta,

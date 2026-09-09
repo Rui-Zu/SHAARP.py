@@ -50,10 +50,10 @@ treatment carries fine fringes at 20–30° that are absent under Jerphagnon–K
 :alt: Replication of SHAARP.ml 2024 Fig. 3(b,c)
 ```
 
-**♯SHAARP.ml 2024, Fig. 4(b,d)** — 123.6 µm Z-cut quartz at 800 nm, uncoated and with a 13.9 nm
-backside Au mirror: the fine-fringe amplification with the mirror is reproduced under the full
-multiple-reflection treatment, including the central feature near $\theta_i = 0$; both panels use
-the paper's own display recipe.
+**♯SHAARP.ml 2024, Fig. 4(b,d)** — Z-cut quartz at 800 nm: the uncoated 123.6 µm slab in panel (b),
+and the 121.18 µm slab with a 13.9 nm backside Au mirror in panel (d). The fine-fringe amplification
+with the mirror is reproduced under the full multiple-reflection treatment, including the central
+feature near $\theta_i = 0$; both panels use the paper's own display recipe.
 
 ```{figure} _static/replication/ml2024_fig4_zcut_quartz_au.png
 :width: 100%

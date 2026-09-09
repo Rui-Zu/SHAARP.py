@@ -43,8 +43,10 @@ def _true_d():
 
 
 def _measure(theta, az, phi):
-    """Physical reflected SHG of a biaxial sample rotated by Rz(az): eps AND d both rotate."""
-    rz = _rz(az)
+    """Physical reflected SHG of a biaxial sample rotated by a positive sample azimuth: eps
+    AND d both rotate. The transpose is the package's physical rotation, the one
+    `CrystalOrientation.with_lab_azimuth_deg` defines -- see docs/sample_rotation.md."""
+    rz = _rz(az).T
     ew = rotate_rank2_crystal_to_lab(np.diag(EPS_W).astype(complex), rz)
     e2 = rotate_rank2_crystal_to_lab(np.diag(EPS_2W).astype(complex), rz)
     dlab = np.real(np.asarray(rotate_d_voigt_crystal_to_lab(_true_d(), rz), dtype=complex))
@@ -93,7 +95,7 @@ class RotatedBiaxialNumericBasisTests(unittest.TestCase):
         differs from leaving eps at its principal diagonal (the prior d-only-rotation bug). If
         these matched, rotating eps would be a no-op and the fix meaningless."""
         az, theta, phi = 1.0, 0.6, 0.7
-        rz = _rz(az)
+        rz = _rz(az).T
         dlab = np.real(np.asarray(rotate_d_voigt_crystal_to_lab(_true_d(), rz), dtype=complex))
         ewp = np.diag(EPS_W).astype(complex)
         e2p = np.diag(EPS_2W).astype(complex)

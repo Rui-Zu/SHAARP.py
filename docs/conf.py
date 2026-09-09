@@ -81,6 +81,8 @@ html_theme_options = {
     "style_external_links": True,
 }
 html_static_path = ["_static"]
+# Small corrections on top of the theme; chiefly letting wide table cells wrap instead of clipping.
+html_css_files = ["custom.css"]
 html_title = "SHAARP.py: second-harmonic generation in crystals and multilayers"
 html_short_title = "SHAARP.py"
 # The site covers BOTH packages, so it carries the package-neutral SHAARP.py mark -- not the

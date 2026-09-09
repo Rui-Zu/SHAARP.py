@@ -33,7 +33,7 @@ python examples/<name>.py
   - ~8 s
 * - `maker_fringes_dense.py`
   - Maker fringes across all three multiple-reflection assumptions (FMR / HH / JK), at the
-    angular sampling rigor of the 2024 paper.
+    angular sampling of the 2024 paper.
   - two-panel fringe comparison
   - ~80 s
 * - `single_interface_demo.py`

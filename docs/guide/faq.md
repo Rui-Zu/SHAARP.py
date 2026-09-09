@@ -48,10 +48,6 @@ reflections (FMR)** keeps all multiply-reflected waves (with a forward/backward/
 **Jerphagnon–Kurtz** drops multiple reflections (single pass); **Herman–Hayden** keeps them only for
 the homogeneous $2\omega$ waves. See {doc}`ml_tab`.
 
-**Why do some Maker-fringe curves show a note about interpolated points?**
-At isolated incidence angles an eigenmode degeneracy makes a term a removable $0/0$; those points are
-masked and interpolated so the curve stays continuous. The title reports how many were interpolated.
-
 **At normal incidence ($\theta_i = 0$) the schematic rays are vertical — is that right?**
 Yes. At normal incidence the incident, reflected, and transmitted beams all travel along the surface
 normal, so they are drawn vertical (separated slightly for legibility). As $\theta_i$ grows they fan

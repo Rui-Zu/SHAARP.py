@@ -25,8 +25,10 @@ self-describing.
 - **Incident angle $\theta_i$** is measured from the surface normal (0° = normal incidence).
 - **Input polarization $\varphi$** parameterizes the incident Jones vector
   $E = E_0(\cos\varphi,\ \sin\varphi\,e^{i\Delta\delta},\ 0)$; $\varphi=0$ is $p$, $\varphi=90°$ is $s$.
-- **Analyzer angle $\psi$** selects the detected polarization (rotating analyzer returns the parallel
-  $I_p$ and perpendicular $I_s$ channels).
+- **Analyzer angle $\psi$** selects the detected polarization. A *rotating* analyzer returns the
+  $p$ and $s$ channels $I_p$, $I_s$, referred to the plane of incidence. A *co-rotating* analyzer,
+  $\psi = \varphi + \text{offset}$, returns the parallel and perpendicular channels, referred to the
+  input polarization. The two pairs coincide only at $\varphi = 0$.
 
 ## Units, and degrees vs radians
 
@@ -59,7 +61,13 @@ and every shipped benchmark runs in **natural units, `mu=1, eps0=1`**. Two conse
 
 The second-order nonlinear response is the $3\times6$ Voigt matrix $d_{i\mu}$ ($i=1..3$, $\mu=1..6$),
 with $P_i^{2\omega} = \varepsilon_0 \sum_\mu d_{i\mu}\,(E E)_\mu$ and the contracted index
-$\mu \in \{xx, yy, zz, yz, xz, xy\}$. The crystal **point group** fixes which components are
+$\mu \in \{xx, yy, zz, yz, xz, xy\}$. **The mixed terms carry a factor of two**, as usual in this
+convention:
+
+$$(E E)_\mu = \left(E_x^2,\ E_y^2,\ E_z^2,\ 2E_yE_z,\ 2E_xE_z,\ 2E_xE_y\right).$$
+
+Check this before substituting $d$ values taken from another source. The crystal **point group**
+fixes which components are
 independent; the rest follow by symmetry. See {py:func}`shaarp.d_voigt_symbolic` and
 {py:func}`shaarp.rotate_d_voigt_crystal_to_lab`. Centrosymmetric/isotropic groups have $d \equiv 0$
 (SHG forbidden).

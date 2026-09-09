@@ -106,7 +106,10 @@ def compute_dextraction_demo() -> dict[str, Any]:
         return np.array([[c, -s, 0.0], [s, c, 0.0], [0.0, 0.0, 1.0]])
 
     def measure(theta, az, phi):
-        d_rot = np.real(np.asarray(rotate_d_voigt_crystal_to_lab(d0, _rz(az)), dtype=complex))
+        # the transpose: a positive sample azimuth is the physical rotation
+        # `CrystalOrientation.with_lab_azimuth_deg` defines (A0 @ Rz(a).T), which is the
+        # one sense the package uses -- see docs/sample_rotation.md.
+        d_rot = np.real(np.asarray(rotate_d_voigt_crystal_to_lab(d0, _rz(az).T), dtype=complex))
         r = solve_single_interface_shg(
             np.diag(eps_w).astype(complex), np.diag(eps_2w).astype(complex), d_rot,
             incident_index_omega=1.0, incident_index_2omega=1.0, incident_theta_rad=theta,

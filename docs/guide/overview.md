@@ -27,7 +27,7 @@ up by clicking can be repeated from a script (see {doc}`../usage`).
   - SHAARP.si
   - SHAARP.ml
 * - Geometry
-  - one semi-infinite interface (air over crystal)
+  - a single air/crystal interface, the crystal semi-infinite
   - air / film(s) / substrate stack (2–N layers)
 * - Primary observable
   - reflected SHG polar plots $I_s(\varphi)$, $I_p(\varphi)$

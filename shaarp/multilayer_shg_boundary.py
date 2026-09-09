@@ -731,6 +731,87 @@ def solve_multilayer_shg_polarimetry_sweep(
     )
 
 
+def _azimuth_linear_d_basis(
+    system: MultilayerSystem,
+    *,
+    azimuth: np.ndarray,
+    theta: np.ndarray,
+    phi: np.ndarray,
+    psi: np.ndarray,
+    ellipticity: np.ndarray,
+    rotate_top: bool,
+    rotate_substrate: bool,
+    tol: float = 1e-9,
+):
+    """The d-LINEARITY fast path for a sample-azimuth sweep, or ``None`` when it does not apply.
+
+    A sample rotation about the surface normal turns BOTH eps and d. When every rotating layer's
+    lab eps is INVARIANT under that rotation, the entire linear problem -- eigenmodes, k_z, Fresnel
+    coefficients, propagation phases, the 2 omega boundary matrix -- is azimuth-independent, and the
+    only thing the rotation changes is the nonlinear source. The SHG fields are exactly linear in
+    every d component (measured to <= 2.7e-14 across FMR / FMR+backward+standing / JK / HH and
+    theta = 20 / 45 / 65 deg), so a rotated d that is a trig polynomial in psi_s makes every
+    azimuth a LINEAR COMBINATION of one solve per touched d component.
+
+    Cost drops from one full boundary-value solve per azimuth point to one per touched component
+    (6 for z-cut quartz, <= 18 per SHG-active layer in the worst case), which is what makes a
+    smooth 0.1 deg curve affordable. This is the same mechanism the symbolic path uses, applied
+    inside the Mathematica-validated NUMERIC solver, so the numbers stay the validated ones.
+
+    Returns ``(amplitudes, results, fundamental_residuals, shg_residuals)`` or ``None``.
+    """
+
+    # -- applicability 1: the polarimetry must be CONSTANT across the sweep. A per-point theta /
+    # phi / psi / ellipticity would change the linear problem or the analyzer projection, and then
+    # one basis no longer covers every point.
+    for arr in (theta, phi, psi, ellipticity):
+        flat = np.asarray(arr, dtype=float).ravel()
+        if flat.size and float(np.max(np.abs(flat - flat[0]))) > 0.0:
+            return None
+
+    # -- applicability 2: every layer the rotation touches must have an azimuth-invariant lab eps
+    # at BOTH frequencies (otherwise a rotated biaxial changes the k_z solve and the basis is not
+    # shared). Checked numerically at two generic angles, exactly as the closed-form gate does.
+    layers = list(system.layers)
+    for idx, layer in enumerate(layers):
+        is_top = idx == 0
+        is_substrate = idx == len(layers) - 1
+        if (is_top and not rotate_top) or (is_substrate and not rotate_substrate):
+            continue
+        for omega in (True, False):
+            eps = _epsilon_lab(layer.material, omega=omega)
+            scale = max(1.0, float(np.max(np.abs(eps))))
+            for ang in (37.0, 113.0):
+                a = np.deg2rad(ang)
+                c, s = np.cos(a), np.sin(a)
+                rz = np.array([[c, -s, 0.0], [s, c, 0.0], [0.0, 0.0, 1.0]])
+                if float(np.max(np.abs(rz @ eps @ rz.T - eps))) / scale > tol:
+                    return None
+
+    # -- the per-point lab d tensors (the ONLY azimuth-dependent quantity)
+    flat_azimuth = np.asarray(azimuth, dtype=float).ravel()
+    interior_count = len(layers) - 2
+    if interior_count < 1:
+        return None
+    d_per_point = []
+    for ang in flat_azimuth:
+        rotated = with_sample_azimuth_deg(system, float(ang), rotate_top=rotate_top,
+                                          rotate_substrate=rotate_substrate)
+        d_per_point.append([
+            _d_voigt_lab(layer.material) if layer.shg_active else np.zeros((3, 6), dtype=complex)
+            for layer in rotated.layers[1:-1]
+        ])
+
+    basis_keys = sorted({(li, i, j)
+                         for point in d_per_point
+                         for li, d in enumerate(point)
+                         for i in range(3) for j in range(6)
+                         if abs(d[i, j]) > 1e-12})
+    if not basis_keys or len(basis_keys) >= flat_azimuth.size:
+        return None  # nothing to gain -- fall back to the honest per-point loop
+    return basis_keys, d_per_point, flat_azimuth
+
+
 def solve_multilayer_shg_sample_azimuth_sweep(
     system: MultilayerSystem,
     *,
@@ -746,6 +827,7 @@ def solve_multilayer_shg_sample_azimuth_sweep(
     single_pass_omega_writeback: bool = True,
     single_pass_2omega: bool = False,
     mrassumption: int = 0,
+    fast_linear_d: bool = False,
 ) -> MultilayerSHGSampleAzimuthSweepResult:
     """Sweep physical sample azimuth separately from polarizer/analyzer angles.
 
@@ -759,6 +841,14 @@ def solve_multilayer_shg_sample_azimuth_sweep(
     omega writeback + full 2 omega). It maps onto the single_pass_* flags below;
     validated vs live SHAARP.ml SampleRotate (4-layer azimuth scan) to ~4.7e-15 in
     tests/test_jkhh_samplerotate_agreement.py.
+
+    ``fast_linear_d`` (opt-in, default OFF so every existing caller is byte-identical) computes the
+    sweep as a linear combination of one solve per touched d component instead of one solve per
+    azimuth point -- see :func:`_azimuth_linear_d_basis` for the preconditions, which are checked
+    at runtime with an automatic fall back to the per-point loop. ``results`` then holds the BASIS
+    solves rather than one entry per point; the amplitude, intensity and residual arrays keep their
+    per-point shape and meaning (the residual vectors combine linearly too, so the reported norms
+    are exact, not estimated).
     """
 
     if mrassumption not in (0, 1, 2):
@@ -793,6 +883,85 @@ def solve_multilayer_shg_sample_azimuth_sweep(
     transmitted_perpendicular_intensities = []
     fundamental_residuals = []
     shg_residuals = []
+
+    plan = (_azimuth_linear_d_basis(
+        system, azimuth=azimuth, theta=theta, phi=phi, psi=psi, ellipticity=ellipticity,
+        rotate_top=rotate_top, rotate_substrate=rotate_substrate) if fast_linear_d else None)
+
+    if plan is not None:
+        basis_keys, d_per_point, flat_azimuth = plan
+        pol_const = replace(
+            pol,
+            theta_deg=float(np.asarray(theta).ravel()[0]),
+            phi_deg=float(np.asarray(phi).ravel()[0]),
+            psi_deg=float(np.asarray(psi).ravel()[0]),
+            ellipticity_deg=float(np.asarray(ellipticity).ravel()[0]),
+        )
+        const_system = replace(system, polarimetry=pol_const)
+        psi_const = float(np.asarray(psi).ravel()[0])
+        # ONE setup: with an azimuth-invariant eps, everything in it except layer_d_voigt_lab is
+        # shared by every point, and that entry is what each basis solve overrides.
+        setup0 = _system_setup(const_system)
+        n_interior = len(const_system.layers) - 2
+
+        basis_amps, basis_shg_residuals = [], []
+        fundamental_residual_value = 0.0
+        for (li, i, j) in basis_keys:
+            unit = [np.zeros((3, 6), dtype=complex) for _ in range(n_interior)]
+            unit[li][i, j] = 1.0
+            setup_k = dict(setup0)
+            setup_k["layer_d_voigt_lab"] = unit
+            solved = solve_multilayer_shg_from_system_polarimetry(
+                const_system,
+                mu=mu,
+                eps0=eps0,
+                condition_threshold=condition_threshold,
+                inhomogeneous_source_policy=inhomogeneous_source_policy,
+                inhomogeneous_solution_policy=inhomogeneous_solution_policy,
+                single_pass_omega=single_pass_omega,
+                single_pass_omega_writeback=single_pass_omega_writeback,
+                single_pass_2omega=single_pass_2omega,
+                setup=setup_k,
+            )
+            basis_amps.append((
+                *sample_rotate_reflected_2omega_amplitudes(solved.shg, psi_const),
+                *sample_rotate_transmitted_2omega_amplitudes(solved.shg, psi_const),
+            ))
+            basis_shg_residuals.append(np.asarray(solved.shg.residual, dtype=complex).ravel())
+            # the FUNDAMENTAL problem carries no d at all, so it is identical for every basis solve
+            fundamental_residual_value = float(np.linalg.norm(solved.fundamental.residual))
+            results.append(solved)
+
+        for point_d in d_per_point:
+            coeffs = np.asarray([point_d[li][i, j] for (li, i, j) in basis_keys], dtype=complex)
+            r_para, r_perp, t_para, t_perp = (
+                complex(np.dot(coeffs, [amp[c] for amp in basis_amps])) for c in range(4))
+            reflected_parallel_amplitudes.append(r_para)
+            reflected_perpendicular_amplitudes.append(r_perp)
+            transmitted_parallel_amplitudes.append(t_para)
+            transmitted_perpendicular_amplitudes.append(t_perp)
+            reflected_parallel_intensities.append(float(abs(r_para) ** 2))
+            reflected_perpendicular_intensities.append(float(abs(r_perp) ** 2))
+            transmitted_parallel_intensities.append(float(abs(t_para) ** 2))
+            transmitted_perpendicular_intensities.append(float(abs(t_perp) ** 2))
+            fundamental_residuals.append(fundamental_residual_value)
+            # the residual VECTOR is linear in d as well, so this norm is exact
+            shg_residuals.append(float(np.linalg.norm(
+                np.tensordot(coeffs, np.asarray(basis_shg_residuals), axes=(0, 0)))))
+        return _build_azimuth_sweep_result(
+            azimuth=azimuth, theta=theta, phi=phi, psi=psi, ellipticity=ellipticity,
+            results=results,
+            reflected_parallel_amplitudes=reflected_parallel_amplitudes,
+            reflected_perpendicular_amplitudes=reflected_perpendicular_amplitudes,
+            transmitted_parallel_amplitudes=transmitted_parallel_amplitudes,
+            transmitted_perpendicular_amplitudes=transmitted_perpendicular_amplitudes,
+            reflected_parallel_intensities=reflected_parallel_intensities,
+            reflected_perpendicular_intensities=reflected_perpendicular_intensities,
+            transmitted_parallel_intensities=transmitted_parallel_intensities,
+            transmitted_perpendicular_intensities=transmitted_perpendicular_intensities,
+            fundamental_residuals=fundamental_residuals,
+            shg_residuals=shg_residuals,
+        )
 
     for idx in np.ndindex(azimuth.shape):
         pol_i = replace(
@@ -833,6 +1002,33 @@ def solve_multilayer_shg_sample_azimuth_sweep(
         transmitted_perpendicular_intensities.append(float(abs(t_perp) ** 2))
         fundamental_residuals.append(np.linalg.norm(result.fundamental.residual))
         shg_residuals.append(np.linalg.norm(result.shg.residual))
+
+    return _build_azimuth_sweep_result(
+        azimuth=azimuth, theta=theta, phi=phi, psi=psi, ellipticity=ellipticity,
+        results=results,
+        reflected_parallel_amplitudes=reflected_parallel_amplitudes,
+        reflected_perpendicular_amplitudes=reflected_perpendicular_amplitudes,
+        transmitted_parallel_amplitudes=transmitted_parallel_amplitudes,
+        transmitted_perpendicular_amplitudes=transmitted_perpendicular_amplitudes,
+        reflected_parallel_intensities=reflected_parallel_intensities,
+        reflected_perpendicular_intensities=reflected_perpendicular_intensities,
+        transmitted_parallel_intensities=transmitted_parallel_intensities,
+        transmitted_perpendicular_intensities=transmitted_perpendicular_intensities,
+        fundamental_residuals=fundamental_residuals,
+        shg_residuals=shg_residuals,
+    )
+
+
+def _build_azimuth_sweep_result(
+    *, azimuth, theta, phi, psi, ellipticity, results,
+    reflected_parallel_amplitudes, reflected_perpendicular_amplitudes,
+    transmitted_parallel_amplitudes, transmitted_perpendicular_amplitudes,
+    reflected_parallel_intensities, reflected_perpendicular_intensities,
+    transmitted_parallel_intensities, transmitted_perpendicular_intensities,
+    fundamental_residuals, shg_residuals,
+) -> MultilayerSHGSampleAzimuthSweepResult:
+    """Assemble the sweep result. Shared by the per-point loop and the d-linearity fast path so the
+    two cannot drift in shape or field meaning."""
 
     r_para_amp = np.asarray(reflected_parallel_amplitudes, dtype=complex).reshape(azimuth.shape)
     r_para_intensity = np.asarray(reflected_parallel_intensities, dtype=float).reshape(azimuth.shape)

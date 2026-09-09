@@ -399,3 +399,73 @@ class SiGeneralOrientationCurve(unittest.TestCase):
 
 if __name__ == "__main__":  # pragma: no cover
     unittest.main(verbosity=2)
+
+
+class SampleAzimuthSensitivity(unittest.TestCase):
+    """The sample azimuth is an input that must reach every mode that shows a crystal.
+
+    It is a new control, and a new control with no cell here is exactly the gap this module was
+    written to close. One cell asserts INVARIANCE by design -- Fresnel coefficients on a stack
+    whose permittivity is unchanged by the rotation genuinely cannot depend on the angle -- and
+    that cell also requires the output to declare the invariance rather than stay silent.
+    """
+
+    ML_STACK = "Quartz + Au (Fig 4, 800 nm)"
+
+    def _si(self, functionality, azimuth):
+        return compute_si_gui_result(
+            functionality, theta_deg=45.0, sample_azimuth_deg=azimuth,
+            material=build_casestudy_material("LiNbO3 z-cut (1064 nm)"))
+
+    def test_si_numeric_depends_on_the_azimuth(self):
+        self.assertNotEqual(_fp_numeric(self._si("SHG Simulation", 0.0)),
+                            _fp_numeric(self._si("SHG Simulation", 37.0)),
+                            "the single-interface numeric mode ignores the sample azimuth")
+
+    def test_si_expression_depends_on_the_azimuth(self):
+        self.assertNotEqual(str(self._si("Partial Analytical", 0.0).stages["reflected_p_2omega"]),
+                            str(self._si("Partial Analytical", 37.0).stages["reflected_p_2omega"]),
+                            "the single-interface expression ignores the sample azimuth")
+
+    def test_si_expression_can_carry_the_azimuth_as_a_symbol(self):
+        res = compute_si_gui_result(
+            "Partial Analytical", theta_deg=45.0, sample_rotation=True,
+            material=build_casestudy_material("LiNbO3 z-cut (1064 nm)"))
+        self.assertIn("psi_s", str(res.stages["reflected_p_2omega"]),
+                      "the symbolic-azimuth request produced an expression without the symbol")
+
+    def test_ml_maker_depends_on_the_azimuth(self):
+        from dataclasses import replace
+
+        from shaarp.shaarp_gui import resolve_ml_system_preset
+
+        base = resolve_ml_system_preset(self.ML_STACK)
+        layers = list(base.layers)
+        biaxial = np.diag([2.10 + 0j, 2.75 + 0j, 2.40 + 0j])
+        layers[1] = replace(layers[1], material=replace(layers[1].material,
+                                                        epsilon_omega=biaxial,
+                                                        epsilon_2omega=biaxial))
+        system = replace(base, layers=tuple(layers))
+        kw = dict(theta_deg=20.0, theta_min_deg=0.0, theta_max_deg=20.0, theta_step_deg=5.0)
+        a = _fp_numeric(compute_ml_gui_result("Maker Fringes", system=system,
+                                              sample_azimuth_deg=0.0, **kw))
+        b = _fp_numeric(compute_ml_gui_result("Maker Fringes", system=system,
+                                              sample_azimuth_deg=37.0, **kw))
+        self.assertNotEqual(a, b, "the Maker sweep ignores the sample azimuth")
+
+    def test_ml_fresnel_is_invariant_by_design_and_says_so(self):
+        """INVARIANCE cell. Fresnel coefficients are linear optics, so for a stack whose
+        permittivity is unchanged by a rotation about the surface normal the azimuth genuinely
+        cannot matter. The output must declare that rather than leave the user guessing."""
+        from shaarp.shaarp_gui import resolve_ml_system_preset
+
+        system = resolve_ml_system_preset(self.ML_STACK)
+        kw = dict(theta_deg=20.0, fresnel_min_deg=0.0, fresnel_max_deg=40.0, fresnel_step_deg=10.0)
+        a = compute_ml_gui_result("Fresnel Coefficients", system=system,
+                                  sample_azimuth_deg=0.0, **kw)
+        b = compute_ml_gui_result("Fresnel Coefficients", system=system,
+                                  sample_azimuth_deg=37.0, **kw)
+        self.assertEqual(_fp_numeric(a), _fp_numeric(b),
+                         "azimuth changed a stack whose permittivity is invariant under it")
+        self.assertIn("no effect", str(b.stages.get("sample_azimuth_effect", "")),
+                      "the invariance is real but undeclared, which reads as a dead control")

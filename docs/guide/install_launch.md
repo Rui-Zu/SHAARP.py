@@ -2,16 +2,15 @@
 
 ## Option 1 — the packaged app (Windows and macOS, no Python needed)
 
-**[Download the latest release](https://github.com/Rui-Zu/SHAARP.py/releases/latest)**
-
 Pick the file for your system, extract it, and run it. There is nothing else to install and no
 license to buy: the bundle already contains the Python interpreter, every dependency and the
-reference data.
+reference data. Each name below is a direct download; they are also listed on the
+[releases page](https://github.com/Rui-Zu/SHAARP.py/releases/latest).
 
-| System | File to download | How to run it |
+| System | Download | How to run it |
 |---|---|---|
-| Windows (64-bit) | `SHAARP_py_v…_win64.zip` (about 120 MB) | extract, then double-click `SHAARP_py\SHAARP_py.exe` |
-| macOS, Apple Silicon (M-series) | `SHAARP_py_v…_macos_arm64.zip` (about 83 MB) | extract, then open `SHAARP_py/SHAARP_py.app` |
+| Windows (64-bit) | [`SHAARP_py_v1.0.0_win64.zip`](https://github.com/Rui-Zu/SHAARP.py/releases/download/v1.0.0/SHAARP_py_v1.0.0_win64.zip) (115 MB) | extract, then double-click `SHAARP_py\SHAARP_py.exe` |
+| macOS, Apple Silicon (M-series) | [`SHAARP_py_v1.0.0_macos_arm64.zip`](https://github.com/Rui-Zu/SHAARP.py/releases/download/v1.0.0/SHAARP_py_v1.0.0_macos_arm64.zip) (79 MB) | extract, then open `SHAARP_py/SHAARP_py.app` |
 
 Extract the zip before running: the app needs the `_internal` folder next to it. The app is not
 code-signed, so Windows and macOS ask you to allow it the first time, and the first launch takes a

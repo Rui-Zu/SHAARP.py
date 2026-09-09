@@ -154,18 +154,24 @@ class InteractiveSessionTests(unittest.TestCase):
         notebook = json.loads((root / "notebooks" / "SHAARP_py_step_by_step.ipynb").read_text(encoding="utf-8"))
         source = "\n".join("".join(cell.get("source", [])) for cell in notebook["cells"])
 
-        self.assertIn("validated compatibility workflows", source)
-        self.assertIn("legacy reduced examples", source)
+        # "Reduced" describes the convenience helpers, never the package. This notebook is the
+        # tutorials index's "Start here", so its framing is what a newcomer takes away, and it
+        # used to say the Python model does not implement full multiple reflection -- which
+        # contradicts the README's own description of the multilayer solver.
+        self.assertIn("the full validated solvers", source)
+        self.assertIn("convenience helpers", source)
         self.assertNotIn("The current Python code uses effective-index approximations", source)
-        self.assertIn("continue expanding end-to-end Mathematica value comparisons", source)
+        self.assertNotIn("The current reduced Python model does", source)
         self.assertNotIn("the next implementation work is to port the Mathematica eigenmode", source)
+        # A tutorial is not the place for a roadmap: it left the reader on "not finished yet".
+        self.assertNotIn("Next development step", source)
 
     def test_step_by_step_notebook_includes_analytical_scaffold_section(self):
         root = Path(__file__).resolve().parents[1]
         notebook = json.loads((root / "notebooks" / "SHAARP_py_step_by_step.ipynb").read_text(encoding="utf-8"))
         source = "\n".join("".join(cell.get("source", [])) for cell in notebook["cells"])
 
-        self.assertIn("Scoped analytical scaffold calculations", source)
+        self.assertIn("Exploratory symbolic routes", source)
         self.assertIn("run_si_full_analytical", source)
         self.assertIn("run_ml_partial_analytical", source)
         self.assertIn("pnl_symbolic_scaffold", source)

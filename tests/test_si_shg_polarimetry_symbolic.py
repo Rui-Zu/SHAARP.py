@@ -52,6 +52,11 @@ def _gaas111_geometric_d():
 
 
 def _rz(psi):
+    # NOTE the transpose. A sample rotation by a positive azimuth is
+    # `CrystalOrientation.with_lab_azimuth_deg`, which composes as A0 @ Rz(a).T, so the
+    # equivalent lab-frame d rotation is crystal_to_lab(d, Rz(a).T). This reference used
+    # Rz(a), the same mirror the code under test used, so it fenced self-consistency
+    # rather than agreement with the package's physical rotation.
     c, s = math.cos(psi), math.sin(psi)
     return np.array([[c, -s, 0.0], [s, c, 0.0], [0.0, 0.0, 1.0]])
 
@@ -209,7 +214,7 @@ class SIThreefoldAzimuthTests(unittest.TestCase):
         self.phi0 = math.radians(40.0)  # fixed input polarization
 
     def _power_p(self, az):
-        geom = np.real(np.asarray(rotate_d_voigt_crystal_to_lab(self.geom0, _rz(az)), dtype=complex))
+        geom = np.real(np.asarray(rotate_d_voigt_crystal_to_lab(self.geom0, _rz(az).T), dtype=complex))
         phi = sp.Symbol("phi", real=True)
         sol = solve_si_shg_full_analytical_symbolic(
             eps_x_omega=self.nw**2, eps_y_omega=self.nw**2, eps_z_omega=self.nw**2,
@@ -243,7 +248,7 @@ class SIThreefoldAzimuthTests(unittest.TestCase):
         azv = math.radians(25.0)
         sym_val = abs(complex(sol.reflected_p.subs({az: azv, phi: self.phi0}).evalf())) ** 2
         # explicit numeric-rotation reference
-        geom = np.real(np.asarray(rotate_d_voigt_crystal_to_lab(self.geom0, _rz(azv)), dtype=complex))
+        geom = np.real(np.asarray(rotate_d_voigt_crystal_to_lab(self.geom0, _rz(azv).T), dtype=complex))
         sol2 = solve_si_shg_full_analytical_symbolic(
             eps_x_omega=self.nw**2, eps_y_omega=self.nw**2, eps_z_omega=self.nw**2,
             eps_x_2omega=self.n2**2, eps_y_2omega=self.n2**2, eps_z_2omega=self.n2**2,

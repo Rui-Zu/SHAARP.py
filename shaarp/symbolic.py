@@ -66,8 +66,9 @@ def d_voigt_symbolic(point_group: str = "1", *, prefix: str = "d") -> Any:
     if pg in {"-43m", "23"}:
         return sp.Matrix([[zero, zero, zero, d(1, 4), zero, zero], [zero, zero, zero, zero, d(1, 4), zero], [zero, zero, zero, zero, zero, d(1, 4)]])
     # the original's "Centrosymmetric ->" popup (SHAARP.ml.nb:5630) carries an
-    # ALL-ZERO 3x6 pattern for each of its 16 groups (the 11 centrosymmetric classes, 432 whose
-    # Kleinman-symmetric d vanishes, and the Curie groups inf/m, inf/mm, infinf, infinfm) and runs
+    # ALL-ZERO 3x6 pattern for each of its 16 groups (the 11 centrosymmetric classes, 432 -- which
+    # is noncentrosymmetric but whose d vanishes by its own symmetry, no Kleinman assumption needed;
+    # see point_groups -- and the Curie groups inf/m, inf/mm, infinf, infinfm) and runs
     # the pipeline with P_NL = 0. Returning that pattern -- instead of raising -- is what lets the
     # GUI offer those groups and lets "SHG activity" be decided by the point group alone.
     from .point_groups import canonical_point_group, is_known_point_group, is_shg_active
@@ -818,13 +819,15 @@ def solve_si_shg_full_analytical_symbolic(
         except (TypeError, ValueError):
             pass  # symbolic eps/azimuth -> cannot check numerically; see the docstring note
         c, s = sp.cos(sample_azimuth_symbol), sp.sin(sample_azimuth_symbol)
-        # rotate d about the surface normal z. NOTE the transpose: rotate_d_voigt_symbolic
-        # uses out_ijk = sum a[i,l] d[l..] (a = R), whereas the validated numeric physical
-        # rotation rotate_d_voigt_crystal_to_lab uses einsum("ai,..") (a = R^T). Passing
-        # R^T here makes a positive sample_azimuth the SAME physical sample rotation as the
-        # numeric path (matches to ~1e-16) -- so the C3v 3-fold azimuth signature is correct.
-        rot_z_T = sp.Matrix([[c, s, 0], [-s, c, 0], [0, 0, 1]])
-        d_used = rotate_d_voigt_symbolic(d_voigt_lab, rot_z_T, simplify=simplify)
+        # Rotate d about the surface normal by a POSITIVE sample azimuth, in the one sense the
+        # package uses: the physical rotation `CrystalOrientation.with_lab_azimuth_deg` defines.
+        # With A(a) = A0 @ Rz(a).T that rotation is d_lab(a)_ijk = Rz_im Rz_jn Rz_kp d_lab(0)_mnp,
+        # which contracts on the SECOND index of Rz -- exactly what rotate_d_voigt_symbolic does
+        # with Rz(+a). Passing the transpose instead is a rotation by -a, and it used to be passed
+        # here, so a positive azimuth meant mirrored rotations on the two tabs. See
+        # docs/sample_rotation.md.
+        rot_z = sp.Matrix([[c, -s, 0], [s, c, 0], [0, 0, 1]])
+        d_used = rotate_d_voigt_symbolic(d_voigt_lab, rot_z, simplify=simplify)
 
     j_s = sp.sin(phi) * sp.exp(sp.I * ellipticity) if ellipticity != 0 else sp.sin(phi)
     j_p = sp.cos(phi)

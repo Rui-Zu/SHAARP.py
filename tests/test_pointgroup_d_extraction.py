@@ -34,7 +34,7 @@ def _rz(az):
 
 def _make_measure(d_lab, ew, e2):
     def measure(theta, az, phi):
-        d_rot = np.real(np.asarray(rotate_d_voigt_crystal_to_lab(d_lab, _rz(az)), dtype=complex))
+        d_rot = np.real(np.asarray(rotate_d_voigt_crystal_to_lab(d_lab, _rz(az).T), dtype=complex))
         r = solve_single_interface_shg(
             np.diag(ew).astype(complex), np.diag(e2).astype(complex), d_rot,
             incident_index_omega=1.0, incident_index_2omega=1.0, incident_theta_rad=theta,

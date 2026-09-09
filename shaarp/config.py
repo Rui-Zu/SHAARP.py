@@ -62,8 +62,10 @@ class Polarimetry:
         psi_deg: analyzer angle; used when the analyzer is fixed.
         ellipticity_deg: incident-field phase between components (the ``Delta-delta`` ellipticity).
         polarizer_mode: :class:`PolarizerMode` -- ``ROTATE`` (sweep phi) or ``FIX`` (hold phi, sweep psi).
-        analyzer_mode: :class:`AnalyzerMode` -- ``FIXED`` analyzer at psi, or rotating (parallel +
-            perpendicular channels).
+        analyzer_mode: :class:`AnalyzerMode` -- ``FIXED`` analyzer at psi, or rotating. A rotating
+            analyzer returns the p and s channels, referred to the plane of incidence; a co-rotating
+            one returns the parallel and perpendicular channels, referred to the input polarization.
+            The two pairs coincide only at phi = 0.
     """
 
     theta_deg: ArrayLike = 45.0

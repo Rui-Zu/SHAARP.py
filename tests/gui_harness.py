@@ -223,6 +223,17 @@ COVERAGE_RULES = [
      "F70 Fresnel Coefficients scan range (own min/max/step, default step 0.1): "
      "tests/test_polarimetry_combinations.py FresnelScanRangeFences (custom grid honored, "
      "defaults reproduce the original 0-89.9 convention, max clamped below 90)"),
+    (r"^si:QCheckBox:tip=sample_azimuth_symbolic#[0-9]+$", "covered",
+     "single-interface symbolic sample azimuth: the closed forms carry psi_s as a symbol, "
+     "matching the multilayer side; fenced by tests/test_si_sample_rotation.py "
+     "(TheAzimuthCanStaySymbolic -- substituting the symbol reproduces turning the crystal, "
+     "the direction is honoured, and a turning permittivity declines instead of guessing)"),
+    (r"^(si|ml):QDoubleSpinBox:tip=sample_azimuth#\d+$", "covered",
+     "fixed sample azimuth, both tabs, every mode: turns the crystal about its surface normal "
+     "before the compute; fenced by tests/test_si_sample_rotation.py (it reaches all three "
+     "single-interface modes) and tests/test_ml_fixed_azimuth_modes.py (it reaches the Maker and "
+     "Fresnel sweeps, agrees with the rotation sweep at the same azimuth, and is declared inert "
+     "for a stack whose permittivity is unchanged by the rotation)"),
     (r"^ml:(QComboBox|QDoubleSpinBox):tip=sample_rotation#\d+$", "covered",
      "F69 sample-rotation toggle + step size + direction: pin the polarizer/analyzer, drive the "
      "azimuth sweep; fenced by tests/test_ra_scan.py (step/direction causality, fixed phi/psi/"

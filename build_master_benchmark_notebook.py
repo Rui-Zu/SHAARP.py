@@ -119,11 +119,11 @@ md("""## 6 · Master summary
 
 | capability | channel | benchmark | status |
 |---|---|---|---|
-| Maker fringes (Full/JK/HH/FMR) | transmitted (.ml) | vs live Mathematica, incl. 0.1° fine-window chunk references | ✅ ~1e-15 |
-| SHG polarimetry, full-analytical | reflected (.si) | vs published GaAs(111) eq 9–32 + numeric | ✅ ~1e-12 |
-| SHG polarimetry, partial-analytical | transmitted (.ml) | vs numeric Jones workflow | ✅ ~1e-10 |
-| d-extraction (field + intensity) | refl + transmitted, SI + ML | recover known d | ✅ ~1e-9 |
-| Fresnel / single-interface / symbolic | both | vs live Mathematica | ✅ ~1e-13..1e-17 |
+| Maker fringes (Full/JK/HH/FMR) | transmitted (.ml) | vs live Mathematica, incl. 0.1° fine-window chunk references | agrees to ~1e-15 |
+| SHG polarimetry, full-analytical | reflected (.si) | vs published GaAs(111) eq 9–32 + numeric | agrees to ~1e-12 |
+| SHG polarimetry, partial-analytical | transmitted (.ml) | vs numeric Jones workflow | agrees to ~1e-10 |
+| d-extraction (field + intensity) | refl + transmitted, SI + ML | recover known d | agrees to ~1e-9 |
+| Fresnel / single-interface / symbolic | both | vs live Mathematica | agrees to ~1e-13..1e-17 |
 
 For the complete evidence table (categories, tolerances, gating test per row) and what is
 deliberately not verified, see `docs/validation.md`.

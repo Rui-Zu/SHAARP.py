@@ -51,8 +51,8 @@ Parameters come from the published case studies, not from re-fitted values.
 
 - quartz Maker fringes under all three assumptions (HH / JK / FMR), plus the analytic
   Herman–Hayden benchmark
-- single-crystal and ZnO//Pt//Al₂O₃ heterostructure polarimetry
-- LiNbO₃//quartz interference
+- single-crystal and ZnO / Pt / Al₂O₃ heterostructure polarimetry
+- LiNbO₃ / quartz interference
 - the twist bilayer MoS₂ rotational-anisotropy case from Supplementary Fig S7
 
 **Master benchmark** — the notebook behind {doc}`../validation` and {doc}`../references`: every

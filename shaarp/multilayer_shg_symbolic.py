@@ -366,6 +366,7 @@ def solve_multilayer_shg_symbolic_polarimetry(
     mu: float = 1.0,   # natural units -- the locked multilayer convention
     eps0: float = 1.0,
     budget: SymbolicThicknessBudget | None = None,
+    inhomogeneous_source_policy: str = "all",
 ) -> SymbolicThicknessSHGSolution:
     """SHAARP.ml PARTIAL-analytical SHG POLARIMETRY for an N-layer stack: a closed form in
     the input polarization ``phi``, the per-layer d, and the symbolic thicknesses, with the
@@ -394,6 +395,7 @@ def solve_multilayer_shg_symbolic_polarimetry(
         layer_epsilon_2omega_lab=layer_epsilon_2omega_lab,
         thickness_symbols=thickness_symbols, layer_amplitudes=combined,
         mu=mu, eps0=eps0, budget=budget,
+        inhomogeneous_source_policy=inhomogeneous_source_policy,
     )
 
 
@@ -463,6 +465,7 @@ def solve_single_film_shg_symbolic_polarimetry(
     ellipticity=0,
     mu: float = 1.0,   # natural units -- the locked multilayer convention
     eps0: float = 1.0,
+    inhomogeneous_source_policy: str = "all",
 ) -> SymbolicThicknessSHGSolution:
     """Single-film partial-analytical SHG polarimetry in (phi, d, h)."""
     d_mat = sp.Matrix(d_voigt_symbolic)
@@ -475,6 +478,7 @@ def solve_single_film_shg_symbolic_polarimetry(
         twoomega_basis=twoomega_basis, layer_d_voigt_symbolic=[d_mat],
         layer_epsilon_2omega_lab=[eps_2omega_lab], thickness_symbols=[thickness_symbol],
         phi_symbol=phi_symbol, ellipticity=ellipticity, mu=mu, eps0=eps0,
+        inhomogeneous_source_policy=inhomogeneous_source_policy,
     )
 
 

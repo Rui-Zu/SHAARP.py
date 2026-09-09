@@ -35,7 +35,9 @@ def build_si():
     md, code = _mk(cells)
     md("""# Reproducing the ♯SHAARP.si (2022) paper with SHAARP.py
 
-**Zu, R. et al. "Reflection second harmonic generation ... ♯SHAARP."** *npj Comput. Mater.* **8**, 246 (2022).
+**Zu, R., Wang, B., He, J. *et al.* "Analytical and numerical modeling of optical second harmonic
+generation in anisotropic crystals using ♯SHAARP package."** *npj Comput. Mater.* **8**, 246 (2022).
+[doi:10.1038/s41524-022-00930-4](https://doi.org/10.1038/s41524-022-00930-4)
 
 This notebook reproduces the four case-study crystals of the SHAARP.si paper — **GaAs (111)**,
 **LiNbO₃ (11̄20)**, **KTP (100)**, **TaAs (112)** — using `SHAARP.py`. Each is a single air/crystal
@@ -46,7 +48,7 @@ function of the incident polarization angle φ, at several incidence angles θ�
 dielectric ε(ω)/ε(2ω)) is taken from the published ♯SHAARP.si case studies
 (stored in `shaarp/casestudy_dispersion.json`) and interpolated
 to the paper's single experimental wavelength (**800 nm**, Ti:Sapphire). The compute call is exactly
-the one the desktop GUI's *Update* button makes. Each section shows the reproduction **beside the
+the one the desktop GUI's *Update* button makes. Each section shows the SHAARP.py result **beside the
 published panel** so you can compare shapes, symmetry, and the relative *p*/*s* channel scaling.
 """)
     code("""import sys; from pathlib import Path
@@ -87,14 +89,14 @@ print('SHAARP.py paper reproduction — SHAARP.si 2022. repo root =', ROOT.name)
          "|d₃₃|, |d₃₁|, |d₁₅| = 827 ± 39, 12 ± 15, 113 ± 20 pm/V — recovered verbatim (values *and* "
          "error bars) from the archived fit (`Plot of Polar Plots_TaAs112_Generalized.nb`, with the "
          "LiNbO₃-d₃₁ = 5.47 pm/V absolute calibration). The reflected SHG is highly θ-dependent "
-         "(≈0 at normal incidence); SHAARP.py carries the full complex ε (F32 fix) and computes the "
-         "true (112) oblique tilt (F40 exact route — the earlier z-cut approximation is gone). "
-         "Panel (b) is closed EXACTLY (F42): the eo-mode effective index **rises** 4.3006 → 4.3512 "
-         "while k **falls** 2.1684 → 2.0541 across θᵢ = 0.5° → 80°, machine-identical to a live "
-         "SHAARP.si V1.04 replication. (The V1.04 frame propagates transmitted waves *downward*, so "
-         "its verbatim orientation matrix needs a documented 180° lab azimuth in this port's upward "
-         "frame — `_SI_FRAME_AZIMUTH_DEG`, fence `TestSiFig7TaAsEffectiveIndex`; the polar channels "
-         "are m_y-symmetric and azimuth-insensitive.) *On the ×20 factor:* "
+         "and vanishes at normal incidence. SHAARP.py carries the full complex ε and computes the "
+         "true (112) oblique tilt rather than a z-cut approximation. Panel (b) is the effective-index "
+         "trend: the eo-mode index **rises** 4.3006 → 4.3512 "
+         "while k **falls** 2.1684 → 2.0541 across θᵢ = 0.5° → 80°. "
+         "(The original single-interface package propagates transmitted waves *downward* while "
+         "SHAARP.py propagates upward, so an orientation matrix authored in that frame carries a "
+         "documented 180° lab azimuth here; the polar channels "
+         "are m_y-symmetric and azimuth-insensitive, so the plots are unaffected.) *On the ×20 factor:* "
          "the panel legend reads \"Exp Iₓ / Exp 20×Iᵧ\" — an experimental display scale that includes "
          "the x/y channel calibration (same class as Fig 5's ×15); the pure-physics lab-channel ratio "
          "with the published d and the exact tilt is I_L₁/I_L₂ ≈ 37."),
@@ -117,7 +119,10 @@ def build_ml():
     md, code = _mk(cells)
     md("""# Reproducing the ♯SHAARP.ml (2024) paper with SHAARP.py
 
-**Zu, R. et al. "... multilayer SHG ... ♯SHAARP.ml."** *npj Comput. Mater.* **10**, 64 (2024).
+**Zu, R., Wang, B., He, J. *et al.* "Optical second harmonic generation in anisotropic multilayers
+with complete multireflection of linear and nonlinear waves using ♯SHAARP.ml package."**
+*npj Comput. Mater.* **10**, 64 (2024).
+[doi:10.1038/s41524-024-01229-2](https://doi.org/10.1038/s41524-024-01229-2)
 
 This notebook reproduces the five case figures of the SHAARP.ml paper with `SHAARP.py`:
 **Maker fringes** (Fig 3, 4), **transmitted single-crystal polarimetry** (Fig 5), a **reflected
@@ -198,8 +203,8 @@ on the left panel). The right panel is computed at the **published spot thicknes
 θ = 0 fringe phase, which is why the earlier 121.0 µm rendering looked wrong at the centre) with
 **13.9 nm Au**.
 
-**What SHAARP.py computes here, and what is embedded from Dr. Zu.** Left panel: JK / HH / FMR are all
-SHAARP.py, fenced against the author's three bare-slab models (`fig4b_*_reference.csv`, corr ≥ 0.998).
+**What SHAARP.py computes here, and what is overlaid from the published models.** Left panel: JK / HH /
+FMR are all SHAARP.py, checked against the three published bare-slab models (corr ≥ 0.998).
 Right panel: the **FMR** (red) and the **FMR+θⁱ+h+λω** curve (teal — the author's method: a plain
 mean over 0.80 µm of equivalent thickness for the h and λ spreads, then a 3° moving average for the
 beam divergence, then its own Rescale ×0.93) are SHAARP.py. The red FMR is the physics result: at the
@@ -215,12 +220,12 @@ half-space; its 2ω Fabry-Pérot constant |r₁r₂| = 0.0559 equals quartz→ai
 thickness dependence, whereas the FMR model carries the 13.9 nm thin-film factors) whose reported
 "p-out" intensity is the beam-frame x′ component of the transmitted field inside the Au. In that geometry
 and convention SHAARP.py's HH matches the author's model (dashed dark green, `QuartzAu_800nm_HHNMRP1S0p01.mx`)
-to **shape correlation 0.998 and peak ratio 0.992** on the fringe-resolved 30–45° window (fenced). The
-earlier "my HH diverges" finding was geometry plus output convention, not a single-pass-ω defect. What
-remains is a ~5 % offset near normal incidence that SHAARP.py shows against *all* of the author's SLAB
-closed forms alike (FMR and HH, bare and Au) — a property of those older closed forms; SHAARP.py is
-validated to ~1e-15 against the .ml numeric solver on this quartz+Au Maker case. HH is still the paper's
-**deliberately-failing** illustrative curve (FMR ⊋ HH is the point of the panel).""")
+to **shape correlation 0.998 and peak ratio 0.992** on the fringe-resolved 30–45° window (checked in
+the test suite). Near normal incidence SHAARP.py sits a few percent above the slab closed forms used to
+draw the published curves, equally for FMR and HH and for the bare and Au cases; on the same quartz+Au
+Maker case it agrees with the ♯SHAARP.ml numeric solver to ~1e-15. HH is the panel's illustrative
+curve: the point of the figure is that the Herman–Hayden treatment does not capture what the full
+multiple-reflection treatment does.""")
     code("""fig, dev = ml_fig4_figure(step=0.05)
 _embed_fig(fig)
 print(f"SHAARP.py FMR vs the author's closed-form FMR model at 121.18 um = {dev['d_FMR_vs_his_FMR_corr']:.4f} "
