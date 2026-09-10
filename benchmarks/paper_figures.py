@@ -170,7 +170,10 @@ def _fig4b_reference(kind: str):
     return _fig4_reference(f"fig4b_{kind}_reference")
 
 
-def ml_fig3_figure(*, step: float = 0.25, th_max: float = 65.0):
+def ml_fig3_figure(*, step: float = 0.02, th_max: float = 65.0):
+    # 0.02 deg, not 0.25. This case's HH fringes sit 0.188 deg apart, so 0.25 deg drew fewer than
+    # one point per fringe: the panel showed an aliasing pattern, not the fringe train. Sample for
+    # the finest feature in the figure, not for its envelope.
     """Fig 3: 300 um X-cut quartz Maker fringes — SHAARP.py(HH) vs SHAARP.py(JK) vs the RAW
     Herman-1995 analytic HH benchmark (analyticHH, ported byte-exact), with the author's own
     serialized .mx reference curves overlaid (main panel: dataoldHHJK evaluated HH; zoom panel:

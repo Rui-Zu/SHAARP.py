@@ -1233,16 +1233,55 @@ def shaarp_ml_selected_transmitted_2omega_jones_sp(shg: MultilayerSHGBoundaryRes
     return _sum_wave_frame_jones_sp(_transmitted_waves_for_maker_policy(shg, "shaarp_ml_selected"))
 
 
+def exit_medium_index(waves: list[Wave]) -> float:
+    """Effective refractive index of the medium a 2omega wave leaves into.
+
+    A plane wave's intensity is ``I = (1/2) c eps0 n |E|^2`` -- proportional to the index of the
+    medium it travels in. SHG intensities are therefore ``n_exit * |E|^2``, not ``|E|^2``: the
+    reflected beam takes the INCIDENT medium's index, the transmitted beam the SUBSTRATE's, both
+    evaluated at 2omega.
+
+    Taken from the wave's own ``k`` rather than a nominal material index, because
+    ``k . k = (n omega)^2`` holds for the solved eigenmode whatever the substrate's symmetry, and
+    an anisotropic substrate has no single scalar ``n`` to quote. The wave carrying the most field
+    is used when several modes are present; for an isotropic exit medium they are degenerate.
+
+    Returns 1.0 when there is no field, so an absent beam stays at zero intensity.
+
+    NOTE what is deliberately ABSENT: there is no ``cos(theta)`` here. A cos factor belongs to
+    reflectance/transmittance -- ratios between two beams of different widths -- not to a single
+    beam's intensity. This was checked rather than assumed: SHAARP.py(HH) reproduces Rui's analytic
+    Herman-Hayden expression with a pointwise ratio spread of 1.4e-10 across 5-60 degrees, and
+    inserting a trial ``cos(theta_t)`` blows that spread up to 6.1e-01 with the residual tracking
+    ``cos(theta)`` at correlation +1.0000. The closed form excludes cos; it cannot see the index,
+    because its slab sits in air where ``n_exit = 1``.
+    """
+    if not waves:
+        return 1.0
+    norms = [float(np.linalg.norm(np.asarray(w.electric))) for w in waves]
+    dominant = waves[int(np.argmax(norms))] if max(norms) > 0.0 else waves[0]
+    k_vec = np.asarray(dominant.k, dtype=complex)
+    omega = float(np.real(dominant.omega))
+    if omega == 0.0:
+        return 1.0
+    index = float(np.real(np.sqrt(complex(np.dot(k_vec, k_vec))) / omega))
+    return abs(index) if index != 0.0 else 1.0
+
+
 def analyze_reflected_2omega(
     shg: MultilayerSHGBoundaryResult,
     analyzer_jones_sp: tuple[complex, complex],
 ) -> tuple[complex, float]:
-    """Project reflected 2omega onto analyzer amplitudes `(s, p)`."""
+    """Project reflected 2omega onto analyzer amplitudes `(s, p)`.
+
+    The returned intensity carries the incident medium's index at 2omega (see
+    :func:`exit_medium_index`); for the usual air ambient that factor is 1.
+    """
 
     s_component, p_component = reflected_2omega_jones_sp(shg)
     s_analyzer, p_analyzer = analyzer_jones_sp
     amplitude = s_analyzer * s_component + p_analyzer * p_component
-    return amplitude, float(abs(amplitude) ** 2)
+    return amplitude, exit_medium_index(shg.reflected_2omega) * float(abs(amplitude) ** 2)
 
 
 def analyze_reflected_2omega_polarimetry(
@@ -1258,24 +1297,32 @@ def analyze_transmitted_2omega(
     shg: MultilayerSHGBoundaryResult,
     analyzer_jones_sp: tuple[complex, complex],
 ) -> tuple[complex, float]:
-    """Project transmitted 2omega onto analyzer amplitudes `(s, p)`."""
+    """Project transmitted 2omega onto analyzer amplitudes `(s, p)`.
+
+    The returned intensity carries the substrate's index at 2omega (see
+    :func:`exit_medium_index`); for a free-standing slab in air that factor is 1.
+    """
 
     s_component, p_component = transmitted_2omega_jones_sp(shg)
     s_analyzer, p_analyzer = analyzer_jones_sp
     amplitude = s_analyzer * s_component + p_analyzer * p_component
-    return amplitude, float(abs(amplitude) ** 2)
+    return amplitude, exit_medium_index(shg.substrate_2omega) * float(abs(amplitude) ** 2)
 
 
 def analyze_transmitted_2omega_waves(
     waves: list[Wave],
     analyzer_jones_sp: tuple[complex, complex],
 ) -> tuple[complex, float]:
-    """Project selected transmitted waves onto analyzer amplitudes `(s, p)`."""
+    """Project selected transmitted waves onto analyzer amplitudes `(s, p)`.
+
+    The returned intensity carries the exit medium's index at 2omega, read from ``waves``
+    themselves (see :func:`exit_medium_index`).
+    """
 
     s_component, p_component = _sum_wave_frame_jones_sp(waves)
     s_analyzer, p_analyzer = analyzer_jones_sp
     amplitude = s_analyzer * s_component + p_analyzer * p_component
-    return amplitude, float(abs(amplitude) ** 2)
+    return amplitude, exit_medium_index(waves) * float(abs(amplitude) ** 2)
 
 
 def analyze_transmitted_2omega_polarimetry(

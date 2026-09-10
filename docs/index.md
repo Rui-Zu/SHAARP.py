@@ -22,6 +22,14 @@ polarimetry scans, an N-layer stack editor, a palette for your own materials, an
 runs exactly what the app's Update button runs. The solvers are checked against the published
 equations and the reference output of the original packages; see {doc}`validation`.
 
+```{figure} screenshot_si.png
+:width: 100%
+:alt: The SHAARP.py desktop app on its single-interface tab, showing the optical setup schematic beside the reflected SHG polar plots
+
+The desktop app: a case study picked, Update pressed, and the reflected SHG polarimetry plotted
+beside a schematic of the sample.
+```
+
 ## What it computes
 
 - Reflected SHG **polarimetry** $I_s(\varphi)$, $I_p(\varphi)$ for any crystal point group and orientation.
@@ -61,6 +69,57 @@ tolerance, and the known limitations.
 {doc}`conventions`, then {doc}`technical_reference` and {doc}`validation`.
 :::
 ::::
+
+## The ♯SHAARP family
+
+SHAARP stands for Second Harmonic Analysis of Anisotropic Rotational Polarimetry. It is a family of
+open-source packages from the same group, each adding a piece of the problem. SHAARP.py is the
+current member, and it carries both earlier methods.
+
+```{list-table}
+:header-rows: 1
+:widths: 14 44 20 22
+
+* - Package
+  - What it introduced
+  - Released as
+  - Where
+* - **♯SHAARP.si**
+  - Reflected SHG polarimetry from a **single interface**, solved without the usual slab and
+    transparency approximations: full anisotropic eigenmodes, absorbing media, arbitrary point group
+    and surface orientation, and closed-form expressions alongside the numerics.
+  - Mathematica package, v1.0.0 – v1.0.3 (2022)
+  - [repo](https://github.com/Rui-Zu/SHAARP) ·
+    [paper](https://doi.org/10.1038/s41524-022-00930-4)
+* - **♯SHAARP.ml**
+  - The same physics extended to an **N-layer stack**, with complete multireflection of both the
+    fundamental and the second-harmonic waves, so Maker fringes, Fresnel curves and multilayer
+    polarimetry come out of one boundary-value solve.
+  - Mathematica package, v1.0.0 – v1.0.2 (2024)
+  - [repo](https://github.com/bzw133/SHAARP.ml) ·
+    [paper](https://doi.org/10.1038/s41524-024-01229-2)
+* - **SHAARP.py**
+  - Both methods in one place, free of any commercial licence: a Python library, a standalone
+    desktop app, symbolic closed forms, *d*-tensor extraction from a polarimetry scan, an N-layer
+    stack editor, and a palette for your own materials.
+  - Python package + desktop app, v1.0.0 (2026)
+  - [releases](https://github.com/Rui-Zu/SHAARP.py/releases) · this site
+```
+
+The two Mathematica packages remain the reference implementations of their methods, and SHAARP.py's
+solvers are checked against their published equations and reference output; {doc}`validation` says
+what that covers.
+
+If you use SHAARP.py, please cite the papers that introduced the methods:
+
+1. Zu, R., Wang, B., He, J. *et al.* Analytical and numerical modeling of optical second harmonic
+   generation in anisotropic crystals using ♯SHAARP package. *npj Comput. Mater.* **8**, 246
+   (2022). [doi:10.1038/s41524-022-00930-4](https://doi.org/10.1038/s41524-022-00930-4)
+2. Zu, R., Wang, B., He, J. *et al.* Optical second harmonic generation in anisotropic multilayers
+   with complete multireflection of linear and nonlinear waves using ♯SHAARP.ml package.
+   *npj Comput. Mater.* **10**, 64 (2024). [doi:10.1038/s41524-024-01229-2](https://doi.org/10.1038/s41524-024-01229-2)
+
+More detail, including the figures reproduced from each paper, is on {doc}`references`.
 
 ```{toctree}
 :maxdepth: 2

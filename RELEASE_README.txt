@@ -39,7 +39,8 @@ YOUR FIRST CALCULATION (about one minute)
    to a schematic of the sample.
 4. Click the SHAARP.ml tab, keep the preset "Quartz + Au (Fig 4, 800 nm)", set Functionality to
    "Maker Fringes", and click "Update / Run". The transmitted SHG fringes of the 2024 paper's
-   Fig-4 heterostructure appear.
+   Fig-4 heterostructure appear. The sweep is fine enough to resolve them, so give it about
+   a minute; raise the theta step for a quicker look at the envelope.
 5. From there, explore: the case lists carry the published case studies at their published
    wavelengths, the papers' heterostructure presets, an N-layer stack editor for your own
    samples, and a My Materials palette for materials you define yourself.
@@ -70,10 +71,10 @@ SHAARP.py grew out of two Mathematica packages from the same group:
 If you use SHAARP.py, please cite the papers that introduced the methods:
 1. Zu, R., Wang, B., He, J. et al. "Analytical and numerical modeling of optical second harmonic
    generation in anisotropic crystals using #SHAARP package." npj Computational Materials 8, 246
-   (2022). doi:10.1038/s41524-022-00930-4
+   (2022). https://doi.org/10.1038/s41524-022-00930-4
 2. Zu, R., Wang, B., He, J. et al. "Optical second harmonic generation in anisotropic multilayers
    with complete multireflection of linear and nonlinear waves using #SHAARP.ml package."
-   npj Computational Materials 10, 64 (2024). doi:10.1038/s41524-024-01229-2
+   npj Computational Materials 10, 64 (2024). https://doi.org/10.1038/s41524-024-01229-2
 
 Authors: R. Zu, B. Wang, L. Weber, A. Saha, L.-Q. Chen & V. Gopalan (The Pennsylvania State
 University). Acknowledgment: U.S. DOE, Office of Science, Basic Energy Sciences, Computational

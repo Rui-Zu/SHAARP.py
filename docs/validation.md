@@ -14,7 +14,7 @@ Three kinds of reference are used:
 In short: SHAARP.py agrees with the reference output of the original packages to machine precision
 (typical maximum error 10⁻¹³ – 10⁻¹⁷) across solver stages, geometries, the Full / JK / HH
 assumption modes, single-interface reflected SHG, crystal orientation and the symbolic engine. The
-full automated suite (221 modules / 1,320 tests) passes, including an offscreen pass over every
+full automated suite (224 modules / 1,331 tests) passes, including an offscreen pass over every
 selectable case and functionality on both GUI tabs.
 
 ## Method
@@ -62,7 +62,7 @@ multilayer path runs in natural units (μ = ε₀ = 1 defaults, with a dispersio
 the suite logs warning-free; and the merged SHAARP.si + .ml GUI (`shaarp.make_shaarp_gui()`) drives
 only the validated backends, with 49 GUI tests including continuity gates.
 
-Suite total: **221 modules, 1,320 tests, 0 failures**, measured by running every module in its own
+Suite total: **224 modules, 1,331 tests, 0 failures**, measured by running every module in its own
 subprocess from a clean checkout copied outside the development tree, so this is the figure you
 reproduce after cloning.
 

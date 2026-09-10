@@ -106,6 +106,96 @@ class FresnelEnergyInvariants(unittest.TestCase):
         self.assertAlmostEqual(float(rp[i0]), float(rs[i0]), places=6,
                                msg="R_p != R_s at normal incidence")
 
+    def test_R_plus_T_unity_with_media_that_are_not_index_matched(self):
+        """The same invariant on stacks where it can actually FAIL.
+
+        The test above runs on the default stack, whose substrate is ``blank_linear`` with n = 1.
+        There the obliquity factor Re(n_exit cos th_exit)/Re(n_inc cos th_inc) is identically 1, so
+        R+T=1 held even while the transmitted curves were bare |t|^2 rather than a power
+        transmittance -- it passed on the one stack that could not expose the bug, and stayed
+        vacuous for the whole life of the multilayer Fresnel path.
+
+        These stacks break the index match on the exit side, on the incident side, and on both, so
+        the factor is genuinely exercised. Cross-checked against tmm and inkstone in
+        tests/test_isotropic_stack_reference_comparison.py.
+        """
+        from shaarp.api import run_fresnel_sweep
+        from shaarp.config import Layer, MultilayerSystem
+        from shaarp.layer_stack import _material_from_iso
+
+        def stack(n_incident, n_substrate):
+            return MultilayerSystem(
+                wavelength_um=0.633,
+                layers=[
+                    Layer(name="ambient", material=_material_from_iso(n_incident, n_incident, "ambient"),
+                          thickness_um=None, shg_active=False),
+                    Layer(name="film", material=_material_from_iso(2.35, 2.35, "film"),
+                          thickness_um=0.5, shg_active=False),
+                    Layer(name="substrate", material=_material_from_iso(n_substrate, n_substrate, "substrate"),
+                          thickness_um=None, shg_active=False),
+                ],
+            )
+
+        # (incident, substrate, max angle): non-air exit; non-air entrance; both, and unequal.
+        #
+        # The water->air row stops at 45 deg on purpose. Going from a dense to a rare medium there
+        # is a critical angle at arcsin(1.00/1.33) = 48.75 deg, and beyond it the multilayer path
+        # raises "No real Snell root found" -- total internal reflection is not supported by
+        # solve_snell_modes. That is a pre-existing limitation of the solver, unrelated to the
+        # transmittance weighting this test guards, so the sweep stays inside the propagating
+        # regime rather than asserting anything about TIR.
+        for n_inc, n_sub, theta_max in ((1.0, 1.52, 85.0), (1.33, 1.0, 45.0), (1.34, 1.52, 85.0)):
+            with self.subTest(n_incident=n_inc, n_substrate=n_sub):
+                theta = np.arange(0.0, theta_max + 1e-9, 5.0)
+                result = run_fresnel_sweep(
+                    stack(n_inc, n_sub), theta,
+                    options={"workflow": "gui_multilayer",
+                             "transmitted_wave_policy": "physical_sum",
+                             "mrassumption": 0},
+                )
+                rp, rs, tp, ts = (np.asarray(result.numeric[k], float) for k in ("rp", "rs", "tp", "ts"))
+                self.assertLess(float(np.max(np.abs(rp + tp - 1.0))), 1e-9,
+                                "R_p + T_p != 1 for n_inc=%s n_sub=%s" % (n_inc, n_sub))
+                self.assertLess(float(np.max(np.abs(rs + ts - 1.0))), 1e-9,
+                                "R_s + T_s != 1 for n_inc=%s n_sub=%s" % (n_inc, n_sub))
+                for arr, name in ((rp, "R_p"), (rs, "R_s"), (tp, "T_p"), (ts, "T_s")):
+                    self.assertGreaterEqual(float(arr.min()), -1e-9, "%s < 0" % name)
+                    self.assertLessEqual(float(arr.max()), 1.0 + 1e-9, "%s > 1" % name)
+
+    def test_legacy_amplitude_transmittance_does_not_conserve_energy(self):
+        """Guards the guard: proves the case above WOULD fail without the obliquity factor.
+
+        An invariant test that cannot fail is worse than none, which is exactly how this bug
+        survived. Requesting transmittance='amplitude' reproduces the pre-fix behaviour, and R+T
+        must then be visibly wrong. If this ever starts conserving energy, the test above has gone
+        vacuous again and its stacks need re-choosing.
+        """
+        from shaarp.api import run_fresnel_sweep
+        from shaarp.config import Layer, MultilayerSystem
+        from shaarp.layer_stack import _material_from_iso
+
+        system = MultilayerSystem(
+            wavelength_um=0.633,
+            layers=[
+                Layer(name="ambient", material=_material_from_iso(1.0, 1.0, "ambient"),
+                      thickness_um=None, shg_active=False),
+                Layer(name="film", material=_material_from_iso(2.35, 2.35, "film"),
+                      thickness_um=0.5, shg_active=False),
+                Layer(name="substrate", material=_material_from_iso(1.52, 1.52, "substrate"),
+                      thickness_um=None, shg_active=False),
+            ],
+        )
+        legacy = run_fresnel_sweep(
+            system, np.arange(0.0, 86.0, 5.0),
+            options={"workflow": "gui_multilayer", "transmitted_wave_policy": "physical_sum",
+                     "mrassumption": 0, "transmittance": "amplitude"},
+        )
+        rs = np.asarray(legacy.numeric["rs"], float)
+        ts = np.asarray(legacy.numeric["ts"], float)
+        self.assertGreater(float(np.max(np.abs(rs + ts - 1.0))), 0.1,
+                           "the legacy |t|^2 convention now conserves energy -- this stack no "
+                           "longer discriminates, so the invariant test above proves nothing")
+
 
 class DTensorSymmetryInvariants(unittest.TestCase):
     """The symmetry-constrained SHG d tensor must obey the point group: every independent component

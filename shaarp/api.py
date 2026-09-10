@@ -372,6 +372,11 @@ def run_fresnel_sweep(case: MultilayerSystem | Material, angle_grid: Any = None,
         case: the :class:`~shaarp.MultilayerSystem` (or a single :class:`~shaarp.Material`) to sweep.
         angle_grid: incidence angles in degrees (array). Defaults to an internal grid.
         options: optional settings, e.g. ``workflow="gui_multilayer"`` for the GUI's multilayer path.
+            ``workflow="gui_multilayer"`` additionally accepts ``transmittance``: ``"power"``
+            (default) returns a true power transmittance, and ``"amplitude"`` returns bare
+            ``|t|**2`` as SHAARP.ml's ``listFresnel`` emits it. The two differ by the obliquity
+            factor ``Re(n_exit cos theta_exit)/Re(n_inc cos theta_inc)`` and coincide only when the
+            exit medium is index-matched to the incident medium.
 
     Returns:
         SHAARPResult: arrays ``rp, rs, tp, ts`` (power coefficients) vs ``theta_deg`` in ``.numeric``.
@@ -385,6 +390,7 @@ def run_fresnel_sweep(case: MultilayerSystem | Material, angle_grid: Any = None,
     if workflow == "gui_multilayer":
         transmitted_wave_policy = options.pop("transmitted_wave_policy", "shaarp_ml_selected")
         mrassumption = int(options.pop("mrassumption", 0))
+        transmittance = str(options.pop("transmittance", "power"))
         if options:
             raise ValueError(f"Unsupported run_fresnel_sweep gui_multilayer options: {sorted(options)}")
         if not isinstance(case, MultilayerSystem):
@@ -395,6 +401,7 @@ def run_fresnel_sweep(case: MultilayerSystem | Material, angle_grid: Any = None,
             transmitted_wave_policy=transmitted_wave_policy,
             include_validation_summary=include_validation_summary,
             mrassumption=mrassumption,
+            transmittance=transmittance,
         )
     if workflow != "interface":
         raise ValueError("run_fresnel_sweep workflow must be 'interface' or 'gui_multilayer'.")
@@ -1280,9 +1287,12 @@ def _run_gui_multilayer_fresnel_sweep(
     transmitted_wave_policy: str,
     include_validation_summary: bool,
     mrassumption: int = 0,
+    transmittance: str = "power",
 ) -> SHAARPResult:
     if transmitted_wave_policy not in {"shaarp_ml_selected", "physical_sum"}:
         raise ValueError("transmitted_wave_policy must be 'shaarp_ml_selected' or 'physical_sum'.")
+    if transmittance not in {"power", "amplitude"}:
+        raise ValueError("transmittance must be 'power' or 'amplitude'.")
     theta_deg = np.asarray(angle_grid if angle_grid is not None else [case.polarimetry.theta_deg], dtype=float)
     if theta_deg.ndim != 1:
         raise ValueError("angle_grid must be a one-dimensional sequence for workflow='gui_multilayer'.")
@@ -1299,12 +1309,13 @@ def _run_gui_multilayer_fresnel_sweep(
     # p- and s-incidence at the same angle share every anisotropic mode solve;
     # this cache makes the second pass reuse the first's bases (byte-identical, ~2x faster).
     basis_cache: dict = {}
-    rp, tp = _gui_fresnel_pair(case, theta_deg, (0.0j, 1.0 + 0.0j), component="p", transmitted_wave_policy=transmitted_wave_policy, base_setup=base_setup, basis_cache=basis_cache, mrassumption=mrassumption)
-    rs, ts = _gui_fresnel_pair(case, theta_deg, (1.0 + 0.0j, 0.0j), component="s", transmitted_wave_policy=transmitted_wave_policy, base_setup=base_setup, basis_cache=basis_cache, mrassumption=mrassumption)
+    rp, tp = _gui_fresnel_pair(case, theta_deg, (0.0j, 1.0 + 0.0j), component="p", transmitted_wave_policy=transmitted_wave_policy, base_setup=base_setup, basis_cache=basis_cache, mrassumption=mrassumption, transmittance=transmittance)
+    rs, ts = _gui_fresnel_pair(case, theta_deg, (1.0 + 0.0j, 0.0j), component="s", transmitted_wave_policy=transmitted_wave_policy, base_setup=base_setup, basis_cache=basis_cache, mrassumption=mrassumption, transmittance=transmittance)
 
     stages: dict[str, Any] = {
         "workflow": "gui_multilayer",
         "transmitted_wave_policy": transmitted_wave_policy,
+        "transmittance": transmittance,
         "listFresnel_labels": ["Rp", "Rs", "Tp", "Ts"],
     }
     if include_validation_summary:
@@ -1340,8 +1351,9 @@ def _gui_fresnel_pair(
     base_setup: dict | None = None,
     basis_cache: dict | None = None,
     mrassumption: int = 0,
+    transmittance: str = "power",
 ) -> tuple[np.ndarray, np.ndarray]:
-    """Reflected AND transmitted Fresnel POWER curves for ONE incident polarization.
+    """Reflected AND transmitted Fresnel curves for ONE incident polarization.
 
     The linear fundamental is solved ONCE per angle and BOTH the reflected
     (``solution.top_unknown``) and transmitted (``solution.substrate_unknown``)
@@ -1349,10 +1361,30 @@ def _gui_fresnel_pair(
     (Rp/Rs/Tp/Ts) cost two solves per angle, not four. The angle-independent
     ``_system_setup`` is built once (``base_setup``) and only
     ``incident_theta_rad`` is overridden per angle (byte-identical to recomputing
-    it). ``component`` selects 'p' or 's'. Returns ``(reflected_power,
-    transmitted_power)`` over ``theta_deg``."""
+    it). ``component`` selects 'p' or 's'.
+
+    ``transmittance`` selects what the transmitted curve MEANS:
+
+    ``"power"`` (default)
+        A true power transmittance, ``|t|**2`` weighted by the obliquity factor
+        ``Re(n_exit cos theta_exit) / Re(n_inc cos theta_inc)``. Refraction changes the beam's
+        width, so the incident and transmitted beams do not share a cross-section even though
+        they cross the same patch of interface; without this factor ``R + T`` does not equal 1
+        for any exit medium whose index differs from the incident medium's.
+    ``"amplitude"``
+        Bare ``|t|**2``. This is what SHAARP.ml's ``listFresnel`` emits, and the Mathematica
+        reference comparisons request it explicitly so that fidelity check stays exact.
+
+    The two coincide whenever the exit and incident media are index-matched, which is why the
+    omission went unnoticed: every stack in the ``R+T=1`` invariant test had an ``n=1`` substrate.
+    Verified against ``tmm`` and ``inkstone`` in
+    ``tests/test_isotropic_stack_reference_comparison.py``.
+
+    Returns ``(reflected_power, transmitted)`` over ``theta_deg``."""
     from .multilayer_shg_boundary import _system_setup
 
+    if transmittance not in {"power", "amplitude"}:
+        raise ValueError("transmittance must be 'power' or 'amplitude', got %r." % (transmittance,))
     if base_setup is None:
         base_setup = _system_setup(case)
     reflected: list[float] = []
@@ -1380,7 +1412,10 @@ def _gui_fresnel_pair(
         else:
             t_waves = solution.substrate_unknown
         s_t, p_t = _sum_wave_frame_jones_sp(t_waves)
-        transmitted.append(float(abs(p_t if component == "p" else s_t) ** 2))
+        amplitude_sq = float(abs(p_t if component == "p" else s_t) ** 2)
+        if transmittance == "power":
+            amplitude_sq *= _fresnel_obliquity_factor(solution, setup, t_waves)
+        transmitted.append(amplitude_sq)
     r_arr = np.asarray(reflected, dtype=float)
     t_arr = np.asarray(transmitted, dtype=float)
     th_arr = np.asarray(list(theta_deg), dtype=float)
@@ -1389,6 +1424,30 @@ def _gui_fresnel_pair(
         if bad.any() and (~bad).sum() >= 2:
             arr[bad] = np.interp(th_arr[bad], th_arr[~bad], arr[~bad])
     return r_arr, t_arr
+
+
+def _fresnel_obliquity_factor(solution, setup: dict, transmitted_waves) -> float:
+    """``Re(n_exit cos theta_exit) / Re(n_inc cos theta_inc)`` for the SOLVED transmitted mode.
+
+    Taken from the transmitted wave's own ``k_z`` rather than a nominal material index, because
+    ``k = n * omega * k_hat`` makes ``k_z = n cos(theta)`` up to the shared ``omega`` that cancels
+    in the ratio -- and because an anisotropic or absorbing substrate has no single scalar ``n`` to
+    quote. The wave carrying the most field is used when several transmitted modes are summed;
+    for an isotropic substrate they are degenerate and the choice does not matter.
+
+    Returns 1.0 when there is no transmitted field to weight, which leaves ``T = 0`` untouched.
+    """
+    if not transmitted_waves:
+        return 1.0
+    incident_kz = float(
+        np.real(complex(setup["top_index_omega"]) * setup["omega"] * np.cos(setup["incident_theta_rad"]))
+    )
+    if abs(incident_kz) <= 0.0:
+        return 1.0
+    norms = [float(np.linalg.norm(np.asarray(w.electric))) for w in transmitted_waves]
+    dominant = transmitted_waves[int(np.argmax(norms))] if max(norms) > 0.0 else transmitted_waves[0]
+    transmitted_kz = float(np.real(np.asarray(dominant.k)[2]))
+    return transmitted_kz / incident_kz
 
 
 def _select_fundamental_transmitted_wave(waves):

@@ -47,10 +47,20 @@ class FresnelSweepPythonComparisonTests(unittest.TestCase):
         reference_case = payload["suites"][0]["items"][0]
         system = {case["id"]: case["system"] for case in build_cases()}[reference_case["id"]]
 
+        # transmittance="amplitude" is REQUIRED here, and saying so is the point. SHAARP.ml's
+        # listFresnel emits bare |t|^2, while the shipped default now returns a true power
+        # transmittance (|t|^2 weighted by Re(n_exit cos th_exit)/Re(n_inc cos th_inc)). This
+        # reference stack has a non-air substrate (n ~ 1.34/1.44/1.56), so the two differ by up to
+        # ~3x. Requesting the legacy convention explicitly keeps this fidelity check exact AND
+        # records which convention Mathematica uses, rather than the agreement being accidental.
         result = run_fresnel_sweep(
             system,
             angle_grid=reference_case["inputs"]["theta_deg"],
-            options={"workflow": "gui_multilayer", "transmitted_wave_policy": "shaarp_ml_selected"},
+            options={
+                "workflow": "gui_multilayer",
+                "transmitted_wave_policy": "shaarp_ml_selected",
+                "transmittance": "amplitude",
+            },
         )
 
         curves = reference_case["mathematica_outputs"]["listFresnel"]

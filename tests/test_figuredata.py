@@ -143,7 +143,19 @@ class FresnelPlotMathematicaValidationTests(unittest.TestCase):
         reference_case = ref["suites"][0]["items"][0]
         system = {case["id"]: case["system"] for case in build_cases()}[reference_case["id"]]
 
-        fd = fresnel_figure_data(system, reference_case["inputs"]["theta_deg"])
+        # transmittance="amplitude" requests the legacy bare-|t|^2 convention that SHAARP.ml's
+        # listFresnel emits. The PLOT's own default is the physical power transmittance; this test
+        # is specifically the Mathematica fidelity check, so it asks for Mathematica's convention.
+        # See tests/test_isotropic_stack_reference_comparison.py for the power-transmittance gate.
+        fd = fresnel_figure_data(
+            system,
+            reference_case["inputs"]["theta_deg"],
+            options={
+                "workflow": "gui_multilayer",
+                "transmitted_wave_policy": "shaarp_ml_selected",
+                "transmittance": "amplitude",
+            },
+        )
 
         curves = reference_case["mathematica_outputs"]["listFresnel"]
         for series_key, curve in zip(("|rp|", "|rs|", "|tp|", "|ts|"), curves):

@@ -276,17 +276,29 @@ TOOLTIPS = {
 
 
 # The original GUIs' default 'User Guide' / welcome page, condensed from the SHAARP.ml docs.
-USER_GUIDE_HTML = """
+# The one place each outward link is written, so the guide, the About box and the Help menu cannot
+# drift apart -- and so that mentioning the originals or the papers without linking them shows up as
+# a missing constant rather than as prose nobody re-reads. Fenced in tests/test_app_voice.py.
+DOCS_URL = "https://shaarp-py.readthedocs.io/en/latest/"
+SI_REPO_URL = "https://github.com/Rui-Zu/SHAARP"
+ML_REPO_URL = "https://github.com/bzw133/SHAARP.ml"
+SI_PAPER_DOI_URL = "https://doi.org/10.1038/s41524-022-00930-4"
+ML_PAPER_DOI_URL = "https://doi.org/10.1038/s41524-024-01229-2"
+
+
+USER_GUIDE_HTML = f"""
 <h2>&#9839;SHAARP.py &mdash; User Guide</h2>
 <p>Simulate and fit optical second-harmonic generation in anisotropic crystals and multilayers.
 This app carries both &#9839;SHAARP methods in one panel: <b>SHAARP.si</b> for reflected
 polarimetry from a single surface, and <b>SHAARP.ml</b> for multilayers and Maker fringes.
 Use the two tabs at the top to switch between them.</p>
+<p><b>Full documentation</b> &mdash; guide, worked examples, API reference, conventions and how it
+is tested: <a href="{DOCS_URL}">shaarp-py.readthedocs.io</a></p>
 <p>SHAARP.py grew out of two Mathematica packages from the same group:
 <b>&#9839;SHAARP.si</b> &mdash;
-<a href="https://github.com/Rui-Zu/SHAARP">github.com/Rui-Zu/SHAARP</a> &middot;
+<a href="{SI_REPO_URL}">github.com/Rui-Zu/SHAARP</a> &middot;
 <b>&#9839;SHAARP.ml</b> &mdash;
-<a href="https://github.com/bzw133/SHAARP.ml">github.com/bzw133/SHAARP.ml</a></p>
+<a href="{ML_REPO_URL}">github.com/bzw133/SHAARP.ml</a></p>
 <p><b>Workflow</b> (per tab):</p>
 <ol>
 <li>Pick a <b>Functionality</b> (SHG Simulation, Maker Fringes, Fresnel Coefficients, or the
@@ -310,10 +322,10 @@ methods:</p>
 <ol>
 <li>Zu, R., Wang, B., He, J. <i>et al.</i> &ldquo;Analytical and numerical modeling of optical second
 harmonic generation in anisotropic crystals using &#9839;SHAARP package.&rdquo;
-<i>npj Computational Materials</i> <b>8</b>, 246 (2022). <a href="https://doi.org/10.1038/s41524-022-00930-4">doi:10.1038/s41524-022-00930-4</a></li>
+<i>npj Computational Materials</i> <b>8</b>, 246 (2022). <a href="{SI_PAPER_DOI_URL}">doi:10.1038/s41524-022-00930-4</a></li>
 <li>Zu, R., Wang, B., He, J. <i>et al.</i> &ldquo;Optical second harmonic generation in anisotropic
 multilayers with complete multireflection of linear and nonlinear waves using &#9839;SHAARP.ml
-package.&rdquo; <i>npj Computational Materials</i> <b>10</b>, 64 (2024). <a href="https://doi.org/10.1038/s41524-024-01229-2">doi:10.1038/s41524-024-01229-2</a></li>
+package.&rdquo; <i>npj Computational Materials</i> <b>10</b>, 64 (2024). <a href="{ML_PAPER_DOI_URL}">doi:10.1038/s41524-024-01229-2</a></li>
 </ol>
 <p><b>Authors:</b> R. Zu, B. Wang, L. Weber, A. Saha, L.-Q. Chen &amp; V. Gopalan
 (The Pennsylvania State University).</p>
@@ -1145,6 +1157,15 @@ def build_main_window():
     act = help_menu.addAction("User Guide")
     act.triggered.connect(_show_user_guide)
 
+    # The full documentation had no route from inside the app at all: a user who wanted the guide,
+    # the API reference or the conventions had to already know the site exists. Put it in the Help
+    # menu, directly under the built-in guide.
+    docs_act = help_menu.addAction("Documentation (online)")
+    docs_act.setStatusTip(DOCS_URL)
+    docs_act.triggered.connect(
+        lambda: QtGui.QDesktopServices.openUrl(QtCore.QUrl(DOCS_URL)))
+    win._open_docs = docs_act  # test hook
+
     def _show_debug_info():
         # Everything a bug report needs, copyable in one place -- the last full
         # traceback (previously lost: the run handler kept only a one-line message), the log
@@ -1186,6 +1207,11 @@ def build_main_window():
             "&#9839;SHAARP methods, si and ml, in one desktop app. The solvers are checked against "
             "the published equations and the reference output of the original packages, and the "
             "test suite runs on every commit.<br><br>"
+            f"<b>Documentation:</b> <a href=\"{DOCS_URL}\">shaarp-py.readthedocs.io</a><br><br>"
+            "<b>The original Mathematica packages:</b><br>"
+            f"&bull; &#9839;SHAARP.si &mdash; <a href=\"{SI_REPO_URL}\">github.com/Rui-Zu/SHAARP</a><br>"
+            f"&bull; &#9839;SHAARP.ml &mdash; <a href=\"{ML_REPO_URL}\">github.com/bzw133/SHAARP.ml</a>"
+            "<br><br>"
             "<b>Authors:</b> R. Zu, B. Wang, L. Weber, A. Saha, L.-Q. Chen &amp; V. Gopalan "
             "(The Pennsylvania State University).<br><br>"
             "<b>Please cite:</b><br>"
@@ -3114,18 +3140,24 @@ def build_main_window():
         # hoisted out of the sweep loops, so a fine scan stays responsive).
         th_min = _NumBox(0.0, 0.0, 89.0, decimals=3)
         th_max = _NumBox(45.0, 0.0, 89.9, decimals=3)
-        # 0.1 deg, not 0.5. The shipped default preset (Quartz + Au, Fig 4) has a fringe spacing of
+        # 0.05 deg, not 0.5. The shipped default preset (Quartz + Au, Fig 4) has a fringe spacing of
         # 0.560 deg between 30 and 40 deg, so 0.5 deg gave 1.12 samples per fringe -- below Nyquist.
         # The default view of the documented example was therefore ALIASED: it read as noise and put
-        # its maxima at the wrong angles. 0.1 deg gives 5.6 samples per fringe. It costs about 26 s
-        # against 5 s for the whole 0-45 deg sweep; the quick-preset buttons on the row still offer
-        # 0.5 for a fast look. Fenced in tests/test_maker_default_resolves_fringes.py.
-        th_step = _NumBox(0.1, 0.01, 30.0, decimals=3)
+        # its maxima at the wrong angles. 0.1 deg clears Nyquist at 5.6 samples per fringe but still
+        # DRAWS coarsely, six points to an oscillation; 0.05 gives 11.2 and the curve reads as the
+        # smooth fringe train it is. The whole 0-45 deg sweep costs about 51 s against 5 s at 0.5;
+        # the quick-preset buttons on the row still offer 0.5 for a fast look at the envelope.
+        # Fenced in tests/test_maker_default_resolves_fringes.py.
+        th_step = _NumBox(0.05, 0.01, 30.0, decimals=3)
         # Fresnel scan range controlled SEPARATELY from Maker Fringes,
         # each in its own separately-toggled section; Fresnel default step = 0.1 deg.
         fr_min = _NumBox(0.0, 0.0, 89.0, decimals=3)
         fr_max = _NumBox(89.9, 0.0, 89.9, decimals=3)
-        fr_step = _NumBox(0.1, 0.01, 30.0, decimals=3)
+        # 0.05 deg for the same reason as the Maker step: a coated slab's Fresnel coefficients carry
+        # the slab's own interference, 0.59 deg per period on the shipped preset, so 0.1 deg drew
+        # them with six points to an oscillation and the curves came out visibly angular. 0.05 gives
+        # 11.8 points per period. The full 0-89.9 deg sweep costs about 61 s against 30 s.
+        fr_step = _NumBox(0.05, 0.01, 30.0, decimals=3)
         g_scan = g_fres = None
         if which == "ml":
             for b in (th_min, th_max, th_step):

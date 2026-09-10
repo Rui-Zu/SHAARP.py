@@ -175,7 +175,7 @@ fringe** (same-grid correlation = 1.000000; the reference is a constant multiple
 analytic expression, ratio spread < 1e-9) — the paper's exact-overlap claim, reproduced. The zoom
 is sampled at 0.05° matching the reference: the fine 2ω fringes have ~0.2° period, so any coarser
 sweep sits at the Nyquist edge and *displays* a spurious fringe offset.""")
-    code("""fig, stats = ml_fig3_figure(step=0.25)
+    code("""fig, stats = ml_fig3_figure(step=0.02)   # 0.188 deg fringes: 0.25 would alias
 _embed_fig(fig)
 print(f"HH/JK envelope peak ratio = {stats['hh_jk_peak_ratio']:.4f} (≈1: near-identical envelopes)")
 print(f"SHAARP.py(HH) vs raw analytic-HH shape correlation = {stats['hh_vs_analytic_corr']:.4f}")

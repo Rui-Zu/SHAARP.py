@@ -137,8 +137,13 @@ def replicate_si_fig4() -> None:
 # ML paper Figure 3(b,c): 300 um X-cut quartz, 1064 nm, p-p Maker fringes, HH vs JK
 # --------------------------------------------------------------------------------------
 
-def _maker(system, assumption: str, th_max: float = 65.0, step: float = 0.1,
+def _maker(system, assumption: str, th_max: float = 65.0, step: float = 0.02,
            fmr_submode: str = "Forward + Backward waves"):
+    # 0.02 deg, not 0.1. The Fig-3 case (300 um X-cut quartz, 1064 nm) has an HH fringe spacing of
+    # 0.188 deg, so 0.1 deg gave 1.88 samples per fringe -- below Nyquist. Its magnified panel came
+    # out as irregular spikes of varying height, which is aliasing, not physics. 0.02 deg gives 9.4
+    # samples per fringe and the oscillation renders as the regular one it actually is. A published
+    # figure has to be sampled for the finest feature in it, not for the envelope.
     # full FMR includes the BACKWARD nonlinear waves -- with the Au backside mirror those are
     # exactly what builds Fig. 4(d)'s central bump (the default forward-only submode misses it)
     r = compute_ml_gui_result("Maker Fringes", system=system, theta_min_deg=0.0,

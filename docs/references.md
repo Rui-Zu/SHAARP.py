@@ -3,9 +3,11 @@
 If you use SHAARP.py, please cite the two papers that introduced the methods it implements:
 
 - **♯SHAARP.si** (single-interface reflected-SHG polarimetry) — Zu, R. *et al.*, *npj Computational
-  Materials* **8**, 246 (2022), doi:10.1038/s41524-022-00930-4.
+  Materials* **8**, 246 (2022),
+  [doi:10.1038/s41524-022-00930-4](https://doi.org/10.1038/s41524-022-00930-4).
 - **♯SHAARP.ml** (multilayer / Maker-fringe SHG) — Zu, R. *et al.*, *npj Computational Materials*
-  **10**, 64 (2024), doi:10.1038/s41524-024-01229-2.
+  **10**, 64 (2024),
+  [doi:10.1038/s41524-024-01229-2](https://doi.org/10.1038/s41524-024-01229-2).
 
 SHAARP stands for Second Harmonic Analysis of Anisotropic Rotational Polarimetry. Both methods
 began as Mathematica packages from the same group, and SHAARP.py grew out of them:

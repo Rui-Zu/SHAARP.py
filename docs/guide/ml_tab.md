@@ -239,7 +239,7 @@ mode" hint only in its own mode.
 The Maker default is fine on purpose. A 121.2 µm quartz slab, the default preset, puts its fringes
 about 0.56° apart, so a 0.5° step would land barely one sample on each and the curve would alias
 into something that looks like noise with its maxima in the wrong places. At 0.1° the full 0–45°
-sweep takes roughly half a minute; the quick-preset buttons beside the step let you drop to 0.5°
+sweep takes about a minute; the quick-preset buttons beside the step let you drop to 0.5°
 for a fast look at the envelope.
 
 ## Polarimetry settings
