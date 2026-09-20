@@ -95,17 +95,26 @@ def ml_case_combo(page):
 def ml_film_labels(page):
     """The selectable single-film rows of the ML case combo, as STRIPPED display labels
     (case-study fidelity audit: films are palette labels, some indented under a
-    disabled material master-title row -- header rows are excluded here)."""
+    disabled material master-title row -- header rows are excluded here).
+
+    Scoped to the CURATED palette. The rows under the Dispersive header are the same crystals with
+    their linear optics read from a published index table -- an extension of the palette, not
+    further original examples -- so they stop this walk and are fenced on their own in
+    test_gui_palette_fidelity."""
     from shaarp.shaarp_gui import ML_SYSTEM_PRESETS
 
+    from shaarp.casestudy_materials import gui_dispersive_group
     from shaarp.user_materials import USER_SECTION_HEADER
 
+    dispersive_header = gui_dispersive_group()[0].strip()
     combo = ml_case_combo(page)
     out = []
     for i in range(combo.count()):
         text = combo.itemText(i)
         if text == USER_SECTION_HEADER:
             break  # the user's own materials are not part of the curated palette
+        if text.strip() == dispersive_header:
+            break
         item = combo.model().item(i)
         if item is not None and not item.isEnabled():
             continue  # header rows (both "— ... —" and bare master titles) are disabled
@@ -210,6 +219,12 @@ COVERAGE_RULES = [
      "(MlCausalityMatrix + causality gaps + StackModeOwnershipContract)"),
     (r"^ml:QDoubleSpinBox:tip=theta_range#\d$", "covered",
      "scan min/max/step steps (theta_max covered implicitly; make all three explicit)"),
+    (r"^(si|ml):QDoubleSpinBox:tip=lambda_range#[0-2]$", "covered",
+     "wavelength scan min/max/step - SpectralSweepCausality drives all three on BOTH tabs and "
+     "asserts the grid they describe reaches the computed spectrum"),
+    (r"^(si|ml):QCheckBox:tip=spectral_sweep#0$", "covered",
+     "the wavelength-sweep switch - SpectralSweepCausality drives it on both tabs and checks it "
+     "swaps the output to the Spectrum tab and pins the rotating geometry"),
     (r"^ml:QDoubleSpinBox:tip=maker_ellipticity#\d+$", "covered",
      "F74 Maker-Fringes-specific ellipticity, range -90..90 as the original .ml gives it in "
      "Maker Fringes Collection Settings (the general polarimetry delta-delta drives every "

@@ -192,6 +192,7 @@ class MakerPlotMathematicaValidationTests(unittest.TestCase):
         from benchmarks.compare_mathematica_reference import numeric_array
         from benchmarks.compare_maker_fringes_reference import DIAGNOSTIC_CASE_IDS
         from benchmarks.generate_maker_fringes_benchmarks import build_cases
+        from shaarp.api import run_maker_fringes
 
         ref_path = (
             Path(__file__).resolve().parents[1]
@@ -210,11 +211,29 @@ class MakerPlotMathematicaValidationTests(unittest.TestCase):
             mfl = numeric_array(item["mathematica_outputs"]["MFList"])
             theta = list(mfl[:, 0].real)
             fd = maker_figure_data(systems[cid], theta)
+
+            # Split into the two things this used to assert in one step, because the plotted
+            # intensity is now the PHYSICAL one (n_exit * |E|^2) while Mathematica's MFList is bare
+            # |E|^2 -- they differ by the substrate's index at 2omega, and these stacks are not
+            # air-exit. Asserting both halves separately is stronger than the old single check:
+            #   (a) the SOLVER agrees with Mathematica, in Mathematica's own convention;
+            #   (b) the PLOT draws the solver's numbers faithfully, which is this test's purpose.
+            raw = run_maker_fringes(systems[cid], theta)
             np.testing.assert_allclose(
-                np.asarray(fd.series["parallel analyzer"], dtype=float), mfl[:, 1].real, atol=1e-10, rtol=1e-10
+                np.abs(np.asarray(raw.numeric["parallel_amplitude"])) ** 2,
+                mfl[:, 1].real, atol=1e-10, rtol=1e-10,
             )
             np.testing.assert_allclose(
-                np.asarray(fd.series["perpendicular analyzer"], dtype=float), mfl[:, 2].real, atol=1e-10, rtol=1e-10
+                np.abs(np.asarray(raw.numeric["perpendicular_amplitude"])) ** 2,
+                mfl[:, 2].real, atol=1e-10, rtol=1e-10,
+            )
+            np.testing.assert_allclose(
+                np.asarray(fd.series["parallel analyzer"], dtype=float),
+                np.asarray(raw.numeric["parallel_intensity"], dtype=float), atol=0.0, rtol=0.0,
+            )
+            np.testing.assert_allclose(
+                np.asarray(fd.series["perpendicular analyzer"], dtype=float),
+                np.asarray(raw.numeric["perpendicular_intensity"], dtype=float), atol=0.0, rtol=0.0,
             )
             checked += 1
         self.assertGreaterEqual(checked, 2)

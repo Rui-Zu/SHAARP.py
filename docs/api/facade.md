@@ -31,6 +31,20 @@ GUI controls take (functionality name, preset or case-study name, angles) and re
 .. autofunction:: run_sample_rotation
 ```
 
+## Wavelength sweeps
+
+Each takes a factory, a function that returns the material or the system at a given fundamental
+wavelength, because the permittivities have to be rebuilt at every point. Worked examples, and the
+materials that carry published index data, are in [Sweeping the wavelength](../usage.md#sweeping-the-wavelength).
+
+```{eval-rst}
+.. currentmodule:: shaarp
+
+.. autofunction:: run_si_spectrum
+.. autofunction:: run_ml_spectrum
+.. autofunction:: run_spectral_map
+```
+
 ## High-level convenience
 
 ```{eval-rst}

@@ -121,7 +121,7 @@ class SICase:
     registry_name: str          # case-study material in casestudy_dispersion.json
     wavelength_um: float
     point_group: str
-    surface: str                # human label of the cut (e.g. "(112̄0) x-cut")
+    surface: str                # human label of the cut (e.g. "(11-20) x-cut")
     provenance: str             # one-line cite to the Mathematica source
     thetas_deg: tuple = (0.0, 15.0, 30.0, 45.0)
 
@@ -192,9 +192,9 @@ SI_CASES = {
         provenance="SHAARP.si V1.04 case button 'GaAs (111)' (source_key GaAs111λ800)",
     ),
     "fig5": SICase(
-        key="fig5", fig="Fig. 5", title="LiNbO₃ (11̄20), 800 nm",
+        key="fig5", fig="Fig. 5", title="LiNbO₃ (11-20), 800 nm",
         registry_name="LiNbO3 x-cut (1550 nm)", wavelength_um=0.800,
-        point_group="3m", surface="(11̄20) x-cut",
+        point_group="3m", surface="(11-20) x-cut",
         provenance="registry 'LiNbO3 x-cut' (source_key LiNbO3xCutλ1550); ε interpolated to 800 nm",
         thetas_deg=(15.0, 30.0, 45.0),   # paper Fig 5(c,d) angles; I_s panel is scaled x15
     ),
@@ -314,20 +314,32 @@ def ml_fig4d_hh_author_geometry_system(*, h_quartz_um: float = 121.18, wavelengt
 def ml_fig6_system():
     """ZnO (159 nm) // Pt (200 nm) // Al₂O₃ substrate, 1550 nm (Fig. 6 heterostructure).
 
-    Thicknesses are the manuscript's stated values ("159 nm ZnO // 200 nm Pt"); Al₂O₃ is the
-    substrate half-space. Only ZnO is SHG-active (Pt metal + Al₂O₃ centrosymmetric are inactive).
+    Thicknesses are the manuscript's stated values ("159 nm ZnO // 200 nm Pt"); Al₂O₃ is a finite
+    wafer with AIR below it. Only ZnO is SHG-active (Pt metal + Al₂O₃ centrosymmetric are inactive).
 
-    ARCHITECTURE-FIDELITY NOTE. This builder models Al₂O₃ as a SEMI-INFINITE
-    exit medium (thickness_um=None). The RELEASED Mathematica .ml GUI could not express that:
-    it forces the exit half-space to air (`SHAARP.ml.nb:425-439` overwrites slot
-    materialnumber+2 with `mbot = setMater@Air[]`; the layer selector `Range[2,
-    materialnumber+1]` cannot reach it), so the original's Fig-6 run must have had Al₂O₃ as a
-    FINITE numbered layer above air — the same shape the MoS₂ notebook uses ("500um for
-    Al2O3"). No Fig-6 generator notebook survives in the archive to pin the thickness, and the
-    panel is REFLECTED SHG at 45 deg behind ~200 nm of Pt, so the bottom boundary is optically
-    almost irrelevant here. Recorded rather than silently reproduced: the numbers agree, the
-    architecture differs. (SHAARP.py deliberately allows an arbitrary exit medium — the ENGINE
-    always did, `setup.nb:6421`: "wSub - a list of waves into Substrate (can be Air)".)
+    ARCHITECTURE — RESOLVED 2026-09-12 (Rui): "in reality, the measurement was done with sapphire
+    sitting on air ... the real exit medium should be air". So Al₂O₃ is a FINITE numbered layer and
+    the exit half-space is air, which is what this builder now does.
+
+    That also settles a fidelity note which stood here for months. This builder used to model Al₂O₃
+    as a SEMI-INFINITE exit medium, and the note recorded that the released Mathematica .ml GUI
+    cannot express that — it forces the exit half-space to air (`SHAARP.ml.nb:425-439` overwrites
+    slot materialnumber+2 with `mbot = setMater@Air[]`; the layer selector `Range[2,
+    materialnumber+1]` cannot reach it) — and concluded the original's Fig-6 run must have had
+    Al₂O₃ as a finite layer above air. The note was right; the builder had simply never followed it.
+    The architecture now matches both the original and the physical sample.
+
+    THICKNESS: 100 µm — the value the RELEASED original's own Al₂O₃(0001) case-study button sets
+    (`setup.nb:3537`, `thickness = 100`, the same table that gives ZnO 0.159 at :3141 and Pt 0.2 at
+    :3375). So a user who builds Fig 6 in the released .ml with Number of Layers = 3 and the three
+    buttons gets exactly this stack. (An earlier revision used 500 µm, citing a MoS₂ notebook; that
+    notebook is not in the released archive, and the released button's value is the better source.)
+    It does not affect the result: the panel is REFLECTED SHG at 45 deg behind ~200 nm of Pt, which
+    is opaque. Measured: the old semi-infinite sapphire vs this finite-layer-on-air form differ by
+    5.3e-13 relative (correlation 1.000000000000), and sweeping 100 µm → 1 mm stays inside 1.4e-12.
+
+    Side effect worth knowing: with air below, both semi-infinite media are isotropic. The old form
+    was the only shipped configuration that was not.
     """
     lam = 1.55
     air = build_casestudy_material("Air", wavelength_um=lam)
@@ -338,7 +350,8 @@ def ml_fig6_system():
         Layer(name="air", material=air, thickness_um=None, shg_active=False),
         Layer(name="ZnO", material=zno, thickness_um=0.159, shg_active=True),
         Layer(name="Pt", material=pt, thickness_um=0.200, shg_active=False),
-        Layer(name="Al₂O₃ substrate", material=al2o3, thickness_um=None, shg_active=False),
+        Layer(name="Al₂O₃ wafer", material=al2o3, thickness_um=100.0, shg_active=False),
+        Layer(name="air", material=air, thickness_um=None, shg_active=False),
     ]
     return MultilayerSystem(wavelength_um=lam, layers=layers)
 
@@ -388,7 +401,7 @@ def ml_maker(system, assumption: str, *, th_min: float = 0.0, th_max: float = 65
 
 # Fig 5 single crystals: LiNbO3 (11-20)=x-cut, LiNbO3 (0001)=z-cut, KTP x-cut and y-cut, all @ 1550 nm.
 FIG5_CRYSTALS = {
-    "LiNbO₃ (11̄20)": "LiNbO3 x-cut (1550 nm)",
+    "LiNbO₃ (11-20)": "LiNbO3 x-cut (1550 nm)",
     "LiNbO₃ (0001)": "LiNbO3 z-cut (1550 nm)",
     "KTP (x-cut)": "KTP x-cut",
     "KTP (y-cut)": "KTP y-cut",

@@ -1436,6 +1436,15 @@ def _fresnel_obliquity_factor(solution, setup: dict, transmitted_waves) -> float
     for an isotropic substrate they are degenerate and the choice does not matter.
 
     Returns 1.0 when there is no transmitted field to weight, which leaves ``T = 0`` untouched.
+
+    NOT bit-exact for an index-matched substrate. The incident ``k_z`` is analytic
+    (``n cos(theta)``) while the transmitted one comes out of ``solve_snell_modes``' root-find, so
+    an air/film/air stack yields 1.0 to about **1.5e-13** rather than to the last bit (measured on
+    the GUI default stack, 0-80 deg). That is the eigen-solver's own tolerance, three orders below
+    the tightest Fresnel comparison in the suite (1e-10) and far below anything a plot can show.
+    Deriving the factor from a closed-form index ratio instead would be exact for isotropic media
+    but wrong for the anisotropic and absorbing substrates this path also serves -- including the
+    three committed Mathematica reference stacks -- so the general form is kept deliberately.
     """
     if not transmitted_waves:
         return 1.0
@@ -1831,3 +1840,156 @@ def _convert_numeric(value: Any) -> Any:
     if isinstance(value, np.generic):
         return value.item()
     raise ValueError(f"Unsupported numeric value: {value!r}")
+
+
+def run_si_spectrum(case: Any, wavelength_grid: Any = None, options: dict | None = None) -> SHAARPResult:
+    """Reflected single-interface SHG across a wavelength grid, at a fixed geometry.
+
+    ``case`` is a wavelength -> Material factory (see :mod:`shaarp.spectral`); a plain Material is
+    accepted and swept as a constant, which warns because the spectrum is then flat by
+    construction. Every numeric entry is one-dimensional and the same length, so
+    :func:`export_result` writes CSV unchanged."""
+
+    from .spectral import constant_spectrum, solve_si_spectral_sweep
+
+    spectrum = case if callable(case) else constant_spectrum(case)
+    opts = dict(options or {})
+    if wavelength_grid is not None:
+        opts["wavelength_um"] = np.asarray(wavelength_grid, dtype=float)
+    raw = solve_si_spectral_sweep(spectrum, **opts)
+    return SHAARPResult(
+        kind="si_spectrum",
+        numeric={
+            "wavelength_um": raw.wavelength_um,
+            "intensity_s": raw.intensity_s,
+            "intensity_p": raw.intensity_p,
+            "intensity_analyzed": raw.intensity_analyzed,
+        },
+        stages={
+            "assumptions": raw.assumptions,
+            "geometry": {"theta_deg": raw.theta_deg, "phi_deg": raw.phi_deg,
+                         "psi_deg": raw.psi_deg, "ellipticity_deg": raw.ellipticity_deg},
+            "diagnostics": {
+                "boundary_residual_norm": raw.boundary_residual_norm,
+                "operator_condition": raw.operator_condition,
+                "ill_conditioned": raw.ill_conditioned,
+                "n_2omega_fast": raw.n_2omega_fast,
+                "n_2omega_slow": raw.n_2omega_slow,
+            },
+            "spectral_support": {
+                "permittivity_varies": raw.support.varies,
+                "material_names": raw.support.material_names,
+                "usable_note": raw.support.flat_reason,
+            },
+        },
+        validation=ValidationStatus(
+            "not_mathematica_validated",
+            notes=(
+                "No live reference exists away from each material's native wavelength; the "
+                "wavelength axis is fenced by the scale identity (the single-interface answer is "
+                "invariant under the omega scale at fixed permittivity) and by agreement with the "
+                "closed form across the grid -- tests/test_si_spectral_sweep.py.",
+                "The SHG tensor is held at its tabulated value across the sweep; see "
+                "stages['assumptions'].",
+            ),
+        ),
+        raw=raw,
+    )
+
+
+def run_ml_spectrum(case: Any, wavelength_grid: Any = None, options: dict | None = None) -> SHAARPResult:
+    """Multilayer SHG across a wavelength grid, at a fixed geometry.
+
+    ``case`` is a wavelength -> MultilayerSystem factory (see :mod:`shaarp.spectral`). A factory
+    that changes only the system's wavelength and leaves its materials frozen produces a curve
+    that moves but is a thickness sweep rather than a spectrum; that case warns."""
+
+    from .spectral import solve_ml_spectral_sweep
+
+    if not callable(case):
+        raise TypeError(
+            "run_ml_spectrum needs a wavelength -> MultilayerSystem factory, not a system: the "
+            "layer permittivities have to be rebuilt at each wavelength alongside omega. Use "
+            "shaarp.spectral.casestudy_ml_spectrum(name) or build one from your own stack.")
+    opts = dict(options or {})
+    if wavelength_grid is not None:
+        opts["wavelength_um"] = np.asarray(wavelength_grid, dtype=float)
+    raw = solve_ml_spectral_sweep(case, **opts)
+    return SHAARPResult(
+        kind="ml_spectrum",
+        numeric={
+            "wavelength_um": raw.wavelength_um,
+            "omega": raw.omega,
+            "intensity": raw.intensity,
+        },
+        stages={
+            "assumptions": raw.assumptions,
+            "channel": raw.channel,
+            "geometry": {"theta_deg": raw.theta_deg, "phi_deg": raw.phi_deg,
+                         "psi_deg": raw.psi_deg, "ellipticity_deg": raw.ellipticity_deg},
+            "diagnostics": {
+                "fundamental_residual_norm": raw.fundamental_residual_norm,
+                "shg_residual_norm": raw.shg_residual_norm,
+                "analyzer_amplitude": raw.analyzer_amplitude,
+            },
+            "spectral_support": {
+                "permittivity_varies": raw.support.varies,
+                "material_names": raw.support.material_names,
+                "usable_note": raw.support.flat_reason,
+            },
+        },
+        validation=ValidationStatus(
+            "not_mathematica_validated",
+            notes=(
+                "No live reference exists away from each material's native wavelength; the "
+                "wavelength axis is fenced by the omega*h identity (scaling every thickness with "
+                "the wavelength at fixed permittivity leaves the answer unchanged) -- "
+                "tests/test_ml_spectral_sweep.py.",
+                "The SHG tensor is held at its tabulated value across the sweep; see "
+                "stages['assumptions'].",
+            ),
+        ),
+        raw=raw,
+    )
+
+
+def run_spectral_map(case: Any, options: dict | None = None) -> SHAARPResult:
+    """Maker fringes or Fresnel coefficients over a wavelength-by-incidence-angle grid.
+
+    ``case`` is a wavelength -> MultilayerSystem factory. The result is stored in LONG format --
+    both axes expanded to the full ``n_wavelength * n_theta`` length -- so the ordinary CSV
+    exporter, which needs equal flattened lengths, writes it unchanged. ``stages['shape']`` gives
+    the rectangle for reshaping."""
+
+    from .spectral import solve_spectral_angle_map
+
+    if not callable(case):
+        raise TypeError("run_spectral_map needs a wavelength -> MultilayerSystem factory.")
+    raw = solve_spectral_angle_map(case, **dict(options or {}))
+    numeric = {"wavelength_um": raw.wavelength_um, "theta_deg": raw.theta_deg}
+    numeric.update({name: np.asarray(values) for name, values in raw.channels.items()})
+    return SHAARPResult(
+        kind=f"spectral_{raw.kind}_map",
+        numeric=numeric,
+        stages={
+            "assumptions": raw.assumptions,
+            "shape": raw.shape,
+            "wavelength_axis": raw.wavelength_axis,
+            "theta_axis": raw.theta_axis,
+            "spectral_support": {
+                "permittivity_varies": raw.support.varies,
+                "material_names": raw.support.material_names,
+                "usable_note": raw.support.flat_reason,
+            },
+        },
+        validation=ValidationStatus(
+            "not_mathematica_validated",
+            notes=(
+                "Each wavelength row is the existing incidence-angle sweep run on a system rebuilt "
+                "at that wavelength; a single-wavelength map reproduces that sweep exactly "
+                "(tests/test_spectral_angle_map.py).",
+                "The SHG tensor is held at its tabulated value across the sweep.",
+            ),
+        ),
+        raw=raw,
+    )

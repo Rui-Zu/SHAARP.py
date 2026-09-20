@@ -105,8 +105,8 @@ Pick the file for your computer. Each name below is a direct download; they are 
 
 | Your computer | Download | Then |
 |---|---|---|
-| Windows (64-bit) | [`SHAARP_py_v1.0.0_win64.zip`](https://github.com/Rui-Zu/SHAARP.py/releases/download/v1.0.0/SHAARP_py_v1.0.0_win64.zip) (115 MB) | extract the zip, then double-click `SHAARP_py\SHAARP_py.exe` |
-| macOS, Apple Silicon (M-series) | [`SHAARP_py_v1.0.0_macos_arm64.zip`](https://github.com/Rui-Zu/SHAARP.py/releases/download/v1.0.0/SHAARP_py_v1.0.0_macos_arm64.zip) (79 MB) | extract the zip, then open `SHAARP_py/SHAARP_py.app` |
+| Windows (64-bit) | [`SHAARP_py_v1.0.0_win64.zip`](https://github.com/Rui-Zu/SHAARP.py/releases/download/v1.0.0/SHAARP_py_v1.0.0_win64.zip) (about 115 MB) | extract the zip, then double-click `SHAARP_py\SHAARP_py.exe` |
+| macOS, Apple Silicon (M-series) | [`SHAARP_py_v1.0.0_macos_arm64.zip`](https://github.com/Rui-Zu/SHAARP.py/releases/download/v1.0.0/SHAARP_py_v1.0.0_macos_arm64.zip) (about 79 MB) | extract the zip, then open `SHAARP_py/SHAARP_py.app` |
 
 Extract the zip before running. The app is not code-signed, so your system will ask you to allow
 it the first time, and the first launch takes a moment; if it does not open, the
@@ -128,7 +128,7 @@ on Linux there is no packaged build, so use the Python route below.
 </tr>
 </table>
 
-Your first calculation takes three clicks:
+Your first calculation:
 
 1. Under **Case Study and Examples**, pick **GaAs (111)** and press **Update / Run**. The reflected
    SHG polar plots appear next to a schematic of the sample.
@@ -136,9 +136,10 @@ Your first calculation takes three clicks:
    **Update / Run** to see the transmitted fringes of the quartz + Au preset. It sweeps finely
    enough to draw them smoothly, so give it about a minute; raise **θ step** for a quicker look
    at the envelope.
-3. Hover any control for an explanation. The
-   [first-calculation guide](https://shaarp-py.readthedocs.io/en/latest/guide/first_run.html)
-   takes it from here.
+
+Hover any control for an explanation. The
+[first-calculation guide](https://shaarp-py.readthedocs.io/en/latest/guide/first_run.html) takes it
+from here.
 
 ---
 
@@ -175,8 +176,8 @@ plt.show()
 
 The functions behind the app's Update button are the same ones you call here, so anything you can
 click you can script. The [usage page](https://shaarp-py.readthedocs.io/en/latest/usage.html)
-shows the rest: polarimetry closed forms, Maker fringes from your own layer stack, and d-tensor
-extraction.
+shows the rest: polarimetry closed forms, Maker fringes from your own layer stack, wavelength
+sweeps, and d-tensor extraction.
 
 ---
 
@@ -185,6 +186,8 @@ extraction.
 - Reflected SHG polarimetry, *I*ₛ(φ) and *I*ₚ(φ), for any crystal point group and orientation.
 - Multilayer Maker fringes *I*(θᵢ) under the Full, Jerphagnon–Kurtz and Herman–Hayden treatments.
 - Linear Fresnel reflection and transmission coefficients.
+- Wavelength sweeps: an SHG spectrum *I*(λ), or a map of Maker fringes or Fresnel curves against
+  both wavelength and incidence angle, for five crystals that carry published index data.
 - Closed-form analytical SHG expressions, symbolic in the input polarization, the *d* tensor and
   the film thickness.
 - *d*-tensor extraction: recover *d*ᵢⱼ from a simulated or measured polarimetry scan.
@@ -195,6 +198,7 @@ extraction.
 |---|---|
 | Install and run the app | [Installation guide](https://shaarp-py.readthedocs.io/en/latest/guide/install_launch.html) · [First calculation](https://shaarp-py.readthedocs.io/en/latest/guide/first_run.html) |
 | Script the solvers | [Usage](https://shaarp-py.readthedocs.io/en/latest/usage.html) · [API reference](https://shaarp-py.readthedocs.io/en/latest/api/index.html) |
+| Compute a spectrum *I*(λ), or a λ × θ map | In the app: [Wavelength Scan Range](https://shaarp-py.readthedocs.io/en/latest/guide/si_tab.html#wavelength-scan-range) · From Python: [Sweeping the wavelength](https://shaarp-py.readthedocs.io/en/latest/usage.html#sweeping-the-wavelength) |
 | Learn by example | [Tutorial notebooks](https://shaarp-py.readthedocs.io/en/latest/tutorials/index.html) · [Example scripts](https://shaarp-py.readthedocs.io/en/latest/examples/index.html) |
 | Reproduce the papers | [the two notebooks below](#reproduce-the-papers) |
 | See what is tested, and how | [How it is tested](https://shaarp-py.readthedocs.io/en/latest/validation.html) |
@@ -209,7 +213,7 @@ Two notebooks reproduce every case figure of both papers beside the published pa
 
 | Notebook | Paper |
 |---|---|
-| [`notebooks/Reproduce_SHAARP_si_paper.ipynb`](https://github.com/Rui-Zu/SHAARP.py/blob/master/notebooks/Reproduce_SHAARP_si_paper.ipynb) | ♯SHAARP.si (2022): GaAs (111), LiNbO₃ (112̄0), KTP (100), TaAs (112) polarimetry |
+| [`notebooks/Reproduce_SHAARP_si_paper.ipynb`](https://github.com/Rui-Zu/SHAARP.py/blob/master/notebooks/Reproduce_SHAARP_si_paper.ipynb) | ♯SHAARP.si (2022): GaAs (111), LiNbO₃ (11-20), KTP (100), TaAs (112) polarimetry |
 | [`notebooks/Reproduce_SHAARP_ml_paper.ipynb`](https://github.com/Rui-Zu/SHAARP.py/blob/master/notebooks/Reproduce_SHAARP_ml_paper.ipynb) | ♯SHAARP.ml (2024): quartz Maker fringes, quartz + Au, LiNbO₃/KTP and ZnO / Pt / Al₂O₃ polarimetry, LiNbO₃ / quartz interference, twisted-bilayer MoS₂ |
 
 <div align="center">
@@ -230,7 +234,7 @@ current member, and it carries both earlier methods.
 |---|---|---|---|
 | **♯SHAARP.si** | Reflected SHG polarimetry from a **single interface**, solved without the usual slab and transparency approximations: full anisotropic eigenmodes, absorbing media, arbitrary point group and surface orientation, and closed-form expressions alongside the numerics. | Mathematica package, v1.0.0 – v1.0.3 (2022) | [repo](https://github.com/Rui-Zu/SHAARP) · [paper](https://doi.org/10.1038/s41524-022-00930-4) |
 | **♯SHAARP.ml** | The same physics extended to an **N-layer stack**, with complete multireflection of both the fundamental and the second-harmonic waves, so Maker fringes, Fresnel curves and multilayer polarimetry come out of one boundary-value solve. | Mathematica package, v1.0.0 – v1.0.2 (2024) | [repo](https://github.com/bzw133/SHAARP.ml) · [paper](https://doi.org/10.1038/s41524-024-01229-2) |
-| **SHAARP.py** *(this repo)* | Both methods in one place, free of any commercial licence: a Python library, a standalone desktop app, symbolic closed forms, *d*-tensor extraction from a polarimetry scan, an N-layer stack editor, and a palette for your own materials. | Python package + desktop app, v1.0.0 (2026) | [releases](https://github.com/Rui-Zu/SHAARP.py/releases) · [docs](https://shaarp-py.readthedocs.io/en/latest/) |
+| **SHAARP.py** *(this repo)* | Both methods in one place, free of any commercial licence: a Python library, a standalone desktop app, symbolic closed forms, *d*-tensor extraction from a polarimetry scan, an N-layer stack editor, wavelength sweeps, and a palette for your own materials. | Python package + desktop app, v1.0.0 (2026) | [releases](https://github.com/Rui-Zu/SHAARP.py/releases) · [docs](https://shaarp-py.readthedocs.io/en/latest/) |
 
 The two Mathematica packages remain the reference implementations of their methods, and SHAARP.py's
 solvers are checked against their published equations and reference output. See

@@ -1,7 +1,7 @@
 # Numeric SHG solvers
 
 The validated numeric building blocks behind the facades — single-interface reflected SHG and the
-multilayer boundary problem. These mirror the structure of the original Mathematica routines.
+multilayer boundary problem. These follow the structure of the original Mathematica routines.
 
 ## Single interface
 

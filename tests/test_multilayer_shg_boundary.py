@@ -15,6 +15,7 @@ from shaarp.multilayer_shg_boundary import (
     analyze_transmitted_2omega_waves,
     analyzer_jones_from_psi_deg,
     analyzer_jones_from_polarimetry,
+    exit_medium_index,
     incident_jones_from_polarimetry,
     reflected_2omega_jones_sp,
     transmitted_2omega_jones_sp,
@@ -537,12 +538,18 @@ class MultilayerSHGBoundaryTests(unittest.TestCase):
         p_amp, p_intensity = analyze_reflected_2omega(result.shg, (0.0, 1.0))
         mixed_amp, mixed_intensity = analyze_reflected_2omega(result.shg, (1 / np.sqrt(2), 1 / np.sqrt(2)))
 
+        # Intensity carries the EXIT medium's index at 2omega: I = n_exit * |E|^2. For the reflected
+        # beam that is the incident medium, whose eps_2omega here is 1.04^2 -- deliberately not 1,
+        # so this test discriminates the factor instead of hiding it.
+        n_exit = exit_medium_index(result.shg.reflected_2omega)
+        self.assertGreater(n_exit, 1.0, "test ambient must not be index-1, or this proves nothing")
+
         self.assertTrue(np.isclose(s_amp, s_component))
         self.assertTrue(np.isclose(p_amp, p_component))
-        self.assertTrue(np.isclose(s_intensity, abs(s_component) ** 2))
-        self.assertTrue(np.isclose(p_intensity, abs(p_component) ** 2))
+        self.assertTrue(np.isclose(s_intensity, n_exit * abs(s_component) ** 2))
+        self.assertTrue(np.isclose(p_intensity, n_exit * abs(p_component) ** 2))
         self.assertTrue(np.isclose(mixed_amp, (s_component + p_component) / np.sqrt(2)))
-        self.assertTrue(np.isclose(mixed_intensity, abs((s_component + p_component) / np.sqrt(2)) ** 2))
+        self.assertTrue(np.isclose(mixed_intensity, n_exit * abs((s_component + p_component) / np.sqrt(2)) ** 2))
 
     def test_transmitted_2omega_jones_components_and_analyzer_intensity(self):
         system = _configured_system(theta_deg=10.0)
@@ -553,12 +560,15 @@ class MultilayerSHGBoundaryTests(unittest.TestCase):
         p_amp, p_intensity = analyze_transmitted_2omega(result.shg, (0.0, 1.0))
         mixed_amp, mixed_intensity = analyze_transmitted_2omega(result.shg, (1 / np.sqrt(2), 1 / np.sqrt(2)))
 
+        # I = n_exit * |E|^2, with the exit medium being the SUBSTRATE for the transmitted beam.
+        n_exit = exit_medium_index(result.shg.substrate_2omega)
+
         self.assertTrue(np.isclose(s_amp, s_component))
         self.assertTrue(np.isclose(p_amp, p_component))
-        self.assertTrue(np.isclose(s_intensity, abs(s_component) ** 2))
-        self.assertTrue(np.isclose(p_intensity, abs(p_component) ** 2))
+        self.assertTrue(np.isclose(s_intensity, n_exit * abs(s_component) ** 2))
+        self.assertTrue(np.isclose(p_intensity, n_exit * abs(p_component) ** 2))
         self.assertTrue(np.isclose(mixed_amp, (s_component + p_component) / np.sqrt(2)))
-        self.assertTrue(np.isclose(mixed_intensity, abs((s_component + p_component) / np.sqrt(2)) ** 2))
+        self.assertTrue(np.isclose(mixed_intensity, n_exit * abs((s_component + p_component) / np.sqrt(2)) ** 2))
 
     def test_analyzer_polarimetry_uses_scalar_psi(self):
         base = _configured_system(theta_deg=10.0)
@@ -576,7 +586,9 @@ class MultilayerSHGBoundaryTests(unittest.TestCase):
         self.assertTrue(np.isclose(analyzer[0], 1.0))
         self.assertTrue(np.isclose(analyzer[1], 0.0))
         self.assertTrue(np.isclose(amplitude, s_component))
-        self.assertTrue(np.isclose(intensity, abs(s_component) ** 2))
+        # I = n_exit * |E|^2 (reflected -> incident medium's index at 2omega).
+        self.assertTrue(np.isclose(intensity,
+                                   exit_medium_index(result.shg.reflected_2omega) * abs(s_component) ** 2))
 
     def test_analyzer_jones_from_psi_deg_matches_polarimetry_helper(self):
         base = _configured_system(theta_deg=10.0)
@@ -608,7 +620,9 @@ class MultilayerSHGBoundaryTests(unittest.TestCase):
         self.assertEqual(sweep.intensity.shape, (3,))
         self.assertTrue(np.all(sweep.fundamental_residual_norm < 1e-9))
         self.assertTrue(np.all(sweep.shg_residual_norm < 1e-7))
-        self.assertTrue(np.allclose(sweep.intensity, np.abs(sweep.analyzer_amplitude) ** 2))
+        # I = n_exit * |E|^2 per point (reflected -> the incident medium's index at 2omega).
+        _n_exit = np.array([exit_medium_index(r.shg.reflected_2omega) for r in sweep.results])
+        self.assertTrue(np.allclose(sweep.intensity, _n_exit * np.abs(sweep.analyzer_amplitude) ** 2))
 
         first_system = MultilayerSystem(
             wavelength_um=base.wavelength_um,
@@ -655,15 +669,25 @@ class MultilayerSHGBoundaryTests(unittest.TestCase):
         np.testing.assert_allclose(sweep.phi_deg, [30.0, 30.0, 30.0])
         self.assertTrue(np.all(sweep.fundamental_residual_norm < 1e-9))
         self.assertTrue(np.all(sweep.shg_residual_norm < 1e-7))
-        self.assertTrue(np.allclose(sweep.intensity, np.abs(sweep.analyzer_amplitude) ** 2))
+        # I = n_exit * |E|^2 per point (reflected -> the incident medium's index at 2omega).
+        _n_exit = np.array([exit_medium_index(r.shg.reflected_2omega) for r in sweep.results])
+        self.assertTrue(np.allclose(sweep.intensity, _n_exit * np.abs(sweep.analyzer_amplitude) ** 2))
         self.assertEqual(sweep.reflected_parallel_intensity.shape, (3,))
         self.assertEqual(sweep.reflected_perpendicular_intensity.shape, (3,))
         self.assertEqual(sweep.transmitted_parallel_intensity.shape, (3,))
         self.assertEqual(sweep.transmitted_perpendicular_intensity.shape, (3,))
-        np.testing.assert_allclose(sweep.reflected_parallel_intensity, np.abs(sweep.reflected_parallel_amplitude) ** 2)
-        np.testing.assert_allclose(sweep.reflected_perpendicular_intensity, np.abs(sweep.reflected_perpendicular_amplitude) ** 2)
-        np.testing.assert_allclose(sweep.transmitted_parallel_intensity, np.abs(sweep.transmitted_parallel_amplitude) ** 2)
-        np.testing.assert_allclose(sweep.transmitted_perpendicular_intensity, np.abs(sweep.transmitted_perpendicular_amplitude) ** 2)
+        # I = n_exit * |E|^2, with DIFFERENT exit media for the two directions: the reflected pair
+        # leaves into the incident medium (eps_2omega = 1.04^2 here) and the transmitted pair into
+        # the substrate. Asserting them separately is what catches applying one index to both.
+        _n_t = np.array([exit_medium_index(r.shg.substrate_2omega) for r in sweep.results])
+        np.testing.assert_allclose(sweep.reflected_parallel_intensity,
+                                   _n_exit * np.abs(sweep.reflected_parallel_amplitude) ** 2)
+        np.testing.assert_allclose(sweep.reflected_perpendicular_intensity,
+                                   _n_exit * np.abs(sweep.reflected_perpendicular_amplitude) ** 2)
+        np.testing.assert_allclose(sweep.transmitted_parallel_intensity,
+                                   _n_t * np.abs(sweep.transmitted_parallel_amplitude) ** 2)
+        np.testing.assert_allclose(sweep.transmitted_perpendicular_intensity,
+                                   _n_t * np.abs(sweep.transmitted_perpendicular_amplitude) ** 2)
         np.testing.assert_allclose(sweep.analyzer_amplitude, sweep.reflected_parallel_amplitude)
         np.testing.assert_allclose(sweep.intensity, sweep.reflected_parallel_intensity)
 
@@ -757,8 +781,14 @@ class MultilayerSHGBoundaryTests(unittest.TestCase):
         self.assertEqual(len(sweep.results), 3)
         self.assertTrue(np.all(sweep.fundamental_residual_norm < 1e-9))
         self.assertTrue(np.all(sweep.shg_residual_norm < 1e-7))
-        np.testing.assert_allclose(sweep.parallel_intensity, np.abs(sweep.parallel_amplitude) ** 2)
-        np.testing.assert_allclose(sweep.perpendicular_intensity, np.abs(sweep.perpendicular_amplitude) ** 2)
+        # Maker fringes are TRANSMITTED, so I = n_substrate(2omega) * |E|^2 per point.
+        n_exit = np.array([
+            exit_medium_index(_transmitted_waves_for_maker_policy(r.shg, "shaarp_ml_selected"))
+            for r in sweep.results
+        ])
+        np.testing.assert_allclose(sweep.parallel_intensity, n_exit * np.abs(sweep.parallel_amplitude) ** 2)
+        np.testing.assert_allclose(sweep.perpendicular_intensity,
+                                   n_exit * np.abs(sweep.perpendicular_amplitude) ** 2)
         copy_lists = sweep.shaarp_ml_copy_lists()
         self.assertEqual(len(copy_lists), 2)
         np.testing.assert_allclose(copy_lists[0], sweep.list_mf_para)

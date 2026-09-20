@@ -17,6 +17,9 @@ from shaarp import (
     run_sample_rotation,
     run_si_full_analytical,
     run_ml_partial_analytical,
+    run_si_spectrum,
+    run_ml_spectrum,
+    run_spectral_map,
     compare_with_mathematica,
     export_result,
 )
@@ -176,7 +179,7 @@ the case the symbolic closed form (a full Booker quartic) cannot reach.
 
 Runnable, plotted examples: `examples/gaas111_shg_polarimetry.py` (GaAs(111) closed-form
 polarimetry with the C3v 3-fold sample-azimuth signature), `examples/d_extraction_demo.py`
-(simulate a Maker-geometry scan of a known crystal → recover its d-tensor to ~1e-9), and
+(simulate a Maker-geometry scan of a known crystal, then recover its d-tensor to ~1e-9), and
 `examples/maker_fringes_dense.py` (Full/JK/HH Maker fringes at the 0.1° angular-sampling rigor of
 npj Comput. Mater. 10, 64 (2024), with a 0.02° zoom resolving the 2ω multiple-reflection fine
 fringes).
@@ -327,6 +330,13 @@ Reflected 2omega output helpers are available for analyzer-style postprocessing:
 `analyze_reflected_2omega_polarimetry`. They extract reflected `(s, p)`
 components and compute analyzer-projected complex amplitude/intensity.
 
+The intensity these return is `n_exit * |E|^2`, with `n_exit` read by `exit_medium_index` from
+the solved mode's own wavevector, so it stays correct for an anisotropic or absorbing substrate.
+No `cos(theta)` is applied at 2omega; inserting one breaks agreement with the analytic
+Herman–Hayden expression. ♯SHAARP.ml's `MFList` emits the unweighted `|E|^2`, and
+`MultilayerMakerFringesSweepResult.shaarp_ml_copy_lists_field_basis()` returns that form for
+comparisons against the original. Why the index belongs and the cosine does not: {doc}`conventions`.
+
 `solve_multilayer_shg_polarimetry_sweep` runs the staged system workflow across
 broadcast-compatible `theta_deg`, `phi_deg`, `psi_deg`, and `ellipticity_deg`
 arrays, returning analyzer amplitudes, intensities, and residual norms.
@@ -428,6 +438,97 @@ Current verification policy:
 
 Command-line Wolfram evaluation is only needed to REGENERATE reference data; every shipped test
 runs against the frozen JSON exports in `benchmarks/` and needs no Mathematica installation.
+
+## Wavelength dependence
+
+Two exact statements set what a wavelength sweep can and cannot do, and both are checked in the
+suite rather than asserted here.
+
+**A single interface is scale-free.** The single-interface problem contains no length, so with
+`mu = eps0 = 1` both sides of the driven wave equation are homogeneous of degree two in the
+frequency and it cancels. Evaluating one geometry at `omega = 1`, `2*pi/0.8` and `2*pi/1.55`
+returns the same reflected second-harmonic field to **5.2e-15**. The wavelength therefore reaches
+a single-interface answer through the permittivity and through nothing else, which is why the
+solver keeps its dimensionless `omega` of 1 and 2 and only the material is swept.
+
+**A layer stack answers to the product of frequency and thickness.** At fixed permittivity the
+multilayer answer depends on the frequency only through `omega * h`, so scaling every layer
+thickness in step with the wavelength leaves the result unchanged — measured at **2.7e-14** across
+a 2.8-fold span of wavelength, while the same sweep without the thickness scaling moves by more
+than its own mean. One consequence is worth stating plainly: a multilayer wavelength sweep at
+frozen permittivity is numerically a thickness sweep, not a spectrum.
+
+**The SHG tensor is held constant.** The case-study data store one `d` per material with no
+wavelength axis, and no dispersion model for it ships today, so `d` is held at its tabulated value
+across a sweep. A computed spectrum therefore carries the dispersion of the linear optics and a
+wavelength-independent nonlinearity. Away from an electronic resonance `d` varies slowly and the
+linear dispersion sets the spectral shape; approaching a resonance at the fundamental or the second
+harmonic the real `d(lambda)` rises, and a spectrum computed this way understates the variation
+there. Every SHG spectral result, a spectrum or a Maker map, carries this in
+`stages["assumptions"]`, and `export_result`'s JSON keeps it. The app's **Export data** JSON writes
+the same assumptions as a top-level `assumptions` block, without the rest of `stages`, and the app
+also states it under every SHG spectrum plot's title. A Fresnel map involves no SHG tensor, so its
+assumptions record only that it is linear optics at the fundamental. The CSV export writes the
+numeric columns only.
+
+A future `d(lambda)` by Miller's rule would need no new data — the linear susceptibility is already
+tabulated at both frequencies, so the Miller delta follows from each material's own values at its
+native wavelength — but it applies only to non-absorbing materials, which excludes the metals and
+the strongly absorbing case-study materials.
+
+**The second harmonic reads an index table at half the wavelength.** `table_spectrum` evaluates
+the permittivity at `lambda` for the fundamental and at `lambda / 2` for the second harmonic, so a
+table covering `lo`–`hi` µm answers an SHG sweep over `2 * lo`–`hi`. A Fresnel map is linear optics
+at the fundamental: it reads the table at `lambda` only, answers over the whole `lo`–`hi`, and is
+exempt from the ultraviolet-pole refusal, which concerns `eps(2w)`. Outside the span a sweep can
+answer, the index is held at the nearest tabulated value, and a sweep reports it once per table
+rather than once per point. In the app, picking a dispersive crystal from the case list clamps the
+scan range into that span, rounded inward to 0.01 µm (from the table's low end in Fresnel mode); a
+session restore does not, so a saved range comes back as it was saved.
+
+**Cost.** A wavelength sweep is one full solve per point; nothing hoists across wavelength, because
+the permittivities and the eigen-bases are wavelength-dependent. Measured through the app on
+2026-09-19, an SHG Simulation spectrum at the app's defaults costs about 14 ms a wavelength on a
+single 1 µm z-cut quartz film and about 26 ms on the Quartz + Au preset, so a hundred-point
+spectrum takes a few seconds at most. A wavelength-by-angle map is the product of its two grids,
+so prefer a coarse wavelength grid with a fine angle grid rather than both fine. The app's default
+grids make a Maker map of 43 wavelengths by 901 angles; measured through the app, that took 21 min
+on the single quartz film and 48 min on the Quartz + Au preset.
+
+The app therefore estimates every sweep before running it. A cheap first bound multiplies the
+number of points by a fixed cost per point: 0.09 s for a Maker map, 0.06 s for a Fresnel map,
+0.11 s for a stack spectrum and 0.03 s for a single-interface spectrum. Those constants only decide
+whether a run might be long, and they are not what a run costs: a thin film costs far less than
+they assume, and a map pays a setup at every wavelength. When the bound passes 15 s, the app times
+the job itself on one wavelength and on a few, taking the fastest of two runs each.
+The difference between the two removes the fixed setup, and the result is extrapolated to the full
+grid. A map is timed on one angle and on a few, and its setup is charged once per wavelength. For
+a 1,001-point spectrum of the quartz film the estimate read 9.5–18 s across repeats, against
+14.5 s real. The cost per wavelength creeps up over thousands of points, so the longest runs
+finish later than estimated: on the same day the two default Maker maps above were estimated at
+14–19 min and about 36 min.
+
+When the estimate passes a minute, **Update** asks first, except in a headless run, where it never
+shows the question. For the default Maker map on the Quartz + Au preset the question read "This is
+38,743 points (43 wavelengths × 901 angles) and will take about 36 minutes. For a quick first look,
+raise the λ step or the θ step." A spectrum is counted in wavelengths alone, as in "This is 10,001
+wavelengths and will take about 4 minutes. For a quick first look, raise the λ step.", and a run
+past an hour and a half is given in hours. What a declined, refused or failed run leaves on screen
+is described under [Wavelength Scan Range](guide/si_tab.md#wavelength-scan-range).
+
+**Undersampled fringes.** A stack's interference fringes run along the wavelength axis as well as
+the angle axis. An SHG spectrum or a Maker map estimates their spacing as
+`lambda**2 / (4 * n * h)`, with `h` a layer's thickness and `n` the largest real index of that
+layer at the fundamental or the second harmonic, and takes the closest spacing over the interior
+layers. When the λ step is more than half that spacing, a note says the curve is undersampled and
+suggests a step of about a fifth of it; the app rounds the suggestion down to what its step field
+can hold, and says so when even the smallest step is too coarse. A layer that absorbs both harmonics over a round trip through it is left out,
+because its fringes cannot reach the output. The 121.2 µm quartz plate of the Quartz + Au preset
+has fringes about 0.0009 µm apart near 0.8 µm, and the note puts them at 0.00084 µm there. A
+Fresnel map is linear optics at the fundamental, so it uses the fundamental's own spacing,
+`lambda**2 / (2 * n_w * h)` with `n_w` the largest real index at the fundamental, and leaves a layer
+out only when it is opaque at the fundamental: on the same plate the note reads 0.0017 µm near
+0.8 µm, against about 0.0019 µm measured along a Fresnel row at 40°.
 
 ## Verifying a packaged build
 

@@ -739,7 +739,33 @@ class SymbolicSIFullPolarimetry:
 
     @property
     def transmitted_intensity(self) -> Any:
-        """Total transmitted SHG intensity (squared magnitude of E_t) as a closed form in ``phi``."""
+        """Total transmitted SHG intensity (squared magnitude of E_t) as a closed form in ``phi``.
+
+        This is ``|E_t|^2``, WITHOUT the exit-medium index weighting the multilayer analyzers apply
+        (``multilayer_shg_boundary.exit_medium_index``) -- and that is CORRECT here, not an omission.
+
+        At a SINGLE interface the transmitted beam has nowhere to go: it propagates into a
+        semi-infinite crystal and is never collected (Rui, 2026-09-12: "in SI, since its single
+        interface, you are not using exit beam which is trapped in the semi infinite layer"). An
+        exit-medium index converts a field into the brightness of a beam that LEAVES into that
+        medium; with no exit there is no such beam and no factor to apply. What this property
+        returns is a field diagnostic -- the shape of the transmitted 2 omega pattern, which is what
+        the original SHAARP.si plots alongside the reflected one -- not a calibrated intensity.
+
+        So do NOT "fix" this by multiplying in an index. Besides being the wrong quantity, the
+        crystal is usually birefringent (LiNbO3, KTP, z-cut quartz, MoS2, TaAs, LBO ... are all
+        anisotropic at 2 omega), its two homogeneous 2 omega eigenmodes carry different effective
+        indices, and ``transmitted_field`` returns their SUM -- so there is no single ``n`` that
+        could be applied even if one belonged.
+
+        The reflected properties above need no factor either, for a different reason: reflected SHG
+        does leave the crystal, into the incident medium, and this symbolic chain fixes that at
+        n = 1 (``solve_biaxial_single_interface_shg_symbolic`` passes ``incident_index=1``).
+
+        Use the multilayer boundary solver when an absolute transmitted intensity matters -- there
+        the beam exits into a real medium, which is isotropic by rule
+        (``shaarp/layer_stack.py::_require_isotropic_halfspace``), so one index applies unambiguously.
+        """
         sp = _sympy()
         e_t = self.transmitted_field
         return sum(sp.Abs(c) ** 2 for c in e_t)
@@ -848,6 +874,12 @@ def solve_si_shg_full_analytical_symbolic(
     e_s = res.boundary.coefficients[0]
     e_p = res.boundary.coefficients[1]
     analyzed = sp.sin(psi) * e_s + sp.cos(psi) * e_p  # I(phi,psi)=|sin psi E_s + cos psi E_p|^2
+    # No exit-medium index factor here, and that is deliberate rather than an oversight. SHG
+    # intensity goes as n_exit * |E|^2 (see multilayer_shg_boundary.exit_medium_index); this is
+    # REFLECTED SHG, so the exit medium IS the incident medium, and the single-interface symbolic
+    # chain fixes that at n = 1 (solve_biaxial_single_interface_shg_symbolic passes
+    # incident_index=1). The factor is therefore identically unity on this path. If a non-air
+    # ambient is ever supported here, this line needs the weighting.
     intensity = sp.Abs(analyzed) ** 2
     return SymbolicSIFullPolarimetry(
         reflected_s=e_s, reflected_p=e_p, phi_symbol=phi, analyzer_symbol=psi,

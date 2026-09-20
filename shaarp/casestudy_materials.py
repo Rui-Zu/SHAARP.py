@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import json
 import re
+from dataclasses import dataclass
 from functools import lru_cache
 
 import numpy as np
@@ -137,6 +138,20 @@ GUI_SI_GROUPS: list[tuple[str, list[tuple[str, str]]]] = [
     ]),
 ]
 
+
+def gui_dispersive_group() -> tuple[str, list[tuple[str, str]]]:
+    """The dispersive variants, as a (header, [(label, label)]) group for the material combos.
+
+    Their labels ARE their keys -- they are resolved by shaarp.dispersion, not by this registry --
+    and each carries its wavelength range, because that is what decides whether the material can
+    answer the sweep being asked of it."""
+    from .dispersion import dispersive_material_names
+
+    names = dispersive_material_names()
+    return ("—  Dispersive (published index data)  —",
+            [(n, n) for n in names])
+
+
 _CASE_LABEL_TO_KEY: dict[str, str] = {label: key for label, key in GUI_ML_CASES}
 for _hdr, _entries in GUI_ML_GROUPS:
     _CASE_LABEL_TO_KEY.update({label: key for label, key in _entries})  # indented child forms
@@ -183,6 +198,133 @@ def casestudy_lambda_range(display_name: str) -> tuple[float, float] | None:
         return None
     g = [float(x) for x in (m.get("grid_um") or [])]
     return (min(g), max(g)) if g else None
+
+
+# A tabulated grid says where the data EXISTS, not where it is still physical. The exported
+# Sellmeier models run into their own ultraviolet pole at the HALF wavelength well inside the
+# 0.40-2.00 um grid: at lambda = 0.44 um KTP's eps(2w) reaches 7.0e3 and LiNbO3 (1550 nm) goes
+# to -0.33 with a zero imaginary part. A transparent medium cannot have a lossless negative
+# permittivity, and a principal value far above the material's own eps(w) is a pole rather than
+# dispersion -- so both symptoms are screened.
+#
+# Only eps(2w) is screened, never eps(w). In an ABSORBING medium eps(w) legitimately dwarfs
+# eps(2w) -- MoS2 sits at eps(2w) = 0.25 with a far larger eps(w) -- so the same ratio rule
+# applied to eps(w) rejects physically fine data. That costs nothing on today's registry, where
+# every absorbing material is constant-by-source and returns before reaching this screen; it
+# starts to matter the moment a dispersive absorbing material is added. Fenced directly on the
+# predicate in tests/test_casestudy_dispersion_quality.py rather than through the registry.
+_POLE_EPS_RATIO = 3.0
+
+
+def _point_is_physical(eps_w: np.ndarray, eps_2w: np.ndarray) -> bool:
+    diag_w = [eps_w[i, i] for i in range(3)]
+    diag_2w = [eps_2w[i, i] for i in range(3)]
+    if any(v.real < 0 and abs(v.imag) <= 1e-12 for v in diag_2w):
+        return False
+    reference = max(abs(v.real) for v in diag_w) or 1.0
+    return max(abs(v.real) for v in diag_2w) <= _POLE_EPS_RATIO * reference
+
+
+@dataclass(frozen=True)
+class SpectralSupport:
+    """What a case-study material's shipped optical data can support across a wavelength RANGE.
+
+    ``kind`` is one of:
+
+    ``"tabulated"``    a multi-point grid whose tensors genuinely vary with wavelength, so a
+                       spectrum computed from it is meaningful.
+    ``"constant"``     a multi-point grid whose tensors are identical at every point -- the
+                       original setup.nb defined the material with a constant index -- so a
+                       spectrum computed from it is FLAT.
+    ``"single_point"`` one tabulated wavelength (the .si palette cases, whose tensors are fixed
+                       values in the original notebook), so the interpolation returns that one
+                       tensor at every wavelength and a spectrum is likewise flat.
+
+    ``tabulated_um`` is the grid span, i.e. what :func:`casestudy_lambda_range` reports.
+    ``usable_um`` is the contiguous sub-interval of that span, anchored at the material's native
+    wavelength, where eps(2w) is still physical (see :func:`_point_is_physical`). The two differ
+    only for materials whose exported model runs into its ultraviolet pole inside its own grid.
+    """
+
+    name: str
+    kind: str
+    tabulated_um: tuple[float, float] | None
+    usable_um: tuple[float, float] | None
+    reason: str
+
+    @property
+    def varies(self) -> bool:
+        """True when a wavelength sweep over this material produces a non-flat spectrum."""
+        return self.kind == "tabulated"
+
+
+@lru_cache(maxsize=None)
+def casestudy_spectral_support(display_name: str) -> SpectralSupport:
+    """Describe what a wavelength RANGE over ``display_name`` can and cannot deliver.
+
+    Derived from the shipped data on every call rather than hand-maintained per material, so it
+    stays true if the registry is ever re-exported."""
+
+    m = _data()["materials"].get(display_name)
+    if not m:
+        return SpectralSupport(display_name, "single_point", None, None,
+                               f"{display_name!r} is not a Case Study material")
+    grid = np.asarray(m["grid_um"], dtype=float)
+    span = (float(grid.min()), float(grid.max()))
+    eps_w = np.asarray(m["epsW_re"], dtype=float) + 1j * np.asarray(m["epsW_im"], dtype=float)
+    eps_2w = np.asarray(m["eps2W_re"], dtype=float) + 1j * np.asarray(m["eps2W_im"], dtype=float)
+
+    if grid.size == 1:
+        return SpectralSupport(
+            display_name, "single_point", span, span,
+            # WHAT the data is, not what a sweep does with it: that depends on the path (flat on a
+            # single interface, a thickness sweep on a stack) and the spectral warning says both.
+            f"{display_name} carries one tabulated wavelength ({grid[0]:g} um); its tensors are "
+            "fixed values in the original notebook")
+
+    varies = bool(np.ptp(eps_w.real, axis=0).max() > 1e-12
+                  or np.ptp(eps_w.imag, axis=0).max() > 1e-12
+                  or np.ptp(eps_2w.real, axis=0).max() > 1e-12
+                  or np.ptp(eps_2w.imag, axis=0).max() > 1e-12)
+    if not varies:
+        return SpectralSupport(
+            display_name, "constant", span, span,
+            f"{display_name} carries a grid across {span[0]:g}-{span[1]:g} um but its tensors are "
+            "the same at every point (the original defines it with a constant index)")
+
+    # the usable window is the CONTIGUOUS run of physical points containing the native
+    # wavelength -- not min/max over all good points, which would span straight across an
+    # interior pole and re-admit exactly the values being screened out.
+    good = [_point_is_physical(eps_w[i], eps_2w[i]) for i in range(grid.size)]
+    anchor = int(np.argmin(np.abs(grid - float(m["native_lambda_um"]))))
+    if not good[anchor]:
+        return SpectralSupport(display_name, "tabulated", span, None,
+                               f"{display_name} has no physical eps(2w) at its own native "
+                               "wavelength; its exported dispersion needs regenerating")
+    lo = hi = anchor
+    while lo > 0 and good[lo - 1]:
+        lo -= 1
+    while hi < grid.size - 1 and good[hi + 1]:
+        hi += 1
+    usable = (float(grid[lo]), float(grid[hi]))
+    if usable == span:
+        return SpectralSupport(display_name, "tabulated", span, usable,
+                               f"{display_name} is dispersive across {span[0]:g}-{span[1]:g} um")
+    return SpectralSupport(
+        display_name, "tabulated", span, usable,
+        f"{display_name} is tabulated across {span[0]:g}-{span[1]:g} um but its eps(2w) is only "
+        f"physical over {usable[0]:g}-{usable[1]:g} um; outside that its index model runs into "
+        "its ultraviolet pole at half the wavelength")
+
+
+def casestudy_usable_lambda_range(display_name: str) -> tuple[float, float] | None:
+    """(min, max) um over which this material's eps(2w) is still physical, or None.
+
+    Narrower than :func:`casestudy_lambda_range` for materials whose exported Sellmeier model
+    poles inside its own grid. This -- not the grid span -- is the range a wavelength sweep may
+    use."""
+
+    return casestudy_spectral_support(display_name).usable_um
 
 
 # SI-frame azimuth corrections (earlier comments here said ",
@@ -261,9 +403,17 @@ def build_casestudy_ml_system(display_name: str, *, thickness_um: float = 1.0,
     Both half-spaces are isotropic media: the ambient defaults to air exactly."""
 
     from . import presets
+    # ONE resolution seam for the film, so a dispersive variant reaches this builder the same way
+    # it reaches the layer editor. Resolving here with build_casestudy_material instead made every
+    # dispersive ML Update fail with "unknown Case Study material", because the registry is only
+    # half of what the material combos offer. Imported lazily: layer_stack imports this module.
+    from .layer_stack import material_for_label
 
-    lam = casestudy_native_wavelength(display_name) if wavelength_um is None else float(wavelength_um)
-    film = build_casestudy_material(display_name, wavelength_um=lam)
+    if wavelength_um is None:
+        lam = casestudy_native_wavelength(display_name)
+    else:
+        lam = float(wavelength_um)
+    film = material_for_label(display_name, lam)
 
     def _iso(name, nw, n2w):
         return Material(

@@ -93,7 +93,7 @@ rather than one per angle, however fine the angular step.
 
 When the permittivity does turn, none of that holds. The mode structure changes with the azimuth,
 the closed form has no counterpart, and the response is computed point by point. The app checks
-which case it is in and takes the honest route.
+which case it is in and takes the matching route.
 
 ## What the detector sees
 

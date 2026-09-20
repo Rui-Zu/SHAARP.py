@@ -5,6 +5,7 @@ SHAARP.py is for experimentalists and theorists working on **nonlinear optics** 
 
 - simulate the **reflected SHG polarimetry** of a crystal of known symmetry and orientation,
 - model **Maker-fringe** thickness and angle scans of a thin film or a layer stack,
+- see how the SHG signal changes **across a band of wavelengths**,
 - obtain the **closed-form** SHG expression to fit experimental polarimetry, and
 - **extract the $d_{ij}$ tensor** from a measured polarimetry scan.
 
@@ -38,6 +39,9 @@ up by clicking can be repeated from a script (see {doc}`../usage`).
 * - Multiple reflections
   - n/a (single interface)
   - Full (FMR) / Jerphagnon–Kurtz / Herman–Hayden
+* - Wavelength sweep
+  - a spectrum $I_s(\lambda)$, $I_p(\lambda)$
+  - a spectrum, or Maker fringes and Fresnel curves mapped against $\lambda$ and $\theta_i$
 ```
 
 Both methods began as Mathematica packages from the same group; the papers and the original

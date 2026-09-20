@@ -36,6 +36,8 @@ beside a schematic of the sample.
 - Multilayer **Maker fringes** $I(\theta_i)$ under the *Full multiple-reflection*, *Jerphagnon–Kurtz*
   and *Herman–Hayden* treatments.
 - Linear **Fresnel** reflection and transmission coefficients.
+- **Wavelength sweeps**: an SHG spectrum $I(\lambda)$, or a map of Maker fringes or Fresnel curves
+  against both $\lambda$ and $\theta_i$, for five crystals that carry published index data.
 - **Closed-form analytical** SHG expressions, symbolic in the input polarization $\varphi$, the $d_{ij}$
   tensor and the film thickness $h$.
 - **$d$-tensor extraction**: recover $d_{ij}$ from a simulated or measured polarimetry scan.
@@ -101,7 +103,7 @@ current member, and it carries both earlier methods.
 * - **SHAARP.py**
   - Both methods in one place, free of any commercial licence: a Python library, a standalone
     desktop app, symbolic closed forms, *d*-tensor extraction from a polarimetry scan, an N-layer
-    stack editor, and a palette for your own materials.
+    stack editor, wavelength sweeps, and a palette for your own materials.
   - Python package + desktop app, v1.0.0 (2026)
   - [releases](https://github.com/Rui-Zu/SHAARP.py/releases) · this site
 ```

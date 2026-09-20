@@ -132,13 +132,18 @@ def run_case(case: dict) -> dict:
 
 
 def _sample_rotate_list(sweep) -> np.ndarray:
+    # FIELD basis: bare |E|^2, the convention SHAARP.ml's SampleRotate output emits. The sweep's
+    # *_intensity arrays are the PHYSICAL intensity and additionally carry the exit medium's index
+    # at 2omega (multilayer_shg_boundary.exit_medium_index), which agrees with the original only
+    # for an air exit medium. These lists feed Mathematica comparisons, so they ask for the
+    # original's convention explicitly rather than agreeing by accident on air-exit stacks.
     return np.column_stack(
         [
             sweep.sample_azimuth_deg,
-            sweep.reflected_parallel_intensity,
-            sweep.reflected_perpendicular_intensity,
-            sweep.transmitted_parallel_intensity,
-            sweep.transmitted_perpendicular_intensity,
+            np.abs(sweep.reflected_parallel_amplitude) ** 2,
+            np.abs(sweep.reflected_perpendicular_amplitude) ** 2,
+            np.abs(sweep.transmitted_parallel_amplitude) ** 2,
+            np.abs(sweep.transmitted_perpendicular_amplitude) ** 2,
         ]
     )
 

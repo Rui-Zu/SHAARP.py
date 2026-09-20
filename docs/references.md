@@ -18,8 +18,22 @@ began as Mathematica packages from the same group, and SHAARP.py grew out of the
 
 Every solver in SHAARP.py is checked against the published equations of the two papers and against
 reference output exported from the original packages, and the published figures of both papers are
-reproduced through the same compute path the desktop app uses. The evidence, with tolerances and
-the test that guards each comparison, is on {doc}`validation`. The machine-readable conventions and
+reproduced through the same compute path the desktop app uses. The linear multilayer stage is
+additionally cross-checked against two outside codes, so that stage does not rest on a single
+formalism:
+
+- **`tmm`** — S. J. Byrnes, *Multilayer optical calculations*,
+  [arXiv:1603.02720](https://arxiv.org/abs/1603.02720);
+  [github.com/sbyrnes321/tmm](https://github.com/sbyrnes321/tmm) (MIT).
+- **`inkstone`** — RCWA from the Fan group at Stanford;
+  [github.com/alexysong/inkstone](https://github.com/alexysong/inkstone) (AGPL-3.0). Method
+  background: Song, Catrysse and Fan, *Physical Review Letters* **120**, 193903 (2018),
+  [doi:10.1103/PhysRevLett.120.193903](https://doi.org/10.1103/PhysRevLett.120.193903).
+- A third, analytic reference follows M. Born and E. Wolf, *Principles of Optics*, 7th ed., §1.6, and
+  H. A. Macleod, *Thin-Film Optical Filters*, 4th ed., ch. 2.
+
+Neither package is a runtime dependency; they regenerate the stored reference numbers. The
+evidence, with tolerances and the test that guards each comparison, is on {doc}`validation`. The machine-readable conventions and
 validation status attached to each computation are exposed via {py:class}`~shaarp.PhysicsConventions`
 and {py:class}`~shaarp.ValidationStatus` (see {doc}`conventions`).
 

@@ -136,6 +136,81 @@ class DesktopAppSmokeTests(unittest.TestCase):
         wl.setValue(0.8)  # back inside the grid -> note hidden
         self.assertFalse(note.isVisibleTo(si), "clamp note stuck on for an in-grid wavelength")
 
+    def test_wavelength_note_distinguishes_the_pole_region_from_a_clamp(self):
+        """Inside the grid is NOT the same as physical. KTP's exported Sellmeier poles at the half
+        wavelength well inside its own 0.40-2.00 um grid -- eps(2w) reaches 7.0e3 at 0.44 um -- so
+        the clamp note, which only fires OUTSIDE the grid, said nothing at all there. A clamp is a
+        degraded answer; this is a wrong one, so it gets its own message and takes priority."""
+        from shaarp.casestudy_materials import casestudy_usable_lambda_range
+        from shaarp.desktop_app import TOOLTIPS, build_main_window
+
+        win = build_main_window()
+        ml = win.findChild(QtWidgets.QTabWidget).widget(1)
+        note = ml.findChild(QtWidgets.QLabel, "wl_note_ml")
+        self.assertIsNotNone(note, "wl_note_ml label missing from the ML tab")
+        combo = next(c for c in ml.findChildren(QtWidgets.QComboBox)
+                     if c.findText("    KTP x-cut · 1550 nm") >= 0)
+        combo.setCurrentIndex(combo.findText("    KTP x-cut · 1550 nm"))
+        wl = next(s for s in ml.findChildren(QtWidgets.QDoubleSpinBox)
+                  if s.toolTip() == TOOLTIPS["wavelength"])
+
+        lo, hi = casestudy_usable_lambda_range("KTP x-cut")
+        wl.setValue(lo - 0.10)          # inside the grid, inside the pole region
+        self.assertTrue(note.isVisibleTo(ml), "no note shown in the pole region")
+        self.assertIn("not physical", note.text())
+        self.assertNotIn("clamped", note.text(), "the pole region must not be reported as a clamp")
+        self.assertIn("KTP x-cut", note.text())
+
+        wl.setValue(lo + 0.10)          # inside the usable window -> quiet
+        self.assertFalse(note.isVisibleTo(ml), "note stuck on for a physical wavelength")
+
+        wl.setValue(hi + 5.0)           # outside the grid -> the ORIGINAL clamp message, intact
+        self.assertTrue(note.isVisibleTo(ml))
+        self.assertIn("clamped", note.text())
+
+    def test_a_dispersive_material_announces_its_clamp_on_the_scalar_wavelength_too(self):
+        """The sweep path warns when a table runs out; the SCALAR wavelength said nothing at all.
+
+        casestudy_lambda_range knows only the registry, so it returns None for a dispersive
+        variant and the clamp branch skipped it entirely -- typing 2.0 um against a table that
+        stops at 1.03 um produced no note on either tab. shaarp.dispersion does raise a
+        RuntimeWarning there, but that reaches a console the frozen app has not got.
+
+        The blue end binds at TWICE the distance the fundamental suggests, because eps(2w) is the
+        table read at lambda/2; both edges are checked here so a one-sided fix cannot pass."""
+        from shaarp.desktop_app import TOOLTIPS, build_main_window
+        from shaarp.dispersion import dispersive_material_names, load_shipped_table
+
+        name = next((n for n in dispersive_material_names() if n.startswith("TaAs")), None)
+        self.assertIsNotNone(name, "the TaAs index table is no longer shipped")
+        low, high = load_shipped_table(name).range_um
+        win = build_main_window()
+        for index, tag in ((0, "si"), (1, "ml")):
+            page = win.findChild(QtWidgets.QTabWidget).widget(index)
+            note = page.findChild(QtWidgets.QLabel, f"wl_note_{tag}")
+            self.assertIsNotNone(note, f"wl_note_{tag} label missing")
+            combo = next(c for c in page.findChildren(QtWidgets.QComboBox)
+                         if c.findText(name) >= 0)
+            combo.setCurrentIndex(combo.findText(name))
+            wl = next(s for s in page.findChildren(QtWidgets.QDoubleSpinBox)
+                      if s.toolTip() == TOOLTIPS["wavelength"])
+
+            with self.subTest(tab=tag, edge="past the red end"):
+                wl.setValue(high + 1.0)
+                self.assertTrue(note.isVisibleTo(page), "no note past the table's red end")
+                self.assertIn("clamped", note.text())
+
+            with self.subTest(tab=tag, edge="half wavelength past the blue end"):
+                # inside the table for the FUNDAMENTAL, outside it for the second harmonic
+                wl.setValue(1.5 * low)
+                self.assertTrue(note.isVisibleTo(page),
+                                "lambda/2 fell off the blue end of the table and nothing said so")
+
+            with self.subTest(tab=tag, edge="inside"):
+                wl.setValue(0.5 * (2.0 * low + high))
+                self.assertFalse(note.isVisibleTo(page),
+                                 "note stuck on for a wavelength the table fully answers")
+
     def test_window_builds_with_both_interface_tabs(self):
         from shaarp.desktop_app import build_main_window
 

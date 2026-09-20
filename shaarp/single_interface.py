@@ -66,6 +66,14 @@ def single_interface_intensity(
     solve anisotropic eigenmodes and 2omega boundary conditions; this function
     keeps the same configuration objects but uses an effective-index Fresnel
     model, tensor contraction P_i=d_ijk E_j E_k, and analyzer projection.
+
+    Intensity here is bare ``|E|^2``. The full solver weights SHG intensities by the exit medium's
+    index at 2omega (``multilayer_shg_boundary.exit_medium_index``), since a plane wave carries
+    ``I = (1/2) c eps0 n |E|^2``. That weighting is deliberately NOT applied here: the reflected
+    beam leaves into the incident medium, whose index this reduced model treats as 1, so the factor
+    would be unity regardless -- and the model makes no claim to absolute intensities, so a partial
+    correction would imply a rigour it does not have. Use the multilayer boundary solver instead
+    when absolute intensity matters.
     """
 
     pol = polarimetry or Polarimetry()

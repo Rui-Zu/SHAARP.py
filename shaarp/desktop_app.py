@@ -12,6 +12,7 @@ Headless smoke (CI): set QT_QPA_PLATFORM=offscreen and call build_main_window().
 
 from __future__ import annotations
 
+import math
 import sys
 import time
 
@@ -51,6 +52,39 @@ from .shaarp_gui import (
 # describes that UI. Attribution corrected after checking the primary sources.
 # so the in-app guidance matches what the Mathematica GUI's manual tells its users.
 # ---------------------------------------------------------------------------
+
+# A wavelength sweep estimated to run longer than LONG_RUN_SECONDS asks before computing
+# (_confirm_long_run). SECONDS_PER_POINT is only the cheap first bound: measured through the
+# spectral solvers on the shipped Quartz + Au preset at realistic sizes (2026-09-19; 2 x 451 Maker,
+# 2 x 900 Fresnel, 400-point spectra) -- Maker 88 ms, Fresnel 60 ms, ML spectrum 110 ms (full
+# multiple reflections, all waves), SI spectrum 31 ms on z-cut quartz. A run that bound puts above
+# PROBE_ABOVE_SECONDS is then timed on one wavelength of the actual job and extrapolated, because a
+# per-point price is wrong both ways: a thin single film costs far less than the preset, and a map
+# pays a setup per wavelength that per-point pricing ignores.
+LONG_RUN_SECONDS = 60.0
+PROBE_ABOVE_SECONDS = 15.0
+SECONDS_PER_POINT = {"maker": 0.09, "fresnel": 0.06, "ml_spectrum": 0.11, "si_spectrum": 0.03}
+
+
+def _long_run_text(n_lambda: int, n_theta: int, est_seconds: float) -> str:
+    """The long-run question's text. A spectrum is counted in wavelengths alone ("10,001 points
+    (10,001 wavelengths)" said one number twice), and a run past an hour and a half in hours rather
+    than "about 2,058 minutes"."""
+    minutes = est_seconds / 60.0
+    if minutes >= 90.0:
+        when = "about {0:,.0f} hours".format(minutes / 60.0)
+    elif minutes >= 1.5:
+        when = "about {0:,.0f} minutes".format(minutes)
+    else:
+        when = "about a minute"
+    if n_theta > 1:
+        what = "{0:,} points ({1:,} wavelengths × {2:,} angles)".format(
+            n_lambda * n_theta, n_lambda, n_theta)
+    else:
+        what = "{0:,} wavelengths".format(n_lambda)
+    return ("This is {0} and will take {1}. For a quick first look, raise the λ step{2}.\n\n"
+            "Compute it now?".format(what, when, " or the θ step" if n_theta > 1 else ""))
+
 TOOLTIPS = {
     "functionality_si": (
         "Choose what to calculate for the single interface.\n"
@@ -232,6 +266,22 @@ TOOLTIPS = {
         "The step size (in degrees) sets the resolution: a smaller step is finer but slower.\n"
         "(Fresnel Coefficients has its own separate scan-range section.)"
     ),
+    "spectral_sweep": (
+        "Sweep the fundamental wavelength instead of holding it at a single value.\n"
+        "The geometry has to be fixed for the result to be a spectrum, so turning this on fixes\n"
+        "the polarizer, the analyzer and the sample rotation at their current values; turning it\n"
+        "off gives them back.\n"
+        "SHG Simulation then plots intensity against wavelength. On the SHAARP.ml tab, Maker\n"
+        "Fringes and Fresnel Coefficients plot a wavelength-by-angle map.\n"
+        "The SHG tensor d is held constant across the sweep -- only the dielectric tensors move."
+    ),
+    "lambda_range": (
+        "The spectrum is calculated for fundamental wavelengths between lambda_min and\n"
+        "lambda_max (in micrometres), at the given step.\n"
+        "A material whose dielectric data does not vary with wavelength gives a flat spectrum,\n"
+        "and the note under the wavelength field says so. Setting min equal to max collapses the\n"
+        "sweep back to a single wavelength."
+    ),
     "assumptions": (
         "Apply full multiple reflections (FMR), Jerphagnon-Kurtz (JK) or Herman-Hayden (HH)\n"
         "assumptions for the calculation of the polar plots, Fresnel coefficients and/or Maker\n"
@@ -313,6 +363,12 @@ and the scan range.</li>
 <li>Click <b>Update / Run</b>. Hover any control for help (text taken from the original SHAARP
 documentation). Use <b>Export data</b> to save the numeric results (and analytical closed forms).</li>
 </ol>
+<p><b>A spectrum instead of a single wavelength:</b> tick <b>sweep the wavelength</b> in the
+<b>Wavelength Scan Range</b> group and set &lambda; min, &lambda; max and the step. SHG Simulation
+then plots intensity against wavelength on the <b>Spectrum</b> tab; on the SHAARP.ml tab Maker
+Fringes and Fresnel Coefficients give a wavelength-by-angle map. For a real spectrum pick a
+crystal from the <b>Dispersive</b> group of the case list; most other materials are defined at one
+wavelength, and the amber note says so. The SHG tensor is held constant across the sweep.</p>
 <p><i>&#966; = 0&deg; is p-polarized; &#966; = 90&deg; is s-polarized. Every computation routes
 through the same solvers, which the test suite checks on every commit.</i></p>
 <hr>
@@ -338,10 +394,15 @@ the references above.</i></p>
 
 
 # Branding text faithful to the original GUIs' header (authors/version/acknowledgment).
+# The version is READ from the package, not typed here: it was a literal "1.0.0" while the About box
+# already read __version__, so a release bump would have left the banner behind. __version__ is the
+# first assignment in the package __init__, so importing it here is safe at any import order.
+from . import __version__ as _BANNER_VERSION  # noqa: E402
+
 BRANDING_HTML = (
     "<b>SHAARP.py</b> &mdash; Second Harmonic Analysis of Anisotropic Rotational Polarimetry"
     "<br><span style='color:#555'>Both &#9839;SHAARP methods, si and ml, in one free app "
-    "(Zu, Wang, Weber, Saha, Chen &amp; Gopalan). Version 1.0.0. "
+    "(Zu, Wang, Weber, Saha, Chen &amp; Gopalan). Version " + _BANNER_VERSION + ". "
     "Please properly acknowledge the SHAARP software.</span>"
 )
 
@@ -558,13 +619,20 @@ def _friendly_validation_status(raw: str) -> str:
     """
 
     raw = str(raw)
-    if "not_fully_mathematica_validated" in raw or raw.startswith("staged_python"):
+    # ANY negated tag first. The match branch below tests substrings, and a tag such as
+    # "not_mathematica_validated" (every spectrum) or "...__not_full_mathematica_validated" (the
+    # analytical modes) contains both of its words -- so those used to be reported as a match.
+    if "unavailable" in raw:
+        return "Checked: reference data is not bundled in this build."
+    if "not_" in raw or raw.startswith("staged_python"):
         return ("Checked: the solver is covered by the test suite; this particular configuration is "
                 "not one of the reference cases.")
     if "mathematica" in raw and "validated" in raw:
-        return "Checked: this configuration matches its reference case."
-    if "unavailable" in raw:
-        return "Checked: reference data is not bundled in this build."
+        # The tag is set per SOLVER PATH, not per configuration: every Maker run through the
+        # validated transmitted-wave policy carries it, whatever the material. "This configuration
+        # matches its reference case" therefore claimed a comparison that never happened for a
+        # custom film or a dispersive material, which has no reference case at all.
+        return "Checked: this solver path matches the original package on its reference cases."
     return f"Checked: {raw.replace('_', ' ')}"
 
 
@@ -575,8 +643,18 @@ def _friendly_error_message(exc: BaseException) -> str:
     detail = f"{type(exc).__name__}: {exc}"
     hints = []
     text = str(exc).lower()
-    if text.startswith("scan range:"):
-        return str(exc)  # already a complete, user-facing instruction
+    if (text.startswith("scan range:") or text.startswith("fresnel scan range:")
+            or text.startswith("the requested wavelength range")
+            # the half-space isotropy refusal (layer_stack._require_isotropic_halfspace): it names
+            # the row, the offending indices and the remedy. With the generic preamble in front,
+            # the remedy fell below the status label's two visible lines.
+            or "must be isotropic" in text):
+        # already a complete, user-facing instruction: it names the material, the range
+        # that IS usable and what to do about it, so the generic "check your tensors"
+        # hint would only bury it. Only its first letter is raised: the text starts lowercase
+        # as an exception message does, and read as a sentence beside the capitalised notes.
+        message = str(exc)
+        return message[:1].upper() + message[1:]
     if "singular" in text:
         hints.append("The dielectric tensor looks unphysical (singular). Check the ε entries -- "
                       "the diagonal should be n² (of order 1-20), never all zeros.")
@@ -1298,6 +1376,75 @@ def build_main_window():
         w_lay.addRow("", wl_note)
         form_col.addWidget(g_wave)
 
+        # Wavelength Scan Range -- a scan-range group attached to the EXISTING functionalities
+        # rather than a new functionality entry. A new entry would change the frozen-exe gui-smoke
+        # cell count and would make the case-by-functionality matrix sweep drive a spectrum across
+        # every case material at three angles, which on the slowest single-interface case runs into
+        # the sweep's per-cell time budget. Off by default, so neither happens.
+        #
+        # The switch is a QCheckBox, NOT the group's own collapse toggle: the session walker reads
+        # a QGroupBox's value as None, so a group's checked state is walked but never serialized,
+        # and a saved session would silently come back with the sweep off.
+        spectral_on = QtWidgets.QCheckBox("sweep the wavelength")
+        _tip(spectral_on, "spectral_sweep")
+        lam_min = _NumBox(0.55, 0.05, 20.0, decimals=4)
+        lam_max = _NumBox(1.60, 0.05, 20.0, decimals=4)
+        lam_step = _NumBox(0.025, 0.0001, 5.0, decimals=4)
+        for _b in (lam_min, lam_max, lam_step):
+            _tip(_b, "lambda_range")
+        g_spec, sp_lay = _collapsible_group(QtWidgets, "Wavelength Scan Range",
+                                            QtWidgets.QFormLayout)
+        sp_lay.addRow("", spectral_on)
+        # short labels on purpose: the input column is measured and capped, and a form's minimum
+        # is the sum of its two column maxima taken from DIFFERENT rows.
+        lam_rows = [_spin_row(QtWidgets, lam_min,
+                              _angle_buttons(QtWidgets, [0.4, 0.55, 0.8, 1.0], lam_min)),
+                    _spin_row(QtWidgets, lam_max,
+                              _angle_buttons(QtWidgets, [1.2, 1.6, 2.0], lam_max)),
+                    _spin_row(QtWidgets, lam_step,
+                              _angle_buttons(QtWidgets, [0.01, 0.025, 0.05, 0.1], lam_step))]
+        sp_lay.addRow("λ min (µm)", lam_rows[0])
+        sp_lay.addRow("λ max (µm)", lam_rows[1])
+        sp_lay.addRow("λ step (µm)", lam_rows[2])
+        # The analytical modes deliver an EXPRESSION, not a curve, and the compute path has no
+        # spectrum for them. Leaving the switch live there would be a control that changes nothing
+        # -- so it greys out and this line says where a spectrum does come from.
+        spec_note = QtWidgets.QLabel("")
+        spec_note.setObjectName(f"spec_note_{which}")
+        spec_note.setWordWrap(True)
+        spec_note.setStyleSheet("color: #555; font-size: 8pt;")
+        spec_note.setVisible(False)
+        sp_lay.addRow("", spec_note)
+        form_col.addWidget(g_spec)
+        page._spectral_state = lambda: {
+            "on": bool(spectral_on.isEnabled() and spectral_on.isChecked()),
+            "min_um": float(lam_min.value()),
+            "max_um": float(lam_max.value()),
+            "step_um": float(lam_step.value()),
+        }
+
+        def _confirm_long_run(n_lambda: int, n_theta: int, est_seconds: float) -> bool:
+            """Ask before a wavelength sweep that will run for a long time.
+
+            With the default grids a Maker map is 43 wavelengths by 901 angles. Measured through the
+            app (2026-09-19): 21 min on a single 1 um z-cut quartz film, 48 min on the Quartz + Au
+            preset -- long enough that a user who clicked Update expecting seconds would think the
+            app had hung. The estimate times one wavelength of the actual job (see
+            PROBE_ABOVE_SECONDS), so a 1-D spectrum with a tiny step is caught too.
+
+            NEVER modal in a headless run. A blocking dialog once hung an offscreen run for ten
+            hours, so the smoke-test sink and the offscreen platform both pass straight through.
+            A page attribute, so a test can replace it and see exactly when it is consulted."""
+            if getattr(win, "_gui_smoke_errors", None) is not None:
+                return True
+            if QtWidgets.QApplication.platformName() == "offscreen":
+                return True
+            answer = QtWidgets.QMessageBox.question(
+                win, "Long computation", _long_run_text(n_lambda, n_theta, est_seconds))
+            return answer == QtWidgets.QMessageBox.Yes
+
+        page._confirm_long_run = _confirm_long_run
+
         # Functionality (collapsible, like the original's expand/collapse sub-panels). The
         # dropdown lists COMPUTE MODES ONLY; on_run resolves each to its canonical compute mode.
         # (The Guide is on the Help menu + startup tab; the schematic is the persistent banner; the
@@ -1323,6 +1470,7 @@ def build_main_window():
         # full-system stacks as presets. Display labels carry the provenance wavelength; selections
         # resolve to registry keys via resolve_case_label.
         from .casestudy_materials import (CASE_LABEL_BY_KEY, GUI_ML_GROUPS, GUI_SI_GROUPS,
+                                          gui_dispersive_group,
                                           resolve_case_label)
 
         def _disable_header_rows(combo):
@@ -1369,6 +1517,13 @@ def build_main_window():
                 si_case.addItem(_hdr)
                 for _label, _key in _entries:
                     si_case.addItem(_label)
+            # the dispersive variants last, so the palette the original packages present stays
+            # first and unchanged. These are the ones a wavelength sweep can actually answer.
+            _disp_hdr, _disp_rows = gui_dispersive_group()
+            if _disp_rows:
+                si_case.addItem(_disp_hdr)
+                for _label, _key in _disp_rows:
+                    si_case.addItem(_label)
             _append_user_rows(si_case)
             _disable_header_rows(si_case)
             _guard_header_selection(si_case)
@@ -1386,6 +1541,11 @@ def build_main_window():
                 if _hdr:
                     system_preset.addItem(_hdr)
                 for _label, _key in _entries:
+                    system_preset.addItem(_label)
+            _disp_hdr, _disp_rows = gui_dispersive_group()
+            if _disp_rows:
+                system_preset.addItem(_disp_hdr)
+                for _label, _key in _disp_rows:
                     system_preset.addItem(_label)
             system_preset.addItem("N-layer stack (editor)")
             system_preset.addItem("Custom film (use fields)")
@@ -1645,6 +1805,34 @@ def build_main_window():
                 edit_layer.setCurrentIndex(min(max(cur, 0), n - 1) if cur >= 0 else min(1, n - 1))
                 _loading["f"] = False
 
+            def _sync_layer_material_choices(index, current):
+                """Offer only ISOTROPIC media on the two half-space rows.
+
+                Both semi-infinite media are isotropic by design -- they set the tangential
+                wavevector for every mode in the stack and the solvers read one scalar index from
+                each. `layer_stack._require_isotropic_halfspace` already refuses a birefringent one
+                in the MODEL; this is the other half of the rule, so the option is never offered in
+                the first place rather than raising after the user picks it.
+
+                A legacy session may still carry a crystal on a half-space row. That entry is kept
+                in the list so the row shows what it actually holds instead of being silently
+                rewritten -- the model then refuses it with a message naming the row.
+                """
+                is_half = index == 0 or index == len(stack_state["stack"]) - 1
+                want = (_layer_material_choices(halfspace=True) if is_half
+                        else _layer_material_choices())
+                if is_half and current and current not in want:
+                    want = [*want, current]
+                if [layer_mat.itemText(k) for k in range(layer_mat.count())] == want:
+                    return  # already right; repopulating would churn the combo on every row change
+                _was_blocked = layer_mat.blockSignals(True)
+                try:
+                    layer_mat.clear()
+                    layer_mat.addItems(want)
+                    _disable_header_rows(layer_mat)  # the user-materials header, when present
+                finally:
+                    layer_mat.blockSignals(_was_blocked)
+
             def _load_layer_into_fields(*_a):
                 if _loading["f"]:
                     return
@@ -1655,13 +1843,18 @@ def build_main_window():
                 _loading["f"] = True
                 layer_name.setText(str(spec.get("name") or ""))
                 mat = spec["material"]
+                # the row's palette depends on WHICH row it is, and the half-spaces move when the
+                # layer count changes -- so this runs before every lookup below, not once at build.
+                _sync_layer_material_choices(i, mat)
                 if layer_mat.findText(mat) < 0:
                     # pre-audit specs/sessions stored registry KEYS; the combo now lists labels
                     mat = CASE_LABEL_BY_KEY.get(resolve_case_label(mat), mat)
+                    _sync_layer_material_choices(i, mat)
                 if layer_mat.findText(mat) < 0:
                     # a user material that no longer exists in the store -> Custom (the row
                     # keeps any snapshot it carries; _my_delete rewrites rows with the spec)
                     mat = CUSTOM_LAYER_CHOICE
+                    _sync_layer_material_choices(i, mat)
                 layer_mat.setCurrentText(mat)
                 layer_thick.setValue(spec["thickness_um"])
                 # per-layer CUSTOM crystal: load this layer's saved snapshot into the entry panels
@@ -2307,12 +2500,21 @@ def build_main_window():
 
         def _ml_film_key(sel: str) -> str | None:
             """Registry key when the ML combo selection is a single-film case row, else None
-            (presets / N-layer / Custom / header rows resolve to None)."""
+            (presets / N-layer / Custom / header rows resolve to None).
+
+            A DISPERSIVE row is a single-film row too. Its label is its own key -- it is resolved
+            by shaarp.dispersion rather than by the registry -- and every consumer here reaches the
+            material through `layer_stack.material_for_label`, which knows both. Without this the
+            row looked selectable and every Update raised "system_preset must be one of ...",
+            because the run path could only read it as a named full-system preset."""
             from .casestudy_materials import CASE_STUDY_ORDER
             if sel in ML_SYSTEM_PRESETS or sel in ("N-layer stack (editor)", "Custom film (use fields)"):
                 return None
             key = resolve_case_label(sel)
-            return key if key in CASE_STUDY_ORDER else None
+            if key in CASE_STUDY_ORDER:
+                return key
+            from .dispersion import dispersive_material_names  # lazy: no import cycle
+            return sel.strip() if sel.strip() in dispersive_material_names() else None
 
         def _active_case_material():
             """The Material whose tensors should fill the matrices, or None for custom/default."""
@@ -2633,10 +2835,32 @@ def build_main_window():
         for _e in lattice_edits:
             _e.valueChanged.connect(lambda *_: _on_panel_user_edit("struct"))
 
+        def _dispersive_lambda_range(name: str):
+            """(low, high) of a dispersive variant's published index table, or None if not one."""
+            try:
+                from .dispersion import dispersive_material_names, load_shipped_table
+                if str(name).strip() not in dispersive_material_names():
+                    return None
+                return load_shipped_table(str(name).strip()).range_um
+            except Exception:
+                return None
+
         def _update_wl_note(*_a):
-            """Show which selected case-study material(s) the entered wavelength falls OUTSIDE of
-            (their tensors clamp to the nearest tabulated value) -- residual risk R2 made visible."""
-            from .casestudy_materials import casestudy_lambda_range
+            """Show which selected case-study material(s) the entered wavelength is unusable for.
+
+            Three distinct cases, in priority order: lambda is inside the grid but in the model's
+            ultraviolet pole region, where eps(2w) is not physical at all; lambda is outside the
+            exported grid entirely (tensors clamp to the nearest tabulated value -- residual risk
+            R2 made visible); or the material is a DISPERSIVE variant and lambda leaves what its
+            published table can answer at both harmonics."""
+            from .casestudy_materials import casestudy_lambda_range, casestudy_usable_lambda_range
+            # While the wavelength sweep is ticked the single wavelength is not computed, so a note
+            # about it would describe a run that will not happen. The sweep writes its own notes
+            # into this label when it runs; any change of input clears them as stale.
+            if spectral_on.isEnabled() and spectral_on.isChecked():
+                wl_note.setToolTip("")
+                wl_note.setVisible(False)
+                return
             names: list[str] = []
             if which == "si":
                 t = si_case.currentText()
@@ -2652,14 +2876,60 @@ def build_main_window():
                               if s.get("material") and s.get("material") != CUSTOM_LAYER_CHOICE
                               and s.get("material") != "air"]
             lam = float(wavelength.value())
-            out = []
+            out = []         # lambda itself is past the material's data
+            half_out = []    # lambda is inside, but the second harmonic's lambda/2 is not
+            poled = []
             for nm in names:
                 rng = casestudy_lambda_range(nm)
+                if rng is None:
+                    # A DISPERSIVE variant: its range comes from the published table, not the
+                    # registry, so casestudy_lambda_range has nothing to say about it. Clamping
+                    # there is announced only as a RuntimeWarning, which a user of the frozen app
+                    # never sees -- this is the visible half of it.
+                    rng = _dispersive_lambda_range(nm)
+                    if not rng:
+                        continue
+                    if not (rng[0] - 1e-12 <= lam <= rng[1] + 1e-12):
+                        out.append(f"{nm}: index data {rng[0]:.2f}–{rng[1]:.2f} µm")
+                    elif lam / 2.0 < rng[0] - 1e-12:
+                        # Only the second harmonic is off the table. Saying "λ is outside the index
+                        # data" here was false -- λ is inside it; λ/2 is not.
+                        # two decimals, as the name prints the table; "covered from" rounded UP,
+                        # as the scan-range fit rounds it, so the number stated is inside
+                        _from = math.ceil(2.0 * rng[0] * 100 - 1e-9) / 100
+                        half_out.append(f"{nm}: index data from {rng[0]:.2f} µm, so both "
+                                        f"harmonics are covered from {_from:.2f} µm")
+                    continue
                 if rng and not (rng[0] - 1e-12 <= lam <= rng[1] + 1e-12):
                     out.append(f"{nm}: tabulated {rng[0]:g}–{rng[1]:g} µm")
+                    continue
+                # INSIDE the grid is not the same as inside the physical range: the Sellmeier
+                # models pole at the half wavelength well within their own grid, so eps(2w) there
+                # is a lossless negative or a runaway positive. Clamping is a degraded answer; this
+                # is a wrong one, and it reads as ordinary dispersion.
+                usable = casestudy_usable_lambda_range(nm)
+                if usable and not (usable[0] - 1e-12 <= lam <= usable[1] + 1e-12):
+                    poled.append(f"{nm}: physical over {usable[0]:g}–{usable[1]:g} µm")
+            lines = []
+            if poled:
+                # Not "Update still computes": for some films (LiNbO3 at 1550 nm below ~0.5 um)
+                # the solve itself fails there, so the promise was false.
+                lines.append("⚠ ε(2ω) is not physical at this wavelength: the material's index data "
+                             "runs into its ultraviolet pole at half the wavelength. Any result here "
+                             "is not physical, and the solve may fail; use a wavelength inside the "
+                             "window (" + "; ".join(poled) + ")")
             if out:
-                wl_note.setText("⚠ λ outside the exported dispersion range — tensors clamped to "
-                                "the nearest tabulated value (" + "; ".join(out) + ")")
+                lines.append("⚠ λ is outside the material's index data, so its tensors are clamped "
+                             "to the nearest tabulated value (" + "; ".join(out) + ")")
+            if half_out:
+                lines.append("⚠ The second harmonic reads the index at λ/2 = {0:g} µm, below the "
+                             "material's index data, so ε(2ω) is held at the table's first value "
+                             "({1})".format(lam / 2.0, "; ".join(half_out)))
+            # the tooltip is reset every time: a sweep's notes leave their full text there, and it
+            # used to survive into an unrelated material's note
+            wl_note.setToolTip("")
+            if lines:
+                wl_note.setText("\n".join(lines))
                 wl_note.setVisible(True)
             else:
                 wl_note.setVisible(False)
@@ -2747,8 +3017,55 @@ def build_main_window():
 
         wavelength.valueChanged.connect(_reassert_case_wavelength)
 
+        def _snap_scan_range_to_table(label):
+            """Fit the wavelength scan range to what a chosen dispersive material can answer.
+
+            A table covering lo-hi um answers a sweep over 2*lo to hi only -- the second harmonic
+            reads it at half the wavelength -- so the default 0.55-1.60 um clamped four of the five
+            shipped materials, while the ranges in their names said it would not. The CURRENT range
+            is clamped into the answerable one rather than replaced, so a range a user chose that
+            still fits survives a change of material; only a range with no overlap at all is reset
+            to the full answerable span. The status bar says so whenever anything moves.
+
+            Wired to the combos' user-driven `textActivated`, not `currentTextChanged`: a session
+            restore sets the combo programmatically AFTER the scan spins, and snapping there would
+            silently overwrite the range the session saved."""
+            from .dispersion import dispersive_material_names, load_shipped_table
+
+            name = str(label).strip()
+            if name not in dispersive_material_names():
+                return
+            lo, hi = load_shipped_table(name).range_um
+            # A Fresnel map is linear optics at the fundamental: no second harmonic reads the table
+            # at lambda/2, so the whole table is usable. Fitting it from 2 x low cut it short.
+            linear = "Fresnel" in functionality.currentText()
+            start = float(lo) if linear else min(2.0 * float(lo), float(hi))
+            # round INWARD to 0.01 um, so the range stays inside the table and reads as the
+            # documentation's table does (0.58-1.06 for LBO, not 0.5788-1.064)
+            start = math.ceil(start * 100 - 1e-9) / 100
+            stop = math.floor(float(hi) * 100 + 1e-9) / 100
+            cur_lo, cur_hi = float(lam_min.value()), float(lam_max.value())
+            new_lo, new_hi = max(cur_lo, start), min(cur_hi, stop)
+            if new_lo > new_hi:
+                new_lo, new_hi = start, stop
+            if abs(new_lo - cur_lo) < 1e-12 and abs(new_hi - cur_hi) < 1e-12:
+                return
+            lam_max.setValue(new_hi)
+            lam_min.setValue(new_lo)
+            why = ("" if linear else
+                   ", and the second harmonic reads it at half the wavelength")
+            # the table's span to two decimals, as the material's name prints it -- "covers
+            # 0.2894-1.064" beside a name reading 0.29-1.06 looked like two different tables
+            win.statusBar().showMessage(
+                "Wavelength scan range set to {0:g}–{1:g} µm, the part the index data of {2} can "
+                "answer: it covers {3:.2f}–{4:.2f} µm{5}.".format(new_lo, new_hi, name, lo, hi, why),
+                15000)
+
+        page._snap_scan_range_to_table = _snap_scan_range_to_table  # test hook
+
         stack_mode_hook = None  # set on the ml branch below; stays None on si
         if which == "si":
+            si_case.textActivated.connect(_snap_scan_range_to_table)
             si_case.currentTextChanged.connect(lambda *_: _on_case_changed())
             si_case.currentTextChanged.connect(_update_wl_note)
             si_case.currentTextChanged.connect(_sync_case_wavelength)  # F54 case-owned lambda
@@ -2811,6 +3128,7 @@ def build_main_window():
             system_preset.currentTextChanged.connect(_enter_stack_mode)
             system_preset.currentTextChanged.connect(lambda *_: _on_case_changed())
             system_preset.currentTextChanged.connect(_update_wl_note)
+            system_preset.textActivated.connect(_snap_scan_range_to_table)
 
             # ---- R15: the layer STACK joins the session payload. The widget walk
             # cannot see stack_state, so an N-layer-editor session used to restore onto the
@@ -3325,8 +3643,74 @@ def build_main_window():
         # fixes the analyzer-polarizer offset gate: the original enables it only when BOTH the
         # polarizer AND the analyzer rotate (`Dynamic[If[RotateAnalyzer, If[RotatePolarizer,
         # offset, ""]]]`); the port previously consulted the analyzer alone.
+        _spectral_pin_guard = {"on": False}
+        # combo -> the mode it had before the sweep pinned it, so turning the sweep off can give it
+        # back. Without this every selector stayed on "Fix" and the next ordinary Update drew one
+        # fixed-polarizer curve instead of the lobes the user had set up.
+        _spectral_pin_saved: dict = {}
+
+        def _pin_geometry_for_spectrum() -> bool:
+            """With the wavelength sweeping, the rotating elements stand down.
+
+            A spectrum needs ONE scalar per wavelength, so the polarizer, the analyzer and the
+            sample rotation are held at their fixed values. This is the original's own idiom
+            rather than a new rule -- turning the sample there already forces the polarizer and
+            analyzer fixed for the same reason.
+
+            Re-entrancy matters: setCurrentText re-fires currentTextChanged, which lands back in
+            _sync_pol_enabled, which calls this again.
+
+            What each selector held before it was pinned is remembered and handed back when the
+            sweep stops pinning (unticked, or greyed out by an analytical mode)."""
+            if _spectral_pin_guard["on"]:
+                return spectral_on.isEnabled() and spectral_on.isChecked()
+            if not (spectral_on.isEnabled() and spectral_on.isChecked()):
+                if _spectral_pin_saved:
+                    _spectral_pin_guard["on"] = True
+                    try:
+                        for _combo, _text in list(_spectral_pin_saved.items()):
+                            _combo.setCurrentText(_text)
+                    finally:
+                        _spectral_pin_saved.clear()
+                        _spectral_pin_guard["on"] = False
+                return False
+            _spectral_pin_guard["on"] = True
+            try:
+                for _combo, _fixed, _rotating in (
+                        (polarizer_mode, "Fix Polarizer", "Rotate"),
+                        (analyzer_mode, "Fix Analyzer", "Rotate Analyzer"),
+                        (sample_mode, "Fix Sample", "Rotate")):
+                    if _combo is not None and _combo.currentText().startswith(_rotating):
+                        _spectral_pin_saved.setdefault(_combo, _combo.currentText())
+                        _combo.setCurrentText(_fixed)
+            finally:
+                _spectral_pin_guard["on"] = False
+            return True
+
+        def _sync_spectral_enabled(func_txt: str) -> None:
+            """The wavelength sweep is live only where a spectrum exists.
+
+            The analytical modes return a closed-form expression rather than a curve, and each
+            wavelength would give a DIFFERENT expression -- there is no sensible answer to which
+            one the panel should show. So the switch greys out there instead of being accepted and
+            silently ignored, which is the dead-control failure the coverage registry exists to
+            catch."""
+            analytical = "Analytical" in func_txt
+            spectral_on.setEnabled(not analytical)
+            live = (not analytical) and spectral_on.isChecked()
+            for _row in lam_rows:
+                _row.setEnabled(live)
+            if analytical:
+                spec_note.setText(
+                    "Not available for the analytical modes: each wavelength gives a different "
+                    "closed form. Use SHG Simulation for a spectrum, and read the wavelength "
+                    "dependence off the expression through the dielectric constants it carries.")
+            spec_note.setVisible(analytical)
+
         def _sync_pol_enabled(*_a):
             func_txt = functionality.currentText()
+            _sync_spectral_enabled(func_txt)
+            sweeping = _pin_geometry_for_spectrum()
             is_maker = which == "ml" and "Maker" in func_txt
             is_fresnel = which == "ml" and "Fresnel" in func_txt
             rot_ok = not (is_maker or is_fresnel)  # rotate/fix triple: SHG Sim + analytical only
@@ -3373,6 +3757,35 @@ def build_main_window():
                 sample_sym.setEnabled(_sym_ok)
                 if _sym_ok and sample_sym.isChecked():
                     sample_az.setEnabled(False)
+            if sweeping:
+                # LAST, so it overrides the rules above rather than racing them. The three
+                # rotate/fix combos are already forced to Fix and now stand down; the fixed-VALUE
+                # boxes stay live, because those are what the user sets the geometry with.
+                for _w in (polarizer_mode, analyzer_mode, analyzer_offset):
+                    _w.setEnabled(False)
+                fixed_phi.setEnabled(True)
+                fixed_phi_btns.setEnabled(True)
+                analyzer_psi.setEnabled(True)
+                psi_btns.setEnabled(True)
+                if sample_mode is not None:
+                    sample_mode.setEnabled(False)
+                    for _w in (sample_step, sample_step_btns, sample_dir):
+                        _w.setEnabled(False)
+                sample_az.setEnabled(True)
+                # Maker and Fresnel sweep the incidence angle themselves, so with the wavelength
+                # sweeping too the result is a map and theta belongs to its own scan range.
+                # SHG Simulation has no angle scan, so there theta stays the user's single value.
+                _map_mode = which == "ml" and ("Maker" in func_txt or "Fresnel" in func_txt)
+                theta_spin.setEnabled(not _map_mode)
+                theta_slider.setEnabled(not _map_mode)
+            # The single wavelength is not used while the sweep runs -- the scan range owns lambda
+            # -- so it stands down exactly as theta does in map mode. Left live it was a second
+            # editable input for one quantity: changing it moved the schematic's header, raised the
+            # "inputs changed" banner and hid the sweep's notes, and changed no result.
+            wavelength.setEnabled(not sweeping)
+
+        spectral_on.toggled.connect(_sync_pol_enabled)
+        spectral_on.toggled.connect(_update_wl_note)
 
         # currentTextChanged (NOT `activated`): must also run on programmatic/session restores,
         # so a restored combination never leaves a control live that the compute path ignores.
@@ -3381,6 +3794,9 @@ def build_main_window():
         if sample_mode is not None:
             sample_mode.currentTextChanged.connect(_sync_pol_enabled)
         functionality.currentTextChanged.connect(_sync_pol_enabled)
+        # after _sync_pol_enabled: an analytical mode greys the sweep out, and the single
+        # wavelength's note comes back with it
+        functionality.currentTextChanged.connect(_update_wl_note)
         _sync_pol_enabled()
         page._sync_pol_enabled = _sync_pol_enabled  # test hook
         form_col.addWidget(g_pol)
@@ -3453,8 +3869,10 @@ def build_main_window():
             # thickness lives in the layer editor now — apply it LAST so it lands in the
             # simple-mode template the lattice/orientation writes above just flipped into
             # (Custom-film ownership), instead of being clobbered by the template rebuild.
-            if which == "ml":
-                layer_thick.setValue(float(snap.get("thickness", 1.0)))
+            if which == "ml" and "thickness" in snap:
+                # Only when the snapshot carries one. A preset row that fell to Custom used to
+                # arrive here with no "thickness" key and get 1.0 written over its real value.
+                layer_thick.setValue(float(snap["thickness"]))
 
         def on_preset(i):
             def handler():
@@ -3801,6 +4219,10 @@ def build_main_window():
         plot_canvas.draw_idle()
         fresnel_canvas = FigureCanvasQTAgg(_Fig(figsize=(7, 4))) if which == "ml" else None
         maker_canvas = FigureCanvasQTAgg(_Fig(figsize=(7, 4))) if which == "ml" else None
+        # The spectrum lives on BOTH tabs -- the wavelength sweep is not a multilayer-only idea,
+        # and the single-interface tab has had no scan output of its own until now.
+        spectrum_canvas = FigureCanvasQTAgg(_Fig(figsize=(7, 4)))
+        spectrum_canvas.setObjectName(f"spectrum_canvas_{which}")
         # QTextEdit (rich text) so the closed forms render with REAL super/subscripts like the
         # original package's typeset output: the display shows n_ω², θᵢ, d₁₄; the Copy
         # button and the .txt export keep the machine-readable sympy text (stored as a property).
@@ -3855,6 +4277,8 @@ def build_main_window():
             output_tabs.addTab(fresnel_tab, "Fresnel Coefficients")
             maker_tab = _scrollable(maker_canvas)
             output_tabs.addTab(maker_tab, "Maker Fringes")
+        spectrum_tab = _scrollable(spectrum_canvas)
+        output_tabs.addTab(spectrum_tab, "Spectrum")
         # the Analytical Expression tab stacks the full published
         # derivation as COLLAPSIBLE steps (transmitted omega fields -> P_NL -> inhomogeneous 2omega
         # fields) ABOVE the final reflected E_p/E_s/I. Steps are rebuilt on each Full-Analytical run
@@ -3957,6 +4381,10 @@ def build_main_window():
         # class of bug as the banner header -> would clip the geometry panel on a laptop).
         status_lbl.setWordWrap(True)
         status_lbl.setMinimumWidth(1)
+        # Room for TWO wrapped lines. The pane below is a splitter section that opened at 80 px, so
+        # the label got exactly one line and a refusal message lost its remedy clause below the
+        # fold (the half-space isotropy error). Two lines fit every message the app raises.
+        status_lbl.setMinimumHeight(2 * status_lbl.fontMetrics().lineSpacing() + 6)
         time_lbl = QtWidgets.QLabel("Time Used = -- s")
         time_lbl.setToolTip("Wall-clock time used by the last Update (the original GUI's "
                             "'Time Used' readout).")
@@ -3969,9 +4397,14 @@ def build_main_window():
         btn_row.addWidget(mcopy_btn)
         btn_row.addWidget(run_btn_out)
         expr_lay.addLayout(btn_row)
-        expr_lay.addWidget(status_lbl)
-        expr_lay.addWidget(time_lbl)
-        expr_widget.setMinimumHeight(76)
+        # Status text and "Time Used" share ONE row: the label gets its two wrapped lines and the
+        # pane stays at the 80 px it always had. Taking those lines from the plot pane instead
+        # made the Polar Plots grid scroll at 1920x1080 (test_gui_layout_integrity).
+        status_row = QtWidgets.QHBoxLayout()
+        status_row.addWidget(status_lbl, 1)
+        status_row.addWidget(time_lbl, 0, QtCore.Qt.AlignTop | QtCore.Qt.AlignRight)
+        expr_lay.addLayout(status_row)
+        expr_widget.setMinimumHeight(80)  # buttons + a two-line status label beside Time Used
 
         # vertical splitter: drag the handles to resize the three sections
         out_splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
@@ -4039,6 +4472,16 @@ def build_main_window():
             state["stale"] = False
             stale_banner.setVisible(False)
 
+        def _mark_not_current(what: str):
+            """This Update did NOT produce what is on screen -- it was declined, refused or failed.
+
+            _clear_stale runs at the top of every Update, so without this a declined map or a
+            refused sweep left the PREVIOUS result on screen looking current, and Export data then
+            wrote that old result under the current inputs."""
+            state["stale"] = True
+            stale_banner.setText("● " + what + " — the plots still show the previous result.")
+            stale_banner.setVisible(True)
+
         def _replace_canvas_figure(canvas, fig):
             import matplotlib.pyplot as plt
 
@@ -4074,6 +4517,11 @@ def build_main_window():
                 return  # ignore a re-entrant Update (double Enter / double-click mid-compute)
             state["running"] = True
             _clear_stale()  # this Update re-syncs every display to the current inputs
+            # A failed Update paints the status line red and parks its message on the tooltip;
+            # without this reset both outlived the next, successful run.
+            status_lbl.setStyleSheet("")
+            status_lbl.setToolTip("")
+            state["progress_note"] = None   # set by a run that ends without computing
             run_btn.setEnabled(False)
             run_btn_out.setEnabled(False)
             t0 = time.perf_counter()
@@ -4085,6 +4533,19 @@ def build_main_window():
             QtWidgets.QApplication.processEvents()
             try:
                 state["last_si_curve"] = None  # refreshed by the SI SHG-Simulation branch only
+                if not page._spectral_state()["on"]:
+                    # A run that is not a sweep: the wavelength note is re-derived from the single
+                    # wavelength (a sweep's notes used to stay up over an unrelated result).
+                    _update_wl_note()
+
+                def _clear_spectrum_tab():
+                    """Empty the Spectrum tab once a run that is NOT a sweep has succeeded: its
+                    plot belongs to a sweep these inputs no longer describe, and Export figure
+                    would otherwise save it as if it were current. Only on success -- emptied at
+                    the start, a failed Update blanked it under a banner saying the plots still
+                    show the previous result."""
+                    spectrum_canvas.figure.clear()
+                    spectrum_canvas.draw_idle()
                 lattice = tuple(e.value() for e in lattice_edits)
                 okw = dict(orientation_mode=orient_mode.currentText(),
                            surface_hkl=tuple(e.value() for e in hkl_edits),
@@ -4110,9 +4571,238 @@ def build_main_window():
                             f"{disp}: the optical-setup schematic (2D + 3D) is shown above. Choose "
                             "'SHG Simulation' or an analytical mode to compute output.")
                     status_lbl.setText(f"view: {disp}")
+                    if not page._spectral_state()["on"]:
+                        _clear_spectrum_tab()
                     state["last_result"] = None
                     output_tabs.setCurrentWidget(expr_box)  # the guide/notice text shows in this tab
                     win.statusBar().showMessage(f"View: {disp}")
+
+                def _run_spectral(spectrum_factory, *, is_map: bool):
+                    """Compute and render a wavelength sweep, and say what it can honestly show.
+
+                    The support warnings are routed into the SAME amber note the wavelength field
+                    already uses, rather than raised: a flat spectrum is a data limitation the user
+                    can act on, and the note names the material and the fix. A wavelength where
+                    eps(2w) is unphysical still raises and lands in the ordinary error path,
+                    because that is a wrong answer rather than an uninformative one."""
+                    import warnings as _warnings
+
+                    from .api import run_ml_spectrum, run_si_spectrum, run_spectral_map
+                    from .shaarp_gui import build_spectral_map_figure, build_spectrum_figure
+
+                    spec = page._spectral_state()
+
+                    def _clear_sweep_notes():
+                        """The notes belong to the plot they were raised for. A refused range or
+                        a run that goes on to compute clears them -- a refusal left the previous
+                        sweep's notes standing beside its own error -- but a DECLINED run does
+                        not: its plot stays on screen, so its notes stay with it."""
+                        wl_note.setVisible(False)
+                        wl_note.setToolTip("")
+
+                    if spec["min_um"] > spec["max_um"]:
+                        _clear_sweep_notes()
+                        raise ValueError(
+                            "scan range: λ min ({0:g} µm) must not exceed λ max ({1:g} µm). Fix "
+                            "the Wavelength Scan Range fields.".format(
+                                spec["min_um"], spec["max_um"]))
+                    from .spectral import inclusive_grid, speaking_to, wavelength_grid
+
+                    # allow_constant_dispersion stays FALSE on purpose. It suppresses the
+                    # flat-spectrum WARNING, not the computation, and that warning is exactly
+                    # what this branch captures and puts into the amber note. Setting it True
+                    # would compute the same flat curve and say nothing about it.
+                    common = dict(lambda_min_um=spec["min_um"], lambda_max_um=spec["max_um"],
+                                  lambda_step_um=spec["step_um"], allow_constant_dispersion=False)
+
+                    def _ml_physics():
+                        """The Assumptions panel, mapped EXACTLY as the single-wavelength ML runs
+                        map it (compute_ml_gui_result): the multiple-reflection model, and for FMR
+                        its sub-mode as the inhomogeneous-source policy.
+
+                        The sweep passed neither, so the spectrum always used FMR with every wave
+                        and the maps FMR forward-only -- two different models, neither the one the
+                        panel named, under a schematic captioned with the panel's choice. Choosing
+                        Jerphagnon-Kurtz gave 1.86 in the polar plot and 55.5 in the spectrum at
+                        the same wavelength."""
+                        if which != "ml":
+                            return {}
+                        _m = ML_ASSUMPTIONS.get(assumption_combo.currentText(), 0)
+                        out = {"mrassumption": _m}
+                        if _m == 0:
+                            out["inhomogeneous_source_policy"] = FMR_SUBMODES[
+                                fmr_submode.currentText()]
+                        return out
+
+                    # each sweep mode owns its OWN angle range, exactly as it does without the
+                    # wavelength sweep: Maker Fringes reads the Maker scan-range group, Fresnel
+                    # Coefficients reads the Fresnel one.
+                    _fresnel = is_map and "Fresnel" in canon
+                    _lo, _hi, _st = ((fr_min, fr_max, fr_step) if _fresnel
+                                     else (th_min, th_max, th_step))
+                    # EQUAL is allowed here: one angle across the wavelengths draws as a spectrum
+                    # line, the degenerate case the map figure renders.
+                    if is_map and _lo.value() > _hi.value():
+                        _clear_sweep_notes()
+                        raise ValueError(
+                            "scan range: θ min ({0:g}°) must not exceed θ max ({1:g}°). Fix θ min "
+                            "/ θ max in the {2} Scan Range.".format(
+                                _lo.value(), _hi.value(),
+                                "Fresnel Coefficients" if _fresnel else "Maker Fringes"))
+
+                    def _run(**overrides):
+                        """The sweep this Update asks for -- or, with overrides, a probe of it. One
+                        description of the job, so the probe cannot drift from the real run."""
+                        if is_map:
+                            opts = dict(
+                                common, **_ml_physics(),
+                                theta_min_deg=_lo.value(), theta_max_deg=_hi.value(),
+                                theta_step_deg=_st.value(),
+                                kind=("fresnel" if _fresnel else "maker"),
+                                phi_deg=fixed_phi.value(), psi_deg=analyzer_psi.value(),
+                                # the Maker scan's OWN ellipticity, as the single-wavelength Maker
+                                # run reads it -- the map ignored it and the general ellipticity
+                                # box is disabled in map mode, so no live control reached it
+                                **({"ellipticity_deg": maker_ell.value()}
+                                   if (maker_ell is not None and not _fresnel) else {}))
+                            return run_spectral_map(spectrum_factory, {**opts, **overrides})
+                        if which == "si":
+                            opts = dict(common, theta_deg=theta_spin.value(),
+                                        phi_deg=fixed_phi.value(), psi_deg=analyzer_psi.value(),
+                                        ellipticity_deg=ellipticity.value(),
+                                        incident_index_omega=inc_n_w.value(),
+                                        incident_index_2omega=inc_n_2w.value())
+                            return run_si_spectrum(spectrum_factory, None, {**opts, **overrides})
+                        opts = dict(common, **_ml_physics(), theta_deg=theta_spin.value(),
+                                    phi_deg=fixed_phi.value(), psi_deg=analyzer_psi.value(),
+                                    ellipticity_deg=ellipticity.value())
+                        return run_ml_spectrum(spectrum_factory, None, {**opts, **overrides})
+
+                    # Estimate the run BEFORE computing it and ask when it will be long. A fixed
+                    # cost per point is wrong in both directions -- a thin film's spectrum costs a
+                    # sixth of the Quartz + Au preset's, and a map pays a setup per wavelength that
+                    # per-point pricing ignores -- so when the cheap bound says "maybe long", the
+                    # job itself is timed small and extrapolated: one point and a few, whose
+                    # difference is the cost of one more point with the fixed setup taken out.
+                    # Measured against real runs (2026-09-19): 9.5-18 s predicted for a 1,001-point
+                    # spectrum on a 1 um quartz film that took 14.5 s. Per-point cost creeps up over
+                    # thousands of points, so very long runs read low: the default 43 x 901 Maker
+                    # map estimated 14-19 min against 21 min measured on that film, and 35 min
+                    # against 48 on the Quartz + Au preset. Close enough for "about N minutes", and
+                    # it is the 20-minute runs this exists to catch.
+                    _n_lam = len(wavelength_grid(spec["min_um"], spec["max_um"], spec["step_um"]))
+                    _n_th = (len(inclusive_grid(_lo.value(), _hi.value(), _st.value()))
+                             if is_map else 1)
+                    _kind = (("fresnel" if _fresnel else "maker") if is_map
+                             else ("si_spectrum" if which == "si" else "ml_spectrum"))
+                    _est = _n_lam * _n_th * SECONDS_PER_POINT[_kind]
+                    if _est > PROBE_ABOVE_SECONDS:
+                        _lam0 = float(spec["min_um"])
+
+                        def _timed(**overrides):
+                            """The FASTEST of two runs. Timing noise only ever adds (a collection,
+                            another process), and a single timing read anywhere from 0.7x to 2.4x
+                            the true cost of a 1,001-point quartz-film spectrum."""
+                            best = float("inf")
+                            for _ in range(2):
+                                _t = time.perf_counter()
+                                _run(**overrides)
+                                best = min(best, time.perf_counter() - _t)
+                            return best
+
+                        # A probe that fails keeps the cheap bound and lets the real run fail
+                        # instead: its error names the range the user asked for, where the probe's
+                        # would name a one-wavelength range nobody typed.
+                        try:
+                            with _warnings.catch_warnings(), speaking_to("app"):
+                                _warnings.simplefilter("ignore")
+                                _one_lam = dict(lambda_min_um=_lam0, lambda_max_um=_lam0)
+                                if not is_map:
+                                    _t1 = _timed(**_one_lam)
+                                    _k = min(_n_lam, 9)
+                                    _per_lam = _t1
+                                    if _k > 1:
+                                        _tk = _timed(lambda_min_um=_lam0, lambda_max_um=(
+                                            _lam0 + float(spec["step_um"]) * (_k - 1)))
+                                        _per_lam = max(_tk - _t1, 0.0) / (_k - 1)
+                                    _probe = _t1 + (_n_lam - 1) * _per_lam
+                                else:
+                                    # a map pays its setup once PER WAVELENGTH (each wavelength
+                                    # is its own angle sweep), so the one-angle time is charged
+                                    # every wavelength and the per-angle cost on top of it
+                                    _th0 = float(_lo.value())
+                                    _t1 = _timed(**_one_lam, theta_min_deg=_th0,
+                                                 theta_max_deg=_th0)
+                                    _k = min(_n_th, 6)
+                                    _per_angle = 0.0
+                                    if _k > 1:
+                                        _tk = _timed(**_one_lam, theta_min_deg=_th0, theta_max_deg=(
+                                            _th0 + float(_st.value()) * (_k - 1)))
+                                        _per_angle = max(_tk - _t1, 0.0) / (_k - 1)
+                                    _probe = _n_lam * (_t1 + (_n_th - 1) * _per_angle)
+                        except Exception:  # noqa: BLE001 -- the real run reports it properly
+                            _probe = None
+                        if _probe is not None:
+                            _est = _probe
+                    if _est > LONG_RUN_SECONDS and not page._confirm_long_run(_n_lam, _n_th, _est):
+                        what = "Map" if is_map else "Spectrum"
+                        # counted as the question counted it: a spectrum in wavelengths
+                        _size = ("{0:,} points".format(_n_lam * _n_th) if is_map
+                                 else "{0:,} wavelengths".format(_n_lam))
+                        status_lbl.setText(
+                            "{0} not computed: {1}. Raise the λ step{2} for a quicker "
+                            "look.".format(what, _size, " or the θ step" if is_map else ""))
+                        state["progress_note"] = "Not computed"
+                        win.statusBar().showMessage("{0} not computed ({1}).".format(what, _size))
+                        _mark_not_current(what + " not computed")
+                        return
+
+                    _clear_sweep_notes()
+                    # speaking_to("app"): the notes and refusals raised inside are worded for this
+                    # window (µm, ε(2ω), the Dispersive group) rather than for a Python caller.
+                    with _warnings.catch_warnings(record=True) as caught, speaking_to("app"):
+                        _warnings.simplefilter("always")
+                        with stage("compute"):
+                            result = _run()
+                    with stage("figure"):
+                        fig = (build_spectral_map_figure(result.raw) if is_map
+                               else build_spectrum_figure(result.raw))
+                    _replace_canvas_figure(spectrum_canvas, fig)
+                    output_tabs.setCurrentWidget(spectrum_tab)
+                    state["last_result"] = result
+                    # EVERY distinct note, not the first: a stack can be partly frozen AND run past
+                    # a table's end at once, and showing only notes[0] hid whichever came second.
+                    notes: list[str] = []
+                    for _w in caught:
+                        if issubclass(_w.category, RuntimeWarning) and str(_w.message) not in notes:
+                            notes.append(str(_w.message))
+                    if notes:
+                        shown = notes[:3]
+                        text = "\n".join("\u26a0 " + n for n in shown)
+                        if len(notes) > len(shown):
+                            text += "\n(+{0} more: hover for all)".format(len(notes) - len(shown))
+                        wl_note.setText(text)
+                        wl_note.setToolTip("\n\n".join(notes))
+                        wl_note.setVisible(True)
+                    # Report what was COMPUTED, not what was asked for: the grid's real end (a range
+                    # the step does not divide stops short of λ max) and, for a map, both axes. It
+                    # used to say "spectrum over 15 points" for a 5 x 3 map, and "1 points".
+                    import numpy as np
+
+                    _lam = np.unique(np.asarray(result.numeric["wavelength_um"], dtype=float))
+                    _nl = int(_lam.size)
+                    _span = ("{0:g}–{1:g} µm".format(_lam[0], _lam[-1]) if _nl > 1
+                             else "{0:g} µm".format(_lam[0]))
+                    if is_map:
+                        _nt = int(np.unique(np.asarray(result.numeric["theta_deg"],
+                                                       dtype=float)).size)
+                        _desc = "map over {0:,} wavelength{1} × {2:,} angle{3}, {4}".format(
+                            _nl, "" if _nl == 1 else "s", _nt, "" if _nt == 1 else "s", _span)
+                    else:
+                        _desc = "spectrum over {0:,} wavelength{1}, {2}".format(
+                            _nl, "" if _nl == 1 else "s", _span)
+                    status_lbl.setText("{0}: {1}".format(canon, _desc))
+                    win.statusBar().showMessage(_desc[0].upper() + _desc[1:])
 
                 if which == "si":
                     # a DIRTY case (panels edited under it) computes from the panels —
@@ -4156,6 +4846,24 @@ def build_main_window():
 
                     _sym = bool(page._sample_azimuth_symbolic())
                     _az = float(page._sample_azimuth_deg())
+                    if page._spectral_state()["on"] and canon == "SHG Simulation":
+                        # built from the UNROTATED material: the factory turns the crystal itself,
+                        # so every wavelength gets the same azimuth and nothing is rotated twice.
+                        from .spectral import casestudy_spectrum, constant_spectrum
+
+                        if si_case.currentText() != "Custom (use fields)" and not _si_dirty["on"]:
+                            _key = resolve_case_label(si_case.currentText())
+                            _base, _names = casestudy_spectrum(_key), (_key,)
+                        else:
+                            _base, _names = constant_spectrum(material), ()
+
+                        def _si_spectrum(lam, _b=_base, _a=_az, _s=_sym):
+                            built = _b(lam)
+                            return built if _s else si_material_at_azimuth(built, _a)
+
+                        _si_spectrum.material_names = _names
+                        _run_spectral(_si_spectrum, is_map=False)
+                        return
                     if not _sym:
                         material = si_material_at_azimuth(material, _az)
                     with stage("compute"):
@@ -4342,11 +5050,66 @@ def build_main_window():
                     else:
                         # F70 the GUI walkthrough: the Fresnel spins need the same friendly min<max guard
                         # as the Maker ones (the grid builder's raw error names no field).
-                        if canon == "Fresnel Coefficients" and fr_min.value() >= fr_max.value():
+                        # With the wavelength sweep on, θ min = θ max is a legitimate request: a
+                        # one-angle map IS a spectrum line. Without the sweep it stays an error.
+                        _one_angle_ok = page._spectral_state()["on"]
+                        if canon == "Fresnel Coefficients" and (
+                                fr_min.value() > fr_max.value()
+                                or (fr_min.value() == fr_max.value() and not _one_angle_ok)):
                             raise ValueError(
                                 f"Fresnel scan range: θ min ({fr_min.value():g}°) must be smaller "
-                                f"than θ max ({fr_max.value():g}°). Fix the Fresnel Coefficients "
-                                f"Scan Range fields.")
+                                f"than θ max ({fr_max.value():g}°). Fix θ min / θ max in the "
+                                f"Fresnel Coefficients Scan Range.")
+                        if (page._spectral_state()["on"]
+                                and canon in ("SHG Simulation", "Maker Fringes",
+                                              "Fresnel Coefficients")):
+                            from .layer_stack import build_system_from_stack
+
+                            from .layer_stack import decode_stack
+                            from .shaarp_gui import _with_fixed_sample_azimuth
+
+                            # DECODED, as the session loader decodes it. The payload is the saved
+                            # form, where a Custom layer's complex tensors are {re, im} dicts, so
+                            # every sweep over a "Custom (fields)" row or "Custom film (use fields)"
+                            # failed with "must be real number, not dict" while the same inputs
+                            # computed fine at one wavelength.
+                            _stack = decode_stack(page._ml_stack_payload()["stack"])
+                            # The sweep pins the sample to Fix Sample, so the fixed azimuth in the
+                            # box is the one to use -- applied the way the single-wavelength Maker
+                            # and Fresnel runs apply it. The sweep ignored it while the box stayed
+                            # live, so a map row disagreed with the Maker run at the same wavelength.
+                            _az = float(_sr.get("azimuth_deg", 0.0) or 0.0)
+                            _ccw = bool(_sr.get("ccw", True))
+
+                            def _ml_spectrum(lam, _st=_stack):
+                                # the WHOLE system is rebuilt per wavelength: the layer
+                                # permittivities and omega = 2*pi/lambda have to move together, or
+                                # the result is a thickness sweep wearing a wavelength label.
+                                return _with_fixed_sample_azimuth(
+                                    build_system_from_stack(_st, wavelength_um=float(lam),
+                                                            theta_deg=theta_spin.value()),
+                                    _az, _ccw)
+
+                            # The REGISTRY keys, taken from the stack rows -- not the built
+                            # materials' display names, which do not match the registry ("X-cut
+                            # KTP" vs "KTP x-cut"). Without these the support check has no material
+                            # to look up and the unphysical-wavelength guard never fires.
+                            _ml_spectrum.material_names = tuple(dict.fromkeys(
+                                resolve_case_label(r.get("material"))
+                                for r in _stack if r.get("material")))
+                            _run_spectral(_ml_spectrum, is_map=canon != "SHG Simulation")
+                            return
+                        # scan-range sanity (audit): a min >= max typo previously ran
+                        # "successfully" with an empty/garbage sweep instead of telling the user
+                        # what to fix. BEFORE the compute: placed after it, min > max never got
+                        # here -- the grid builder raised first and the user read the generic
+                        # "check the material tensors" text. theta_min/theta_max are the MAKER
+                        # FRINGES range; Fresnel's own is guarded above.
+                        if canon == "Maker Fringes" and th_min.value() >= th_max.value():
+                            raise ValueError(
+                                f"scan range: θ min ({th_min.value():g}°) must be smaller than θ "
+                                f"max ({th_max.value():g}°). Fix θ min / θ max in the Maker "
+                                f"Fringes Scan Range.")
                         with stage("compute"):
                             result = compute_ml_gui_result(canon,
                                                            point_group=point_group.currentText(),
@@ -4378,14 +5141,6 @@ def build_main_window():
                                                                None if any(d for _h, d in _stack_analytic_flags())
                                                                else False),
                                                            analytical_h_value=h_val)
-                    # scan-range sanity (audit): a min >= max typo previously ran "successfully"
-                    # with an empty/garbage sweep instead of telling the user what to fix
-                    # theta_min/theta_max here are the MAKER FRINGES range; Fresnel has
-                    # its own fr_min/fr_max/fr_step (guarded above, before compute).
-                    if canon == "Maker Fringes" and th_min.value() >= th_max.value():
-                        raise ValueError(
-                            f"scan range: θ min ({th_min.value():g}°) must be smaller than θ max "
-                            f"({th_max.value():g}°). Fix the 'scan: min / max / step (deg)' fields.")
                     if getattr(result, "kind", "") == "sample_rotation":
                         # polar RA figure (2ω SHG vs SAMPLE azimuth), angular axis in the
                         # user's CW/CCW sense. The curve rides along for the equal-results fence.
@@ -4464,6 +5219,7 @@ def build_main_window():
                             ellipses=ell3)
                         _replace_canvas_figure(plot_canvas, _mlfig)
                         output_tabs.setCurrentWidget(plot_tab)
+                _clear_spectrum_tab()
                 state["last_result"] = result
                 had_expr = False
                 try:
@@ -4502,6 +5258,8 @@ def build_main_window():
                 from .debuglog import log_exception
                 win._last_traceback = log_exception(which, disp, exc)
                 win.statusBar().showMessage(f"{type(exc).__name__}: {exc}")
+                _mark_not_current("This Update did not complete")
+                state["progress_note"] = "Did not complete"
                 # Record into the smoke-test sink if one is armed (--gui-smoke) so an Update that
                 # errors is DETECTED rather than silently swallowed into a dialog -- the exact way the
                 # frozen-exe FileNotFoundError hid from "I clicked Update and it looked fine".
@@ -4519,7 +5277,9 @@ def build_main_window():
                     try:
                         status_lbl.setText("⚠ " + _msg)
                         status_lbl.setStyleSheet("color:#b00020;")
-                        status_lbl.setToolTip("See Help ▸ Debug Info for the full traceback.")
+                        # The label sits in a fixed-height section and clips past ~2 lines, so
+                        # the FULL message rides on the tooltip; the traceback is in Debug Info.
+                        status_lbl.setToolTip(_msg + "\n\nSee Help ▸ Debug Info for the full traceback.")
                     except Exception:
                         pass
             finally:
@@ -4530,8 +5290,14 @@ def build_main_window():
                 dt = time.perf_counter() - t0
                 time_lbl.setText(f"Time Used = {dt:.3f} s")
                 progress.setRange(0, 100)  # leave the indeterminate/busy state
-                progress.setValue(100)
-                progress.setFormat("100% Completed")
+                if state.get("progress_note"):
+                    # declined before computing: "100% Completed" there claimed a run that did
+                    # not happen
+                    progress.setValue(0)
+                    progress.setFormat(state["progress_note"])
+                else:
+                    progress.setValue(100)
+                    progress.setFormat("100% Completed")
                 try:  # Phase D: per-Update telemetry (never allowed to break a run)
                     from .debuglog import log_run
                     _case = (si_case.currentText() if which == "si"
@@ -4558,6 +5324,12 @@ def build_main_window():
             from .shaarp_gui import export_result_payload
 
             payload = export_result_payload(state["last_result"])
+            # A result's stated ASSUMPTIONS travel with its numbers. A spectrum holds the SHG tensor
+            # constant across the sweep; the Python result said so in stages["assumptions"], but
+            # this export dropped the stages, so a spectrum saved from the app arrived without it.
+            _assumed = (getattr(state["last_result"], "stages", None) or {}).get("assumptions")
+            if _assumed:
+                payload["assumptions"] = dict(_assumed)
             _curve = state.get("last_si_curve")
             if which == "si" and _curve is not None:
                 import numpy as _np
@@ -4587,7 +5359,14 @@ def build_main_window():
                     "tab": which,
                     "exported": _t.strftime("%Y-%m-%d %H:%M:%S"),
                     "inputs": collect_session_state(win),
-                    "note": "Reproduce: File > Load Session with 'inputs', then press Update.",
+                    # The old note said "Reproduce: File > Load Session with 'inputs'": there is no
+                    # File menu, and Load Session only reads a saved-session file, not an export.
+                    # And when the inputs changed after the result was computed, 'inputs' are the
+                    # current settings -- say so rather than imply they produced these numbers.
+                    "note": ("The inputs were changed after this result was computed, so "
+                             "'inputs' records the current settings, not necessarily the ones "
+                             "that produced it." if state.get("stale") else
+                             "'inputs' records every setting that produced this result."),
                 }
             except Exception:
                 pass  # provenance is best-effort; never block a data export
@@ -4626,7 +5405,8 @@ def build_main_window():
             """The figure on the OUTPUT tab the user is looking at. The visible output
             sub-tab decides which canvas: Maker/Fresnel on ML, else the main polar/analytical plot."""
             cur = output_tabs.currentWidget() if output_tabs is not None else None
-            for cv, tab in ((maker_canvas, maker_tab if which == "ml" else None),
+            for cv, tab in ((spectrum_canvas, spectrum_tab),
+                            (maker_canvas, maker_tab if which == "ml" else None),
                             (fresnel_canvas, fresnel_tab if which == "ml" else None),
                             (plot_canvas, plot_tab)):
                 if cv is not None and tab is not None and cur is tab:
@@ -4651,7 +5431,8 @@ def build_main_window():
 
         def _current_result_canvas():
             cur = output_tabs.currentWidget() if output_tabs is not None else None
-            for cv, tab in ((maker_canvas, maker_tab if which == "ml" else None),
+            for cv, tab in ((spectrum_canvas, spectrum_tab),
+                            (maker_canvas, maker_tab if which == "ml" else None),
                             (fresnel_canvas, fresnel_tab if which == "ml" else None),
                             (plot_canvas, plot_tab)):
                 if cv is not None and tab is not None and cur is tab:
@@ -4686,7 +5467,7 @@ def build_main_window():
             dlg.finished.connect(lambda *_: fig.set_canvas(plot_canvas))  # rebind on close
             dlg.show()
 
-        for _cv in (plot_canvas, maker_canvas, fresnel_canvas):
+        for _cv in (plot_canvas, maker_canvas, fresnel_canvas, spectrum_canvas):
             if _cv is not None:
                 _cv.mouseDoubleClickEvent = (lambda ev, f=_popout_current_figure: f())
 

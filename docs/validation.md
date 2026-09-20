@@ -14,7 +14,7 @@ Three kinds of reference are used:
 In short: SHAARP.py agrees with the reference output of the original packages to machine precision
 (typical maximum error 10⁻¹³ – 10⁻¹⁷) across solver stages, geometries, the Full / JK / HH
 assumption modes, single-interface reflected SHG, crystal orientation and the symbolic engine. The
-full automated suite (224 modules / 1,331 tests) passes, including an offscreen pass over every
+full automated suite (233 modules / 1,545 tests) passes, including an offscreen pass over every
 selectable case and functionality on both GUI tabs.
 
 ## Method
@@ -41,7 +41,7 @@ selectable case and functionality on both GUI tabs.
 | Sample-rotation azimuth (ext1 + ml4) | 16 | 10⁻⁹ | 4.5×10⁻¹⁵ | `test_sample_rotation_ext_reference_comparison.py`, `test_sample_rotation_multilayer_ml4_reference_comparison.py` |
 | SHG assumption modes — Full / JK / HH | 12 | 5×10⁻⁴ | 2.0×10⁻¹⁵ | `test_jkhh_*_agreement.py` |
 | Multilayer polarimetry solve (forward-only) | 20 | 10⁻¹⁰ | 2.0×10⁻¹⁴ | `test_polarimetry_reference_comparison.py` |
-| Fresnel coefficients (multilayer `listFresnel`) | 3 | 10⁻¹⁰ | ~1×10⁻¹⁵ | `test_fresnel_sweep_python_comparison.py`, `test_figuredata.py` |
+| Fresnel coefficients (multilayer `listFresnel`, compared in amplitude mode — `transmittance="amplitude"`) | 3 | 10⁻¹⁰ | ~1×10⁻¹⁵ | `test_fresnel_sweep_python_comparison.py`, `test_figuredata.py` |
 | Crystal orientation (`hklConvert`/QC/QP, eps-lab, d-lab) | 10 | 10⁻¹¹ | ≤10⁻¹¹ (asserted) | `test_mathematica_orientation_reference.py` |
 | Single-interface solver stage values | — | 10⁻¹² | 1.2×10⁻¹⁶ | `test_shaarp_si_stage_*` |
 | Single-interface reflected — point groups (sipg1/2) | 14 | 2×10⁻⁶ | match | `test_shaarp_si_*` |
@@ -60,9 +60,9 @@ reference JSON files.
 Two further properties are enforced by the suite rather than compared against a reference: the
 multilayer path runs in natural units (μ = ε₀ = 1 defaults, with a dispersion-contract warning) and
 the suite logs warning-free; and the merged SHAARP.si + .ml GUI (`shaarp.make_shaarp_gui()`) drives
-only the validated backends, with 49 GUI tests including continuity gates.
+only the validated backends, with 68 GUI tests including continuity gates.
 
-Suite total: **224 modules, 1,331 tests, 0 failures**, measured by running every module in its own
+Suite total: **233 modules, 1,545 tests, 0 failures**, measured by running every module in its own
 subprocess from a clean checkout copied outside the development tree, so this is the figure you
 reproduce after cloning.
 
@@ -78,6 +78,87 @@ reproduce after cloning.
 | HH | both | 0.047766 | 0.048828 | 0.032616 | 0.008250 |
 
 (max \|error\| ≈ 2×10⁻¹⁵ for all three modes.)
+
+## Independent cross-check: the linear stage against outside codes
+
+Everything above compares SHAARP.py with the original Mathematica packages. That establishes
+agreement with the original packages, not independence: both sides share one formalism. The linear (fundamental-frequency)
+multilayer stage is the part an outside, widely used code can check end to end, so it is also
+compared against three references that have nothing to do with ♯SHAARP:
+
+| Reference | What it is |
+| --- | --- |
+| [`tmm`](https://pypi.org/project/tmm/) | Steven Byrnes' transfer-matrix package |
+| [`inkstone`](https://pypi.org/project/inkstone/) | RCWA (a Fourier-space eigenmode expansion), truncated to the zeroth order |
+| closed form | An Abelès characteristic matrix written out from Born & Wolf, in `benchmarks/isotropic_stack_closed_form.py` |
+
+`tmm` and the closed form are two spellings of the transfer-matrix idea; `inkstone` is a different
+formalism that must collapse to the same answer for an unpatterned stack. Agreeing with all three
+is what rules out a shared convention error.
+
+Six isotropic stacks are compared — a bare interface, a single film swept in angle, the same film swept
+in wavelength, an eight-layer quarter-wave stack, a 13.9 nm absorbing gold film, and a half-wave
+absentee layer:
+
+| Quantity | Cases | Tolerance | Max \|error\| vs. `tmm` | Gating test |
+| --- | --- | --- | --- | --- |
+| Reflectance and transmittance, isotropic stacks | 6 (348 grid points) | 10⁻¹² | 1.3×10⁻¹³ | `test_isotropic_stack_reference_comparison.py` |
+| Agreement among the three references | 6 | 10⁻¹¹ | 6.1×10⁻¹⁵ | same |
+| Stored numbers vs. a live recomputation | 6 | 10⁻¹³ | — | `test_isotropic_stack_live_recheck.py` |
+
+```{figure} _static/isotropic_stack_benchmark.png
+:alt: SHAARP.py, tmm and inkstone overlaid on the reflectance and transmittance of a single film across 400-800 nm; residuals against tmm sit three to five orders below the 1e-12 tolerance
+
+SHAARP.py, `tmm` and `inkstone` on the Fabry–Pérot fringes of a 0.5 µm film on glass. The three
+curves overlay; the residual panel (against `tmm`) sits three to five orders below the 1e-12
+tolerance line.
+```
+
+The reference numbers are committed to `benchmarks/isotropic_stack_reference_v1.json`, so this
+comparison runs with neither package installed. Install the `benchmark` extra
+(`pip install -e ".[benchmark]"`) to regenerate them with
+`benchmarks/generate_isotropic_stack_reference.py`; the live recheck then also confirms the
+stored numbers have not drifted.
+
+This check is what catches a transmitted curve that is bare $|t|^2$ instead of a power
+transmittance. The obliquity factor that separates the two is exactly 1 for an index-matched
+exit medium, so an $R+T=1$ test on an $n=1$ substrate cannot see it; the suite therefore runs
+that test on a glass substrate, and the corresponding $2\omega$ check on a non-air exit medium.
+Definitions: {doc}`conventions`.
+
+## Wavelength sweeps
+
+The original packages give no reference away from each material's native wavelength, so the
+wavelength axis is checked by identities that must hold at *every* wavelength rather than at one,
+plus agreement between two independent implementations across the grid.
+
+| Check | What it pins | Agreement |
+| --- | --- | --- |
+| Frequency invariance at fixed permittivity (single interface) | the wavelength reaches a single-interface answer only through the permittivity | 5.2e-15 |
+| `omega * h` invariance at fixed permittivity (layer stack) | the wavelength reaches a stack through the permittivity and the optical thickness, and nothing else | 2.7e-14 |
+| Closed form against the numeric solver, over a whole wavelength grid | the wavelength axis of the closed-form route | 1.4e-11 |
+| A one-wavelength map against the plain incidence-angle sweep | the map reuses the validated angle sweep rather than re-deriving it | exact |
+| A grid point at a material's native wavelength against the existing single-wavelength result | grid construction and the per-wavelength material rebuild | exact |
+
+Gating tests: `tests/test_si_spectral_sweep.py`, `tests/test_ml_spectral_sweep.py`,
+`tests/test_spectral_angle_map.py`, `tests/test_casestudy_dispersion_quality.py`,
+`tests/test_spectral_gui.py`, `tests/test_dispersion_tables.py`.
+
+The five shipped index tables are checked against their sources in `tests/test_dispersion_tables.py`.
+LiNbO₃, KTP and LBO match literature index values at 1.064 µm to 10⁻³. GaAs absorbs at 0.532 µm,
+above its band edge, and is clear at 1.064 µm. TaAs matches the case study's own permittivity at
+0.8 and 0.4 µm to within 3 %, because its source gives a fitted model rather than a table of
+indices. The same file checks the half-wavelength rule and that a sweep past a table's end says so
+once, with the range the table can answer.
+
+What this does not certify: the permittivity *values* between tabulated points are linear
+interpolants of the material's index data, so a spectrum's shape inherits the accuracy of its
+source. Five palette films, KTP x-cut and y-cut, LiNbO₃ x-cut and z-cut (1550 nm) and ZnO (001),
+carry index data that stops being physical inside its own tabulated range; these are a different
+five from the shipped index tables. Those wavelengths are screened rather than corrected. A
+spectrum or Maker map that reaches them is refused, with the usable range named. At a single
+wavelength the app warns that any result there is not physical, and for the LiNbO₃ films the solve
+itself fails below about 0.5 µm. A Fresnel map reads no second harmonic and is not screened.
 
 ## Scope — what is, and isn't, claimed
 
@@ -133,7 +214,7 @@ message naming the variable to set, rather than failing part-way through.
 
 ## Paper figures and further checks
 
-Beyond the evidence table, four further checks are part of the suite:
+Beyond the evidence table, five further checks are part of the suite:
 
 - **Input sensitivity** (`tests/test_input_sensitivity_matrix.py`): every output must respond to
   every input that should matter, or declare its invariance. This includes the metal-film
@@ -155,14 +236,24 @@ Beyond the evidence table, four further checks are part of the suite:
   study, guarded by a test): the phase-resolved field method degrades gracefully, with median error
   about equal to the noise level; the phase-less intensity method amplifies noise strongly at
   realistic conditioning, so its output on noisy data is an initial guess, not an estimate.
+- **Polarimetry combinations and the sample-rotation sweep** (`tests/test_polarimetry_combinations.py`,
+  `tests/test_ra_scan_assumptions.py`): the rotate/fix combinations of polarizer, analyzer and
+  sample agree where the physics says they must. At normal incidence, rotating the sample by $t$
+  equals co-rotating the polarizer and analyzer by $t$ with the sample fixed (measured 4.9×10⁻¹⁰,
+  asserted below 10⁻⁸). The selected FMR/JK/HH assumption reaches every point of a sample-rotation
+  sweep. The fast sample-rotation path, one solve per $d$ component, agrees with the per-point loop
+  to 3.3×10⁻¹¹ of peak (asserted below 10⁻⁹), and where it does not apply it falls back to that
+  loop with identical output.
 
 All five tutorial notebooks execute cleanly against the current API
 (`jupyter nbconvert --execute`).
 
 ## What is not covered
 
-v1.0.0 was released with the release gate passing at the suite total recorded above, plus a
-312-cell GUI matrix sweep. Rather than summarising coverage as a percentage, the tables above state
+The release gate passes at the suite total recorded above, alongside a GUI matrix sweep that drives
+every selectable case against every functionality at three incidence angles on both tabs — 334
+cells as the palette currently stands, and it grows with the palette rather than being a fixed
+number. Rather than summarising coverage as a percentage, the tables above state
 what is verified and at what tolerance, and the Scope section states what is not: display-bound GUI
 behaviour, the phase-matching singular points that are labelled rather than compared, and the
 convention choices that are documented rather than asserted as agreement.

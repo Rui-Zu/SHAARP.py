@@ -127,9 +127,12 @@ def _quartz_au_docs_system():
 
 
 def _fig6_zno_pt_al2o3_system():
-    # Fig 6: ZnO (159 nm) // Pt (200 nm) // Al2O3 substrate at 1550 nm; only ZnO is SHG-active.
-    # Same stack as benchmarks.paper_cases.ml_fig6_system, kept inline so shaarp/ never imports
-    # benchmarks at runtime.
+    # Fig 6: ZnO (159 nm) // Pt (200 nm) // Al2O3 (100 um wafer) // air at 1550 nm; only ZnO is
+    # SHG-active. Same stack as benchmarks.paper_cases.ml_fig6_system -- kept inline so shaarp/
+    # never imports benchmarks at runtime, so THE TWO COPIES MUST BE EDITED TOGETHER.
+    # Al2O3 is a FINITE wafer sitting on AIR (Rui, 2026-09-12: the measurement was sapphire on air),
+    # which is also the only shape the released .ml GUI could express. See ml_fig6_system's
+    # docstring for where 100 um comes from and the measured (1e-12-level) impact of the change.
     from .casestudy_materials import build_casestudy_material
     from .config import Layer, MultilayerSystem
 
@@ -142,7 +145,8 @@ def _fig6_zno_pt_al2o3_system():
         Layer(name="air", material=air, thickness_um=None, shg_active=False),
         Layer(name="ZnO", material=zno, thickness_um=0.159, shg_active=True),
         Layer(name="Pt", material=pt, thickness_um=0.200, shg_active=False),
-        Layer(name="Al₂O₃ substrate", material=al2o3, thickness_um=None, shg_active=False),
+        Layer(name="Al₂O₃ wafer", material=al2o3, thickness_um=100.0, shg_active=False),
+        Layer(name="air", material=air, thickness_um=None, shg_active=False),
     ])
 
 
@@ -1974,6 +1978,7 @@ def ml_polarimetry_curve(
     from dataclasses import replace
 
     from .multilayer_shg_boundary import (
+        exit_medium_index,
         reflected_2omega_jones_sp,
         shaarp_ml_selected_transmitted_2omega_jones_sp,
         solve_multilayer_shg_from_system_polarimetry,
@@ -2008,8 +2013,14 @@ def ml_polarimetry_curve(
             except Exception:
                 t_s, t_p = 0j, 0j
         psi = np.radians(phi_deg)
-        i_refl = (np.abs(np.sin(psi) * r_s + np.cos(psi) * r_p) ** 2).astype(float)
-        i_trans = (np.abs(np.sin(psi) * t_s + np.cos(psi) * t_p) ** 2).astype(float)
+        # I = n_exit * |E|^2, matching analyze_reflected_2omega / analyze_transmitted_2omega. These
+        # polar plots build their intensities from Jones amplitudes directly rather than through
+        # those analyzers, so the weighting has to be applied here too or the GUI and the API
+        # disagree for any non-air ambient or substrate.
+        n_r = exit_medium_index(res.shg.reflected_2omega)
+        n_t = exit_medium_index(res.shg.substrate_2omega)
+        i_refl = (n_r * np.abs(np.sin(psi) * r_s + np.cos(psi) * r_p) ** 2).astype(float)
+        i_trans = (n_t * np.abs(np.sin(psi) * t_s + np.cos(psi) * t_p) ** 2).astype(float)
         return {"phi_deg": phi_deg, "intensity_reflected": i_refl, "intensity_transmitted": i_trans,
                 "fixed_phi_deg": float(fixed_phi_deg), "theta_deg": th,
                 "ellipticity_deg": float(ellipticity_deg)}
@@ -2038,19 +2049,24 @@ def ml_polarimetry_curve(
                 t_s, t_p = shaarp_ml_selected_transmitted_2omega_jones_sp(res.shg)
             except Exception:
                 t_s, t_p = 0j, 0j
+        # I = n_exit * |E|^2, matching the analyze_*_2omega helpers. Reflected leaves into the
+        # incident medium, transmitted into the substrate, so the two channels take DIFFERENT
+        # indices. Applied here because these polar plots project Jones amplitudes directly.
+        n_r = exit_medium_index(res.shg.reflected_2omega)
+        n_t = exit_medium_index(res.shg.substrate_2omega)
         if corotating_offset_deg is not None:
             # co-rotating analyzer (FB1): psi = phi + offset; parallel channel projects the
             # (s, p) Jones onto (sin psi, cos psi), perpendicular onto (cos psi, -sin psi).
             psi = math.radians(float(ph) + float(corotating_offset_deg))
-            i_p[k] = float(abs(math.sin(psi) * r_s + math.cos(psi) * r_p) ** 2)   # parallel
-            i_s[k] = float(abs(math.cos(psi) * r_s - math.sin(psi) * r_p) ** 2)   # perpendicular
-            i_pt[k] = float(abs(math.sin(psi) * t_s + math.cos(psi) * t_p) ** 2)
-            i_st[k] = float(abs(math.cos(psi) * t_s - math.sin(psi) * t_p) ** 2)
+            i_p[k] = n_r * float(abs(math.sin(psi) * r_s + math.cos(psi) * r_p) ** 2)   # parallel
+            i_s[k] = n_r * float(abs(math.cos(psi) * r_s - math.sin(psi) * r_p) ** 2)   # perpendicular
+            i_pt[k] = n_t * float(abs(math.sin(psi) * t_s + math.cos(psi) * t_p) ** 2)
+            i_st[k] = n_t * float(abs(math.cos(psi) * t_s - math.sin(psi) * t_p) ** 2)
         else:
-            i_p[k] = float(abs(r_p) ** 2)
-            i_s[k] = float(abs(r_s) ** 2)
-            i_pt[k] = float(abs(t_p) ** 2)
-            i_st[k] = float(abs(t_s) ** 2)
+            i_p[k] = n_r * float(abs(r_p) ** 2)
+            i_s[k] = n_r * float(abs(r_s) ** 2)
+            i_pt[k] = n_t * float(abs(t_p) ** 2)
+            i_st[k] = n_t * float(abs(t_s) ** 2)
         _amps["r_s"][k], _amps["r_p"][k] = complex(r_s), complex(r_p)
         _amps["t_s"][k], _amps["t_p"][k] = complex(t_s), complex(t_p)
     out = {"phi_deg": phi_deg, "intensity_p": i_p, "intensity_s": i_s,
@@ -2777,7 +2793,9 @@ def schematic_indices_for(system):
             pair = []
             for omega in (True, False):
                 eps = _epsilon_lab_of(layer.material, omega=omega)
-                n = float(np.sqrt(complex(np.asarray(eps)[0, 0]).real))
+                # Re(sqrt(eps)), not sqrt(Re(eps)): a metal has Re(eps) < 0, and the old form gave
+                # NaN (plus a RuntimeWarning on every Fig 6 Update) and drew Pt with n = 1.
+                n = float(np.real(np.sqrt(complex(np.asarray(eps)[0, 0]))))
                 pair.append(n if n > 0.05 else 1.0)
             out.append((pair[0], pair[1]))
         return out
@@ -3443,3 +3461,144 @@ def make_shaarp_gui(*, system=None, material=None) -> Any:
     tabs.set_title(0, "SHAARP.si (single interface)")
     tabs.set_title(1, "SHAARP.ml (multilayer)")
     return tabs
+
+
+# The constant-d caveat rides on the FIGURE, not only in the docs: a plot gets screenshotted and
+# pasted into a talk, and the assumption has to travel with it.
+SPECTRUM_CAPTION = "SHG tensor held constant; only the dielectric tensors disperse"
+
+
+def build_spectrum_figure(sweep, *, title: str = "Spectral Response",
+                          caption: str | None = SPECTRUM_CAPTION):
+    """Intensity against fundamental wavelength, from an si or ml spectral sweep result.
+
+    Accepts either result type: the single-interface sweep carries s and p channels, the
+    multilayer one a single analyzed channel. Agg-testable."""
+
+    lam = np.asarray(sweep.wavelength_um, dtype=float)
+    fig = Figure(figsize=(7.0, 4.2), layout="constrained")
+    ax = fig.subplots()
+    channels = []
+    if hasattr(sweep, "intensity_s"):
+        channels = [(np.asarray(sweep.intensity_s, dtype=float), "navy",
+                     r"$I_s^{2\omega}(\lambda)$"),
+                    (np.asarray(sweep.intensity_p, dtype=float), "crimson",
+                     r"$I_p^{2\omega}(\lambda)$")]
+    else:
+        channels = [(np.asarray(sweep.intensity, dtype=float), "navy",
+                     r"$I^{2\omega}(\lambda)$")]
+    for values, color, label in channels:
+        # a one-point grid has no line to draw -- mark it, or the panel comes up blank and reads
+        # as a failed run rather than as the single wavelength the user asked for.
+        style = dict(marker="o", ms=5) if lam.size == 1 else dict(lw=1.8)
+        ax.plot(lam, values, "-", color=color, label=label, **style)
+    ax.set_xlabel(r"Fundamental wavelength, $\lambda$ (µm)")
+    ax.set_ylabel(r"$I^{2\omega}(\lambda)$ (a.u.)")
+    if lam.size == 1 and caption == SPECTRUM_CAPTION:
+        # One wavelength sweeps nothing, so the dispersion caveat describes nothing on the plot --
+        # the same reasoning that took it off a one-wavelength map. Say which wavelength instead.
+        caption = None
+        title = rf"{title} at $\lambda$ = {float(lam[0]):g} µm"
+    full_title = title if not caption else f"{title}\n{caption}"
+    ax.set_title(full_title, fontsize=10)
+    ax.legend(fontsize=9)
+    ax.grid(alpha=0.3)
+    return fig
+
+
+def build_spectral_map_figure(result, *, channel: str | None = None,
+                              caption: str | None = SPECTRUM_CAPTION):
+    """A wavelength-by-incidence-angle map, showing EVERY channel the sweep produced.
+
+    The single-wavelength figures this mirrors plot all of their channels -- Maker fringes draws
+    the parallel and perpendicular analyzer channels, Fresnel draws R_p, R_s, T_p and T_s -- so a
+    map that showed only the first would quietly drop the rest. Pass ``channel`` to isolate one.
+
+    Both collapsed cases are drawn as the line plot they actually are: a heat map of a single row
+    is unreadable, and with one wavelength this IS an ordinary angle scan, while with one angle it
+    is an ordinary spectrum. Agg-testable."""
+
+    names = [channel] if channel else list(result.channels)
+    lam = result.wavelength_axis
+    theta = result.theta_axis
+    is_fresnel = result.kind == "fresnel"
+    if caption == SPECTRUM_CAPTION and np.asarray(lam).size == 1:
+        # One wavelength is an ordinary angle scan: nothing is swept, so neither the dispersion
+        # note nor the constant-d caveat describes it. "Dispersed across the sweep" under a single
+        # wavelength was false -- and the title already names the wavelength, so no caption at all
+        # (a caption repeating "at lambda = ..." printed it twice).
+        caption = None
+    elif is_fresnel and caption == SPECTRUM_CAPTION:
+        # Fresnel coefficients are LINEAR optics -- no SHG tensor takes part, so the constant-d
+        # caveat is not merely unnecessary here, it would describe an assumption this figure does
+        # not make. Only the dispersion note applies.
+        caption = "dielectric tensors dispersed across the sweep"
+    # the single-wavelength figures' own colours, so the two read as the same family
+    colours = ({"rp": "tab:blue", "rs": "tab:orange", "tp": "tab:green", "ts": "tab:red"}
+               if is_fresnel else
+               {"parallel_intensity": "navy", "perpendicular_intensity": "crimson"})
+    labels = ({"rp": r"$R_p$", "rs": r"$R_s$", "tp": r"$T_p$", "ts": r"$T_s$"}
+              if is_fresnel else
+              {"parallel_intensity": r"$I_\parallel^{2\omega}$",
+               "perpendicular_intensity": r"$I_\perp^{2\omega}$"})
+    y_label = ("Reflectance / Transmittance (power)" if is_fresnel
+               else r"$I^{2\omega}$ (a.u.)")
+
+    collapsed = result.is_angle_scan_only or result.is_spectrum_only
+    if collapsed:
+        # one panel, every channel as a curve against whichever axis survived
+        fig = Figure(figsize=(7.0, 4.4), layout="constrained")
+        ax = fig.subplots()
+        if result.is_angle_scan_only:
+            x, x_label = theta, r"Incident Angle, $\theta_i$ (deg)"
+            head = rf"{result.kind.title()} at $\lambda$ = {lam[0]:g} µm"
+            take = lambda g: g[0, :]
+        else:
+            x, x_label = lam, r"Fundamental wavelength, $\lambda$ (µm)"
+            head = rf"{result.kind.title()} at $\theta_i$ = {theta[0]:g}°"
+            take = lambda g: g[:, 0]
+        for name in names:
+            values = take(result.grid(name))
+            style = dict(marker="o", ms=5) if len(x) == 1 else dict(lw=1.8)
+            ax.plot(x, values, color=colours.get(name), label=labels.get(name, name), **style)
+        ax.set_xlabel(x_label)
+        ax.set_ylabel(y_label)
+        if is_fresnel:
+            ax.set_ylim(-0.02, 1.02)
+        ax.legend(fontsize=9, ncols=2)
+        ax.grid(alpha=0.3)
+        ax.set_title(head if not caption else f"{head}\n{caption}", fontsize=10)
+        return fig
+
+    # a heat map per channel, laid out so four Fresnel channels read as a 2x2 block
+    columns = 2 if len(names) > 1 else 1
+    rows = (len(names) + columns - 1) // columns
+    fig = Figure(figsize=(3.7 * columns + 1.2, 3.1 * rows + 0.9), layout="constrained")
+    axes = fig.subplots(rows, columns, squeeze=False)
+    # the largest SHG intensity in ANY channel, so a channel that is zero by symmetry can be told
+    # apart from a weak one
+    peak = max((float(np.nanmax(np.abs(result.grid(n)))) for n in names), default=0.0)
+    for index, name in enumerate(names):
+        ax = axes[index // columns][index % columns]
+        grid = result.grid(name)
+        title = labels.get(name, name)
+        # power ratios share a 0-1 scale so the four panels are directly comparable; SHG
+        # intensities have no such bound and get their own.
+        limits = dict(vmin=0.0, vmax=1.0) if is_fresnel else {}
+        if not is_fresnel and float(np.nanmax(np.abs(grid))) <= 1e-9 * peak:
+            # A channel that vanishes (the perpendicular channel of a symmetric geometry sits at
+            # rounding noise, ~1e-30) autoscaled its own colour bar and drew that noise as
+            # full-contrast structure. Drawn on the other channel's scale, it reads as the zero
+            # it is, and the title says so.
+            limits = dict(vmin=0.0, vmax=peak if peak > 0.0 else 1.0)
+            title += r" ($\approx$ 0)"
+        mesh = ax.pcolormesh(theta, lam, grid, shading="nearest", cmap="viridis", **limits)
+        fig.colorbar(mesh, ax=ax)
+        ax.set_title(title, fontsize=10)
+        ax.set_xlabel(r"$\theta_i$ (deg)")
+        ax.set_ylabel(r"$\lambda$ (µm)")
+    for spare in range(len(names), rows * columns):
+        axes[spare // columns][spare % columns].axis("off")
+    head = f"{result.kind.title()}: wavelength by incidence angle"
+    fig.suptitle(head if not caption else f"{head}\n{caption}", fontsize=10)
+    return fig

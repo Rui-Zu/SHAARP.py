@@ -32,6 +32,12 @@ symbolic = []
 interactive = ["ipywidgets>=8", "ipython>=8"]
 desktop = ["PySide6>=6.5"]
 dev = ["pytest>=7"]
+# Independent codes used ONLY to regenerate benchmarks/isotropic_stack_reference_v1.json. The
+# committed fixture is what the suite reads, so neither package is needed to run the tests, build
+# the app, or use SHAARP.py. Both are pure Python: tmm declares no dependencies, inkstone needs
+# only numpy and scipy. inkstone is AGPL-3.0 -- it is a development tool that produces numbers and
+# is never shipped, linked into, or served by this package.
+benchmark = ["tmm>=0.2", "inkstone>=0.3"]
 
 [project.scripts]
 shaarp = "shaarp.cli:main"
@@ -43,5 +49,9 @@ shaarp-gui = "shaarp.desktop_app:main"
 include = ["shaarp*"]
 
 [tool.setuptools.package-data]
-# ship the Mathematica-exported case-study dispersion data + the #SHAARP logos/icon with the wheel
-shaarp = ["*.json", "assets/*.png", "assets/*.ico"]
+# ship the Mathematica-exported case-study dispersion data, the published refractive-index tables
+# for the dispersive material variants, and the #SHAARP logos/icon with the wheel.
+# NOTE the "*.json" glob is TOP-LEVEL ONLY -- dispersion_data/ needs its own entries or the
+# dispersive materials vanish from an installed wheel while working fine from a source checkout.
+shaarp = ["*.json", "assets/*.png", "assets/*.ico",
+          "dispersion_data/*.csv", "dispersion_data/*.json"]

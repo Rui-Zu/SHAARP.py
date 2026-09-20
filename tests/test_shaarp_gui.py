@@ -260,8 +260,14 @@ class MlTabComputeTests(unittest.TestCase):
         retired = resolve_ml_system_preset("LiNbO3 film (10 um)")
         self.assertAlmostEqual(float(retired.layers[1].thickness_um), 10.0, places=6)
         fig6 = resolve_ml_system_preset("ZnO / Pt / Al2O3 (Fig 6, 1550 nm)")
-        self.assertEqual([lyr.shg_active for lyr in fig6.layers], [False, True, False, False])
+        # FIVE media since 2026-09-12: air / ZnO / Pt / Al2O3 (500 um wafer) / air. The sapphire was
+        # modelled as a semi-infinite exit medium, but the sample was a wafer sitting on AIR (Rui),
+        # which is also the only shape the released .ml GUI could express. Only ZnO is active.
+        self.assertEqual([lyr.shg_active for lyr in fig6.layers], [False, True, False, False, False])
         self.assertAlmostEqual(float(fig6.layers[1].thickness_um), 0.159, places=9)
+        # 100 um: the released original's Al2O3(0001) button value (setup.nb:3537); the wafer sits on air
+        self.assertAlmostEqual(float(fig6.layers[3].thickness_um), 100.0, places=6)
+        self.assertIsNone(fig6.layers[-1].thickness_um, "exit medium is semi-infinite air")
         self.assertAlmostEqual(float(fig6.wavelength_um), 1.55, places=9)
         fig7 = resolve_ml_system_preset("LiNbO3 / Quartz (Fig 7, 1550 nm)")
         self.assertEqual([lyr.shg_active for lyr in fig7.layers], [False, True, True, False])

@@ -208,10 +208,10 @@ class MLPaperCaseTests(unittest.TestCase):
         """S45 closure (2026-09-02): the port vs the LIVE SHAARP.ml engine (Github checkout setup.nb, exported
         through the same chunk pipeline as verify_quartz_au_docs_vs_mathematica.py) on the bare 123.6 um Z-cut
         quartz slab at 800 nm, p-in/p-out transmitted, 27 angles 0..10 deg (0.5 deg) + 15/20/25/30/34.68/38:
-        max |port - ml| / max(ml) = 4.7e-11. The SLAB closed form QuartzSimuMRP1S0p02 (fig4b_fmr_reference.csv)
-        is 0.77x the engine at 0 deg and 0.5x at 6 deg, converging only beyond 30 deg -- so the ~5% near-normal
-        offset the port shows against the author's closed forms is a property of that older derivation, not of
-        the port. Reference: benchmarks/mathematica_reference/bare_quartz_z_800nm_reference.json."""
+        max |port - ml| / max(ml) = 4.7e-11. The live engine is the reference for this test; do not substitute
+        the serialized slab closed form (fig4b_fmr_reference.csv), which is the reference for the separate
+        fig4b closed-form test above.
+        Reference: benchmarks/mathematica_reference/bare_quartz_z_800nm_reference.json."""
         import json
         from benchmarks.paper_cases import ml_fig4_system
         from shaarp.multilayer_shg_boundary import solve_multilayer_maker_fringes_sweep

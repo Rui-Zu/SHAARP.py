@@ -12,13 +12,22 @@ defect class, where a combo carried the right display labels while a read site s
 LABEL to build_casestudy_material and every SI case Update failed silently.
 
 So this file drives the BUILT WINDOW and asserts:
-  * the SI case combo's selectable rows == GUI_SI_GROUPS, in order, with the group headers present
+  * the SI case combo's curated rows == GUI_SI_GROUPS, in order, with the group headers present
     and DISABLED (headers are titles, not choices);
   * the ML case combo's film rows == the curated ML palette;
-  * EVERY selectable row resolves through resolve_case_label to a registry key that
-    build_casestudy_material can actually build.
+  * the ONE permitted extension -- the Dispersive group -- is exactly the shipped index tables,
+    under its own disabled header, AFTER the curated palette;
+  * EVERY selectable row resolves through the GUI's own resolution seam to a material that can
+    actually be built.
 A future session cannot silently reintroduce a non-original example, or break the label->key
 resolution, without this going red.
+
+Why the Dispersive group is fenced separately rather than folded into the curated lists: a
+dispersive row is not a new example. It is a crystal ALREADY in the palette, with its linear optics
+read from a published index table instead of one tabulated wavelength, so that a wavelength sweep
+has something to move. Its membership is decided by shaarp.dispersion's shipped tables, not by an
+editorial choice, and asserting it against that registry is the same fence the curated lists get --
+a row cannot appear in it without a table (and therefore a citation) landing in the package first.
 """
 
 from __future__ import annotations
@@ -84,9 +93,25 @@ class GuiPaletteFidelityTests(unittest.TestCase):
             out.append((t, en))
         return out
 
+    @staticmethod
+    def _dispersive_group():
+        """(header text, [label]) for the shipped index tables -- the registry, not the widget."""
+        from shaarp.casestudy_materials import gui_dispersive_group
+        hdr, rows = gui_dispersive_group()
+        return hdr.strip(), [label for label, _key in rows]
+
+    @classmethod
+    def _split_curated(cls, rows):
+        """(rows before the Dispersive header, rows from it onward)."""
+        hdr, _labels = cls._dispersive_group()
+        for i, (text, _en) in enumerate(rows):
+            if text.strip() == hdr:
+                return rows[:i], rows[i:]
+        return rows, []
+
     def test_si_combo_rows_are_exactly_the_curated_palette(self):
         from shaarp.casestudy_materials import GUI_SI_GROUPS
-        rows = self._builtin_rows(self._rows(self._si_case_combo()))
+        rows, _disp = self._split_curated(self._builtin_rows(self._rows(self._si_case_combo())))
         headers = [t for t, en in rows if not en]
         choices = [t.strip() for t, en in rows if en and t.strip() != "Custom (use fields)"]
         self.assertEqual(choices, [label for _hdr, entries in GUI_SI_GROUPS for label, _key in entries],
@@ -101,12 +126,35 @@ class GuiPaletteFidelityTests(unittest.TestCase):
         self.assertEqual(ml_film_labels(self.ml_page), [label for label, _key in GUI_ML_CASES],
                          "ML film rows no longer match the curated original palette")
 
+    def test_dispersive_rows_are_exactly_the_shipped_index_tables(self):
+        """The one permitted extension, fenced as tightly as the palette it follows.
+
+        A row may sit here only because a published index table (and therefore its citation) is in
+        the package -- never because a session typed a name into a combo."""
+        from tests.gui_harness import ml_case_combo
+        hdr, labels = self._dispersive_group()
+        self.assertTrue(labels, "no dispersive tables are shipped -- the group should be absent")
+        tail_rows = {"N-layer stack (editor)", "Custom film (use fields)"}
+        for tab, combo in (("SI", self._si_case_combo()), ("ML", ml_case_combo(self.ml_page))):
+            with self.subTest(tab=tab):
+                _curated, disp = self._split_curated(self._builtin_rows(self._rows(combo)))
+                self.assertTrue(disp, f"{tab}: the Dispersive group is missing from the case combo")
+                self.assertEqual(disp[0][0].strip(), hdr)
+                self.assertFalse(disp[0][1],
+                                 f"{tab}: the Dispersive header must be a title, not a choice")
+                shown = [t.strip() for t, en in disp[1:] if en]
+                self.assertEqual(shown[:len(labels)], labels,
+                                 f"{tab}: the Dispersive rows are not the shipped index tables")
+                self.assertEqual(set(shown[len(labels):]) - tail_rows, set(),
+                                 f"{tab}: an unrecognised row follows the Dispersive group")
+
     def test_every_selectable_case_row_resolves_to_a_buildable_material(self):
         # THE CS-1 REGRESSION FENCE: a row whose label does not resolve to a registry key looks
         # perfectly fine in the combo and fails only when the user clicks Update.
         from shaarp.casestudy_materials import build_casestudy_material, resolve_case_label
         from tests.gui_harness import ml_film_labels
-        si_rows = [t.strip() for t, en in self._builtin_rows(self._rows(self._si_case_combo()))
+        curated, _disp = self._split_curated(self._builtin_rows(self._rows(self._si_case_combo())))
+        si_rows = [t.strip() for t, en in curated
                    if en and t.strip() != "Custom (use fields)"]
         for label in si_rows + ml_film_labels(self.ml_page):
             with self.subTest(label=label):
@@ -115,6 +163,23 @@ class GuiPaletteFidelityTests(unittest.TestCase):
                 material = build_casestudy_material(key)
                 self.assertTrue(getattr(material, "structure", None) is not None,
                                 f"{label!r} -> {key!r} did not build a usable material")
+
+    def test_every_dispersive_row_builds_through_the_gui_resolution_seam(self):
+        """Same fence, other resolver: a dispersive label never reaches the registry by key -- it is
+        resolved by material_for_label, which is the seam every GUI read site already goes through.
+        A row whose table is missing or misnamed looks perfectly fine until the user clicks Update."""
+        from shaarp.dispersion import load_shipped_table
+        from shaarp.layer_stack import material_for_label
+        _hdr, labels = self._dispersive_group()
+        for label in labels:
+            with self.subTest(label=label):
+                low, high = load_shipped_table(label).range_um
+                # a wavelength the table can answer at BOTH harmonics where it reaches that far:
+                # eps(2w) is read at lam/2, so a table runs out at the blue end twice as fast.
+                lam = 0.5 * (min(2.0 * low, high) + high)
+                material = material_for_label(label, lam)
+                self.assertTrue(getattr(material, "structure", None) is not None,
+                                f"{label!r} did not build a usable material at {lam} um")
 
 
 if __name__ == "__main__":  # pragma: no cover

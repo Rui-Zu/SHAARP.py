@@ -60,10 +60,13 @@ def _real_list(values: Any) -> list[float]:
 def maker_figure_data(system, theta_grid=None, options=None) -> FigureData:
     """Maker-fringe transmitted-SHG intensity vs incidence angle (parallel + perp).
 
-    Uses ``run_maker_fringes`` (SHAARP.ml unit normalization by default), so the
-    plotted ``parallel``/``perpendicular`` series are exactly the live-Mathematica
-    ``listMFpara``/``listMFperp`` quantities -- matched to ~1e-15 on the non-singular
-    validated cases (see ``tests/test_figuredata.py::MakerPlotMathematicaValidationTests``)."""
+    Uses ``run_maker_fringes`` (SHAARP.ml unit normalization by default). The plotted series are
+    the PHYSICAL intensity, ``n_exit * |E|^2``, with ``n_exit`` the substrate's index at 2 omega
+    (``multilayer_shg_boundary.exit_medium_index``). ♯SHAARP.ml's ``listMFpara`` / ``listMFperp``
+    are the unweighted ``|E|^2``, so the two coincide only for an air substrate; the underlying
+    FIELDS match the live-Mathematica values to ~1e-15 on the non-singular validated cases (see
+    ``tests/test_figuredata.py::MakerPlotMathematicaValidationTests``, which checks the solver
+    against Mathematica and the plot against the solver as two separate assertions)."""
     result = run_maker_fringes(system, theta_grid, options)
     n = result.numeric
     return FigureData(
@@ -76,7 +79,8 @@ def maker_figure_data(system, theta_grid=None, options=None) -> FigureData:
             "perpendicular analyzer": _real_list(n["perpendicular_intensity"]),
         },
         validation_status=result.validation.status,
-        note="Plotted intensities are listMFpara/listMFperp (SHAARP.ml unit normalization), "
+        note="Plotted intensities are n_exit*|E|^2 (SHAARP.ml unit normalization); the underlying "
+             "fields are listMFpara/listMFperp, "
              "matched to live Mathematica MFList to ~1e-15 on non-singular cases (ext1 + ml1/2/3/5/6).",
         meta={"kind": result.kind},
     )

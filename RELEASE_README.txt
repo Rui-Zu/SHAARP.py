@@ -29,8 +29,8 @@ does not open, the FAQ in the documentation has the fix for each system.
 Inside the app: the Help menu has the User Guide, and every control shows a tooltip when you
 hover over it.
 
-YOUR FIRST CALCULATION (about one minute)
------------------------
+YOUR FIRST CALCULATION (a few minutes)
+--------------------------------------
 1. The app opens on the SHAARP.si tab. Leave every setting as it is.
 2. Under "Case Study and Examples", pick "GaAs (111)", one of the four worked cases of the 2022
    paper (all at 800 nm).
@@ -50,6 +50,8 @@ WHAT IT COMPUTES
 * Reflected SHG polarimetry I_s(phi), I_p(phi) for any SHG-active crystal class and orientation
 * Multilayer Maker fringes under Full multiple reflections / Jerphagnon-Kurtz / Herman-Hayden
 * Linear Fresnel reflection/transmission sweeps
+* Wavelength sweeps: an SHG spectrum I(lambda), or Maker fringes and Fresnel curves mapped
+  against both wavelength and incidence angle, for five crystals with published index data
 * Closed-form analytical SHG expressions (symbolic in polarization, d_ij, thickness)
 * d-tensor extraction: recover d_ij from a simulated or measured polarimetry scan
 

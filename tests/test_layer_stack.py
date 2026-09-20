@@ -8,10 +8,14 @@ import unittest
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 from shaarp.layer_stack import (
+    ISOTROPIC_LAYER_CHOICE,
     LAYER_MATERIAL_CHOICES,
     build_system_from_stack,
+    default_layer_spec,
     default_stack,
+    layer_material_choices,
     set_layer_count,
+    simple_film_stack,
 )
 
 
@@ -36,8 +40,19 @@ class LayerStackModelTests(unittest.TestCase):
         self.assertNotIn("LiNbO3 z-cut (1064 nm)", LAYER_MATERIAL_CHOICES)  # setup.nb dead code
         self.assertIn("Custom (fields)", LAYER_MATERIAL_CHOICES)  # per-layer custom crystal entry
         self.assertIn("isotropic n (set below)", LAYER_MATERIAL_CHOICES)  # F56 half-space entry
-        # air + isotropic-n + 16 palette films + Custom
-        self.assertEqual(len(LAYER_MATERIAL_CHOICES), 19)
+        # ...plus the DISPERSIVE variants, between the palette and Custom. These are not further
+        # original examples -- they are palette crystals whose linear optics come from a published
+        # index table -- but the editor is the single stack truth, so a material the case combo can
+        # select has to be a material a layer row can hold. While they were missing, choosing a
+        # dispersive film silently degraded the row to Custom and the run then failed on a
+        # half-filled snapshot. Counted from the registry so shipping a new table cannot break this.
+        from shaarp.dispersion import dispersive_material_names
+
+        dispersive = dispersive_material_names()
+        self.assertEqual(LAYER_MATERIAL_CHOICES[-1 - len(dispersive):-1], dispersive,
+                         "the dispersive variants must sit between the palette and Custom")
+        # air + isotropic-n + 16 palette films + the dispersive variants + Custom
+        self.assertEqual(len(LAYER_MATERIAL_CHOICES), 19 + len(dispersive))
 
     def test_per_layer_custom_crystal(self):
         """A layer marked 'Custom (fields)' builds its Material from the per-layer crystal snapshot
@@ -116,6 +131,53 @@ class LayerEditorGuiTests(unittest.TestCase):
                     and any("N-layer" in c.itemText(i) for i in range(c.count())))
         self.assertTrue(any(c.itemText(i) == "N-layer stack (editor)" for i in range(sysd.count())
                             for c in [sysd]))
+
+    def test_half_space_rows_are_offered_only_isotropic_materials(self):
+        """The other half of the isotropy rule: the option is never OFFERED, not just refused.
+
+        `layer_stack._require_isotropic_halfspace` guarantees it in the model; this checks the
+        editor does not put a birefringent crystal in front of the user on the ambient/substrate
+        rows in the first place. Driven through the REAL window, because the palette depends on
+        which row is selected and the half-spaces MOVE when the layer count changes -- a per-row
+        rule cannot be verified from the combo's initial contents.
+        """
+        from PySide6 import QtWidgets
+
+        from shaarp.desktop_app import build_main_window
+        from shaarp.layer_stack import ISOTROPIC_LAYER_CHOICE
+
+        win = build_main_window()
+
+        def _all(w):
+            yield w
+            for ch in (w.children() if hasattr(w, "children") else []):
+                yield from _all(ch)
+
+        ml = win.findChild(QtWidgets.QTabWidget).widget(1)
+        combos = [c for c in _all(ml) if isinstance(c, QtWidgets.QComboBox)]
+        row_sel = next(c for c in combos if (c.toolTip() or "").startswith("Select the layer"))
+        material = next(c for c in combos if (c.toolTip() or "").startswith("Assign a material"))
+
+        rows = row_sel.count()
+        self.assertGreaterEqual(rows, 3, "need at least ambient + film + substrate")
+        interior_seen = False
+        for i in range(rows):
+            row_sel.setCurrentIndex(i)
+            offered = [material.itemText(k) for k in range(material.count())]
+            if i in (0, rows - 1):
+                self.assertEqual(offered, ["air", ISOTROPIC_LAYER_CHOICE],
+                                 f"row {i + 1} is a half-space and must offer isotropic media only")
+            else:
+                interior_seen = True
+                self.assertGreater(len(offered), 2,
+                                   f"row {i + 1} is interior and must keep the full palette")
+                self.assertIn("Custom (fields)", offered)
+        self.assertTrue(interior_seen, "no interior row exercised -- the contrast is the test")
+
+        # returning to a half-space must restrict again (the combo is ONE widget, repopulated)
+        row_sel.setCurrentIndex(0)
+        self.assertEqual([material.itemText(k) for k in range(material.count())],
+                         ["air", ISOTROPIC_LAYER_CHOICE])
 
 
 
@@ -208,7 +270,10 @@ class LayerNumberingConvention(unittest.TestCase):
                  custom("3m"),                                             # active
                  custom("m3m", shg_active=True),                           # legacy key ignored
                  isotropic_layer_spec(1.5, 1.5),                           # iso interior -> inactive
-                 default_layer_spec("LiNbO3 z-cut · 1550 nm", 1.0)]        # substrate half-space
+                 # substrate half-space: isotropic by rule -- a crystal here is now REFUSED by
+                 # build_system_from_stack (HalfSpacesAreIsotropic), so the old "a crystal in a
+                 # half-space is still inactive" case is superseded by "it cannot be one at all".
+                 default_layer_spec("air", 0.0)]
         n = len(stack)
         expect = [False, True, False, False, True, False, False, False]
         sysm = build_system_from_stack(stack, wavelength_um=1.55)
@@ -229,6 +294,172 @@ class LayerNumberingConvention(unittest.TestCase):
             rebuilt = build_system_from_stack(stack_from_system(ref), wavelength_um=ref.wavelength_um)
             self.assertEqual([L.shg_active for L in rebuilt.layers],
                              [bool(L.shg_active) for L in ref.layers], name)
+
+
+class PresetRowsRoundTrip(unittest.TestCase):
+    """Every shipped preset must load into the editor as PALETTE rows carrying its true thickness.
+
+    Found by the fidelity auditor (2026-09-18): the Fig 6 and Fig 7 presets build from the
+    registry, whose materials are named 'ZnO', 'Pt', 'Al₂O₃', 'LiNbO₃' -- none a palette label --
+    so `stack_from_system` sent those rows to Custom (fields) with a snapshot that carried no
+    thickness, and the editor then displayed h = 1.0 um for the 159 nm ZnO film. Pressing Update
+    "settled" that 1.0 into the stack and computed the wrong sample: shg coefficients differed from
+    the factory preset by a relative 1.00. Fig 4 was immune only because its materials happen to
+    be named in PRESET_MATERIAL_LABELS. Rows are now matched by tensor equality.
+    """
+
+    def test_every_preset_row_is_a_palette_entry_with_its_true_thickness(self):
+        from shaarp.layer_stack import CUSTOM_LAYER_CHOICE, stack_from_system
+        from shaarp.shaarp_gui import ML_SYSTEM_PRESETS
+
+        for name, factory in ML_SYSTEM_PRESETS.items():
+            reference = factory()
+            stack = stack_from_system(reference)
+            for row, (spec, layer) in enumerate(zip(stack, reference.layers), start=1):
+                with self.subTest(preset=name, row=row):
+                    self.assertNotEqual(spec["material"], CUSTOM_LAYER_CHOICE,
+                                        f"row {row} ({layer.material.name!r}) fell to Custom")
+                    self.assertAlmostEqual(spec["thickness_um"], float(layer.thickness_um or 0.0))
+
+    def test_rebuilding_a_preset_from_its_rows_reproduces_the_physics(self):
+        """Not just the labels: the rebuilt stack must carry the same tensors and thicknesses."""
+        import numpy as np
+
+        from shaarp.layer_stack import stack_from_system
+        from shaarp.shaarp_gui import ML_SYSTEM_PRESETS
+
+        for name, factory in ML_SYSTEM_PRESETS.items():
+            reference = factory()
+            rebuilt = build_system_from_stack(stack_from_system(reference),
+                                              wavelength_um=reference.wavelength_um)
+            with self.subTest(preset=name):
+                self.assertEqual(len(rebuilt.layers), len(reference.layers))
+                for a, b in zip(rebuilt.layers, reference.layers):
+                    self.assertEqual(a.thickness_um, b.thickness_um)
+                    self.assertEqual(a.shg_active, b.shg_active)
+                    np.testing.assert_allclose(np.asarray(a.material.eps_w(), complex),
+                                               np.asarray(b.material.eps_w(), complex))
+                    np.testing.assert_allclose(np.asarray(a.material.eps_2w(), complex),
+                                               np.asarray(b.material.eps_2w(), complex))
+                    if b.shg_active:
+                        # d only where it is READ. The registry's "Au Coating" (∞∞m) carries a
+                        # stray d11 = 0.3 pm/V that the Fig 4 docs material does not; gold is
+                        # SHG-inactive by point group, so the tensor never enters a computation
+                        # (register row on the data quirk). Comparing it here would fail the
+                        # round-trip on a number nothing uses.
+                        np.testing.assert_allclose(np.asarray(a.material.d_voigt_pm_v, complex),
+                                                   np.asarray(b.material.d_voigt_pm_v, complex))
+
+
+class SchematicIndicesAreFiniteForMetals(unittest.TestCase):
+    """The stack schematic drew Pt with n = 1 and warned on every Fig 6 Update.
+
+    `schematic_indices_for` took sqrt(Re(eps)); a metal has Re(eps) < 0, so that is NaN, the
+    '> 0.05' guard then fell back to 1.0, and numpy printed a RuntimeWarning each time the ML tab
+    mirrored or ran the Fig 6 preset (found in a GUI review, 2026-09-18). The schematic must use
+    Re(sqrt(eps)) -- 1.77 for Pt at 1550 nm -- and stay silent.
+    """
+
+    def test_fig6_pt_layer_has_a_finite_index_and_no_warning(self):
+        import warnings
+
+        from shaarp.shaarp_gui import ML_SYSTEM_PRESETS, schematic_indices_for
+
+        system = ML_SYSTEM_PRESETS["ZnO / Pt / Al2O3 (Fig 6, 1550 nm)"]()
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")  # any RuntimeWarning fails the test
+            pairs = schematic_indices_for(system)
+        self.assertIsNotNone(pairs)
+        self.assertEqual(len(pairs), len(system.layers))
+        pt_w, pt_2w = pairs[2]
+        self.assertGreater(pt_w, 1.05, "Pt drawn with the n=1 fallback (NaN index)")
+        self.assertAlmostEqual(pt_w, 1.7719, places=3)
+        self.assertAlmostEqual(pt_2w, 0.5557, places=3)
+        for n_w, n_2w in pairs:
+            self.assertTrue(n_w > 0 and n_2w > 0)
+
+
+class HalfSpacesAreIsotropic(unittest.TestCase):
+    """The ambient and substrate media must be isotropic -- nx = ny = nz, kx = ky = kz.
+
+    The two semi-infinite media set the tangential wavevector for every mode in the stack and the
+    solvers read ONE scalar index from each; a birefringent half-space would split the incoming and
+    outgoing beams before the stack is even reached. So the combo does not offer the choice, and the
+    model refuses it anyway -- the same belt-and-braces this file already applies to shg_active on a
+    half-space ("guaranteed in the MODEL, not just by hiding the checkboxes"), because a saved
+    session or a stack built in code never goes near the combo.
+
+    The incident side was already enforced deeper in (`multilayer_shg_boundary._isotropic_index`);
+    the exit side was not, which is the hole this closes.
+    """
+
+    BIREFRINGENT = "LiNbO3 z-cut · 1550 nm"
+
+    def test_the_combo_offers_only_isotropic_media_for_half_spaces(self):
+        choices = layer_material_choices(halfspace=True)
+        self.assertEqual(choices, ["air", ISOTROPIC_LAYER_CHOICE])
+        self.assertNotIn(self.BIREFRINGENT, choices)
+        # ...while interior rows keep the full palette, or this is a regression, not a rule.
+        self.assertIn(self.BIREFRINGENT, layer_material_choices())
+
+    def test_a_birefringent_ambient_or_substrate_is_refused_by_the_builder(self):
+        """Enforced in the MODEL, so a saved session or a code-built stack cannot smuggle one in."""
+        for role, index in (("ambient", 0), ("substrate", -1)):
+            with self.subTest(role=role):
+                stack = default_stack()
+                stack[index] = default_layer_spec(self.BIREFRINGENT, 0.0, False)
+                with self.assertRaises(ValueError) as ctx:
+                    build_system_from_stack(stack)
+                message = str(ctx.exception)
+                self.assertIn("must be isotropic", message)
+                self.assertIn(role, message)
+                # the message has to say what to do, not merely that it refused
+                self.assertIn(ISOTROPIC_LAYER_CHOICE, message)
+
+    def test_every_shipped_preset_obeys_the_rule(self):
+        """The rule has to hold for the paper stacks, or it is not a rule.
+
+        Fig 6 used to be the sole violator: its sapphire was modelled as a semi-infinite exit
+        medium. Rui confirmed (2026-09-12) the sample was sapphire sitting on AIR, so it is now a
+        finite 100 um wafer (the released .ml button's value) above an air half-space -- which is also the only shape the released
+        Mathematica .ml GUI could express. Measured impact of the correction: 5.3e-13 relative,
+        correlation 1.000000000000, because the 200 nm Pt in front of it is opaque.
+        """
+        from shaarp.layer_stack import stack_from_system
+        from shaarp.shaarp_gui import ML_SYSTEM_PRESETS
+
+        for name, factory in ML_SYSTEM_PRESETS.items():
+            with self.subTest(preset=name):
+                reference = factory()
+                build_system_from_stack(stack_from_system(reference),
+                                        wavelength_um=reference.wavelength_um)
+
+    def test_fig6_models_sapphire_as_a_finite_wafer_on_air(self):
+        """Pin the corrected architecture in BOTH copies -- they are edited by hand, separately."""
+        from benchmarks.paper_cases import ml_fig6_system
+        from shaarp.shaarp_gui import ML_SYSTEM_PRESETS
+
+        for label, system in (("gui preset", ML_SYSTEM_PRESETS["ZnO / Pt / Al2O3 (Fig 6, 1550 nm)"]()),
+                              ("paper_cases", ml_fig6_system())):
+            with self.subTest(copy=label):
+                self.assertEqual(len(system.layers), 5, "air / ZnO / Pt / Al2O3 / air")
+                self.assertAlmostEqual(system.layers[3].thickness_um, 100.0,
+                                       msg="the released original's Al2O3(0001) button sets 100 um "
+                                           "(setup.nb:3537)")
+                self.assertIsNone(system.layers[-1].thickness_um, "exit medium is semi-infinite air")
+                self.assertEqual(system.layers[-1].material.name, "Air")
+
+    def test_the_same_crystal_is_fine_in_an_interior_layer(self):
+        """The rule is about the half-spaces only -- it must not disarm the stack's actual film."""
+        stack = default_stack()
+        stack[1] = default_layer_spec(self.BIREFRINGENT, 10.0, True)
+        self.assertEqual(len(build_system_from_stack(stack).layers), 3)
+
+    def test_the_shipped_defaults_still_build(self):
+        """A rule that breaks the app's own starting stack is not a rule, it is a bug."""
+        self.assertEqual(len(build_system_from_stack(default_stack()).layers), 3)
+        self.assertEqual(
+            len(build_system_from_stack(simple_film_stack(self.BIREFRINGENT, 10.0)).layers), 3)
 
 
 if __name__ == "__main__":

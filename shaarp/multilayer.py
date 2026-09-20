@@ -58,6 +58,13 @@ def multilayer_shg(system: MultilayerSystem) -> MultilayerResult:
     solves forward/backward anisotropic waves and multilayer boundary-condition
     equations. This function only coherently sums internal nonlinear layer
     source terms using scalar effective refractive indices.
+
+    Intensities here are bare ``|E|^2``. The full solver weights SHG intensities by the exit
+    medium's index at 2omega (``multilayer_shg_boundary.exit_medium_index``), since a plane wave
+    carries ``I = (1/2) c eps0 n |E|^2``. That weighting is deliberately NOT applied here: this
+    reduced model never represents an exit medium -- it sums layer sources with propagation phases
+    and stops -- so there is no exit index to apply, and the model claims relative shapes rather
+    than absolute intensities. Use the multilayer boundary solver when absolute intensity matters.
     """
 
     system.validate()

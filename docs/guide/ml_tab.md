@@ -133,18 +133,21 @@ repeat Updates are instant.
 `Quartz + Au (Fig 4, 800 nm)` (the documentation example), `ZnO / Pt / Al2O3 (Fig 6, 1550 nm)`, and
 `LiNbO3 / Quartz (Fig 7, 1550 nm)`. Those are the exact strings, spelled with plain digits; pass one
 as `system_preset=` to {py:func}`shaarp.compute_ml_gui_result` to run the same case from Python.
-Below them, the **Single film in air** section lists the original ♯SHAARP.ml palette — each
-material labelled with its provenance wavelength (multi-wavelength materials are grouped under a
-master title, e.g. *Quartz → x-cut · 1064 nm / z-cut · 800 nm*) — plus **"N-layer stack
-(editor)"** and **"Custom film (use fields)"**.
+Below them, the **Single film in air** section lists the original ♯SHAARP.ml palette, each
+material labelled with its provenance wavelength. Materials with more than one variant are grouped
+under a master title, such as *Quartz* with *x-cut · 1064 nm* and *z-cut · 800 nm* beneath it.
+After the palette comes the **Dispersive** group, the five crystals that carry published index data
+for a wavelength sweep (see [Wavelength Scan Range](#wavelength-scan-range)), and then
+**"N-layer stack (editor)"** and **"Custom film (use fields)"**.
 
 **N-layer stack editor.** Set the **number of layers** (layer 1 = ambient/air, layers 2…N-1 = films,
 layer N = substrate half-space). For the selected layer choose the **material**, an optional **layer
 name** (shown in the selector and the schematic; leave blank for the automatic "role: material"
 label), and the **thickness** (µm; disabled for half-spaces). Each layer can carry its own custom
 crystal (point group, orientation, $\varepsilon$, $d$) via the same controls as {doc}`si_tab`;
-stack labels also show the material's point group and surface $(hkl)$. The **substrate** is the last
-layer and takes the same choices as any other: a case-study crystal, a custom crystal, or the
+stack labels also show the material's point group and surface $(hkl)$. An interior layer's
+material list holds the palette, the Dispersive crystals, your saved materials and *Custom
+(fields)*. The first and last layers are half-spaces, and their list offers only *air* and the
 isotropic option, where you enter scalar $n_\omega, n_{2\omega}$. In the simple single-film mode
 above, the substrate is always the isotropic one.
 
@@ -230,22 +233,86 @@ as in the original's own JK/HH branches.
 
 Each sweep mode has its **own** scan section, controlled and toggled separately.
 **$\theta_{\min}$, $\theta_{\max}$, $\theta_{\text{step}}$** (deg) set the incidence-angle grid; a finer
-step gives smoother curves at the cost of compute time. Both scan groups default to a **0.1°**
+step gives smoother curves at the cost of compute time. Both scan groups default to a **0.05°**
 step: the *Maker Fringes Scan Range* over 0–45°, the *Fresnel Coefficients Scan Range* over the
 original's full 0–89.9° (the original fixed the Fresnel range at 0–90° and exposed only the step;
 the separate min/max here is a deliberate extension). Each group clears its "— not used by this
 mode" hint only in its own mode.
 
 The Maker default is fine on purpose. A 121.2 µm quartz slab, the default preset, puts its fringes
-about 0.56° apart, so a 0.5° step would land barely one sample on each and the curve would alias
-into something that looks like noise with its maxima in the wrong places. At 0.1° the full 0–45°
-sweep takes about a minute; the quick-preset buttons beside the step let you drop to 0.5°
-for a fast look at the envelope.
+about 0.56° apart, so a 0.5° step lands barely one sample on each: the curve still follows the
+envelope, but not the individual fringes. At 0.05° the fringes are
+drawn smoothly and the full 0–45° sweep takes about a minute. The quick-preset buttons beside the
+step (0.1, 0.5, 1, 2, 5) coarsen it for a fast look at the envelope. The Fresnel step is fine for
+the same reason: a coated slab's reflectance and transmittance carry the slab's own interference.
+
+## Wavelength Scan Range
+
+The switch, the λ fields, the wavelength field greying out while the sweep is on, the question
+before a long run, and the notes under the wavelength field work as on the SHAARP.si tab, described
+under [Wavelength Scan Range](si_tab.md#wavelength-scan-range) there. Turning the sweep on here
+also sets **Sample rotation** to *Fix*, and turning it off gives back the previous setting. A layer
+stack adds the following.
+
+All three compute modes sweep. SHG Simulation plots one spectrum. With **Maker Fringes** or
+**Fresnel Coefficients** selected, the wavelength sweep and that mode's angle scan run together, and
+the **Spectrum** tab shows a wavelength-by-angle map. The incident-angle field greys out there,
+because the angles come from the mode's own scan range. With the sweep on, θ min may equal θ max:
+the map then has a single angle and draws as a spectrum line. Without the sweep, equal values are
+still an error.
+
+A sweep uses the same settings as a run at one wavelength: the **Assumptions** panel (full
+multiple reflections and its sub-mode, Jerphagnon–Kurtz, or Herman–Hayden), the fixed
+**sample azimuth ψₛ (deg)**, and for Maker Fringes the **Maker Fringes Δδ (deg)**. At a single
+wavelength, a map row is the Maker Fringes result for that wavelength.
+
+Picking a crystal from the **Dispersive** group under *Case Study and Examples* fits the scan range
+to what its data can answer, as on the SHAARP.si tab. With **Fresnel Coefficients** selected, the
+fit starts at the table's own low end instead of twice it, because a Fresnel map reads the index at
+the fundamental only. Picking one in the stack editor's layer list leaves the range as it is; take
+the sweep range from the [materials table](../usage.md#materials-that-already-carry-dispersion).
+
+A stack of materials whose index does not change with wavelength still gives a curve that moves,
+through each layer's optical thickness alone, and the note under the wavelength field calls it a
+thickness sweep rather than a spectrum; {doc}`../conventions` explains why.
+
+A stack can disperse in part. A layer whose data is a single number stays at that value while the
+other layers move. In the Quartz + Au preset that layer is the Au coating, and the note reads "Only
+part of this stack disperses: Au coating keeps a single index at every wavelength, so the spectrum
+carries the other layers' dispersion but not its own."
+
+A thick layer needs a fine λ step. A stack's interference fringes run along the wavelength axis
+too, closer together the thicker the layer. When the λ step is too coarse for them, the note says
+the curve is "undersampled and can show spikes that are not spectral features" and suggests a
+step. The 121.2 µm quartz plate of the Quartz + Au preset sets it off at the default step by a wide
+margin: narrow the range and use the step the note gives. A 1 µm quartz film sets it off at the
+default step too, narrowly, except in a Fresnel map, whose fringes along the wavelength sit about
+twice as far apart. How the fringe spacing is estimated is on the {doc}`../technical_reference`
+page.
+
+Five palette films have a floor: their index data runs into an ultraviolet pole at half the
+wavelength inside their own range (the list is on the
+[usage page](../usage.md#materials-that-already-carry-dispersion)). At a single wavelength below the
+floor, the note says any result there is not physical and the solve may fail. For the LiNbO₃ films
+at 1550 nm it does fail below about 0.5 µm, and a banner says the plots still show the previous
+result. A spectrum or Maker map that reaches below the floor refuses and names the window to use.
+
+A Fresnel map reads no second harmonic, so neither the half-wavelength rule nor the floor applies to
+it: it runs over the whole range, and its exported assumptions carry no SHG-tensor line.
+
+Maps take a while. A map costs the product of its two grids, and with the default grids a Maker map
+runs for tens of minutes, so **Update** asks first. For a first look, raise **λ step (µm)** to 0.1
+and the Maker **θ step (deg)** to 1. That brings the default range to 11 wavelengths by 46 angles,
+which runs in under a minute on the Quartz + Au preset without the question. On that preset a map
+this coarse shows the envelope rather than the individual fringes, and the note will call it
+undersampled; for a first look at the envelope, that is expected.
 
 ## Polarimetry settings
 
-Incident angle $\theta_i$, incident polarization $\varphi$, ellipticity $\Delta\delta$, analyzer —
-as on the SI tab, applied to the stack — plus (multilayer only) **Sample rotation**.
+Incident angle $\theta_i$, incident polarization $\varphi$, ellipticity $\Delta\delta$ and the
+analyzer work as on the SI tab, applied to the stack. One limit differs: the incident-angle spin box
+here stops at 89.0°, where the SI tab's goes to 89.9°. The slider and the quick-angle buttons are
+the same on both tabs. This tab adds **Sample rotation**.
 
 **Rotate/fix × 3.** The polarizer, the analyzer, and the sample each carry an independent
 *rotate / fix* choice, and **any of the 8 combinations is legal** — nothing is pinned. Every
@@ -255,17 +322,15 @@ participates only when **both** rotate, exactly the original's gate), and the sa
 $\psi_s(t)=\pm t$ per the **rotation direction** (CW/CCW, looking at the sample from the beam
 side) with the **step size** setting the grid. A fixed element holds its fixed angle. With the
 sample fixed this is the ordinary polarimetry; with the sample rotating the polar RA figure is
-drawn over the sample azimuth. Self-consistency across the combinations is fenced in
-`tests/test_polarimetry_combinations.py` (e.g. at normal incidence, rotating the sample by $t$
-equals co-rotating polarizer and analyzer by $t$ with the sample fixed, to ~5e-10).
+drawn over the sample azimuth. The combinations are checked against one another in the test
+suite; {doc}`../validation` has the detail.
 
 A rotating sample is a **physical crystal rotation**, not a relabelled polarizer sweep: at each
 $\psi_s$ the layer orientations are turned about the surface normal, $\varepsilon(\omega)$,
 $\varepsilon(2\omega)$ and the $d$ tensor are re-derived in the lab frame, and the multilayer
 boundary-value problem is solved afresh. That is what the original's `SampleRotate` does, and away
 from normal incidence it does **not** reduce to co-rotating the polarizer and analyzer. The
-selected assumption (FMR/JK/HH and the FMR sub-mode) applies to every point;
-`tests/test_ra_scan_assumptions.py` fences that it reaches the sweep.
+selected assumption (FMR/JK/HH and the FMR sub-mode) applies to every point.
 
 **Why a fine step is cheap.** Where every rotating layer's $\varepsilon$ is unchanged by a rotation
 about the surface normal, the whole *linear* problem — eigenmodes, $k_z$, Fresnel coefficients,
@@ -273,11 +338,10 @@ propagation phases, the $2\omega$ boundary matrix — does not depend on $\psi_s
 the nonlinear source turns. Because the SHG fields are exactly linear in every $d$ component, the
 sweep is then a linear combination of **one solve per touched $d$ component** (six for z-cut
 quartz) instead of one solve per azimuth point. The cost is therefore flat in the number of points:
-on the quartz + gold case a $0.5°$ step takes 0.7 s instead of 54 s. It is the same validated
-solver and the same assumption support, agreeing with the per-point loop to $3\times10^{-11}$ of
-peak, and it falls back automatically — to the loop, bit for bit — whenever a rotating layer's
-$\varepsilon$ does turn with the sample (a rotated biaxial) or the polarizer/analyzer vary per
-point.
+on the quartz + gold case a $0.5°$ step takes 0.7 s instead of 54 s. It is the same solver with the
+same assumption support, checked against the per-point loop ({doc}`../validation`), and it falls
+back to that loop automatically whenever a rotating layer's $\varepsilon$ does turn with the sample
+(a rotated biaxial) or the polarizer and analyzer vary per point.
 
 **Maker Fringes uses this panel too:** the sweep's *input* polarization ($\varphi$,
 $\Delta\delta$) and *detection* polarization (analyzer $\psi$; the perpendicular channel sits at
@@ -288,14 +352,24 @@ Coefficients is linear ($R_p, R_s, T_p, T_s$ per angle) and reads no polarimetry
 
 - **Maker Fringes** — $I(\theta_i)$ with the assumption shown in the subtitle, plotted straight from
   the solver.
-- **Fresnel Coefficients** — $R_p, R_s, T_p, T_s$ over the original's full 0–90° range at the
-  panel's step. An isolated angle where the boundary solve is singular, which happens for metallic
-  films, is interpolated from its neighbours. Lossless stacks satisfy $R+T=1$.
+- **Fresnel Coefficients** — $R_p, R_s, T_p, T_s$ over the *Fresnel Coefficients Scan Range*
+  (0–89.9° by default). An isolated angle where the boundary solve is singular, which happens for
+  metallic films, is interpolated from its neighbours. $T$ is a true power transmittance, so lossless
+  stacks give $R+T=1$ whatever the substrate (see {doc}`../conventions`).
 - **Polar Plots** — reflected/transmitted $I_p$, $I_s$ panels, plus a **beam-ellipticity tile**
   showing the polarization ellipses of the incident, reflected, and transmitted fundamental beams.
   The co-rotating analyzer mode ($\psi = \varphi +$ offset) is available on this tab too.
+- **Spectrum** — with the wavelength sweep on. Under SHG Simulation, one curve: the reflected
+  $I^{2\omega}(\lambda)$ at the analyzer angle you set, against the fundamental wavelength. Under
+  Maker Fringes, two maps over $\theta_i$ and $\lambda$, one for each analyzer channel
+  ($I_\parallel$, $I_\perp$). Under Fresnel Coefficients, four maps, $R_p, R_s, T_p, T_s$, on a
+  shared 0–1 scale. With λ min equal to λ max a map becomes the ordinary angle scan at that
+  wavelength, named once in its title; with θ min equal to θ max it becomes a spectrum line. In a
+  Maker map, a channel that vanishes by symmetry, such as the perpendicular channel for p-polarized
+  input on z-cut quartz, is drawn on the other channel's colour scale and its panel title carries
+  "(≈ 0)". An **Update** with the sweep off empties this tab.
 - **Analytical Expression** — the closed form $I(\varphi, d, h)$, typeset with real
-  super/subscripts and Greek symbols like the original package; the Copy button and the `.txt`
-  export stay machine-readable SymPy.
+  super/subscripts and Greek symbols like the original package; **Copy closed form (Python/SymPy)**
+  and the `.txt` export stay machine-readable SymPy.
 
 See {doc}`outputs_export`. Common questions are in the {doc}`faq`.

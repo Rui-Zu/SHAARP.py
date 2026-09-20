@@ -1,6 +1,6 @@
 # Examples
 
-Six self-contained scripts in the repository's `examples/` folder. Run any of them with:
+Seven self-contained scripts in the repository's `examples/` folder. Run any of them with:
 
 ```bash
 python examples/<name>.py
@@ -36,6 +36,11 @@ python examples/<name>.py
     angular sampling of the 2024 paper.
   - two-panel fringe comparison
   - ~80 s
+* - `spectral_sweep.py`
+  - Reflected SHG from z-cut quartz across 0.60–1.60 µm, and the Maker fringes of a 2 µm quartz film
+    mapped against wavelength (0.80–1.40 µm) and incidence angle (0–45°), 31 × 31 points.
+  - a spectrum and a wavelength-by-angle map, as two PNGs in `build/`
+  - ~30–50 s
 * - `single_interface_demo.py`
   - The shortest path from a preset to a plot — deliberately uses the **reduced** convenience
     model, and prints the warning that says so.
@@ -93,4 +98,11 @@ sketch but not for published numbers ({doc}`../usage`).
 ```{literalinclude} ../../examples/maker_mathematica_overlay.py
 :language: python
 :caption: examples/maker_mathematica_overlay.py
+```
+
+## Wavelength sweep and wavelength-by-angle map
+
+```{literalinclude} ../../examples/spectral_sweep.py
+:language: python
+:caption: examples/spectral_sweep.py
 ```

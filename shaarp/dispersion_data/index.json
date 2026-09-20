@@ -1,0 +1,85 @@
+{
+  "note": "Refractive-index tables for the dispersive material variants. Every entry names the primary literature it came from. The Sellmeier and tabulated entries were read from the refractiveindex.info database's YAML sources, which are released CC0; TaAs was evaluated from the Lorentz-oscillator model of its source paper, with the oscillator parameters of that paper's ellipsometry fit.",
+  "materials": {
+    "linbo3_zelmon_1997": {
+      "display": "LiNbO3 (dispersive)",
+      "symmetry": "uniaxial",
+      "reference": "D. E. Zelmon, D. L. Small, D. Jundt. Infrared corrected Sellmeier coefficients for congruently grown lithium niobate and 5 mol.% magnesium oxide-doped lithium niobate. J. Opt. Soc. Am. B 14, 3319-3322 (1997).",
+      "doi": "10.1364/JOSAB.14.003319",
+      "conditions": "congruently grown LiNbO3, 21 C",
+      "template": "LiNbO3 (11-20) MTI X-cut",
+      "range_um": [
+        0.4,
+        5.0
+      ],
+      "source_files": [
+        "LiNbO3/nk/Zelmon-o.yml",
+        "LiNbO3/nk/Zelmon-e.yml"
+      ]
+    },
+    "ktp_kato_2002": {
+      "display": "KTP (dispersive)",
+      "symmetry": "biaxial",
+      "reference": "K. Kato and E. Takaoka. Sellmeier and thermo-optic dispersion formulas for KTP. Appl. Opt. 41, 5040-5044 (2002).",
+      "doi": "10.1364/AO.41.005040",
+      "conditions": "20 C",
+      "template": "KTP (100)",
+      "range_um": [
+        0.43,
+        3.54
+      ],
+      "source_files": [
+        "KTiOPO4/nk/Kato-alpha.yml",
+        "KTiOPO4/nk/Kato-beta.yml",
+        "KTiOPO4/nk/Kato-gamma.yml"
+      ]
+    },
+    "lbo_chen_1989": {
+      "display": "LiB3O5 / LBO (dispersive)",
+      "symmetry": "biaxial",
+      "reference": "C. Chen, Y. Wu, A. Jiang, B. Wu, G. You, R. Li, S. Lin. New nonlinear-optical crystal: LiB3O5. J. Opt. Soc. Am. B 6, 616-621 (1989); dispersion formula from F. Hanson and D. Dick, Opt. Lett. 16, 205-207 (1991).",
+      "doi": "10.1364/JOSAB.6.000616",
+      "conditions": "room temperature",
+      "template": "LiB3O5 (LBO)",
+      "range_um": [
+        0.2894,
+        1.064
+      ],
+      "source_files": [
+        "LiB3O5/nk/Chen-alpha.yml",
+        "LiB3O5/nk/Chen-beta.yml",
+        "LiB3O5/nk/Chen-gamma.yml"
+      ]
+    },
+    "gaas_rakic_1996": {
+      "display": "GaAs (dispersive)",
+      "symmetry": "isotropic",
+      "reference": "A. D. Rakic and M. L. Majewski. Modeling the optical dielectric function of GaAs and AlAs: Extension of Adachi's model. J. Appl. Phys. 80, 5909-5914 (1996).",
+      "doi": "10.1063/1.363586",
+      "conditions": "room temperature",
+      "template": "GaAs (111) (1064 nm)",
+      "range_um": [
+        0.20664,
+        12.398
+      ],
+      "source_files": [
+        "GaAs/nk/Rakic.yml"
+      ]
+    },
+    "taas_zu_2021": {
+      "display": "TaAs (dispersive)",
+      "symmetry": "uniaxial",
+      "reference": "R. Zu, M. Gu, L. Min, C. Hu, N. Ni, Z. Mao, J. M. Rondinelli, V. Gopalan. Comprehensive anisotropic linear optical properties of the Weyl semimetals TaAs and NbAs. Phys. Rev. B 103, 165137 (2021).",
+      "doi": "10.1103/PhysRevB.103.165137",
+      "conditions": "spectroscopic ellipsometry, room temperature, Lorentz model of Eq. 1",
+      "template": "TaAs (112)",
+      "range_um": [
+        0.2066,
+        1.0332
+      ],
+      "source_files": [
+        "author ellipsometry fit record (Lorentz model)"
+      ]
+    }
+  }
+}

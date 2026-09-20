@@ -63,7 +63,10 @@ class JKHHTwoActiveAgreementTests(unittest.TestCase):
         sweep = solve_multilayer_maker_fringes_sweep(
             case["system"], theta_deg=case["theta_deg"], mu=1.0, eps0=1.0, mrassumption=mrassumption
         )
-        para, _ = sweep.shaarp_ml_copy_lists()
+        # FIELD basis: bare |E|^2, the convention SHAARP.ml's MFList emits. The physical
+        # intensity (list_mf_para) additionally carries the exit medium's index at 2omega,
+        # so it agrees with the original only for an air substrate -- this case is not one.
+        para, _ = sweep.shaarp_ml_copy_lists_field_basis()
         arr = np.array(para)
         col = arr[:, 1] if arr.ndim == 2 else arr
         return np.abs(col.astype(complex))

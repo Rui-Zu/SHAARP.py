@@ -1,7 +1,9 @@
 # Conventions
 
-SHAARP.py follows the conventions of the original ♯SHAARP package and the published *npj Computational
-Materials* equations (see {doc}`references`). The exact, machine-readable conventions attached to each
+SHAARP.py keeps the conventions of the original ♯SHAARP packages and the published *npj Computational
+Materials* equations (see {doc}`references`), except where this page says otherwise. There are two
+departures, both under *Reflection / transmission* below: the transmittance is a power transmittance,
+and SHG intensities carry the exit medium's index. The exact, machine-readable conventions attached to each
 run are exposed via {py:class}`~shaarp.PhysicsConventions` (on the result), so a computation is always
 self-describing.
 
@@ -10,7 +12,7 @@ self-describing.
 - **Crystal-physics frame** — the material's intrinsic axes; $\varepsilon$ and the $d$ tensor are
   entered here.
 - **Lab frame** — L1, L2, L3 with **L3 along the surface normal** and the **plane of incidence = the
-  L1–L3 plane**. The {py:class}`~shaarp.CrystalOrientation` rotates crystal → lab (z-cut = identity;
+  L1–L3 plane**. The {py:class}`~shaarp.CrystalOrientation` rotates the crystal frame into the lab frame (z-cut = identity;
   Miller `(hkl)`+`[uvw]`; or explicit Z1/Z2/Z3 axes). See {doc}`guide/si_tab`.
 - **Vertical propagation frame** — SHAARP.py (like the original ♯SHAARP.ml `solveSnell` it is
   validated against) propagates transmitted waves along **+L3**; the original ♯SHAARP.si numeric
@@ -74,8 +76,23 @@ independent; the rest follow by symmetry. See {py:func}`shaarp.d_voigt_symbolic`
 
 ## Reflection / transmission
 
-- Linear Fresnel coefficients are returned as **power** $R_p, R_s, T_p, T_s$; for a lossless stack they
+- Linear Fresnel coefficients are returned as power $R_p, R_s, T_p, T_s$; for a lossless stack they
   satisfy $R+T=1$ per polarization, and at normal incidence $p$ and $s$ are degenerate.
+- $R = |r|^2$, and the transmittance carries the obliquity factor
+
+  $$T = \frac{\mathrm{Re}(n_\text{exit}\cos\theta_\text{exit})}{\mathrm{Re}(n_\text{inc}\cos\theta_\text{inc})}\,|t|^2 .$$
+
+  Refraction changes the beam's width, so the incident and transmitted beams do not share a
+  cross-section even though they cross the same patch of interface. Without this factor, $R+T=1$
+  holds only when the exit medium is index-matched to the incident one. Pass
+  `transmittance="amplitude"` to {py:func}`shaarp.run_fresnel_sweep` for bare $|t|^2$, which is what
+  ♯SHAARP.ml's `listFresnel` emits.
+- SHG intensities carry the exit medium's index at $2\omega$, $I_{2\omega} \propto n_\text{exit}\,|E_{2\omega}|^2$,
+  because a plane wave carries $I = \tfrac{1}{2}c\varepsilon_0 n |E|^2$. The exit medium is the
+  *incident* medium for reflected SHG and the *substrate* for transmitted SHG. There is deliberately
+  no $\cos\theta$ here: that factor belongs to $R$ and $T$, which are ratios between two beams of
+  different widths, not to a single beam's intensity. Every published case exits into air, where
+  $n_\text{exit}=1$ and the factor is invisible.
 - The **reflected $\omega$ and reflected $2\omega$ are collinear and specular** (same medium, angle
   $=\theta_i$); only the *transmitted* $\omega$/$2\omega$ split by crystal dispersion. (This is what
   the optical-setup schematic draws — see {doc}`guide/interface`.)
@@ -85,6 +102,34 @@ independent; the rest follow by symmetry. See {py:func}`shaarp.d_voigt_symbolic`
 The Maker-fringe sweep supports **Full multiple reflections (FMR)** (with forward/backward/standing
 sub-modes), **Jerphagnon–Kurtz** (no multiple reflections), and **Herman–Hayden** (multiple
 reflections only for the homogeneous $2\omega$ waves). See {doc}`guide/ml_tab`.
+
+## Wavelength
+
+The wavelength you set is the **fundamental**. The permittivity at the second harmonic comes from
+each material's own second-harmonic data at that fundamental, so you never enter a second
+wavelength.
+
+That second-harmonic data is the material's index at **half the wavelength**, $\lambda/2$. A
+material given by an index table is read there directly, so a table covering $\lambda_\text{lo}$
+to $\lambda_\text{hi}$ can answer an SHG sweep only from $2\lambda_\text{lo}$ up to
+$\lambda_\text{hi}$. The same halving is why a wavelength inside a material's data range can still
+reach an ultraviolet pole at the second harmonic. Fresnel coefficients are linear optics at the
+fundamental, so neither applies to them: a Fresnel sweep uses the whole table. The ranges of the
+shipped tables are listed in {doc}`usage`.
+
+Where the wavelength reaches the answer differs between the two methods, and it follows from what
+each problem contains rather than from a modelling choice:
+
+- A **single interface** has no thickness in it, so it has no length to compare a wavelength
+  against. The wavelength reaches the answer only through the dispersion of the permittivity.
+- A **layer stack** has the layer thicknesses, so the wavelength reaches the answer twice: through
+  the same permittivity dispersion, and through the optical thickness of each layer. A stack whose
+  materials carry one index at every wavelength therefore still gives a curve that moves, through
+  the optical thickness alone. That curve is a thickness sweep rather than a spectrum.
+
+Across a wavelength sweep the SHG tensor is held at its tabulated value, so a computed spectrum
+carries the dispersion of the linear optics and a wavelength-independent nonlinearity. See
+{doc}`technical_reference` for what that costs and when it matters.
 
 ## Validation metadata
 

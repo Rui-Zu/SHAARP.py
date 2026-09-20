@@ -32,8 +32,24 @@ from .config import Layer, MultilayerSystem, Polarimetry
 # per layer in spec["custom"]).
 CUSTOM_LAYER_CHOICE = "Custom (fields)"
 ISOTROPIC_LAYER_CHOICE = "isotropic n (set below)"
+
+
+def _dispersive_layer_choices() -> list[str]:
+    """The dispersive variants, as layer materials.
+
+    The editor is the single stack truth, so a material the CASE combo offers has to be a material
+    a LAYER ROW can hold. While these were missing, selecting a dispersive film wrote a label the
+    layer combo could not show, the row fell back to Custom, and the run then rebuilt that layer
+    from a half-filled custom snapshot -- "TypeError: must be real number, not dict" on every ML
+    dispersive Update, with nothing in the message pointing at the material list as the cause."""
+    from .dispersion import dispersive_material_names  # .dispersion imports only .config: no cycle
+
+    return list(dispersive_material_names())
+
+
 LAYER_MATERIAL_CHOICES = ["air", ISOTROPIC_LAYER_CHOICE,
-                          *(label for label, _key in GUI_ML_CASES), CUSTOM_LAYER_CHOICE]
+                          *(label for label, _key in GUI_ML_CASES),
+                          *_dispersive_layer_choices(), CUSTOM_LAYER_CHOICE]
 
 
 def _material_from_custom_spec(cspec: dict, wavelength_um: float):
@@ -101,6 +117,13 @@ def material_for_label(label: str, wavelength_um: float):
     key = resolve_case_label(name)
     if key in CASE_STUDY_ORDER:
         return build_casestudy_material(key, wavelength_um=wavelength_um)
+    # A DISPERSIVE variant: the same crystal as its palette twin, but with its linear optics from a
+    # published index table instead of one tabulated wavelength. Resolved here so every caller that
+    # already goes through this seam gets them without knowing about tables.
+    from .dispersion import dispersive_material_names, dispersive_spectrum  # lazy: no cycle
+
+    if name.strip() in dispersive_material_names():
+        return dispersive_spectrum(name.strip())(wavelength_um)
     from .user_materials import build_user_material, is_user_material  # lazy: no import cycle
 
     if is_user_material(name):
@@ -112,9 +135,52 @@ def _layer_material(name: str, wavelength_um: float):
     return material_for_label(name, wavelength_um)
 
 
-def layer_material_choices() -> list[str]:
+#: What the ambient and substrate rows may be. Both semi-infinite media are ISOTROPIC by design --
+#: the incidence and exit half-spaces set the tangential wavevector for every mode in the stack, and
+#: the solvers read a single scalar index from each. A birefringent half-space would split the
+#: incoming and outgoing beams in two before the stack is even reached, which is a different problem
+#: from the one this package solves. So the choice is simply not offered, and
+#: `_require_isotropic_halfspace` enforces it in the model for stacks built in code or restored from
+#: a saved session.
+HALFSPACE_MATERIAL_CHOICES = ["air", ISOTROPIC_LAYER_CHOICE]
+
+
+def _require_isotropic_halfspace(material, role: str, row: int | None = None) -> None:
+    """Raise unless `material`'s permittivity is isotropic at BOTH omega and 2omega.
+
+    Isotropic means nx = ny = nz including the absorptive parts (kx = ky = kz), i.e. the tensor is a
+    scalar times the identity. Checked on epsilon rather than on a point-group label, so a crystal
+    that merely happens to be cubic passes and a "custom" entry with unequal diagonal entries does
+    not.
+    """
+    import numpy as _np
+
+    where = f"{role} (row {row})" if row is not None else role
+    for label, eps in (("omega", material.eps_w()), ("2omega", material.eps_2w())):
+        arr = _np.asarray(eps, dtype=complex)
+        scalar = _np.trace(arr) / 3
+        if not _np.allclose(arr, _np.eye(3, dtype=complex) * scalar, atol=1e-10):
+            diag = ", ".join(f"{_np.sqrt(arr[j, j]):.4g}" for j in range(3))
+            raise ValueError(
+                # Two lines in the result panel's status label at most: the remedy has to be
+                # visible, not clipped below the fold (found in a GUI review, 2026-09-18).
+                f"The {where} medium must be isotropic: {material.name!r} is birefringent at "
+                f"{label} (n = {diag}). Use 'air' or '{ISOTROPIC_LAYER_CHOICE}' here, or move it "
+                f"to an interior layer."
+            )
+
+
+def layer_material_choices(*, halfspace: bool = False) -> list[str]:
     """The ML layer-material combo rows: the pinned palette list plus, when the user's store is
-    non-empty, a disabled section header and the user's materials, just before the Custom entry."""
+    non-empty, a disabled section header and the user's materials, just before the Custom entry.
+
+    `halfspace=True` returns only the isotropic entries, for the ambient and substrate rows -- see
+    HALFSPACE_MATERIAL_CHOICES for why those media are not allowed to be birefringent. The user's
+    saved materials and the Custom entry are excluded there because either can carry a full tensor.
+    """
+    if halfspace:
+        return list(HALFSPACE_MATERIAL_CHOICES)
+
     from .user_materials import USER_SECTION_HEADER, list_names
 
     names = list_names()
@@ -175,16 +241,19 @@ def interior_layer_count(stack: list[dict]) -> int:
     The released Mathematica .ml GUI numbers the interior media 1..materialnumber
     (`SHAARP.ml.nb:3707-3712`, `matindex in Range[2, materialnumber+1]`) and treats the two
     half-spaces as unnumbered ambient/exit media it fixes to air; its stack is
-    `materialnumber + 2` media long. This port keeps the SAME counting convention while letting
-    the user set the half-space media (the extension)."""
+    `materialnumber + 2` media long. SHAARP.py does NOT use this convention in its GUI: since
+    both half-spaces became user-settable rows (F60/F61) the "Number of Layers" spin counts EVERY
+    medium (air/quartz/Au/air reads 4). This helper is the original's view, kept for converting a
+    stack description quoted in the original's terms; nothing in the GUI calls it."""
     return max(len(stack) - 2, 0)
 
 
 def set_interior_layer_count(stack: list[dict], n_interior: int) -> list[dict]:
     """Grow/shrink to exactly ``n_interior`` INTERIOR layers, keeping both half-spaces.
 
-    The GUI spin speaks the original's language (Fig 4 = 2 layers: quartz + Au); the stack model
-    still stores ambient + interiors + substrate, so this is the one place the two counts meet."""
+    The original's counting (Fig 4 = 2 layers: quartz + Au). The GUI spin does NOT use it -- it
+    counts every medium and calls :func:`set_layer_count` directly; this wrapper exists for code
+    that speaks the original's language."""
     return set_layer_count(stack, int(n_interior) + 2)
 
 
@@ -193,8 +262,9 @@ def set_layer_count(stack: list[dict], n: int) -> list[dict]:
     grow by inserting interior film layers before the substrate, shrink by removing interior
     layers (never the two half-spaces).
 
-    NOTE: the GUI's "Number of Layers" spin counts INTERIOR layers, matching the original —
-    use :func:`set_interior_layer_count` / :func:`interior_layer_count` for that view."""
+    This is what the GUI's "Number of Layers" spin drives: it counts EVERY medium, half-spaces
+    included, unlike the original (interior films only). :func:`set_interior_layer_count` /
+    :func:`interior_layer_count` give the original's view."""
 
     if n < 2:
         raise ValueError("a stack needs at least 2 layers (ambient + substrate)")
@@ -335,6 +405,31 @@ def custom_spec_snapshot_from_material(mat) -> dict:
     }
 
 
+def _palette_label_for_material(material, wavelength_um: float) -> str | None:
+    """The interior-palette label whose material equals `material` at this wavelength, or None.
+
+    Equality is on the physics (both permittivity tensors, the d tensor and the orientation),
+    so a preset row is recognised as the palette entry it was built from regardless of the
+    registry's display name.
+    """
+    import numpy as _np
+
+    def _same(a, b) -> bool:
+        return (_np.allclose(_np.asarray(a.eps_w(), complex), _np.asarray(b.eps_w(), complex))
+                and _np.allclose(_np.asarray(a.eps_2w(), complex), _np.asarray(b.eps_2w(), complex))
+                and _np.allclose(_np.asarray(a.d_voigt_pm_v, complex), _np.asarray(b.d_voigt_pm_v, complex))
+                and _np.allclose(a.orientation.rotation_matrix(), b.orientation.rotation_matrix()))
+
+    for label, _key in GUI_ML_CASES:
+        try:
+            candidate = _layer_material(label, wavelength_um)
+        except Exception:
+            continue  # a palette entry that cannot be built at this wavelength is not a match
+        if _same(candidate, material):
+            return label
+    return None
+
+
 def stack_from_system(system) -> list[dict]:
     """Layer-editor specs mirroring a resolved MultilayerSystem (a named preset's REAL stack).
     Palette-labelled where the material is (or aliases to) a palette entry; otherwise a faithful
@@ -344,8 +439,14 @@ def stack_from_system(system) -> list[dict]:
     for L in system.layers:
         name = str(getattr(L.material, "name", "") or "")
         label = PRESET_MATERIAL_LABELS.get(name)
-        if label is None and name in {lbl for lbl, _k in GUI_ML_CASES}:
-            label = name  # already a palette display label (Fig 6/7 presets build from the registry)
+        if label is None:
+            # Match by what the material IS, not what it is called. The Fig 6/7 presets build from
+            # the registry, whose materials are named 'ZnO', 'Pt', 'Al₂O₃', 'LiNbO₃' -- none a
+            # palette label -- so a name lookup sent every one of those rows to Custom (fields) with
+            # a snapshot carrying no thickness, and the editor then showed h = 1.0 for a 159 nm
+            # film (and computed it on Update). Comparing tensors at the system wavelength is
+            # unambiguous and needs no name table.
+            label = _palette_label_for_material(L.material, float(system.wavelength_um))
         spec = {
             "material": label if label is not None else CUSTOM_LAYER_CHOICE,
             "thickness_um": float(L.thickness_um or 0.0),
@@ -426,6 +527,13 @@ def build_system_from_stack(stack: list[dict], *, wavelength_um: float = 1.064,
         else:
             mat = _layer_material(spec["material"], wavelength_um)
         is_halfspace = i == 0 or i == last
+        if is_halfspace:
+            # A semi-infinite medium must be ISOTROPIC -- guaranteed in the MODEL, not just by the
+            # combo offering fewer choices, exactly as shg_active is below. The one shipped stack
+            # that used to violate this was the Fig 6 preset, whose sapphire is now the finite wafer
+            # it physically is, sitting on air.
+            _require_isotropic_halfspace(mat, "ambient" if i == 0 else "substrate",
+                                         layer_number(i))
         # user-assigned layer name wins (original .ml: "each layer can be assigned a name"); the
         # role: material auto-label stays the fallback.
         nm = (str(spec["name"]).strip() if spec.get("name")

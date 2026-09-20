@@ -90,6 +90,29 @@ class AppSpeaksInTheProjectsVoice(unittest.TestCase):
                               "(Zu, Wang, Weber, Saha, Chen & Gopalan).")
         self.assertIsNotNone(RETIRED.search(shipped_regression))
 
+    def test_the_doe_award_is_acknowledged_everywhere_the_app_credits_its_authors(self):
+        """The funding acknowledgment is a condition of the award, not a courtesy.
+
+        WHY THIS EXISTS. A later wording pass deleted the sentence from all THREE shipped surfaces
+        at once -- the User Guide page, the About dialog and RELEASE_README.txt -- and deleted the
+        two assertions that had fenced the first one, so nothing went red. Two of the three had no
+        fence of their own, which is how the deletion reached them.
+
+        Scanning the module's string literals rather than a named constant is the same choice the
+        retired-vocabulary fence makes above, and for the same reason: the About dialog's text is
+        built inside a closure and is not reachable as a constant, so a constant-based check would
+        miss it exactly as it did before."""
+        award = "DE-SC0020145"
+        hits = [lineno for lineno, text in _user_facing_string_literals(SOURCE) if award in text]
+        self.assertGreaterEqual(
+            len(hits), 2,
+            f"{award} must appear in BOTH the User Guide page and the About dialog; "
+            f"found it at lines {hits}")
+        readme = ROOT / "RELEASE_README.txt"
+        if readme.exists():  # absent when the package is imported from an installed wheel
+            self.assertIn(award, readme.read_text(encoding="utf-8"),
+                          "RELEASE_README.txt no longer acknowledges the DOE award")
+
     def test_window_title_names_the_package_and_both_methods_only(self):
         from shaarp.desktop_app import build_main_window
 
@@ -111,7 +134,29 @@ class AppSpeaksInTheProjectsVoice(unittest.TestCase):
         self.assertIn("github.com/Rui-Zu/SHAARP", USER_GUIDE_HTML)
         self.assertIn("github.com/bzw133/SHAARP.ml", USER_GUIDE_HTML)
         self.assertIn("npj Comput", USER_GUIDE_HTML)
+        # ...and still carries the DOE award that funded the original work. This is a condition of
+        # the award, not a nicety: a voice/wording pass deleted it once, silently, along with this
+        # very assertion, which is why it is restated here and in test_desktop_app.
         self.assertIn("DE-SC0020145", USER_GUIDE_HTML)
+
+    def test_a_negated_tag_never_reads_as_a_match(self):
+        """The classifier tests substrings, and "not_mathematica_validated" contains both words of
+        the match test -- so every spectrum, and every analytical run tagged
+        "...__not_full_mathematica_validated", was reported as matching the original package."""
+        from shaarp.desktop_app import _friendly_validation_status
+
+        match = _friendly_validation_status("mathematica_validated")
+        for raw in ("not_mathematica_validated",
+                    "si_full_analytical_polarimetry_form_validated_published_gaas111_and_numeric_"
+                    "jones__not_full_mathematica_validated",
+                    "physically_motivated_not_mathematica_gui_default",
+                    "staged_python_not_fully_mathematica_validated"):
+            with self.subTest(raw=raw):
+                self.assertNotEqual(_friendly_validation_status(raw), match)
+        self.assertEqual(
+            _friendly_validation_status("maker_outputs_nonsingular_mathematica_validated_with_"
+                                        "phase_matching_diagnostic_and_transmitted_sum_caveat"),
+            match, "a genuinely validated path still says so ('nonsingular' is not a negation)")
 
     def test_per_run_status_line_reports_a_check_not_a_provenance_claim(self):
         from shaarp.desktop_app import _friendly_validation_status

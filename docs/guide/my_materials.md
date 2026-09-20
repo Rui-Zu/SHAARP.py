@@ -29,9 +29,10 @@ studies and palette films are never modified, and a name that matches a built-in
 ## Where a saved material appears
 
 - **SHAARP.si tab** — at the end of the *Case Study and Examples* dropdown, under a header row
-  **— My Materials —** (the header itself cannot be selected), after *Polar Metals*.
+  **— My Materials —** (the header itself cannot be selected), after the *Dispersive* group.
 - **SHAARP.ml tab** — in the N-layer stack editor's **layer material** list, under the same
-  **— My Materials —** header, just before *Custom (fields)*. It is **not** listed in the
+  **— My Materials —** header, after the Dispersive crystals and just before *Custom (fields)*.
+  It is **not** listed in the
   *Single film in air* section of the system dropdown; to use it as a film, open the
   *N-layer stack (editor)* and assign it to a layer.
 
@@ -40,7 +41,7 @@ studies and palette films are never modified, and a name that matches a built-in
 A saved material is **single-wavelength**: its tensors were entered at the wavelength in effect when
 you saved it. Selecting it therefore sets the wavelength spin to that value and the row label
 reads *"wavelength (µm) — set by the case (single-λ data)"*, the same rule the built-in
-single-λ cases follow (e.g. *TaAs (112)* → 0.8 µm, *GaAs (111) @1064 nm* → 1.064 µm). Editing
+single-λ cases follow (*TaAs (112)* at 0.8 µm, *GaAs (111) @1064 nm* at 1.064 µm). Editing
 the spin while the material is selected snaps it back. To use the same crystal at another
 wavelength, select *Custom (use fields)*, enter the tensors for that wavelength, and save it under a
 second name.

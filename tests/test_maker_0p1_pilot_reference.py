@@ -58,8 +58,11 @@ class Maker0p1DegLiveMathematicaTests(unittest.TestCase):
         sweep = solve_multilayer_maker_fringes_sweep(
             build_cases()[0]["system"], theta_deg=theta, mrassumption=0, mu=1.0, eps0=1.0,
         )
-        py_para = np.asarray(sweep.parallel_intensity)
-        py_perp = np.asarray(sweep.perpendicular_intensity)
+        # FIELD basis: bare |E|^2, the convention SHAARP.ml's MFList emits. sweep.parallel_intensity
+        # is the PHYSICAL intensity and additionally carries the exit medium's index at 2omega, so
+        # it matches the original only for an air substrate -- this stack has a glass-like one.
+        py_para = np.abs(np.asarray(sweep.parallel_amplitude)) ** 2
+        py_perp = np.abs(np.asarray(sweep.perpendicular_amplitude)) ** 2
 
         scale = max(float(np.max(np.abs(mma_para))), float(np.max(np.abs(mma_perp))), 1e-300)
         self.assertGreater(scale, 1e-6, "near-zero reference -> vacuous")

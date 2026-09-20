@@ -40,7 +40,7 @@ generation in anisotropic crystals using ♯SHAARP package."** *npj Comput. Mate
 [doi:10.1038/s41524-022-00930-4](https://doi.org/10.1038/s41524-022-00930-4)
 
 This notebook reproduces the four case-study crystals of the SHAARP.si paper — **GaAs (111)**,
-**LiNbO₃ (11̄20)**, **KTP (100)**, **TaAs (112)** — using `SHAARP.py`. Each is a single air/crystal
+**LiNbO₃ (11-20)**, **KTP (100)**, **TaAs (112)** — using `SHAARP.py`. Each is a single air/crystal
 interface probed by **reflected-SHG polarimetry**: the *p*- and *s*-polarized SHG intensity as a
 function of the incident polarization angle φ, at several incidence angles θᵢ.
 
@@ -66,7 +66,7 @@ print('SHAARP.py paper reproduction — SHAARP.si 2022. repo root =', ROOT.name)
         ("fig4", "## Figure 4 — GaAs (111), 800 nm  (isotropic, −43m)",
          "GaAs is cubic (−43m): the reflected-SHG lobes come purely from the (111) surface geometry. "
          "This is the SHAARP.py↔paper anchor case (validated to ~5e-14 against the closed-form solver)."),
-        ("fig5", "## Figure 5 — LiNbO₃ (11̄20), 800 nm  (uniaxial, 3m)",
+        ("fig5", "## Figure 5 — LiNbO₃ (11-20), 800 nm  (uniaxial, 3m)",
          "The a-plane (x-cut) surface of uniaxial LiNbO₃, computed with the **paper's own fitted "
          "800-nm *d* tensor** (d₃₃/d₃₁ = 5.21 ± 0.13, d₁₅/d₃₁ = 1.23, d₂₂/d₃₁ = −0.23; |d₃₃| = 28.5 "
          "pm/V — the published fit, recovered from the archived `NonlinearModelFit` table). Panel (c) "
@@ -221,9 +221,8 @@ thickness dependence, whereas the FMR model carries the 13.9 nm thin-film factor
 "p-out" intensity is the beam-frame x′ component of the transmitted field inside the Au. In that geometry
 and convention SHAARP.py's HH matches the author's model (dashed dark green, `QuartzAu_800nm_HHNMRP1S0p01.mx`)
 to **shape correlation 0.998 and peak ratio 0.992** on the fringe-resolved 30–45° window (checked in
-the test suite). Near normal incidence SHAARP.py sits a few percent above the slab closed forms used to
-draw the published curves, equally for FMR and HH and for the bare and Au cases; on the same quartz+Au
-Maker case it agrees with the ♯SHAARP.ml numeric solver to ~1e-15. HH is the panel's illustrative
+the test suite). On the same quartz+Au Maker case SHAARP.py agrees with the ♯SHAARP.ml numeric
+solver to ~1e-15. HH is the panel's illustrative
 curve: the point of the figure is that the Herman–Hayden treatment does not capture what the full
 multiple-reflection treatment does.""")
     code("""fig, dev = ml_fig4_figure(step=0.05)
@@ -239,17 +238,17 @@ _show_panel('ml_fig4', 'SHAARP.ml 2024 Fig. 4')""")
     md("""## Figure 5 — LiNbO₃ and KTP single crystals, 1550 nm (transmitted polarimetry)
 
 **Transmitted** *p*/*s* SHG vs incident polarization φ for thick single crystals at several θᵢ:
-LiNbO₃ (11̄20) [x-cut, 3m], LiNbO₃ (0001) [z-cut, 3m], and KTP (x-cut, mm2). The lobe patterns,
+LiNbO₃ (11-20) [x-cut, 3m], LiNbO₃ (0001) [z-cut, 3m], and KTP (x-cut, mm2). The lobe patterns,
 their angular positions, and the per-crystal channel hierarchy reproduce the published panels.
 
 *Open item (documented):* the published panels' cross-panel scale factors (×135 / ×4 / ×7) depend
 on the **slab thickness used in the original simulation**, which is not stated in the paper or SI
 and is not recoverable from the archived notebooks (the transmitted-channel ratio oscillates with
-thickness through multiple-reflection interference — e.g. LiNbO₃ (11̄20) spans ~58–399 over
+thickness through multiple-reflection interference — e.g. LiNbO₃ (11-20) spans ~58–399 over
 10–1000 µm; this build uses a representative 500 µm). The patterns shown here are
 thickness-robust; only those display ratios are not pinned.""")
     code("""rows = [
-    ('LiNbO₃ (11̄20)', ml_single_crystal_system(FIG5_CRYSTALS['LiNbO₃ (11̄20)']), (0., 10., 30.)),
+    ('LiNbO₃ (11-20)', ml_single_crystal_system(FIG5_CRYSTALS['LiNbO₃ (11-20)']), (0., 10., 30.)),
     ('LiNbO₃ (0001)', ml_single_crystal_system(FIG5_CRYSTALS['LiNbO₃ (0001)']), (0., 10., 30.)),
     ('KTP (x-cut)', ml_single_crystal_system(FIG5_CRYSTALS['KTP (x-cut)']), (0., 10., 20., 40.)),
 ]

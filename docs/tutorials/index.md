@@ -41,7 +41,7 @@ running the solvers, and plotting, with the state kept between cells.
 reproduced with SHAARP.py and shown beside the published panel:
 
 - GaAs (111)
-- LiNbO₃ (112̄0)
+- LiNbO₃ (11-20)
 - KTP (100)
 - TaAs (112)
 

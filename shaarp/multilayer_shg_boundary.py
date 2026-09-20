@@ -145,6 +145,22 @@ class MultilayerMakerFringesSweepResult:
     def shaarp_ml_copy_lists(self) -> list[np.ndarray]:
         return [self.list_mf_para, self.list_mf_perp]
 
+    def shaarp_ml_copy_lists_field_basis(self) -> list[np.ndarray]:
+        """The same two lists, but as bare ``|E|^2`` with NO exit-medium index weighting.
+
+        ``list_mf_para`` / ``list_mf_perp`` carry the physical intensity, ``n_exit * |E|^2`` (see
+        :func:`exit_medium_index`). ♯SHAARP.ml's ``MFList`` emits the unweighted ``|E|^2``, so the
+        two agree only for an air substrate. This accessor exists so comparisons against the
+        original's exported values ask for the original's convention EXPLICITLY, rather than
+        agreeing by accident on air-exit stacks and silently disagreeing elsewhere.
+
+        Use ``list_mf_para`` for a physical intensity; use this only to compare with ♯SHAARP.ml.
+        """
+        return [
+            np.column_stack([self.theta_deg, np.abs(self.parallel_amplitude) ** 2]),
+            np.column_stack([self.theta_deg, np.abs(self.perpendicular_amplitude) ** 2]),
+        ]
+
 
 def _warn_if_units_break_dispersion(mu: float, eps0: float) -> None:
     """The multilayer bases are built with the c=1 convention (omega = 2*pi/lambda_um, k = n*omega),
@@ -930,6 +946,9 @@ def solve_multilayer_shg_sample_azimuth_sweep(
             basis_shg_residuals.append(np.asarray(solved.shg.residual, dtype=complex).ravel())
             # the FUNDAMENTAL problem carries no d at all, so it is identical for every basis solve
             fundamental_residual_value = float(np.linalg.norm(solved.fundamental.residual))
+            # Exit-medium indices at 2omega, likewise geometry-only and shared across every point.
+            n_reflected_exit = exit_medium_index(solved.shg.reflected_2omega)
+            n_transmitted_exit = exit_medium_index(solved.shg.substrate_2omega)
             results.append(solved)
 
         for point_d in d_per_point:
@@ -940,10 +959,13 @@ def solve_multilayer_shg_sample_azimuth_sweep(
             reflected_perpendicular_amplitudes.append(r_perp)
             transmitted_parallel_amplitudes.append(t_para)
             transmitted_perpendicular_amplitudes.append(t_perp)
-            reflected_parallel_intensities.append(float(abs(r_para) ** 2))
-            reflected_perpendicular_intensities.append(float(abs(r_perp) ** 2))
-            transmitted_parallel_intensities.append(float(abs(t_para) ** 2))
-            transmitted_perpendicular_intensities.append(float(abs(t_perp) ** 2))
+            # I = n_exit * |E|^2 -- reflected leaves into the incident medium, transmitted into the
+            # substrate. The d-linear basis reconstruction shares one geometry, so both indices are
+            # the same for every point and are read once from the basis solve.
+            reflected_parallel_intensities.append(n_reflected_exit * float(abs(r_para) ** 2))
+            reflected_perpendicular_intensities.append(n_reflected_exit * float(abs(r_perp) ** 2))
+            transmitted_parallel_intensities.append(n_transmitted_exit * float(abs(t_para) ** 2))
+            transmitted_perpendicular_intensities.append(n_transmitted_exit * float(abs(t_perp) ** 2))
             fundamental_residuals.append(fundamental_residual_value)
             # the residual VECTOR is linear in d as well, so this norm is exact
             shg_residuals.append(float(np.linalg.norm(
@@ -996,10 +1018,14 @@ def solve_multilayer_shg_sample_azimuth_sweep(
         reflected_perpendicular_amplitudes.append(r_perp)
         transmitted_parallel_amplitudes.append(t_para)
         transmitted_perpendicular_amplitudes.append(t_perp)
-        reflected_parallel_intensities.append(float(abs(r_para) ** 2))
-        reflected_perpendicular_intensities.append(float(abs(r_perp) ** 2))
-        transmitted_parallel_intensities.append(float(abs(t_para) ** 2))
-        transmitted_perpendicular_intensities.append(float(abs(t_perp) ** 2))
+        # I = n_exit * |E|^2 -- reflected leaves into the incident medium, transmitted into the
+        # substrate. Read per point, since a sweep may change the geometry between points.
+        n_reflected_exit = exit_medium_index(result.shg.reflected_2omega)
+        n_transmitted_exit = exit_medium_index(result.shg.substrate_2omega)
+        reflected_parallel_intensities.append(n_reflected_exit * float(abs(r_para) ** 2))
+        reflected_perpendicular_intensities.append(n_reflected_exit * float(abs(r_perp) ** 2))
+        transmitted_parallel_intensities.append(n_transmitted_exit * float(abs(t_para) ** 2))
+        transmitted_perpendicular_intensities.append(n_transmitted_exit * float(abs(t_perp) ** 2))
         fundamental_residuals.append(np.linalg.norm(result.fundamental.residual))
         shg_residuals.append(np.linalg.norm(result.shg.residual))
 
@@ -1242,9 +1268,14 @@ def exit_medium_index(waves: list[Wave]) -> float:
     evaluated at 2omega.
 
     Taken from the wave's own ``k`` rather than a nominal material index, because
-    ``k . k = (n omega)^2`` holds for the solved eigenmode whatever the substrate's symmetry, and
-    an anisotropic substrate has no single scalar ``n`` to quote. The wave carrying the most field
-    is used when several modes are present; for an isotropic exit medium they are degenerate.
+    ``k . k = (n omega)^2`` holds for the solved eigenmode however the layer stack is built. The
+    wave carrying the most field is used when several are present, and that is EXACT rather than a
+    tie-break: both semi-infinite media are isotropic by rule
+    (``shaarp/layer_stack.py::_require_isotropic_halfspace``), so the two transmitted 2omega
+    eigenmodes are degenerate -- measured at 2.2e-16 apart, pinned by
+    ``tests/test_shg_exit_medium_index.py::WhereTheDominantModeChoiceIsExact``. Were a birefringent
+    exit medium ever allowed back in, this would become a real ambiguity: on the ml/ext stacks the
+    two modes differ by 5-11% and both carry comparable field (register row R18).
 
     Returns 1.0 when there is no field, so an absent beam stays at zero intensity.
 
