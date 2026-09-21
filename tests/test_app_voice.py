@@ -108,10 +108,14 @@ class AppSpeaksInTheProjectsVoice(unittest.TestCase):
             len(hits), 2,
             f"{award} must appear in BOTH the User Guide page and the About dialog; "
             f"found it at lines {hits}")
-        readme = ROOT / "RELEASE_README.txt"
-        if readme.exists():  # absent when the package is imported from an installed wheel
-            self.assertIn(award, readme.read_text(encoding="utf-8"),
-                          "RELEASE_README.txt no longer acknowledges the DOE award")
+        # ...and every page that credits the authors in public. The repo's front page and the docs
+        # site's citation page carried no acknowledgment at all until 2026-09-20, which is the same
+        # hole in a different surface: the award condition does not stop at the app.
+        for rel in ("RELEASE_README.txt", "README.md", "docs/references.md"):
+            page = ROOT / rel
+            if page.exists():  # absent when the package is imported from an installed wheel
+                self.assertIn(award, page.read_text(encoding="utf-8"),
+                              f"{rel} no longer acknowledges the DOE award")
 
     def test_window_title_names_the_package_and_both_methods_only(self):
         from shaarp.desktop_app import build_main_window

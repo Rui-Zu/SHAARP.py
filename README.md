@@ -249,6 +249,12 @@ If you use SHAARP.py, please cite the papers that introduced the methods:
    with complete multireflection of linear and nonlinear waves using ♯SHAARP.ml package.
    *npj Comput. Mater.* **10**, 64 (2024). [doi:10.1038/s41524-024-01229-2](https://doi.org/10.1038/s41524-024-01229-2)
 
+## Acknowledgment
+
+Development of the SHAARP software was supported as part of the Computational Materials Sciences
+Program funded by the U.S. Department of Energy, Office of Science, Basic Energy Sciences, under
+Award No. DE-SC0020145.
+
 ## License
 
 GNU General Public License v3 — see [LICENSE](https://github.com/Rui-Zu/SHAARP.py/blob/master/LICENSE).

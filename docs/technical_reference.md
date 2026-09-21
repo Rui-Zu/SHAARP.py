@@ -491,9 +491,11 @@ the permittivities and the eigen-bases are wavelength-dependent. Measured throug
 2026-09-19, an SHG Simulation spectrum at the app's defaults costs about 14 ms a wavelength on a
 single 1 µm z-cut quartz film and about 26 ms on the Quartz + Au preset, so a hundred-point
 spectrum takes a few seconds at most. A wavelength-by-angle map is the product of its two grids,
-so prefer a coarse wavelength grid with a fine angle grid rather than both fine. The app's default
-grids make a Maker map of 43 wavelengths by 901 angles; measured through the app, that took 21 min
-on the single quartz film and 48 min on the Quartz + Au preset.
+so prefer a coarse wavelength grid with a fine angle grid rather than both fine. Before the current
+defaults, the app's grids made a Maker map of 43 wavelengths by 901 angles; measured through the
+app, that took 21 min on the single quartz film and 48 min on the Quartz + Au preset. The sweep now
+opens at 26 wavelengths and sets the angle step to 10° when it is ticked, so the default map is
+seconds; the figures below are for the old grid and still describe a fine map.
 
 The app therefore estimates every sweep before running it. A cheap first bound multiplies the
 number of points by a fixed cost per point: 0.09 s for a Maker map, 0.06 s for a Fresnel map,
@@ -509,7 +511,7 @@ finish later than estimated: on the same day the two default Maker maps above we
 14–19 min and about 36 min.
 
 When the estimate passes a minute, **Update** asks first, except in a headless run, where it never
-shows the question. For the default Maker map on the Quartz + Au preset the question read "This is
+shows the question. For the old default Maker map on the Quartz + Au preset the question read "This is
 38,743 points (43 wavelengths × 901 angles) and will take about 36 minutes. For a quick first look,
 raise the λ step or the θ step." A spectrum is counted in wavelengths alone, as in "This is 10,001
 wavelengths and will take about 4 minutes. For a quick first look, raise the λ step.", and a run

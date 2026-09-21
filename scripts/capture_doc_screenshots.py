@@ -132,6 +132,63 @@ def main() -> int:
     win.grab().save(str(ml_card))
     print(f"  wrote {ml_card.name}")
 
+    # --- SI tab: a wavelength sweep, on the Spectrum tab ---
+    # No shipped image showed the sweep in use, so a reader met the feature only as prose. KTP
+    # (dispersive) is the crystal the guide's own walkthrough reaches for, and picking it fits the
+    # scan range to the span its index data can answer, so this is the state a reader arrives at.
+    top.setCurrentIndex(0)
+    pump(app)
+    case = set_combo(app, si, "KTP (dispersive) 0.43-3.54 um")
+    case.textActivated.emit("KTP (dispersive) 0.43-3.54 um")   # a user's own pick fits the range
+    pump(app)
+    set_combo(app, si, "SHG Simulation")
+    sweep = next(c for c in si.findChildren(QtWidgets.QCheckBox)
+                 if "sweep the wavelength" in c.text())
+    sweep.setChecked(True)
+    pump(app)
+    # phi = 30 deg, not the 0 deg default: at 0 the p channel of this crystal is zero by symmetry,
+    # so the figure showed one curve rising and one flat line along the axis -- true, but it reads
+    # as a half-broken plot rather than as a spectrum.
+    from shaarp.desktop_app import TOOLTIPS
+
+    phi = next(s for s in si.findChildren(QtWidgets.QDoubleSpinBox)
+               if s.toolTip() == TOOLTIPS["polarizer"] and s.isEnabled())
+    phi.setValue(30.0)
+    pump(app)
+    press_update(app, si)
+    pump(app, 10)
+    spectrum = out / "_static" / "screens" / "spectrum.png"
+    win.grab().save(str(spectrum))
+    print(f"  wrote {spectrum.name}")
+
+    # --- SI tab: the first-run page's OWN result ---
+    # guide/first_run.md walks a reader through GaAs (111) at normal incidence and then showed
+    # them the si_tab card, which is LiNbO3 at 45 deg: a different case, a different pattern. The
+    # page's figure should be the result its steps produce.
+    sweep.setChecked(False)
+    pump(app)
+    set_combo(app, si, "GaAs (111)")
+    set_combo(app, si, "SHG Simulation")
+    phi.setValue(0.0)
+    set_incidence(app, si, 0.0)
+    # ...and back to the wavelength a genuine first launch opens at. This case does not own a
+    # wavelength, so the field keeps whatever the previous capture left in it (0.8 um, from the
+    # LiNbO3 card above) -- and the first-run page's own step 1 tells the reader it reads 1.064.
+    wavelength = next(s for s in si.findChildren(QtWidgets.QDoubleSpinBox)
+                      if s.toolTip() == TOOLTIPS["wavelength"])
+    wavelength.setValue(1.064)
+    # The KTP pick above fitted the scan range to its table (0.86-3.54 um); a first launch shows
+    # the fields' own defaults, so put them back before the frame is taken.
+    for spin, default in zip((s for s in si.findChildren(QtWidgets.QDoubleSpinBox)
+                              if s.toolTip() == TOOLTIPS["lambda_range"]), (0.55, 0.8, 0.01)):
+        spin.setValue(default)
+    pump(app)
+    press_update(app, si)
+    pump(app, 10)
+    first = out / "_static" / "screens" / "first_run_result.png"
+    win.grab().save(str(first))
+    print(f"  wrote {first.name}")
+
     return 0
 
 

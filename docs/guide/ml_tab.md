@@ -300,12 +300,14 @@ result. A spectrum or Maker map that reaches below the floor refuses and names t
 A Fresnel map reads no second harmonic, so neither the half-wavelength rule nor the floor applies to
 it: it runs over the whole range, and its exported assumptions carry no SHG-tensor line.
 
-Maps take a while. A map costs the product of its two grids, and with the default grids a Maker map
-runs for tens of minutes, so **Update** asks first. For a first look, raise **λ step (µm)** to 0.1
-and the Maker **θ step (deg)** to 1. That brings the default range to 11 wavelengths by 46 angles,
-which runs in under a minute on the Quartz + Au preset without the question. On that preset a map
-this coarse shows the envelope rather than the individual fringes, and the note will call it
-undersampled; for a first look at the envelope, that is expected.
+Maps take a while. A map costs the product of its two grids, so ticking **sweep the wavelength**
+sets the Maker and Fresnel **θ step (deg)** to 10, and the status bar says so; the fine step a
+single-wavelength scan needs comes back when you untick the box. A step you had already changed
+is left alone. With the default λ grid that is 26 wavelengths by 6 angles on the Maker range, a
+few seconds. Narrow the θ step for a finer map, and when the estimate passes a minute **Update**
+asks first. On the Quartz + Au preset a coarse map shows the envelope rather than the individual
+fringes, and the note will call it undersampled; for a first look at the envelope, that is
+expected.
 
 ## Polarimetry settings
 

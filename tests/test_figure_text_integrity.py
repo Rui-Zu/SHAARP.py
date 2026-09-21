@@ -71,6 +71,29 @@ class FigureTextIntegrity(unittest.TestCase):
         finally:
             plt.close(fig)
 
+    def test_a_constant_index_panel_reads_as_a_constant(self):
+        """A cubic crystal's effective index does not move with the angle, so both curves land on
+        one value and matplotlib autoscaled to the rounding noise: the axis was labelled
+        "1e-12+3.666", which reads as structure at the twelfth decimal. It shipped that way in the
+        GaAs screenshot and in the README GIF. The panel must show plain index values."""
+        import matplotlib.pyplot as plt
+
+        mat = build_casestudy_material("GaAs (111) (800 nm)", wavelength_um=0.8)
+        fig = build_si_polarimetry_figure(theta_deg=0.0, **si_figure_kwargs_from_material(mat))
+        try:
+            ax = next(a for a in fig.axes
+                      if a.get_title() == "Effective refractive index")
+            offset = ax.yaxis.get_major_formatter().get_offset()
+            self.assertEqual(offset, "", f"index axis still carries an offset label: {offset!r}")
+            low, high = ax.get_ylim()
+            self.assertGreater(high - low, 1e-3,
+                               "the axis is still zoomed into the rounding noise")
+            labels = [t.get_text() for t in ax.get_yticklabels() if t.get_text()]
+            self.assertTrue(any("3.6" in t or "3.7" in t for t in labels),
+                            f"ticks should read the index itself, got {labels}")
+        finally:
+            plt.close(fig)
+
     def test_si_polarimetry_figures(self):
         mat = build_casestudy_material("Quartz z-cut (800 nm)", wavelength_um=0.8)
         kw = si_figure_kwargs_from_material(mat)

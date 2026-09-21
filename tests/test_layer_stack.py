@@ -462,5 +462,85 @@ class HalfSpacesAreIsotropic(unittest.TestCase):
             len(build_system_from_stack(simple_film_stack(self.BIREFRINGENT, 10.0)).layers), 3)
 
 
+class APresetNameDoesNotOutliveItsMaterial(unittest.TestCase):
+    """A preset ships its rows with names describing the material they came with -- "Z-cut Quartz"
+    on the Quartz + Au film -- and `spec["name"]` wins over the auto label in
+    build_system_from_stack. Swapping that row's material therefore left the layer selector, the
+    schematic caption and the sweep's notes all naming a material that is no longer in the stack
+    (found in a GUI review, 2026-09-19: an undersampling note read "Z-cut Quartz (121.2 um thick)"
+    about a LiNbO3 row).
+
+    A name the USER typed is theirs and must survive the same swap, which is what makes this a
+    rule about provenance rather than a blanket clear.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        from PySide6 import QtWidgets
+
+        cls.app = QtWidgets.QApplication.instance() or QtWidgets.QApplication([])
+
+    def _editor(self):
+        from PySide6 import QtWidgets
+
+        from shaarp.desktop_app import TOOLTIPS, build_main_window
+        from tests.gui_harness import ml_case_combo
+
+        win = build_main_window()
+        page = win.findChild(QtWidgets.QTabWidget).widget(1)
+        preset = ml_case_combo(page)
+        preset.setCurrentIndex(preset.findText("Quartz + Au (Fig 4, 800 nm)"))
+        self.app.processEvents()
+        select = next(c for c in page.findChildren(QtWidgets.QComboBox)
+                      if c.toolTip() == TOOLTIPS["layer_select"])
+        material = next(c for c in page.findChildren(QtWidgets.QComboBox)
+                        if c.toolTip() == TOOLTIPS["layer_material"])
+        name = next(e for e in page.findChildren(QtWidgets.QLineEdit)
+                    if "layer name" in (e.toolTip() or "").lower())
+        select.setCurrentIndex(1)                     # the quartz film
+        self.app.processEvents()
+        return page, select, material, name
+
+    def _row_name(self, page, row=1):
+        from shaarp.layer_stack import decode_stack
+
+        return decode_stack(page._ml_stack_payload()["stack"])[row].get("name", "")
+
+    def test_a_preset_name_goes_when_the_user_changes_that_rows_material(self):
+        from shaarp.layer_stack import decode_stack
+
+        page, _select, material, name = self._editor()
+        self.assertIn("uartz", self._row_name(page), "the preset row should start out named")
+
+        other = "LiNbO3 z-cut · 1550 nm"
+        material.setCurrentText(other)
+        material.textActivated.emit(other)             # what a user's own pick fires
+        self.app.processEvents()
+
+        self.assertEqual(name.text().strip(), "")
+        self.assertNotIn("uartz", self._row_name(page),
+                         "the row still carries the name of the material it no longer holds")
+        # ...and the built system labels the row by what is actually in it
+        label = build_system_from_stack(
+            decode_stack(page._ml_stack_payload()["stack"]), wavelength_um=1.55).layers[1].name
+        self.assertNotIn("uartz", label)
+        self.assertIn("LiNbO3", label)
+
+    def test_a_name_the_user_typed_survives_the_swap(self):
+        page, _select, material, name = self._editor()
+        name.setText("my film")
+        name.textEdited.emit("my film")                # typing, not a programmatic write
+        name.editingFinished.emit()
+        self.app.processEvents()
+        self.assertEqual(self._row_name(page), "my film")
+
+        other = "LiNbO3 z-cut · 1550 nm"
+        material.setCurrentText(other)
+        material.textActivated.emit(other)
+        self.app.processEvents()
+        self.assertEqual(name.text().strip(), "my film")
+        self.assertEqual(self._row_name(page), "my film")
+
+
 if __name__ == "__main__":
     unittest.main()

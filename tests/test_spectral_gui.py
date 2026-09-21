@@ -600,8 +600,9 @@ class SpectralSweepCausality(unittest.TestCase):
 
     def test_choosing_a_dispersive_material_fits_the_scan_range_to_its_table(self):
         """A table covering 0.40-5.00 um answers a sweep from 0.80 um only: eps(2w) is the table
-        read at lambda / 2. The default 0.55-1.60 um used to clamp four of the five shipped
-        materials while their names said it would not."""
+        read at lambda / 2. The former default 0.55-1.60 um used to clamp four of the five shipped
+        materials while their names said it would not; the range is set here explicitly so the
+        fence does not depend on what the fields open at."""
         from shaarp.desktop_app import build_main_window
 
         name = "LiNbO3 (dispersive) 0.40-5.00 um"
@@ -652,8 +653,10 @@ class SpectralSweepCausality(unittest.TestCase):
     # -- a large map asks first --------------------------------------------------------------
 
     def test_a_long_run_asks_before_computing_and_a_short_one_does_not(self):
-        """The default grids make a Maker map of 43 x 901 points: measured 21 min on a 1 um z-cut
-        quartz film and 48 min on the Quartz + Au preset. The question is a page hook so it can be
+        """The 2026-09-19 default grids made a Maker map of 43 x 901 points: measured 21 min on a
+        1 um z-cut quartz film and 48 min on the Quartz + Au preset. The defaults are now a
+        seconds-long map (26 wavelengths, and ticking the sweep coarsens the theta step to 10 deg),
+        so the long grid is set explicitly below. The question is a page hook so it can be
         observed here; in an offscreen run the real one passes straight through, because a modal
         dialog once hung a headless run for ten hours.
 
@@ -673,9 +676,14 @@ class SpectralSweepCausality(unittest.TestCase):
         page._confirm_long_run = (lambda n_lam, n_th, est:
                                   asked.append((n_lam, n_th, est)) or False)
 
-        # long: 9 wavelengths x the default 0-45 deg at 0.05 deg
+        # long: 9 wavelengths x 0-45 deg at the fine 0.05 deg step (ticking the sweep set the
+        # step to 10 deg; a user narrowing it back is exactly who meets the question)
         for spin, value in zip(spins, (0.8, 1.2, 0.05)):
             spin.setValue(value)
+        theta = sorted((s for s in page.findChildren(QtWidgets.QDoubleSpinBox)
+                        if s.toolTip() == TOOLTIPS["theta_range"]), key=lambda s: s.value())
+        _th_min, th_step, _th_max = theta
+        th_step.setValue(0.05)
         self._update(page)
         self.assertEqual(len(asked), 1, "a long map must ask first")
         self.assertGreater(asked[0][2], LONG_RUN_SECONDS)

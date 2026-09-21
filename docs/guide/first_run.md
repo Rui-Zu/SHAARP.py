@@ -8,26 +8,26 @@ works.
 Double-click `SHAARP_py.exe` (Windows) or `SHAARP_py.app` (macOS). If nothing appears, give the
 first launch a moment; if it still does not open, see {doc}`faq`.
 
-The first time, it opens on the **SHAARP.si (single interface)** tab with these fields:
+The first time, it opens on the **SHAARP.si (single interface)** tab with the paper's first case
+study already selected:
 
 | Setting | Default value |
 |---|---|
 | Functionality | SHG Simulation |
-| Case Study and Examples | Custom (use fields) |
-| Point group | `-43m` (the GaAs class — one independent coefficient, $d_{14}$) |
-| Orientation | z-cut (identity) |
-| $\varepsilon(\omega)$, $\varepsilon(2\omega)$ | 4, 4.84 |
+| Case Study and Examples | GaAs (111) |
+| Point group | `-43m` (the GaAs class — one independent coefficient, $d_{14}$), from the case |
+| Orientation | Crystal Physics Directions, the (111) face, from the case |
+| $\varepsilon(\omega)$, $\varepsilon(2\omega)$, $d$ | filled from the case |
 | Incident angle $\theta_i$ | 0° |
 | Wavelength | 1.064 µm |
 
-This crystal, face-on to the beam, gives no reflected SHG: pressing **Update** on these fields
-draws *"SHG ≈ 0 (symmetry-forbidden)"* in both polar panels. Start from a case study instead.
 Later launches reopen with the inputs you used last.
 
-## 2. Pick GaAs (111)
+## 2. Check that GaAs (111) is selected
 
-Under **Case Study and Examples**, pick **GaAs (111)**. The point group, lattice, dielectric
-tensors and $d$ tensor fill in from the paper's case study.
+Under **Case Study and Examples** the dropdown reads **GaAs (111)**. If a previous session left
+something else there, pick it again. The point group, lattice, dielectric tensors and $d$ tensor
+fill in from the paper's case study.
 
 ## 3. Press **Update**
 
@@ -36,12 +36,11 @@ they do the same thing. Nothing computes until you press it — that is true thr
 
 ## 4. Read the result
 
-```{figure} ../_static/screens/si_tab.png
+```{figure} ../_static/screens/first_run_result.png
 :width: 100%
-:alt: The SHAARP.si tab after an Update, with LiNbO3 (11-20) at 45 degrees: the optical setup schematic above two reflected SHG polar plots
+:alt: The SHAARP.si tab after an Update on GaAs (111) at normal incidence: the optical setup schematic above two four-lobed reflected SHG polar plots, the left one with its lobes on the diagonals and the right one with its lobes on the axes
 
-The *Polar Plots* tab after an **Update**, here for LiNbO₃ (11-20) at θᵢ = 45°. Your GaAs (111)
-result has the same layout.
+The *Polar Plots* tab after an **Update**, with GaAs (111) at θᵢ = 0°.
 ```
 
 You should see, within a few seconds:

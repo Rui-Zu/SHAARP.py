@@ -1887,6 +1887,18 @@ def build_si_polarimetry_figure(point_group: str, *, theta_deg: float = 45.0, in
         ax_n.set_title("Effective refractive index", fontsize=9)
         ax_n.legend(fontsize=8)
         ax_n.grid(alpha=0.3)
+        # A cubic crystal's index does not move with the angle, and both curves land on one value.
+        # Matplotlib then autoscales to the rounding noise and labels the axis "1e-12+3.666", which
+        # reads as structure at the 12th decimal -- it is the same constant drawn flat. Give those
+        # panels a plain band around the value instead. (Seen in the shipped GaAs screenshot and
+        # the README GIF.)
+        _n_all = np.concatenate([np.asarray(idx["n_ordinary"], dtype=float),
+                                 np.asarray(idx["n_extraordinary"], dtype=float)])
+        _lo, _hi = float(np.nanmin(_n_all)), float(np.nanmax(_n_all))
+        if _hi - _lo < 1e-6 * max(abs(_hi), 1.0):
+            _mid = 0.5 * (_lo + _hi)
+            ax_n.set_ylim(_mid - 0.05, _mid + 0.05)
+            ax_n.ticklabel_format(axis="y", style="plain", useOffset=False)
         # (bottom-right) incident-polarization Ellipticity locus E_p vs E_s (linear when Delta-delta=0)
         ax_e = fig.add_subplot(2, 2, 4)
         phi0 = math.radians(45.0)

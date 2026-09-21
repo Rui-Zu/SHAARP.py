@@ -63,6 +63,9 @@ from .shaarp_gui import (
 # pays a setup per wavelength that per-point pricing ignores.
 LONG_RUN_SECONDS = 60.0
 PROBE_ABOVE_SECONDS = 15.0
+# The single-interface tab's case on a first launch: the hero of the README and first_run.md.
+# One name, so a test and the docs can read it rather than repeat it.
+STARTUP_SI_CASE = "GaAs (111)"
 SECONDS_PER_POINT = {"maker": 0.09, "fresnel": 0.06, "ml_spectrum": 0.11, "si_spectrum": 0.03}
 
 
@@ -437,12 +440,37 @@ QPushButton:hover { background: #f0f0f3; }
 QPushButton:pressed { background: #e2e2e6; }
 QPushButton:disabled { color: #b0b0b5; border-color: #e8e8ea; }
 
-QComboBox, QLineEdit, QAbstractSpinBox, QPlainTextEdit, QTextEdit {
-    background: #ffffff; border: 1px solid #d0d0d4; border-radius: 6px; padding: 3px 6px;
+/* Three kinds of control, three looks, readable BEFORE a click (Rui, 2026-09-20: "the input box
+   and click box appear too similar, I can't tell which is which unless I start to click"):
+   - a FIELD you type into: white, square-ish corners, a heavier bottom edge (an inset "line");
+   - a DROPDOWN: the same field with a visible arrow well on its right;
+   - an action BUTTON: the rounded white pill above; the quick-pick chips beside a field are
+     tinted grey pills (see _angle_buttons), so they never read as a second input box. */
+QLineEdit, QAbstractSpinBox, QPlainTextEdit, QTextEdit {
+    background: #ffffff; border: 1px solid #c9cacf; border-bottom: 2px solid #b4b6bd;
+    border-radius: 3px; padding: 3px 6px;
     selection-background-color: #0a84ff; selection-color: #ffffff;
 }
-QComboBox:focus, QLineEdit:focus, QAbstractSpinBox:focus, QPlainTextEdit:focus { border: 1px solid #0a84ff; }
-QComboBox::drop-down { border: none; width: 18px; }
+QComboBox {
+    background: #ffffff; border: 1px solid #c9cacf; border-radius: 3px; padding: 3px 6px;
+    selection-background-color: #0a84ff; selection-color: #ffffff;
+}
+QComboBox:focus, QLineEdit:focus, QAbstractSpinBox:focus, QPlainTextEdit:focus { border: 1px solid #0a84ff; border-bottom: 2px solid #0a84ff; }
+QComboBox::drop-down { subcontrol-origin: padding; subcontrol-position: top right; width: 20px;
+    border-left: 1px solid #d5d6da; background: #f1f1f4; border-top-right-radius: 3px; border-bottom-right-radius: 3px; }
+QComboBox::down-arrow { image: url("__COMBO_ARROW__"); width: 10px; height: 6px; }
+/* The few spins that keep their arrows (incident angle, layer count) get the same well and the
+   same glyphs as a dropdown, instead of the platform's arrows cramped inside the styled frame. */
+QAbstractSpinBox::up-button, QAbstractSpinBox::down-button {
+    subcontrol-origin: border; width: 18px; border-left: 1px solid #d5d6da; background: #f1f1f4; }
+QAbstractSpinBox::up-button { subcontrol-position: top right; border-top-right-radius: 3px; }
+QAbstractSpinBox::down-button { subcontrol-position: bottom right; border-bottom-right-radius: 3px; }
+QAbstractSpinBox::up-button:hover, QAbstractSpinBox::down-button:hover { background: #e4e5ea; }
+QAbstractSpinBox::up-arrow { image: url("__SPIN_UP_ARROW__"); width: 8px; height: 5px; }
+QAbstractSpinBox::down-arrow { image: url("__COMBO_ARROW__"); width: 8px; height: 5px; }
+QComboBox:disabled { color: #b0b0b5; }
+QComboBox::drop-down:disabled { background: #f7f7f9; }
+QComboBox QAbstractItemView { background: #ffffff; border: 1px solid #c9cacf; selection-background-color: #0a84ff; selection-color: #ffffff; }
 
 QTabWidget::pane { border: 1px solid #e4e4e7; border-radius: 8px; top: -1px; background: #ffffff; }
 QTabBar::tab {
@@ -477,6 +505,27 @@ QSplitter::handle:horizontal { width: 6px; }
 QSplitter::handle:vertical { height: 6px; }
 QSplitter::handle:hover { background: #0a84ff; }
 """
+
+
+def _asset_file_url(filename):
+    """A bundled shaarp/assets file as the forward-slash path a stylesheet url() takes, or ""
+    when it is not on disk (then the combo arrow falls back to the style's own glyph)."""
+    from pathlib import Path
+
+    try:
+        from importlib.resources import files
+
+        p = Path(str(files("shaarp") / "assets" / filename))
+    except (ModuleNotFoundError, AttributeError, OSError, TypeError):
+        p = Path(__file__).with_name("assets") / filename
+    return p.resolve().as_posix() if p.exists() else ""
+
+
+# Qt's stylesheet engine draws a combo's arrow from an IMAGE, not from a CSS border triangle (that
+# trick renders as a dark square), so the arrow is a bundled 10x6 PNG. Substituted once, here, so
+# every consumer of MODERN_QSS (the app, the tests, the screenshot scripts) gets the same sheet.
+MODERN_QSS = (MODERN_QSS.replace("__COMBO_ARROW__", _asset_file_url("combo_arrow.png"))
+              .replace("__SPIN_UP_ARROW__", _asset_file_url("spin_up_arrow.png")))
 
 # Accent style for the primary "Update" buttons (Apple blue).
 PRIMARY_BTN_QSS = (
@@ -687,8 +736,16 @@ def _angle_buttons(QtWidgets, values, target_spin):
         # button padding
         b.setMaximumWidth(max(42, 14 + 9 * len(str(v))))
         b.setCheckable(True)
-        b.setStyleSheet("QPushButton:checked { background-color: #58a6ff; color: white; "
-                        "border: 1px solid #2f6fb3; border-radius: 3px; }")
+        # A chip is a CLICK target, not a second input box: tinted grey pill when idle, solid
+        # blue when it is the active value. The field beside it stays white with a square inset
+        # edge (MODERN_QSS), so the two are told apart at a glance without clicking either.
+        b.setStyleSheet(
+            "QPushButton { background-color: #e9ebf0; color: #3a3a3c; border: 1px solid #d3d5db; "
+            "border-radius: 10px; padding: 2px 8px; }"
+            "QPushButton:hover { background-color: #dcdfe6; }"
+            "QPushButton:checked { background-color: #58a6ff; color: white; "
+            "border: 1px solid #2f6fb3; }"
+            "QPushButton:disabled { background-color: #f2f3f6; color: #b0b0b5; border-color: #e6e7eb; }")
         buttons.append((float(v), b))
         lay.addWidget(b)
 
@@ -1387,9 +1444,13 @@ def build_main_window():
         # and a saved session would silently come back with the sweep off.
         spectral_on = QtWidgets.QCheckBox("sweep the wavelength")
         _tip(spectral_on, "spectral_sweep")
+        # Defaults 0.55-0.80 um at 0.01 um (26 wavelengths), Rui 2026-09-20: the old 0.55-1.60 at
+        # 0.025 was finer and wider than a first look needs, and with the Maker scan grid it made
+        # the app's own default map a tens-of-minutes job. 10 nm is the step the quick-pick row
+        # starts at; 50 and 100 nm are the coarser looks beside it.
         lam_min = _NumBox(0.55, 0.05, 20.0, decimals=4)
-        lam_max = _NumBox(1.60, 0.05, 20.0, decimals=4)
-        lam_step = _NumBox(0.025, 0.0001, 5.0, decimals=4)
+        lam_max = _NumBox(0.80, 0.05, 20.0, decimals=4)
+        lam_step = _NumBox(0.01, 0.0001, 5.0, decimals=4)
         for _b in (lam_min, lam_max, lam_step):
             _tip(_b, "lambda_range")
         g_spec, sp_lay = _collapsible_group(QtWidgets, "Wavelength Scan Range",
@@ -1400,9 +1461,9 @@ def build_main_window():
         lam_rows = [_spin_row(QtWidgets, lam_min,
                               _angle_buttons(QtWidgets, [0.4, 0.55, 0.8, 1.0], lam_min)),
                     _spin_row(QtWidgets, lam_max,
-                              _angle_buttons(QtWidgets, [1.2, 1.6, 2.0], lam_max)),
+                              _angle_buttons(QtWidgets, [0.8, 1.0, 1.6, 2.0], lam_max)),
                     _spin_row(QtWidgets, lam_step,
-                              _angle_buttons(QtWidgets, [0.01, 0.025, 0.05, 0.1], lam_step))]
+                              _angle_buttons(QtWidgets, [0.01, 0.05, 0.1], lam_step))]
         sp_lay.addRow("λ min (µm)", lam_rows[0])
         sp_lay.addRow("λ max (µm)", lam_rows[1])
         sp_lay.addRow("λ step (µm)", lam_rows[2])
@@ -1426,10 +1487,14 @@ def build_main_window():
         def _confirm_long_run(n_lambda: int, n_theta: int, est_seconds: float) -> bool:
             """Ask before a wavelength sweep that will run for a long time.
 
-            With the default grids a Maker map is 43 wavelengths by 901 angles. Measured through the
-            app (2026-09-19): 21 min on a single 1 um z-cut quartz film, 48 min on the Quartz + Au
-            preset -- long enough that a user who clicked Update expecting seconds would think the
-            app had hung. The estimate times one wavelength of the actual job (see
+            The question exists because a map costs the product of its two grids. Before the
+            2026-09-20 defaults (0.55-1.60 um at 0.025 um, theta step 0.05 deg) a Maker map was
+            43 wavelengths by 901 angles -- measured through the app (2026-09-19): 21 min on a
+            single 1 um z-cut quartz film, 48 min on the Quartz + Au preset -- long enough that a
+            user who clicked Update expecting seconds would think the app had hung. The defaults
+            are now 26 wavelengths, and ticking the sweep sets the theta step to 10 deg (6 angles
+            over 0-45), so the out-of-the-box map is seconds; a user who narrows either step
+            still meets this question. The estimate times one wavelength of the actual job (see
             PROBE_ABOVE_SECONDS), so a 1-D spectrum with a tiny step is caught too.
 
             NEVER modal in a headless run. A blocking dialog once hung an offscreen run for ten
@@ -1898,6 +1963,12 @@ def build_main_window():
             # (stay under the example case ... reupdate the input back if you select
             # quartz+Au again"). The mode combo NEVER auto-switches (supersedes the flip-to-Custom and the flip-to-editor).
             _ml_dirty = {"on": False}
+            # Rows whose name the USER typed (QLineEdit.textEdited fires for nothing else). A
+            # preset ships its rows with names describing the material they came with ("Z-cut
+            # quartz"), and spec["name"] wins over the auto label in build_system_from_stack, so
+            # those names have to stand down when the row's material changes. A name someone typed
+            # is theirs and stays. Indices are reset whenever a whole stack is loaded.
+            _named_by_user: set[int] = set()
 
             def _set_ml_dirty(on):
                 _ml_dirty["on"] = bool(on)
@@ -1955,9 +2026,24 @@ def build_main_window():
                 if not settled_unchanged:
                     _set_ml_dirty(True)
 
+            def _drop_preset_layer_name(*_a):
+                """Clear a row's name when the USER changes that row's material, unless the name is
+                one they typed.
+
+                Swapping a preset row from quartz to LiNbO3 left "Z-cut quartz" on the row, and the
+                layer selector, the schematic caption and the sweep's notes all quote that name --
+                so every one of them described the material that is no longer there."""
+                i = edit_layer.currentIndex()
+                if _loading["f"] or i in _named_by_user or not layer_name.text().strip():
+                    return
+                layer_name.clear()
+                _store_layer_from_fields()
+                _refresh_layer_selector()
+
             def _on_count_change(n):
                 # no mode switch — a count change modifies the working copy in place
                 stack_state["stack"] = set_layer_count(stack_state["stack"], int(n))
+                _named_by_user.clear()          # the rows this set points at have moved
                 _refresh_layer_selector()
                 _load_layer_into_fields()
                 _sync_layer_crystal_view()  # the guarded mirror no longer self-fires mid-refresh
@@ -1967,7 +2053,13 @@ def build_main_window():
             n_layers.valueChanged.connect(_on_count_change)
             edit_layer.currentIndexChanged.connect(_load_layer_into_fields)
             layer_name.editingFinished.connect(lambda: (_store_layer_from_fields(), _refresh_layer_selector()))
+            # textEdited, not textChanged: it fires ONLY for typing, so a name written into the
+            # field by a preset load never counts as the user's own
+            layer_name.textEdited.connect(lambda *_: _named_by_user.add(edit_layer.currentIndex()))
             layer_mat.currentTextChanged.connect(_store_layer_from_fields)
+            # textActivated, not currentTextChanged: a session restore or a preset load sets the
+            # combo programmatically, and neither is the user changing this row's material
+            layer_mat.textActivated.connect(_drop_preset_layer_name)
             layer_thick.valueChanged.connect(lambda *_: _store_layer_from_fields(source="thickness"))
 
             # ---- per-layer symbolic flags + the auto-pivot -------------------------
@@ -3021,8 +3113,8 @@ def build_main_window():
             """Fit the wavelength scan range to what a chosen dispersive material can answer.
 
             A table covering lo-hi um answers a sweep over 2*lo to hi only -- the second harmonic
-            reads it at half the wavelength -- so the default 0.55-1.60 um clamped four of the five
-            shipped materials, while the ranges in their names said it would not. The CURRENT range
+            reads it at half the wavelength -- so the former default 0.55-1.60 um clamped four of
+            the five shipped materials, while the ranges in their names said it would not. The CURRENT range
             is clamped into the answerable one rather than replaced, so a range a user chose that
             still fits survives a change of material; only a range with no overlap at all is reset
             to the full answerable span. The status bar says so whenever anything moves.
@@ -3081,6 +3173,7 @@ def build_main_window():
             # editor writes run under the _loading guard (+ blockSignals on n_layers), so the user-edit flip cannot self-fire on a selection.
             def _load_stack_into_editor(new_stack, select_index=1):
                 stack_state["stack"] = new_stack
+                _named_by_user.clear()          # these rows are the new stack's, not the old one's
                 n_layers.blockSignals(True)
                 n_layers.setValue(len(new_stack))  # every medium counts
                 n_layers.blockSignals(False)
@@ -3428,6 +3521,14 @@ def build_main_window():
             _enter_stack_mode()  # startup: the editor mirrors the initial selection's stack
             _apply_stack_mode_relevance()  # startup state
             stack_mode_hook = _apply_stack_mode_relevance  # test hook (exposed on the page below)
+        if which == "si":
+            # A first launch opens on the documented hero case (README, first_run.md, the README
+            # GIF), not on "Custom" with the -43m / z-cut / normal-incidence fields whose reflected
+            # SHG is symmetry-forbidden -- Rui's first cold-eyes look (2026-09-20) met "SHG ≈ 0"
+            # as the app's opening result. Set through the combo so the same hooks a user's pick
+            # fires (panel mirror, matrices, case-owned wavelength, notes) run; the last-session
+            # restore in main() still overrides this on later launches.
+            si_case.setCurrentText(STARTUP_SI_CASE)
         _sync_case_wavelength()  # F54 startup: lambda + label reflect the initial selection
         _update_wl_note()  # startup: correct clamp-note visibility for the initial selection
 
@@ -3648,6 +3749,16 @@ def build_main_window():
         # back. Without this every selector stayed on "Fix" and the next ordinary Update drew one
         # fixed-polarizer curve instead of the lobes the user had set up.
         _spectral_pin_saved: dict = {}
+        # The angle-scan steps a sweep coarsens, each with the fine single-wavelength default it
+        # coarsens FROM. A wavelength-by-angle map multiplies its two grids, and the 0.05 deg the
+        # single-wavelength Maker/Fresnel scans need (Nyquist on the shipped preset's fringes,
+        # tests/test_maker_default_resolves_fringes.py) made the out-of-the-box map a
+        # tens-of-minutes job. So ticking the sweep sets the step to 10 deg (Rui, 2026-09-20) --
+        # but ONLY if the step is still at that fine default: a step the user has already chosen
+        # is theirs and stays. Unticking gives the fine default back, again only if the step is
+        # still the 10 deg the sweep set.
+        _SWEEP_THETA_STEP_DEG = 10.0
+        _spectral_step_pins = tuple((_s, float(_s.value())) for _s in (th_step, fr_step))
 
         def _pin_geometry_for_spectrum() -> bool:
             """With the wavelength sweeping, the rotating elements stand down.
@@ -3655,7 +3766,8 @@ def build_main_window():
             A spectrum needs ONE scalar per wavelength, so the polarizer, the analyzer and the
             sample rotation are held at their fixed values. This is the original's own idiom
             rather than a new rule -- turning the sample there already forces the polarizer and
-            analyzer fixed for the same reason.
+            analyzer fixed for the same reason. The angle-scan steps coarsen to 10 deg for the
+            same tick (see _spectral_step_pins), so a map is seconds rather than minutes.
 
             Re-entrancy matters: setCurrentText re-fires currentTextChanged, which lands back in
             _sync_pol_enabled, which calls this again.
@@ -3673,6 +3785,9 @@ def build_main_window():
                     finally:
                         _spectral_pin_saved.clear()
                         _spectral_pin_guard["on"] = False
+                    for _spin, _fine in _spectral_step_pins:
+                        if abs(float(_spin.value()) - _SWEEP_THETA_STEP_DEG) < 1e-9:
+                            _spin.setValue(_fine)
                 return False
             _spectral_pin_guard["on"] = True
             try:
@@ -3683,6 +3798,17 @@ def build_main_window():
                     if _combo is not None and _combo.currentText().startswith(_rotating):
                         _spectral_pin_saved.setdefault(_combo, _combo.currentText())
                         _combo.setCurrentText(_fixed)
+                # first tick only: the saved dict is empty before the combos are pinned, and a
+                # re-entrant call (guarded above) never reaches here
+                coarsened = False
+                for _spin, _fine in _spectral_step_pins:
+                    if abs(float(_spin.value()) - _fine) < 1e-9:
+                        _spin.setValue(_SWEEP_THETA_STEP_DEG)
+                        coarsened = True
+                if coarsened and which == "ml":
+                    win.statusBar().showMessage(
+                        "θ step set to 10° for the wavelength sweep (a map multiplies its two "
+                        "grids); it goes back to the fine step when the sweep is off.")
             finally:
                 _spectral_pin_guard["on"] = False
             return True

@@ -14,6 +14,12 @@ began as Mathematica packages from the same group, and SHAARP.py grew out of the
 [github.com/Rui-Zu/SHAARP](https://github.com/Rui-Zu/SHAARP) (single interface) and
 [github.com/bzw133/SHAARP.ml](https://github.com/bzw133/SHAARP.ml) (multilayer).
 
+## Acknowledgment
+
+Development of the SHAARP software was supported as part of the Computational Materials Sciences
+Program funded by the U.S. Department of Energy, Office of Science, Basic Energy Sciences, under
+Award No. DE-SC0020145.
+
 ## How SHAARP.py is checked
 
 Every solver in SHAARP.py is checked against the published equations of the two papers and against

@@ -133,8 +133,18 @@ stack.
 Tick **sweep the wavelength** to compute across a band instead of at one wavelength, and set
 **λ min (µm)**, **λ max (µm)** and **λ step (µm)**. Press **Update** and the result appears on the
 **Spectrum** output tab. The status line under the plots says what was computed, for example
-"SHG Simulation: spectrum over 43 wavelengths, 0.55–1.6 µm". The grid stops at the last step that
-fits, so its end can fall short of λ max.
+"SHG Simulation: spectrum over 26 wavelengths, 0.55–0.8 µm". The grid stops at the last step that
+fits, so its end can fall short of λ max. The fields open at 0.55–0.80 µm in 0.01 µm steps, a
+quick first look; the chips beside each field offer the common alternatives, and any value can be
+typed.
+
+```{figure} ../_static/screens/spectrum.png
+:width: 100%
+:alt: The SHAARP.si tab after a wavelength sweep: the scan-range box ticked above a greyed-out single-wavelength field, and the Spectrum output tab showing the s and p reflected SHG channels both rising across the band
+
+A sweep on the **Spectrum** tab: KTP from the **Dispersive** group, its scan range fitted to
+0.86–1.6 µm, with the polarizer held at φ = 30°.
+```
 
 A spectrum needs one number per wavelength, so turning the sweep on sets the polarizer and the
 analyzer to *Fix* and greys out their selectors; the fixed $\varphi$ and $\psi$ you enter set the
