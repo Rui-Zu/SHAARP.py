@@ -148,10 +148,12 @@ class ResolutionSeam(_TempStore):
         self.assertEqual(choices[-3:-1], [um.USER_SECTION_HEADER, "mine"])
         from shaarp.dispersion import dispersive_material_names
 
-        self.assertEqual(len(LAYER_MATERIAL_CHOICES), 19 + len(dispersive_material_names()),
-                         "the pinned palette constant is untouched: air + isotropic-n + the 16 "
+        self.assertEqual(len(LAYER_MATERIAL_CHOICES), 18 + len(dispersive_material_names()),
+                         "the pinned palette constant is untouched: air + isotropic-n + the 15 "
                          "palette films + the shipped dispersive variants + Custom, and nothing "
-                         "the user saves may reach it")
+                         "the user saves may reach it. 15, not 16: the palette's own Air case is "
+                         "the same medium as the air entry and no longer gets a second row "
+                         "(R21, cold-eyes round 3)")
         self.assertEqual(material_for_label("mine", 1.064).name, "mine")
 
 

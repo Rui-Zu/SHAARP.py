@@ -31,7 +31,7 @@ Reflected SHG polar plots for LiNbO₃ (point group 3m) at θᵢ = 45°.
 
 - **Copy closed form (Python/SymPy)** and **Copy closed form (Mathematica)** — copy the analytical
   closed form to the clipboard, as SymPy text or in Wolfram Language syntax (an analytical run
-  auto-switches to that tab).
+  auto-switches to that tab). Both stay greyed until an analytical run has produced a closed form.
 - **Export data** — writes the last result to JSON: the numeric data, the result `kind`, its
   check status, and under `provenance` the version, the export time and, in `inputs`, every setting
   that produced it. If you changed an input after the run, `provenance` says so: its `inputs` are

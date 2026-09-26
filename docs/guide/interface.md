@@ -65,4 +65,7 @@ The 2D schematic draws, at the **true** incident angle $\theta_i$ you entered:
 At **normal incidence ($\theta_i = 0$)** all beams are drawn **vertical** along the surface normal; as
 $\theta_i$ increases they fan out to the entered angle (45° looks like 45°, near-90° looks grazing).
 
+The beams inside the sample bend by the **material's own refractive index**, so a high-index crystal
+such as GaAs ($n \approx 3.7$) draws them close to the surface normal even at a steep $\theta_i$.
+
 Next: {doc}`si_tab`.

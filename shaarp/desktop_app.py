@@ -66,6 +66,11 @@ PROBE_ABOVE_SECONDS = 15.0
 # The single-interface tab's case on a first launch: the hero of the README and first_run.md.
 # One name, so a test and the docs can read it rather than repeat it.
 STARTUP_SI_CASE = "GaAs (111)"
+_MATHEMATICA_COPY_TIP = (
+    "Copy the closed-form expressions in Wolfram Language syntax "
+    "(Sqrt[..], Exp[..], ^ powers; symbols as \\[Theta]i, n\\[Omega], "
+    "\\[CurlyPhi], ...) — paste directly into a Mathematica notebook. "
+    "The conversion is numerically verified against a live Wolfram kernel.")
 SECONDS_PER_POINT = {"maker": 0.09, "fresnel": 0.06, "ml_spectrum": 0.11, "si_spectrum": 0.03}
 
 
@@ -429,6 +434,7 @@ QGroupBox {
     margin-top: 14px; padding: 10px 10px 8px 10px; font-weight: 600; color: #3a3a3c;
 }
 QGroupBox::title { subcontrol-origin: margin; subcontrol-position: top left; left: 12px; padding: 0 4px; }
+QGroupBox[collapsed="true"] { padding: 0px 10px 0px 10px; }
 
 QLabel { color: #1d1d1f; background: transparent; }
 
@@ -624,13 +630,105 @@ def _collapsible_group(QtWidgets, title, layout_cls=None, collapsed=False):
     def _toggle(on):
         body.setVisible(on)
         body.setEnabled(True)  # inner per-field enabled flags stay authoritative
+        # a collapsed group is a title line, not an empty white card: drop the body margins and
+        # let the stylesheet's [collapsed="true"] rule remove the card padding
+        shell.setContentsMargins(6, 2, 6, 6) if on else shell.setContentsMargins(0, 0, 0, 0)
+        box.setProperty("collapsed", "false" if on else "true")
+        box.style().unpolish(box)
+        box.style().polish(box)
 
     box.toggled.connect(_toggle)
     body.setVisible(not collapsed)
+    _toggle(not collapsed)
     return box, lay
 
 
-def _symbols_summary(result) -> str:
+def _undersampled_caption(fig) -> str | None:
+    """Say so when an angle scan is too coarse to resolve what it drew.
+
+    MEASURED from the curve, not predicted from the stack. The statistic is the fraction of steps
+    at which the slope REVERSES. A resolved oscillation turns only at its extrema, so with k
+    samples to a fringe that fraction is about 2/k; a fringe train sampled below its own period
+    has independent neighbours and tends to 1/2.
+
+    Measured through the app on the shipped Quartz + Au preset (0-45 deg, 121.2 um quartz,
+    fringe spacing 0.560 deg), 2026-09-20:
+
+        theta step   samples/fringe   slope reversals
+          0.05 deg        11.2             0.128
+          0.10 deg         5.6             0.229
+          0.50 deg         1.12            0.382
+          1.00 deg         0.56            0.455
+          2.00 deg         0.28            0.476
+
+    The threshold is 0.35, which sits between the 0.10 deg step (5.6 samples a fringe, above the
+    4-per-fringe bar `tests/test_maker_default_resolves_fringes.py` calls comfortable) and the
+    0.50 deg step (1.12, below Nyquist -- the aliasing that made the app's own default view of
+    its documented example read as noise). The jump floor only keeps a dead-flat curve out, and
+    curves at pure numerical-noise level are skipped: their reversals are also ~1/2, but
+    "undersampled" is the wrong explanation for them.
+
+    Why it exists: the wavelength sweep has warned about its own step since the spectral work;
+    the ANGLE step had no equivalent, so widening the Maker step off its honest-but-slow default
+    drew an aliased curve under a green "matches the original package" line (cold-eyes round 2).
+    """
+    import numpy as _np
+
+    for ax in getattr(fig, "axes", []):
+        for line in ax.lines:
+            y = _np.asarray(line.get_ydata(), dtype=float)
+            y = y[_np.isfinite(y)]
+            if y.size < 12:
+                continue
+            span = float(_np.max(y) - _np.min(y))
+            if span <= 0 or float(_np.max(_np.abs(y))) < 1e-20:
+                continue  # flat, or numerical noise rather than a physical curve
+            steps = _np.diff(y)
+            jump = float(_np.median(_np.abs(steps))) / span
+            nz = steps[steps != 0]
+            if nz.size < 8:
+                continue
+            flips = float(_np.mean(_np.sign(nz[1:]) != _np.sign(nz[:-1])))
+            if jump > 0.002 and flips > 0.35:
+                return ("⚠ This scan looks undersampled: the slope reverses at {0:.0f}% of the "
+                        "steps, which is what a fringe train sampled below its own period looks "
+                        "like. Reduce the θ step and run again.".format(flips * 100))
+    return None
+
+
+def _caption_figure(fig, text: str) -> None:
+    """Put a warning ON the figure, under the axes: it is then read with the plot it belongs to,
+    and it travels into Export figure and Copy figure.
+
+    Space is RESERVED for it first. Dropping the text at the bottom of a finished figure lands it
+    on the x-axis label -- the same overprint the multilayer schematic was already reported for --
+    so the layout engine is released and the axes are lifted to make room.
+    """
+    reserved = False
+    engine = None
+    try:
+        engine = fig.get_layout_engine()
+    except Exception:
+        engine = None
+    if engine is not None:
+        # a constrained/tight engine REFUSES subplots_adjust ("incompatible layout engine"), so
+        # the space is reserved through the engine's own rect instead
+        try:
+            # (left, bottom, WIDTH, HEIGHT) -- not (left, bottom, right, top): a height of 1.0
+            # here runs the layout to 1.14 and cuts the title off the top of the figure
+            engine.set(rect=(0.0, 0.14, 1.0, 0.86))
+            reserved = True
+        except Exception:
+            reserved = False
+    if not reserved:
+        try:
+            fig.subplots_adjust(bottom=0.30)
+        except Exception:
+            pass
+    fig.text(0.01, 0.02, text, ha="left", va="bottom", fontsize=7.5, color="#8a5a00", wrap=True)
+
+
+def _symbols_summary(result, limit: int | None = None) -> str:
     """Say WHAT the closed form contains, at a glance.
 
     A multilayer closed form is a single ~10^5-character line; the panel shows whatever slice
@@ -653,7 +751,19 @@ def _symbols_summary(result) -> str:
                 names |= {str(sym) for sym in parsed.free_symbols}
         if not names:
             return ""
-        return (f"   |   symbols: {', '.join(sorted(names))}"
+        listed = ", ".join(sorted(names))
+        # The status label is sized for two wrapped lines. A Full-Analytical run names ~40
+        # symbols (478 characters), which needed three and was clipped with nowhere to overflow
+        # -- the status bar sits 10 px below (cold-eyes round 2, 2026-09-20). Elide to fit; the
+        # caller puts the full list in the tooltip.
+        if limit and len(listed) > limit:
+            # A Full-Analytical run names ~25 symbols. Even elided, the list needed a third line
+            # the label does not have. Say HOW MANY and name one, and let the tooltip carry the
+            # rest -- that is the part a reader acts on.
+            first = sorted(names)[0]
+            return (f"   |   {len(names)} symbols incl. {first}"
+                    f"   ({chars:,} characters — use Copy/Export; hover for the list)")
+        return (f"   |   symbols: {listed}"
                 f"   ({chars:,} characters — use Copy/Export for the full form)")
     except Exception:
         return ""
@@ -736,6 +846,12 @@ def _angle_buttons(QtWidgets, values, target_spin):
         # button padding
         b.setMaximumWidth(max(42, 14 + 9 * len(str(v))))
         b.setCheckable(True)
+        # Say what the chip DOES, on the STATUS tip. 94 of them shipped with nothing, so a pill
+        # reading "0.4" beside a wavelength field explained itself only by being clicked
+        # (cold-eyes round 2, 2026-09-20). It must NOT be a tooltip: a widget's audit/session
+        # identity falls back to its tooltip before its text, so giving these a tooltip renames
+        # every chip and breaks both the coverage registry and every saved session.
+        b.setStatusTip(f"Set the field beside it to {v}. Type in the field for any other value.")
         # A chip is a CLICK target, not a second input box: tinted grey pill when idle, solid
         # blue when it is the active value. The field beside it stays white with a square inset
         # edge (MODERN_QSS), so the two are told apart at a glance without clicking either.
@@ -809,30 +925,34 @@ def _scalar_eps(grid, rtol=1e-6):
     return d0
 
 
-def _complex_grid(QtWidgets, defaults):
+def _complex_grid(QtWidgets, defaults, cell_width=(44, 62)):
     """A grid of complex-number QLineEdits (the original's full ε / d matrix entry). ``defaults`` is a
-    2-D list; returns (container_widget, cells[r][c] QLineEdit)."""
+    2-D list; returns (container_widget, cells[r][c] QLineEdit). ``cell_width`` is the
+    (minimum, maximum) pixel width of one cell."""
     w = QtWidgets.QWidget()
     g = QtWidgets.QGridLayout(w)
     g.setContentsMargins(0, 0, 0, 0)
     g.setSpacing(2)
     cells = []
+    lo_w, hi_w = cell_width
     for r, drow in enumerate(defaults):
         row = []
         for c, dval in enumerate(drow):
             e = QtWidgets.QLineEdit(str(dval))
             # Compact cells so the 3x6 d-matrix (6 columns) doesn't force the input panel -- and thus
             # the whole window's minimum width -- so wide that the output/geometry panel gets clipped on
-            # narrower laptops. Real values fit; long complex entries scroll within the field.
-            e.setMaximumWidth(62)
-            e.setMinimumWidth(44)
+            # narrower laptops. The 3x3 eps grids ask for wider cells (see _matrix_block callers):
+            # at 62 px a complex permittivity such as 13.4361+0.432588j showed only its tail,
+            # "432588j", and a newcomer read that as the value (round-1 audit, 2026-09-20).
+            e.setMaximumWidth(hi_w)
+            e.setMinimumWidth(lo_w)
             g.addWidget(e, r, c)
             row.append(e)
         cells.append(row)
     return w, cells
 
 
-def _matrix_block(QtWidgets, label, defaults):
+def _matrix_block(QtWidgets, label, defaults, cell_width=(44, 62)):
     """A Mathematica-style labeled, bracketed matrix of complex QLineEdits: label ( [grid] ).
     Returns (container_widget, cells[r][c]). Used for the full ε (3×3) and d (3×6) tensor entry."""
     w = QtWidgets.QWidget()
@@ -845,7 +965,7 @@ def _matrix_block(QtWidgets, label, defaults):
     lbr = QtWidgets.QLabel("⎡\n⎢\n⎣")
     lbr.setStyleSheet("color:#8a8a8e;")
     h.addWidget(lbr)
-    grid_w, cells = _complex_grid(QtWidgets, defaults)
+    grid_w, cells = _complex_grid(QtWidgets, defaults, cell_width=cell_width)
     h.addWidget(grid_w)
     rbr = QtWidgets.QLabel("⎤\n⎥\n⎦")
     rbr.setStyleSheet("color:#8a8a8e;")
@@ -1276,16 +1396,21 @@ def build_main_window():
 
     # Help menu -> User Guide (the original GUIs' default 'User Guide' Functionality / welcome page).
     def _show_user_guide():
-        dlg = QtWidgets.QMessageBox(win)
+        # A scrollable dialog, not a QMessageBox: the message box grew to the guide's full height
+        # (1369 px) with its OK button below the bottom of any laptop screen (round-1 audit,
+        # 2026-09-20). The links open in the browser.
+        dlg = QtWidgets.QDialog(win)
         dlg.setWindowTitle("SHAARP.py -- User Guide")
-        dlg.setTextFormat(QtCore.Qt.RichText)
-        dlg.setText(USER_GUIDE_HTML)
-        # the guide links to the two ORIGINAL Mathematica repos; a QMessageBox
-        # label does not open external links by default, so enable it on the standard text label
-        # (guarded: if Qt ever renames it the guide still shows, the URLs just aren't clickable).
-        _lbl = dlg.findChild(QtWidgets.QLabel, "qt_msgbox_label")
-        if _lbl is not None:
-            _lbl.setOpenExternalLinks(True)
+        lay = QtWidgets.QVBoxLayout(dlg)
+        view = QtWidgets.QTextBrowser()
+        view.setObjectName("user_guide_view")
+        view.setOpenExternalLinks(True)
+        view.setHtml(USER_GUIDE_HTML)
+        lay.addWidget(view, 1)
+        buttons = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.Ok)
+        buttons.accepted.connect(dlg.accept)
+        lay.addWidget(buttons)
+        dlg.resize(720, 560)
         dlg.exec()
 
     help_menu = win.menuBar().addMenu("Help")
@@ -1429,7 +1554,7 @@ def build_main_window():
         wl_note.setObjectName(f"wl_note_{which}")
         wl_note.setWordWrap(True)
         wl_note.setStyleSheet("color: #b26a00; font-size: 8pt;")
-        wl_note.setVisible(False)
+        wl_note.setText(""); wl_note.setVisible(False)  # never leave a previous material's note behind
         w_lay.addRow("", wl_note)
         form_col.addWidget(g_wave)
 
@@ -1476,7 +1601,12 @@ def build_main_window():
         spec_note.setStyleSheet("color: #555; font-size: 8pt;")
         spec_note.setVisible(False)
         sp_lay.addRow("", spec_note)
-        form_col.addWidget(g_spec)
+        # NOT added here. The sweep is an option on a calculation, not the first thing to decide:
+        # with it second, a newcomer met "sweep the wavelength" and three greyed λ rows before
+        # reaching Functionality and Case Study, which is where the README tells them to start
+        # (cold-eyes round 2, 2026-09-20). It is inserted just after Case Study below, keeping
+        # "Wavelength Setting is the first input group" intact.
+        _g_spec_pending = g_spec
         page._spectral_state = lambda: {
             "on": bool(spectral_on.isEnabled() and spectral_on.isChecked()),
             "min_um": float(lam_min.value()),
@@ -1618,6 +1748,8 @@ def build_main_window():
             _tip(system_preset, "case_study")
             c_lay.addWidget(system_preset)
             form_col.addWidget(g_case)
+        # the sweep group, held back above so Functionality and Case Study come first
+        form_col.addWidget(_g_spec_pending)
 
         # ----- Layer Selection: the original's N-layer stack editor (.ml only) -----
         stack_state: dict = {"stack": None}
@@ -1647,7 +1779,9 @@ def build_main_window():
             _guard_header_selection(layer_mat)
             _tip(layer_mat, "layer_material")
             layer_name = QtWidgets.QLineEdit()  # original .ml: "each layer can be assigned a name"
-            layer_name.setPlaceholderText("(auto: role: material)")
+            # what the row is ACTUALLY called when left blank -- the old "(auto: role: material)"
+            # promised a label the app never writes (cold-eyes round 2, 2026-09-20)
+            layer_name.setPlaceholderText("(auto: ambient / film / substrate)")
             layer_name.setToolTip("Optional layer name shown in the layer list and the stack "
                                   "schematics; leave empty for the automatic 'role: material' label.")
             layer_thick = _NumBox(1.0, 0.0, 100000.0, decimals=6)
@@ -1947,6 +2081,10 @@ def build_main_window():
                     _thick_label.setText(
                         "(no input: this medium is semi-infinite)" if is_half
                         else "Layer thickness (µm)")
+                # ...and the field goes with the label. A semi-infinite medium kept a disabled
+                # "0.0" spin beside the "no input" caption: an unlabelled dead box that reads as
+                # a thickness of zero (cold-eyes round 2, 2026-09-20).
+                layer_thick_stack.setVisible(not is_half)
                 _loading["f"] = False
 
             # the simple modes' remembered template values — film thickness plus the
@@ -2039,10 +2177,25 @@ def build_main_window():
                 layer_name.clear()
                 _store_layer_from_fields()
                 _refresh_layer_selector()
+                # ...and the panel titles, which are written from the row BEFORE this handler
+                # runs: the Dielectric Tensors group went on reading "2: waveguide core — KTP"
+                # for a row whose name had just been dropped (cold-eyes round 2, 2026-09-20).
+                _sync_layer_crystal_view()
 
             def _on_count_change(n):
                 # no mode switch — a count change modifies the working copy in place
+                _before = len(stack_state["stack"])
                 stack_state["stack"] = set_layer_count(stack_state["stack"], int(n))
+                # A row that appears out of nowhere says what it is: the new film carries the
+                # model's default material, which may be quoted at a different wavelength from
+                # the stack you are building (cold-eyes round 1, 2026-09-20).
+                _added = int(n) - _before
+                if _added > 0:
+                    _new = stack_state["stack"][max(1, _before - 1)].get("material", "")
+                    win.statusBar().showMessage(
+                        "Added {0} layer{1}, each starting as {2} at 1 µm. Set the material and "
+                        "thickness for the row in Layer Selection.".format(
+                            _added, "" if _added == 1 else "s", _new))
                 _named_by_user.clear()          # the rows this set points at have moved
                 _refresh_layer_selector()
                 _load_layer_into_fields()
@@ -2091,9 +2244,15 @@ def build_main_window():
                 if flagged and current != _PA_DISPLAY:
                     _auto_pa["prev"] = current
                     functionality.setCurrentText(_PA_DISPLAY)
+                    # a control that moves on its own says why (the flip used to be silent and
+                    # the status bar kept an older message -- round-1 audit, 2026-09-20)
+                    win.statusBar().showMessage(
+                        "Functionality switched to Partial Analytical Expressions: a symbolic "
+                        "thickness or d needs the analytical mode. Clear the flag to go back.")
                 elif not flagged and current == _PA_DISPLAY and _auto_pa["prev"]:
                     previous, _auto_pa["prev"] = _auto_pa["prev"], None
                     functionality.setCurrentText(previous)
+                    win.statusBar().showMessage(f"Functionality back to {previous}.")
 
             def _reconcile_activity_flags_ml():
                 """After a point-group pick is committed to the row, re-store the layer from
@@ -2353,8 +2512,13 @@ def build_main_window():
         # converts BOTH ways with MatrixPower -- eps = n.n (a matrix square, NOT elementwise)
         # and n = eps^(1/2). Switching therefore CONVERTS what is on screen, so the panel always
         # describes the same medium; epsilon stays the internal truth everywhere else.
-        eps_w_w, eps_w_cells = _matrix_block(QtWidgets, "ε(ω) =", [[4.0, 0, 0], [0, 4.0, 0], [0, 0, 4.0]])
-        eps_2w_w, eps_2w_cells = _matrix_block(QtWidgets, "ε(2ω) =", [[4.84, 0, 0], [0, 4.84, 0], [0, 0, 4.84]])
+        # 3x3 grids: wide enough for a full complex permittivity (a case study writes values such
+        # as 13.4361+0.432588j); the 3x6 d grid below keeps the compact cell so the column fits.
+        _EPS_CELL = (126, 140)  # "13.4361+0.432588j" needs 121 px of text in the app font
+        eps_w_w, eps_w_cells = _matrix_block(QtWidgets, "ε(ω) =", [[4.0, 0, 0], [0, 4.0, 0], [0, 0, 4.0]],
+                                             cell_width=_EPS_CELL)
+        eps_2w_w, eps_2w_cells = _matrix_block(QtWidgets, "ε(2ω) =", [[4.84, 0, 0], [0, 4.84, 0], [0, 0, 4.84]],
+                                               cell_width=_EPS_CELL)
         epsm_lay.addWidget(eps_w_w)
         epsm_lay.addWidget(eps_2w_w)
         _wire_symmetric_grid(eps_w_cells)
@@ -2926,6 +3090,19 @@ def build_main_window():
         point_group.activated.connect(lambda *_: _on_panel_user_edit("struct"))
         for _e in lattice_edits:
             _e.valueChanged.connect(lambda *_: _on_panel_user_edit("struct"))
+        # On the SINGLE-INTERFACE tab the tensor cells count as edits too. They were the one panel
+        # that did not: typing a new eps under a named case left the case reading pristine, and
+        # re-selecting it discarded the edit without a word (cold-eyes round 2, 2026-09-20).
+        # textEdited, not textChanged -- the symmetric-grid mirror writes the partner cell
+        # programmatically and that is not a user edit.
+        #
+        # SI ONLY, deliberately. On the multilayer tab a d cell is ALSO how a user declares a
+        # KNOWN analytical component, which is explicitly not a material edit: wiring it there
+        # flipped the row to "Custom (fields)" and broke the F61 known-d contract.
+        if which == "si":
+            for _row in (eps_w_cells + eps_2w_cells + d_full_cells):
+                for _cell in _row:
+                    _cell.textEdited.connect(lambda *_: _on_panel_user_edit("struct"))
 
         def _dispersive_lambda_range(name: str):
             """(low, high) of a dispersive variant's published index table, or None if not one."""
@@ -2951,7 +3128,7 @@ def build_main_window():
             # into this label when it runs; any change of input clears them as stale.
             if spectral_on.isEnabled() and spectral_on.isChecked():
                 wl_note.setToolTip("")
-                wl_note.setVisible(False)
+                wl_note.setText(""); wl_note.setVisible(False)  # never leave a previous material's note behind
                 return
             names: list[str] = []
             if which == "si":
@@ -3024,7 +3201,7 @@ def build_main_window():
                 wl_note.setText("\n".join(lines))
                 wl_note.setVisible(True)
             else:
-                wl_note.setVisible(False)
+                wl_note.setText(""); wl_note.setVisible(False)  # never leave a previous material's note behind
 
         point_group.currentTextChanged.connect(lambda *_: populate_matrices(d_only=True))
         point_group.currentTextChanged.connect(_apply_shg_activity_hint)
@@ -4311,12 +4488,28 @@ def build_main_window():
         # D14: the launch banner used the function's default theta_deg=20 and printed
         # "theta_i = 20" while the panel next to it read 0 -- a picture asserting a number no input
         # holds. Draw it at normal incidence, matching the default.
+        # The launch banner draws what is LOADED, not a generic two-band cartoon: the multilayer
+        # tab opened on a 4-layer preset while the picture showed "air / crystal", and the
+        # single-interface tab said "crystal" with no point group (round-1 audit, 2026-09-20).
+        if which == "ml":
+            _init_stack = list(stack_state.get("stack") or [])
+            _init_layers = [(str(_s.get("material", "layer")),
+                             None if _i in (0, len(_init_stack) - 1) else float(_s.get("thickness_um", 0.0)))
+                            for _i, _s in enumerate(_init_stack)] or [("air", None), ("crystal", None)]
+        else:
+            _init_layers = [("air", None), (f"crystal ({point_group.currentText()})", None)]
         schematic_canvas = FigureCanvasQTAgg(
-            build_schematic_figure([("air", None), ("crystal", None)], theta_deg=0.0))
-        schematic_canvas.setMinimumSize(260, 250)
+            build_schematic_figure(_init_layers, theta_deg=0.0))
+        # Floors sized so the whole window fits a 1366x768 laptop: the banner + plot tabs + the
+        # action strip used to sum to a 819 px minimum, which pushed the Update strip and the
+        # status bar below such a screen (round-1 audit, 2026-09-20). The banner scales its figure.
+        # 230/250, not lower: below that the multilayer schematic's legend and caption touch the
+        # border (the layout-integrity edge-ink fence), and above it the window no longer fits
+        # 768 px. With the plot tabs at 220 the window minimum is about 730 px tall.
+        schematic_canvas.setMinimumSize(260, 230)
         canv_row.setSpacing(8)
         canv_row.addWidget(schematic_canvas, 1)    # 2D fills the full banner width now
-        schem_widget.setMinimumHeight(270)
+        schem_widget.setMinimumHeight(250)
 
         # (2) plot-tabs section: Polar Plots (+ ML Fresnel/Maker) + Analytical Expression. The
         # analytical closed form lives in its OWN tab so it gets the full output area (the original
@@ -4355,7 +4548,10 @@ def build_main_window():
         expr_box = QtWidgets.QTextEdit()
         expr_box.setObjectName("expr_box")
         expr_box.setReadOnly(True)
-        expr_box.setLineWrapMode(QtWidgets.QTextEdit.NoWrap)  # long closed forms scroll horizontally
+        # wrap at the widget width: a closed form is one long product, readable wrapped, and the
+        # "[expression too large to display: ...]" sentence was cut off at the box edge under
+        # NoWrap (round-1 audit, 2026-09-20)
+        expr_box.setLineWrapMode(QtWidgets.QTextEdit.WidgetWidth)
         expr_box.setPlaceholderText("The closed-form analytical expression appears here after an "
                                     "analytical run (Partial / Full Analytical). Use 'Copy' below.")
         _tip(expr_box, "closed_form")
@@ -4387,8 +4583,11 @@ def build_main_window():
         # ask: a single plot should auto-fit, never be clipped). Width flexes via the scroll area.
         plot_canvas.setMinimumSize(440, 500)  # low enough that the 2x2 polar grid FILLS a maximized viewport (no scroll); still scrolls on short laptops
         if which == "ml":
-            fresnel_canvas.setMinimumSize(440, 240)
-            maker_canvas.setMinimumSize(440, 240)
+            # 190, not 240: a single plot must SHRINK to its viewport rather than scroll, and at
+            # 1366x768 the plot tabs now get about 220 px (the banner keeps 250 so the multilayer
+            # schematic stays clear of its border; the whole window fits 768 px)
+            fresnel_canvas.setMinimumSize(440, 190)
+            maker_canvas.setMinimumSize(440, 190)
             # name the result canvases so tests can address them by ROLE. The Maker-gating
             # fence previously selected canvases by a figure-height heuristic, which swept in the
             # polarimetry tile whenever an earlier test changed the render history -- a fragile
@@ -4403,7 +4602,26 @@ def build_main_window():
             output_tabs.addTab(fresnel_tab, "Fresnel Coefficients")
             maker_tab = _scrollable(maker_canvas)
             output_tabs.addTab(maker_tab, "Maker Fringes")
-        spectrum_tab = _scrollable(spectrum_canvas)
+        # The sweep's notes (undersampled fringes, a clamped table, a frozen index) are shown
+        # UNDER the spectrum as well as in the Wavelength Setting group: a map of aliased noise
+        # with its only warning in the top-left input column read as a finished result
+        # (round-1 audit, 2026-09-20).
+        spec_result_note = QtWidgets.QLabel("")
+        spec_result_note.setObjectName(f"spec_result_note_{which}")
+        spec_result_note.setWordWrap(True)
+        spec_result_note.setStyleSheet("color: #8a5a00; background: #fff6df; border: 1px solid "
+                                       "#f0d9a0; border-radius: 6px; padding: 5px 8px; font-size: 8pt;")
+        spec_result_note.setVisible(False)
+        spec_page = QtWidgets.QWidget()
+        spec_page_lay = QtWidgets.QVBoxLayout(spec_page)
+        spec_page_lay.setContentsMargins(0, 0, 0, 0)
+        spec_page_lay.setSpacing(4)
+        # The note goes ABOVE the plot. Below it, the canvas's own minimum height pushed it past
+        # the bottom of the scroll viewport and a user saw an aliased curve with no explanation
+        # (cold-eyes round 2, 2026-09-20). Above, it is the first thing read on the tab.
+        spec_page_lay.addWidget(spec_result_note, 0)
+        spec_page_lay.addWidget(spectrum_canvas, 1)
+        spectrum_tab = _scrollable(spec_page)
         output_tabs.addTab(spectrum_tab, "Spectrum")
         # the Analytical Expression tab stacks the full published
         # derivation as COLLAPSIBLE steps (transmitted omega fields -> P_NL -> inhomogeneous 2omega
@@ -4440,6 +4658,12 @@ def build_main_window():
                 steps = analytical_derivation_items(result)
             except Exception:
                 steps = []
+            # a step with nothing in it is not shown: a Partial run once left three empty
+            # "Step" frames under a heading that called itself the FULL derivation
+            # (round-1 audit, 2026-09-20)
+            steps = [s for s in steps if str(s[2]).strip()]
+            mode_word = "Partial" if "Partial" in functionality.currentText() else "Full"
+            deriv_heading.setText(f"<b>{mode_word} analytical derivation — step by step</b>")
             for heading, subtitle, body_html in steps:
                 box, blay = _collapsible_group(QtWidgets, heading, collapsed=True)
                 if subtitle:
@@ -4460,7 +4684,7 @@ def build_main_window():
             deriv_heading.setVisible(has)
 
         output_tabs.addTab(analytical_scroll, "Analytical Expression")
-        output_tabs.setMinimumHeight(280)
+        output_tabs.setMinimumHeight(220)  # see the banner floors above: the window must fit 768 px
         output_tabs.setCurrentWidget(guide_view)  # land on the instruction page at startup
 
         # (3) status / actions section (compact: Copy + Update + validation + Time Used)
@@ -4469,8 +4693,17 @@ def build_main_window():
         expr_lay.setContentsMargins(0, 0, 0, 0)
         copy_btn = QtWidgets.QPushButton("Copy closed form (Python/SymPy)")
         _tip(copy_btn, "closed_form")
-        copy_btn.clicked.connect(lambda: QtWidgets.QApplication.clipboard().setText(
-            expr_box.property("raw_text") or expr_box.toPlainText()))  # machine-readable, not the typeset view
+
+        def _copy_python():
+            text = expr_box.property("raw_text") or expr_box.toPlainText()
+            if not str(text).strip():
+                win.statusBar().showMessage(
+                    "Nothing to copy yet: run Partial or Full Analytical Expressions first.")
+                return
+            QtWidgets.QApplication.clipboard().setText(text)  # machine-readable, not the typeset view
+            win.statusBar().showMessage("Closed form copied.")
+
+        copy_btn.clicked.connect(_copy_python)
 
         def _copy_mathematica():
             """Copy the closed forms in Wolfram-Language format (request).
@@ -4496,11 +4729,23 @@ def build_main_window():
             win.statusBar().showMessage("Closed form copied in Mathematica format.")
 
         mcopy_btn = QtWidgets.QPushButton("Copy closed form (Mathematica)")
-        mcopy_btn.setToolTip("Copy the closed-form expressions in Wolfram Language syntax "
-                             "(Sqrt[..], Exp[..], ^ powers; symbols as \\[Theta]i, n\\[Omega], "
-                             "\\[CurlyPhi], ...) — paste directly into a Mathematica notebook. "
-                             "The conversion is numerically verified against a live Wolfram kernel.")
+        mcopy_btn.setToolTip(_MATHEMATICA_COPY_TIP)
         mcopy_btn.clicked.connect(_copy_mathematica)
+
+        def _set_copy_enabled(on: bool) -> None:
+            """Both Copy buttons follow the closed form: greyed until an analytical run
+            produces one, live afterwards.
+
+            The TOOLTIPS must not change with the state. A widget's audit/session identity is
+            keyed on its tooltip (shaarp/gui_introspect.py), so rewriting one renames the widget
+            and silently drops it out of the coverage registry and out of every saved session.
+            The reason for the greying goes on the status tip instead."""
+            for _b in (copy_btn, mcopy_btn):
+                _b.setEnabled(bool(on))
+                _b.setStatusTip("" if on else
+                                "Available after a Partial or Full Analytical Expressions run.")
+
+        _set_copy_enabled(False)
         status_lbl = QtWidgets.QLabel("Checked: (run to populate)")
         # The validation status can be a long single token (e.g. "maker_outputs_nonsingular_...
         # _caveat"); wrap it so it does NOT pin the window's minimum width wide after Update (same
@@ -4672,6 +4917,7 @@ def build_main_window():
                     show the previous result."""
                     spectrum_canvas.figure.clear()
                     spectrum_canvas.draw_idle()
+                    spec_result_note.setVisible(False)
                 lattice = tuple(e.value() for e in lattice_edits)
                 okw = dict(orientation_mode=orient_mode.currentText(),
                            surface_hkl=tuple(e.value() for e in hkl_edits),
@@ -4723,8 +4969,10 @@ def build_main_window():
                         a run that goes on to compute clears them -- a refusal left the previous
                         sweep's notes standing beside its own error -- but a DECLINED run does
                         not: its plot stays on screen, so its notes stay with it."""
-                        wl_note.setVisible(False)
+                        wl_note.setText(""); wl_note.setVisible(False)  # never leave a previous material's note behind
                         wl_note.setToolTip("")
+                        spec_result_note.setVisible(False)
+                        spec_result_note.setToolTip("")
 
                     if spec["min_um"] > spec["max_um"]:
                         _clear_sweep_notes()
@@ -4896,6 +5144,15 @@ def build_main_window():
                     _replace_canvas_figure(spectrum_canvas, fig)
                     output_tabs.setCurrentWidget(spectrum_tab)
                     state["last_result"] = result
+                    # A sweep computes numbers, not a closed form. The previous analytical run's
+                    # expression stayed on the box, so exporting the spectrum wrote a
+                    # byte-identical copy of THAT run's closed form beside it, named for this one
+                    # (cold-eyes round 2, 2026-09-20).
+                    expr_box.setProperty("raw_text", "")
+                    expr_box.setProperty("mathematica_text", "")
+                    expr_box.setPlainText("")
+                    _rebuild_derivation_steps(None)
+                    _set_copy_enabled(False)
                     # EVERY distinct note, not the first: a stack can be partly frozen AND run past
                     # a table's end at once, and showing only notes[0] hid whichever came second.
                     notes: list[str] = []
@@ -4910,6 +5167,9 @@ def build_main_window():
                         wl_note.setText(text)
                         wl_note.setToolTip("\n\n".join(notes))
                         wl_note.setVisible(True)
+                        spec_result_note.setText(text)
+                        spec_result_note.setToolTip("\n\n".join(notes))
+                        spec_result_note.setVisible(True)
                     # Report what was COMPUTED, not what was asked for: the grid's real end (a range
                     # the step does not divide stops short of λ max) and, for a map, both axes. It
                     # used to say "spectrum over 15 points" for a 5 x 3 map, and "1 points".
@@ -4959,9 +5219,27 @@ def build_main_window():
                     # the schematic names the true incident medium (post-Update contract)
                     _amb_lbl = ("air" if inc_n_w.value() == 1.0 and inc_n_2w.value() == 1.0
                                 else f"ambient (n={inc_n_w.value():g})")
+                    # the drawn refraction uses the case's REAL indices, as the multilayer tab
+                    # already does: with the illustrative n = 1.5 fallback the GaAs pump was
+                    # drawn at ~20 deg inside the crystal at theta_i = 30 deg, where n = 3.67
+                    # gives 7.8 deg (round-1 audit, 2026-09-20).
+                    try:
+                        import numpy as _np  # not a module-level import in this file
+
+                        from .shaarp_gui import _epsilon_lab_of as _eps_lab_of
+                        _si_pair = []
+                        for _om in (True, False):
+                            _e00 = _np.asarray(_eps_lab_of(material, omega=_om))[0, 0]
+                            _nn = float(_np.real(_np.sqrt(complex(_e00))))
+                            _si_pair.append(_nn if _nn > 0.05 else 1.0)
+                        _si_idx = [(float(inc_n_w.value()), float(inc_n_2w.value())),
+                                   (_si_pair[0], _si_pair[1])]
+                    except Exception:
+                        _si_idx = None
                     _replace_canvas_figure(schematic_canvas, build_schematic_figure(
                         [(_amb_lbl, None), (f"crystal ({pg_label})", None)],
-                        theta_deg=theta_spin.value()))
+                        theta_deg=theta_spin.value(), wavelength_um=float(wavelength.value()),
+                        indices=_si_idx))
                     _refresh_orientation_view()  # keep the input-panel Zi-vs-Li view current
                     if canon is None:  # defensive: no compute mode selected
                         _show_view_only()
@@ -5098,6 +5376,24 @@ def build_main_window():
                     else:
                         sys_arg, preset_arg = None, sel
                     sketch_sys = sys_arg if sys_arg is not None else resolve_ml_system_preset(preset_arg)
+                    # A film has to have a thickness, and it has to be a film. 0 um ran for 12 s
+                    # and returned numerical noise (maxima ~1e-30) under a green "Run complete.";
+                    # 100,000 um is a 10 cm "thin film". Both are input mistakes and both now name
+                    # the row (cold-eyes round 2, 2026-09-20). Checked on the RESOLVED system, so
+                    # every ML mode passes through it, presets included.
+                    for _i, _L in enumerate(sketch_sys.layers):
+                        _h = getattr(_L, "thickness_um", None)
+                        if _h is None:
+                            continue           # a semi-infinite half-space carries no thickness
+                        _h = float(_h)
+                        if _h <= 0.0:
+                            raise ValueError(
+                                f"Layer {_i + 1} has a thickness of {_h:g} µm. An interior layer "
+                                "needs a real thickness; set it in Layer Selection.")
+                        if _h > 10000.0:
+                            raise ValueError(
+                                f"Layer {_i + 1} is {_h:g} µm thick — a centimetre-scale slab, "
+                                "not a film. Check the thickness in Layer Selection.")
 
                     def _layer_label(L):
                         # original .ml Set-Material figure: "layer name, Miller indices ..., point
@@ -5106,7 +5402,11 @@ def build_main_window():
                         parts = [L.name]
                         try:
                             from .casestudy_materials import casestudy_miller_label
-                            pg = L.material.structure.point_group
+                            pg = str(L.material.structure.point_group)
+                            # "[∞∞m]" reads as garbage to anyone who does not know the Curie
+                            # groups; an isotropic medium says so (round-1 audit, 2026-09-20)
+                            if pg.replace(" ", "").lower() in ("∞∞m", "infinfm", "∞∞/m"):
+                                pg = "isotropic"
                             hkl = casestudy_miller_label(getattr(L.material, "name", ""))
                             extra = " ".join(x for x in (pg, hkl) if x)
                             if extra:
@@ -5295,11 +5595,19 @@ def build_main_window():
                     elif canon == "Maker Fringes":
                         with stage("figure"):
                             _mkfig = build_maker_figure(result, assumption_label=a_label)
+                        # the caption goes on the FIGURE, not the status bar: the run's own
+                        # "Run complete." overwrites a status message a moment later
+                        _alias = _undersampled_caption(_mkfig)
+                        if _alias:
+                            _caption_figure(_mkfig, _alias)
                         _replace_canvas_figure(maker_canvas, _mkfig)
                         output_tabs.setCurrentWidget(maker_tab)
                     elif canon == "Fresnel Coefficients":
                         with stage("figure"):
                             _frfig = build_fresnel_figure(result)
+                        _alias = _undersampled_caption(_frfig)
+                        if _alias:
+                            _caption_figure(_frfig, _alias)
                         _replace_canvas_figure(fresnel_canvas, _frfig)
                         output_tabs.setCurrentWidget(fresnel_tab)
                     elif canon == "SHG Simulation":
@@ -5339,9 +5647,24 @@ def build_main_window():
                                 mrassumption=ML_ASSUMPTIONS.get(assum, 0))
                         except Exception:
                             ell3 = None  # ellipse tile is auxiliary; never block the polar plots
+                        # R19: the title used to name whatever row the EDITOR happened to have
+                        # selected, so picking the air half-space put "point group ∞∞m" over ZnO's
+                        # own lobes. The SHG comes from the active layers, so the title names
+                        # those; the editor selection is not a property of the result.
+                        _src_pgs = []
+                        for _L in getattr(sketch_sys, "layers", []):
+                            if not getattr(_L, "shg_active", False):
+                                continue
+                            try:
+                                _pg = str(_L.material.structure.point_group)
+                            except Exception:
+                                continue
+                            if _pg not in _src_pgs:
+                                _src_pgs.append(_pg)
+                        _pg_label = ", ".join(_src_pgs) if _src_pgs else point_group.currentText()
                         with stage("figure"):
                             _mlfig = build_ml_polarimetry_figure(
-                            ml_curve, point_group=point_group.currentText(), assumption_label=a_label,
+                            ml_curve, point_group=_pg_label, assumption_label=a_label,
                             ellipses=ell3)
                         _replace_canvas_figure(plot_canvas, _mlfig)
                         output_tabs.setCurrentWidget(plot_tab)
@@ -5362,9 +5685,14 @@ def build_main_window():
                     expr_box.setProperty("mathematica_text", "")
                     expr_box.setPlainText("")
                 _rebuild_derivation_steps(result if had_expr else None)  # F37 step-by-step
+                # A Copy button with nothing to copy is a button that does nothing: both were
+                # live from launch and the Python one put an empty string on the clipboard
+                # without a word (cold-eyes round 1, 2026-09-20).
+                _set_copy_enabled(had_expr)
                 status_lbl.setText(_friendly_validation_status(result.validation.status)
-                                   + _symbols_summary(result))
-                status_lbl.setToolTip(f"raw validation tag: {result.validation.status}")
+                                   + _symbols_summary(result, limit=110))
+                status_lbl.setToolTip(f"raw validation tag: {result.validation.status}"
+                                      + _symbols_summary(result).replace("   |   ", "\n"))
                 # F70 the GUI walkthrough: a Partial-Analytical run that fell back to the numeric
                 # sample-rotation sweep must SAY so (the reason was write-only before) -- and it
                 # must survive to the FINAL statusBar write, not be clobbered by "Run complete.".
@@ -5541,6 +5869,13 @@ def build_main_window():
 
         def on_export_figure():
             fig = _current_result_figure()
+            # A figure exists before the first Update -- it is the "Getting started" instruction
+            # page -- so the axes test alone let a premature click write a screenshot of the
+            # instructions and report success (cold-eyes round 2, 2026-09-20). Export data
+            # already guards on the result; this now guards the same way.
+            if state.get("last_result") is None:
+                win.statusBar().showMessage("Nothing to export yet -- press Update/Run first.")
+                return
             if fig is None or not fig.axes:
                 win.statusBar().showMessage("Nothing to export yet -- press Update/Run first.")
                 return

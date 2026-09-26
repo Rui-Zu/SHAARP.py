@@ -889,7 +889,12 @@ def analytical_expression_html(result) -> str:
         head = _ANALYTICAL_ITEM_LABELS_HTML.get(stage_key, _html.escape(label))
         parts.append(
             f"<div style='font-weight:bold; margin-top:14px;'>{head}</div>"
-            f"<div style='white-space:pre; margin-bottom:6px; {math_style}'>{math_display_html(text)}</div>")
+            # pre-WRAP, not pre: `pre` defeats the box's own word wrap, and a multilayer closed
+            # form is a single ~400,000 px line, so the panel showed a truncated first line and a
+            # horizontal scrollbar (cold-eyes round 2, 2026-09-20). pre-wrap keeps the alignment
+            # whitespace and still wraps at the viewport.
+            f"<div style='white-space:pre-wrap; word-wrap:break-word; margin-bottom:6px; "
+            f"{math_style}'>{math_display_html(text)}</div>")
     return "<html><body>" + "\n".join(parts) + "</body></html>"
 
 
@@ -1269,8 +1274,19 @@ def compute_ml_gui_result(
         # keep the familiar single-film provenance key alongside the per-layer list
         _first_active = next((L for L, a in zip(interiors, active) if a), interiors[0])
         ml_extra["film"] = f"{_first_active.name} ε (substituted)"
+        def _row_name(i, layer):
+            """The row's name WITHOUT the role prefix the auto-label carries.
+
+            The line already leads with the row number, and an unnamed interior row is called
+            "layer 2: KTP x-cut", so the two together read "2: layer 2: KTP x-cut" -- two numbers
+            for one row, which the layer-naming contract forbids (cold-eyes round 2, 2026-09-20).
+            A user-given name has no such prefix and is printed unchanged."""
+            nm = str(layer.name)
+            prefix = f"layer {i}: "
+            return nm[len(prefix):] if nm.startswith(prefix) else nm
+
         ml_extra["layers"] = ", ".join(
-            f"{i}: {L.name}{'' if a else ' (passive)'}"
+            f"{i}: {_row_name(i, L)}{'' if a else ' (passive)'}"
             f"{' [d symbolic]' if (a and ((not any_d_flag and analytical_d_symbolic is not False) or getattr(L, 'analytic_d', False))) else ''}"
             for i, (L, a) in ((interior_layer_number(k), pair)
                               for k, pair in enumerate(zip(interiors, active))))
@@ -1855,6 +1871,9 @@ def build_si_polarimetry_figure(point_group: str, *, theta_deg: float = 45.0, in
                     ha="center", va="center", fontsize=8, color="0.35")
         else:
             ax.set_rmin(0.0)
+            # A few short radial labels, off the lobes (the shared helper also applies the
+            # two-significant-figure format and hides the offset text).
+            _ra_thin_radial_ticks(ax)
     def _four_tile(chan_a, title_a, chan_b, title_b, suptitle):
         """The SHAARP.si SHG-Simulation multi-tile output: the two reflected-SHG polar plots (the two
         analyzer channels) on top, effective refractive index n(theta_i) and the incident-polarization
@@ -2326,6 +2345,11 @@ def _ra_thin_radial_ticks(ax, n_ticks: int = 3) -> None:
         ax.set_yticks([top * k / n_ticks for k in range(1, n_ticks + 1)])
     ax.set_rlabel_position(202.5)
     ax.tick_params(axis="y", labelsize=7)
+    # TWO significant figures, and no separate "1e-30" offset text. The default printed four
+    # decimals -- "0.1784 0.3568 0.5352" ran into each other across the lobes -- and put the
+    # offset on top of the 90 deg tick (cold-eyes rounds 1 and 2, 2026-09-20).
+    ax.set_yticklabels([f"{t:.2g}" for t in ax.get_yticks()])
+    ax.yaxis.get_offset_text().set_visible(False)
     for lbl in ax.get_yticklabels():
         lbl.set_bbox(dict(boxstyle="round,pad=0.12", fc="white", ec="none", alpha=0.65))
 
@@ -3041,7 +3065,10 @@ def build_schematic_figure(layers, theta_deg: float = 20.0, *, wavelength_um: fl
     # D6: the clamp pinned the label's START, so a left-aligned label at X_MAX still ran past the
     # stack. Flip to right-aligned once it would not fit.
     _twx = tw_x + 0.14
-    ax.text(min(_twx, X_MAX + 0.55), tw_y - 0.20, r"$\omega$ trans (pump)", color="crimson",
+    # R20: this label hangs below the last interface, so it shares the strip with the colour key
+    # and the assumption caption. The three now sit on their OWN rows (0.18 / 0.40 / 0.62 below
+    # the stack) inside a strip deep enough to hold them (cold-eyes round 2, 2026-09-20).
+    ax.text(min(_twx, X_MAX + 0.55), tw_y - 0.18, r"$\omega$ trans (pump)", color="crimson",
             fontsize=8, alpha=0.7, ha=("left" if _twx < 7.4 else "right"), va="top")
     # incidence-angle readout in the EMPTY right end of the ambient band. It used to sit just
     # left of the normal, which is exactly where the incident ray passes at oblique angles.
@@ -3058,7 +3085,11 @@ def build_schematic_figure(layers, theta_deg: float = 20.0, *, wavelength_um: fl
         # band below the film, so it landed on top of the next layer's label whenever that band was
         # thin (screenshot: it collided with "Au coating"). Put it in reserved space BELOW the
         # whole stack, where nothing else is drawn.
-        ax.text(0.25, -total - 0.40, short, fontsize=8, color="0.25", style="italic", va="top")
+        # R20: 0.40 put this italic caption within one text-height of the colour key at 0.16, and
+        # with five layers the two overprinted. The gap is now 0.32 in data units and the reserved
+        # strip below grows to match (cold-eyes round 2, 2026-09-20).
+        ax.text(0.01, -0.20, short, transform=ax.transAxes, fontsize=8, color="0.25",
+                style="italic", va="top", ha="left")
         # D5: a colour key instead of glyphs pinned beside the rays. Three tags competing for the
         # few millimetres around the incidence point label each other's arrows -- at normal
         # incidence they collapse onto one column entirely.
@@ -3067,15 +3098,19 @@ def build_schematic_figure(layers, theta_deg: float = 20.0, *, wavelength_um: fl
         for _kx, _txt, _c in ((0.25, "— ω fundamental", "crimson"),
                               (2.60, "-- 2ω SHG", "navy"),
                               (4.65, "— bound source", "darkorange")):
-            ax.text(_kx, -total - 0.16, _txt, fontsize=7.5, color=_c, va="top", ha="left")
+            ax.text(_kx / 10.0, -0.09, _txt, transform=ax.transAxes, fontsize=7.5, color=_c,
+                    va="top", ha="left")
     title = "Optical setup schematic"
     if wavelength_um:
         title += rf"   ($\lambda$ = {wavelength_um:g} µm)"
     ax.set_title(title, fontsize=11)
     ax.set_xlim(0, 10)
-    ax.set_ylim(-total - 0.72, 0.15)   # reserved strip for the colour key + caption
+    ax.set_ylim(-total - 0.30, 0.15)   # room for the pump label only; the colour key and
+    # the assumption caption live BELOW the axes in axes-fraction coordinates, so their
+    # spacing is a constant number of PIXELS. In data units it shrank as the stack grew:
+    # with five layers a 0.22 gap was a few pixels and the two overprinted (R20).
     ax.axis("off")
-    fig.tight_layout()
+    fig.tight_layout(rect=(0.0, 0.14, 1.0, 1.0))   # reserve the strip the two labels sit in
     return fig
 
 

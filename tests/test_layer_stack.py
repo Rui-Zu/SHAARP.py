@@ -51,8 +51,14 @@ class LayerStackModelTests(unittest.TestCase):
         dispersive = dispersive_material_names()
         self.assertEqual(LAYER_MATERIAL_CHOICES[-1 - len(dispersive):-1], dispersive,
                          "the dispersive variants must sit between the palette and Custom")
-        # air + isotropic-n + 16 palette films + the dispersive variants + Custom
-        self.assertEqual(len(LAYER_MATERIAL_CHOICES), 19 + len(dispersive))
+        # air + isotropic-n + 15 palette films + the dispersive variants + Custom.
+        # 15, not 16: the palette's own "Air" case study was dropped from THIS list because it is
+        # the same medium as the "air" entry above it, and offering both put one medium on two
+        # rows (R21, cold-eyes round 3, 2026-09-20). The case study stays in the registry.
+        self.assertEqual(len(LAYER_MATERIAL_CHOICES), 18 + len(dispersive))
+        # the invariant the count is really there to protect
+        self.assertEqual([c for c in LAYER_MATERIAL_CHOICES if c.strip().lower() == "air"], ["air"],
+                         "one medium, one row")
 
     def test_per_layer_custom_crystal(self):
         """A layer marked 'Custom (fields)' builds its Material from the per-layer crystal snapshot

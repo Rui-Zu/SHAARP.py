@@ -747,7 +747,9 @@ class DesktopAppSmokeTests(unittest.TestCase):
                              "orientation view (3D) must be width-capped near-square to render fully")
         self.assertGreaterEqual(orient.minimumHeight(), 240, "orientation view should be compact")
         # compact context canvases: the 2D banner + the orientation view
-        schem = [c for c in si.findChildren(FigureCanvasQTAgg) if 240 <= c.minimumHeight() <= 320]
+        # 220, not 240: the 2D banner's floor is 230 px since the window was made to fit a
+        # 1366x768 laptop (cold-eyes round 1, 2026-09-20); the orientation view keeps 250
+        schem = [c for c in si.findChildren(FigureCanvasQTAgg) if 220 <= c.minimumHeight() <= 320]
         self.assertGreaterEqual(len(schem), 2, "SI tab needs the 2D banner + the orientation view")
         # The window must not force a huge minimum width (the non-wrapping banner once pinned it ~1388,
         # clipping the geometry/output panel on smaller laptops). Keep it laptop-friendly.

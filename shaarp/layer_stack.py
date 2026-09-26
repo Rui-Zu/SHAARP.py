@@ -48,7 +48,11 @@ def _dispersive_layer_choices() -> list[str]:
 
 
 LAYER_MATERIAL_CHOICES = ["air", ISOTROPIC_LAYER_CHOICE,
-                          *(label for label, _key in GUI_ML_CASES),
+                          # R21: the palette's own "Air" case study is the SAME medium as the
+                          # "air" entry above, and the list offered both -- two rows, one medium,
+                          # which is the one-control-per-concept rule broken inside a dropdown.
+                          # The case study stays in the registry; only the duplicate row goes.
+                          *(label for label, _key in GUI_ML_CASES if label.strip().lower() != "air"),
                           *_dispersive_layer_choices(), CUSTOM_LAYER_CHOICE]
 
 
